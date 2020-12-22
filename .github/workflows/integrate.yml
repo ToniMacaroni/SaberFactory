@@ -1,8 +1,8 @@
 name: Build Saber Factory
 
 on:
-  pull_request:
-    branches: [ main ]
+  push:
+    branches: [ development ]
 
 jobs:
   build:
