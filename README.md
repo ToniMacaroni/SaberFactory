@@ -1,2 +1,30 @@
-# SaberFactoryV2
+# Saber Factory 2 *[SaberFactory.com](https://saberfactory.com)*.  
+
 A highly customizable saber mod for Beat Saber
+
+Mod Download => **[Releases](https://github.com/ToniMacaroni/SaberFactory/releases)** or the **[Official Website](https://saberfactory.com)**
+
+To get more content and help with the mod or creation of content  
+join the the **[Saber Factory Discord](https://discord.gg/G9dtW5s)** server
+
+[![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/D1D21V8R8)
+
+## What is Saber Factory?
+Simply said: An all-rounder when it comes to sabers.
+Create your own sabers in-game
+
+Combine different saber parts like lego pieces.  
+Everything is built around customization.  
+Change the shape, shaders, material properties, textures and more of parts and sabers.
+
+**You can use and customize both parts and custom sabers in saber factory**
+
+## How do I install it
+1) Download the first zip from [Here](https://github.com/ToniMacaroni/SaberFactory/releases)
+2) Unpack it in your Beat Saber directory
+
+## How do I use custom sabers
+You can find the guide [here](https://github.com/ToniMacaroni/SaberFactory/blob/master/CustomSabersTutorial.md)
+
+## How do I create parts?
+You can find guides on the discord server
