@@ -7,11 +7,8 @@ Mod Download => **[Releases](https://github.com/ToniMacaroni/SaberFactory/releas
 To get more content and help with the mod or creation of content  
 join the the **[Saber Factory Discord](https://discord.gg/G9dtW5s)** server
 
-[![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/D1D21V8R8)
-
 ## What is Saber Factory?
 Simply said: An all-rounder when it comes to sabers.
-Create your own sabers in-game
 
 Combine different saber parts like lego pieces.  
 Everything is built around customization.  
