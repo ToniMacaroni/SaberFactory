@@ -23,7 +23,7 @@ jobs:
       id: Build
       env: 
         FrameworkPathOverride: /usr/lib/mono/4.7.2-api
-      run: dotnet build --configuration Debug
+      run: dotnet build --configuration Release
     - name: Echo Filename
       run: echo "$BUILDTEXT ($ASSEMBLYNAME)"
       env:
