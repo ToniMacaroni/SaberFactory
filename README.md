@@ -2,7 +2,7 @@
 
 A highly customizable saber mod for Beat Saber
 
-Mod Download => **[Releases](https://github.com/ToniMacaroni/SaberFactory/releases)** or the **[Official Website](https://saberfactory.com)**
+Mod Download => **[Releases](https://github.com/ToniMacaroni/SaberFactory/releases)**
 
 To get more content and help with the mod or creation of content  
 join the the **[Saber Factory Discord](https://discord.gg/G9dtW5s)** server
