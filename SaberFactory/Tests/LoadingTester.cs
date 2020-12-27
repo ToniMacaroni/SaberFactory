@@ -12,6 +12,8 @@ namespace SaberFactory.Tests
         public async void Initialize()
         {
             var composition = await _mainAssetStore["CustomSabers\\zIndustrial.saber"];
+            _saberSet.LeftSaber.SetModelComposition(composition);
+            _saberSet.RightSaber.SetModelComposition(composition);
         }
     }
 }

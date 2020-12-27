@@ -1,4 +1,5 @@
 ﻿using System;
+using IPA.Utilities;
 using SaberFactory.Instances;
 using SaberFactory.Models;
 using SiraUtil.Interfaces;
@@ -27,14 +28,17 @@ namespace SaberFactory.Game
             var saberModel = saber.saberType == SaberType.SaberA ? _saberSet.LeftSaber : _saberSet.RightSaber;
 
             _saberInstance = _saberInstanceFactory.Create(saberModel);
+
             _saberInstance.SetParent(parent);
+            _saberInstance.CreateTrail(_saberTrail.GetField<SaberTrailRenderer, SaberTrail>("_trailRendererPrefab"));
+            _saberInstance.SetColor(_colorManager.ColorForSaberType(_saberInstance.Model.SaberType));
 
             _logger.Info("Instantiated Saber");
         }
 
         public void SetColor(Color color)
         {
-            
+            _saberInstance.SetColor(color);
         }
 
         public Color Color { get; }

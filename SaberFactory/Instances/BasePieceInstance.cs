@@ -1,4 +1,5 @@
-﻿using SaberFactory.Models;
+﻿using System;
+using SaberFactory.Models;
 using UnityEngine;
 using Zenject;
 
@@ -6,18 +7,25 @@ namespace SaberFactory.Instances
 {
     internal class BasePieceInstance
     {
+        public readonly BasePieceModel Model;
         public GameObject GameObject;
         public Transform CachedTransform;
 
-        private BasePieceInstance(BasePieceModel model)
+        protected BasePieceInstance(BasePieceModel model)
         {
-            GameObject = new GameObject("Saber Piece");
+            Model = model;
+            GameObject = Instantiate();
             CachedTransform = GameObject.transform;
         }
 
         public void SetParent(Transform parent)
         {
-            CachedTransform.SetParent(parent);
+            CachedTransform.SetParent(parent, false);
+        }
+
+        protected virtual GameObject Instantiate()
+        {
+            return new GameObject("BasePiece");
         }
 
         internal class Factory : PlaceholderFactory<BasePieceModel, BasePieceInstance> {}

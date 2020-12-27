@@ -156,22 +156,37 @@
     <Compile Include="DataStore\MainAssetStore.cs" />
     <Compile Include="Game\SFSaberModelController.cs" />
     <Compile Include="Helpers\AsyncReaders.cs" />
+    <Compile Include="Helpers\BaseGameTypeExtension.cs" />
     <Compile Include="Helpers\PathTools.cs" />
+    <Compile Include="Helpers\TypeValueRetriever.cs" />
     <Compile Include="Installers\AppInstaller.cs" />
     <Compile Include="Installers\GameInstaller.cs" />
     <Compile Include="Installers\MenuInstaller.cs" />
     <Compile Include="Instances\BasePieceInstance.cs" />
+    <Compile Include="Instances\CustomSaberInstance.cs" />
+    <Compile Include="Instances\CustomSaberTrailHandler.cs" />
+    <Compile Include="Instances\InstanceFactory.cs" />
+    <Compile Include="Instances\PieceInstanceManager.cs" />
+    <Compile Include="Instances\SaberInstanceManager.cs" />
+    <Compile Include="Instances\SectionInstantiator.cs" />
+    <Compile Include="Instances\TrailHandler.cs" />
     <Compile Include="Instances\SaberInstance.cs" />
+    <Compile Include="Instances\TrailConstructionData.cs" />
     <Compile Include="Loaders\AssetBundleLoader.cs" />
     <Compile Include="Models\CustomSaber\CustomSaberModelLoader.cs" />
     <Compile Include="Loaders\CustomSaberAssetLoader.cs" />
     <Compile Include="DataStore\StoreAsset.cs" />
     <Compile Include="Models\CustomSaber\CustomSaberModel.cs" />
     <Compile Include="Models\BasePieceModel.cs" />
+    <Compile Include="Models\CustomSaber\CustomSaberTrailData.cs" />
+    <Compile Include="Models\EAssetType.cs" />
     <Compile Include="Models\IStoreAssetParser.cs" />
     <Compile Include="Models\ModelComposition.cs" />
+    <Compile Include="Models\PieceCollection.cs" />
     <Compile Include="Models\SaberModel.cs" />
     <Compile Include="Models\SaberSet.cs" />
+    <Compile Include="Instances\SFTrail.cs" />
+    <Compile Include="Models\TrailModel.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Configuration\PluginConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -183,6 +198,7 @@
   <ItemGroup>
     <None Include="Directory.Build.props" Condition="Exists('Directory.Build.props')" />
     <None Include="Directory.Build.targets" Condition="Exists('Directory.Build.targets')" />
+    <EmbeddedResource Include="Resources\CustomSaberComponents" />
     <None Include="SaberFactory.csproj.user" Condition="Exists('SaberFactory.csproj.user')" />
   </ItemGroup>
   <ItemGroup>

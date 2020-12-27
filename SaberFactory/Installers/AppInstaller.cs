@@ -29,8 +29,8 @@ namespace SaberFactory.Installers
             Container.Bind<MainAssetStore>().AsSingle();
 
             // Model stuff
-            Container.Bind<SaberModel>().WithId("LeftSaberModel").AsSingle();
-            Container.Bind<SaberModel>().WithId("RightSaberModel").AsSingle();
+            Container.Bind<SaberModel>().WithId("LeftSaberModel").AsCached().WithArguments(SaberType.SaberA);
+            Container.Bind<SaberModel>().WithId("RightSaberModel").AsCached().WithArguments(SaberType.SaberB);
 
             Container.Bind<SaberSet>().AsSingle();
 
@@ -40,7 +40,10 @@ namespace SaberFactory.Installers
         private void InstallFactories()
         {
             Container.BindFactory<StoreAsset, CustomSaberModel, CustomSaberModel.Factory>();
-            Container.BindFactory<BasePieceModel, BasePieceInstance, BasePieceInstance.Factory>();
+
+            //Container.BindFactory<BasePieceModel, BasePieceInstance, BasePieceInstance.Factory>().FromFactory<InstanceFactory>();
+            Container.BindFactory<BasePieceModel, BasePieceInstance, BasePieceInstance.Factory>()
+                .FromFactory<InstanceFactory>();
             Container.BindFactory<SaberModel, SaberInstance, SaberInstance.Factory>();
         }
     }

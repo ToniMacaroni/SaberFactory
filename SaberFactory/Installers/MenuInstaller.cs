@@ -1,4 +1,5 @@
-﻿using SaberFactory.Tests;
+﻿using SaberFactory.Instances;
+using SaberFactory.Tests;
 using Zenject;
 
 namespace SaberFactory.Installers
@@ -8,6 +9,9 @@ namespace SaberFactory.Installers
         public override void InstallBindings()
         {
             Container.BindInterfacesAndSelfTo<LoadingTester>().AsSingle();
+
+            Container.Bind<SaberInstanceManager>().AsSingle();
+            Container.Bind<PieceInstanceManager>().AsSingle();
         }
     }
 }

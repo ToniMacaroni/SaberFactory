@@ -24,7 +24,7 @@ namespace SaberFactory.Models.CustomSaber
             var modelLeft = _factory.Create(storeAssetLeft);
             var modelRight = _factory.Create(storeAssetRight);
 
-            var composition = new ModelComposition(modelLeft, modelRight, storeAsset.Prefab);
+            var composition = new ModelComposition(AssetTypeDefinition.CustomSaber, modelLeft, modelRight, storeAsset.Prefab);
 
             return composition;
         }

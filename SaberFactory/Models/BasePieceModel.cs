@@ -9,8 +9,10 @@ namespace SaberFactory.Models
     /// Model related to everything that makes up a saber
     /// like parts, halos, accessories, custom sabers
     /// </summary>
-    internal abstract class BasePieceModel : IDisposable
+    internal class BasePieceModel : IDisposable
     {
+        public ModelComposition ModelComposition { get; set; }
+
         public readonly StoreAsset StoreAsset;
 
         public GameObject Prefab => StoreAsset.Prefab;

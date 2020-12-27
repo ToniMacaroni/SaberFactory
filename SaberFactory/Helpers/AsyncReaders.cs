@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Reflection;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -18,6 +19,12 @@ namespace SaberFactory.Helpers
             var result = new byte[stream.Length];
             await stream.ReadAsync(result, 0, result.Length);
             return result;
+        }
+
+        public static async Task<byte[]> ReadResource(string path)
+        {
+            using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(path);
+            return await ReadStreamAsync(stream);
         }
 
         public static async Task<AssetBundle> LoadAssetBundleAsync(byte[] data)

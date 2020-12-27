@@ -1,24 +1,42 @@
-﻿namespace SaberFactory.Models
+﻿using System.Collections.Generic;
+using System.Net.NetworkInformation;
+using SaberFactory.Helpers;
+using SaberFactory.Models.CustomSaber;
+using UnityEngine;
+
+namespace SaberFactory.Models
 {
     internal class SaberModel
     {
-        public readonly SaberSection Blade;
-        public readonly SaberSection Emitter;
-        public readonly SaberSection Handle;
-        public readonly SaberSection Pommel;
+        public readonly PieceCollection<BasePieceModel> PieceCollection;
 
-        private SaberModel()
+        private TrailModel _trailModel;
+
+        public readonly SaberType SaberType;
+
+        private SaberModel(SaberType saberType)
         {
-            Blade = new SaberSection();
-            Emitter = new SaberSection();
-            Handle = new SaberSection();
-            Pommel = new SaberSection();
+            SaberType = saberType;
+
+            PieceCollection = new PieceCollection<BasePieceModel>();
+            _trailModel = new TrailModel();
         }
 
-        internal struct SaberSection
+        public void SetModelComposition(ModelComposition composition)
         {
-            public BasePieceModel Model;
-            public BasePieceModel Halo;
+            PieceCollection[composition.AssetTypeDefinition] = SaberType.IsLeft()
+                ? composition.GetLeft()
+                : composition.GetRight();
+        }
+
+        public TrailModel GetTrailModel()
+        {
+            if (PieceCollection.TryGetPiece(AssetTypeDefinition.CustomSaber, out var model))
+            {
+                return (model as CustomSaberModel).TrailModel;
+            }
+
+            return _trailModel;
         }
     }
 }
