@@ -22,6 +22,7 @@ namespace SaberFactory.Game
         [Inject] private readonly SaberInstance.Factory _saberInstanceFactory = null;
 
         private SaberInstance _saberInstance;
+        private Color _saberColor;
 
         public override void Init(Transform parent, Saber saber)
         {
@@ -38,9 +39,10 @@ namespace SaberFactory.Game
 
         public void SetColor(Color color)
         {
+            _saberColor = color;
             _saberInstance.SetColor(color);
         }
 
-        public Color Color { get; }
+        public Color Color => _saberColor;
     }
 }

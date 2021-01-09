@@ -1,6 +1,8 @@
-﻿using UnityEngine;
+﻿using SaberFactory.Helpers;
+using SaberFactory.Instances.Trail;
+using UnityEngine;
 
-namespace SaberFactory.Instances
+namespace SaberFactory.Instances.CustomSaber
 {
     internal class CustomSaberTrailHandler : TrailHandler
     {
@@ -14,12 +16,17 @@ namespace SaberFactory.Instances
             var trailInitData = new SFTrail.TrailInitData
             {
                 TrailColor = new Color(0.7f, 0.7f, 0.7f),
-                TrailLength = 20,
+                TrailLength = _trailConstructionData.Length,
                 TrailPrefab = _trailRenderer,
-                Whitestep = 0
+                Whitestep = _trailConstructionData.Whitestep
             };
             TrailInstance.Setup(trailInitData, _trailConstructionData.Material, _trailConstructionData.BottomTransform,
                 _trailConstructionData.TopTransform);
+        }
+
+        public override void DestroyTrail()
+        {
+            TrailInstance.TryDestroy();
         }
     }
 }

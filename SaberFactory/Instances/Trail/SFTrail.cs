@@ -2,7 +2,7 @@
 using IPA.Utilities;
 using UnityEngine;
 
-namespace SaberFactory.Instances
+namespace SaberFactory.Instances.Trail
 {
     internal class SFTrail : SaberTrail
     {

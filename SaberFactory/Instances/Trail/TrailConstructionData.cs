@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace SaberFactory.Instances
+namespace SaberFactory.Instances.Trail
 {
     internal struct TrailConstructionData
     {

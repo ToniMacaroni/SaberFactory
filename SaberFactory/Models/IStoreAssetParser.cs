@@ -1,5 +1,4 @@
 ﻿using SaberFactory.DataStore;
-using SaberFactory.Loaders;
 
 namespace SaberFactory.Models
 {

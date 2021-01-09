@@ -1,0 +1,4 @@
+﻿<vertical background='round-rect-panel' bg-color='#00000033' pad='2' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
+  <button on-click='Click_Saber' font-size='6' text='sabers'/>
+  <button on-click='Click_Trail' font-size='6' text='trail'/>
+</vertical>

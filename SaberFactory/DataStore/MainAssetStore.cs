@@ -1,15 +1,23 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using SaberFactory.Helpers;
 using SaberFactory.Loaders;
 using SaberFactory.Models;
 using SaberFactory.Models.CustomSaber;
 using SiraUtil.Tools;
+using Zenject;
 
 namespace SaberFactory.DataStore
 {
-    internal class MainAssetStore
+    internal class MainAssetStore : IInitializable
     {
+        public event Action OnLoadingFinished;
+        public bool IsLoading { get; private set; }
+
         private readonly CustomSaberAssetLoader _customSaberAssetLoader;
         private readonly CustomSaberModelLoader _customSaberModelLoader;
 
@@ -40,8 +48,14 @@ namespace SaberFactory.DataStore
             return composition;
         }
 
-        public async Task LoadAllCustomSabers()
+        public async void Initialize()
         {
+            await LoadAll();
+        }
+
+        public async Task LoadAllCustomSabersAsync(bool fireEvent)
+        {
+            var sw = Stopwatch.StartNew();
             foreach (var path in _customSaberAssetLoader.CollectFiles())
             {
                 var relativePath = PathTools.ToRelativePath(path);
@@ -51,6 +65,22 @@ namespace SaberFactory.DataStore
                 var composition = await LoadModelCompositionAsync(relativePath);
                 if(composition != null) _modelCompositions.Add(relativePath, composition);
             }
+            sw.Stop();
+            _logger.Info($"Loaded in {sw.Elapsed.Seconds} Seconds");
+
+            if (fireEvent) NotifyLoadingFinished();
+        }
+
+        public async Task LoadAll()
+        {
+            IsLoading = true;
+            await LoadAllCustomSabersAsync(false);
+            NotifyLoadingFinished();
+        }
+
+        public List<ModelComposition> GetAllModelCompositions()
+        {
+            return _modelCompositions.Values.ToList();
         }
 
         public void UnloadAll()
@@ -60,6 +90,23 @@ namespace SaberFactory.DataStore
                 modelCompositions.Dispose();
             }
             _modelCompositions.Clear();
+        }
+
+        public void RegisterOneShotCallback(Action callback)
+        {
+            void OnFinished()
+            {
+                OnLoadingFinished -= OnFinished;
+                callback?.Invoke();
+            }
+
+            OnLoadingFinished += OnFinished;
+        }
+
+        private void NotifyLoadingFinished()
+        {
+            IsLoading = false;
+            OnLoadingFinished?.Invoke();
         }
 
         private void AddModelComposition(string key, ModelComposition modelComposition)

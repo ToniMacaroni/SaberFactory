@@ -6,5 +6,6 @@ namespace SaberFactory.Configuration
 {
     internal class PluginConfig
     {
+        public bool LoadOnStart { get; set; } = true;
     }
 }

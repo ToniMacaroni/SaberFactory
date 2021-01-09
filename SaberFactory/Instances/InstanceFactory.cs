@@ -1,4 +1,5 @@
 ﻿using System;
+using SaberFactory.Instances.CustomSaber;
 using SaberFactory.Models;
 using SaberFactory.Models.CustomSaber;
 using SiraUtil.Tools;

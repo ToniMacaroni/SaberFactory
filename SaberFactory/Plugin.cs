@@ -17,7 +17,7 @@ namespace SaberFactory
         [Init]
         public async void Init(IPALogger logger, Config conf, Zenjector zenjector)
         {
-            Assembly.Load(await AsyncReaders.ReadResource("SaberFactory.Resources.CustomSaberComponents"));
+            Assembly.Load(await AsyncReaders.ReadResourceAsync("SaberFactory.Resources.CustomSaberComponents.dll"));
 
             zenjector.OnApp<AppInstaller>().WithParameters(logger, conf.Generated<PluginConfig>());
             zenjector.OnMenu<Installers.MenuInstaller>();

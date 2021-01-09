@@ -1,6 +1,6 @@
 ﻿using System;
 using SaberFactory.DataStore;
-using SaberFactory.Loaders;
+using SaberFactory.UI;
 using UnityEngine;
 
 namespace SaberFactory.Models
@@ -9,7 +9,7 @@ namespace SaberFactory.Models
     /// Model related to everything that makes up a saber
     /// like parts, halos, accessories, custom sabers
     /// </summary>
-    internal class BasePieceModel : IDisposable
+    internal class BasePieceModel : IDisposable, ICustomListItem
     {
         public ModelComposition ModelComposition { get; set; }
 
@@ -17,13 +17,20 @@ namespace SaberFactory.Models
 
         public GameObject Prefab => StoreAsset.Prefab;
 
-        protected BasePieceModel(StoreAsset storeAsset)
+        protected CommonResources _commonResources;
+
+        protected BasePieceModel(StoreAsset storeAsset, CommonResources commonResources)
         {
             StoreAsset = storeAsset;
+            _commonResources = commonResources;
         }
 
         public virtual void Dispose()
         {
         }
+
+        public virtual string ListName { get; }
+        public virtual string ListAuthor { get; }
+        public virtual Sprite ListCover { get; }
     }
 }

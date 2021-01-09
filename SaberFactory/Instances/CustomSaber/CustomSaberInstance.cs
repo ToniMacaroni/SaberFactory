@@ -1,9 +1,8 @@
 ﻿using SaberFactory.Models.CustomSaber;
 using SiraUtil.Tools;
 using UnityEngine;
-using Zenject;
 
-namespace SaberFactory.Instances
+namespace SaberFactory.Instances.CustomSaber
 {
     internal class CustomSaberInstance : BasePieceInstance
     {
@@ -16,7 +15,7 @@ namespace SaberFactory.Instances
 
         protected override GameObject Instantiate()
         {
-            return GameObject.Instantiate(Model.Prefab);
+            return Object.Instantiate(Model.Prefab, Vector3.zero, Quaternion.identity);
         }
     }
 }

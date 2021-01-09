@@ -1,5 +1,4 @@
-﻿using System;
-using SaberFactory.Helpers;
+﻿using CustomSaber;
 using UnityEngine;
 
 namespace SaberFactory.Models.CustomSaber
@@ -13,26 +12,16 @@ namespace SaberFactory.Models.CustomSaber
 
         public CustomSaberTrailData FromCustomSaber(GameObject gameobject)
         {
-            TypeValueRetriever valueRetriever = null;
-            foreach (var component in gameobject.GetComponentsInChildren<Component>())
-            {
-                if (!component) continue;
-                Type type = component.GetType();
-                if (type.Name == "CustomTrail")
-                {
-                    valueRetriever = new TypeValueRetriever(type, component);
-                    break;
-                }
-            }
+            var saberTrail = gameobject.GetComponent<CustomTrail>();
 
-            if (valueRetriever == null) return default;
+            if (!saberTrail) return default;
 
             var data = new CustomSaberTrailData
             {
-                PointStart = valueRetriever.GetValue<Transform>("PointStart"),
-                PointEnd = valueRetriever.GetValue<Transform>("PointEnd"),
-                Material = valueRetriever.GetValue<Material>("TrailMaterial"),
-                Length = valueRetriever.GetValue<int>("Length")
+                PointStart = saberTrail.PointStart,
+                PointEnd = saberTrail.PointEnd,
+                Material = saberTrail.TrailMaterial,
+                Length = saberTrail.Length
             };
 
             return data;

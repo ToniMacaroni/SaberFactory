@@ -12,5 +12,11 @@ namespace SaberFactory.Models
             LeftSaber = leftSaber;
             RightSaber = rightSaber;
         }
+
+        public void SetModelComposition(ModelComposition modelComposition)
+        {
+            LeftSaber.SetModelComposition(modelComposition);
+            RightSaber.SetModelComposition(modelComposition);
+        }
     }
 }

@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using JetBrains.Annotations;
+﻿using System.Collections.Generic;
 using SaberFactory.Helpers;
+using SaberFactory.Instances.CustomSaber;
+using SaberFactory.Instances.Trail;
 using SaberFactory.Models;
-using SaberFactory.Models.CustomSaber;
 using SiraUtil.Tools;
 using UnityEngine;
 using Zenject;
@@ -53,7 +52,10 @@ namespace SaberFactory.Instances
                 material.color = color;
             }
 
-            TrailHandler.TrailInstance.Color = color;
+            if (TrailHandler != null)
+            {
+                TrailHandler.TrailInstance.Color = color;
+            }
         }
 
         public void CreateTrail(SaberTrailRenderer rendererPrefab)
@@ -63,7 +65,17 @@ namespace SaberFactory.Instances
                 CreateCustomSaberTrail(customsaber as CustomSaberInstance, rendererPrefab);
             }
 
-            TrailHandler.CreateTrail();
+            TrailHandler?.CreateTrail();
+        }
+
+        public void DestroyTrail()
+        {
+            TrailHandler?.DestroyTrail();
+        }
+
+        public void Destroy()
+        {
+            GameObject.TryDestroy();
         }
 
         private void CreateCustomSaberTrail(CustomSaberInstance instance, SaberTrailRenderer rendererPrefab)
@@ -92,17 +104,15 @@ namespace SaberFactory.Instances
                 foreach (var material in renderer.materials)
                 {
                     // color for saber factory models
-                    if ((material.HasProperty("_UseColorScheme") && material.GetFloat("_UseColorScheme") > 0.5f) || (material.HasProperty("_CustomColors") && material.GetFloat("_CustomColors") > 0))
+                    if (material.HasProperty("_UseColorScheme") && material.GetFloat("_UseColorScheme") > 0.5f || material.HasProperty("_CustomColors") && material.GetFloat("_CustomColors") > 0)
                         materials.Add(material);
 
                     // color for custom saber models
-                    else if (PieceCollection.HasPiece(AssetTypeDefinition.CustomSaber) && ((material.HasProperty("_Glow") && material.GetFloat("_Glow") > 0) || (material.HasProperty("_Bloom") && material.GetFloat("_Bloom") > 0)))
+                    else if (PieceCollection.HasPiece(AssetTypeDefinition.CustomSaber) && (material.HasProperty("_Glow") && material.GetFloat("_Glow") > 0 || material.HasProperty("_Bloom") && material.GetFloat("_Bloom") > 0))
                         materials.Add(material);
                 }
             }
         }
-
-        
 
         internal class Factory : PlaceholderFactory<SaberModel, SaberInstance> {}
     }

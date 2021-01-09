@@ -25,7 +25,8 @@ namespace SaberFactory.Models
 
         public void AddPiece(AssetTypeDefinition definition, T model)
         {
-            if(!HasPiece(definition)) _pieceModels.Add(definition, model);
+            if (!HasPiece(definition)) _pieceModels.Add(definition, model);
+            else _pieceModels[definition] = model;
         }
 
         public bool TryGetPiece(AssetTypeDefinition definition, out T model)

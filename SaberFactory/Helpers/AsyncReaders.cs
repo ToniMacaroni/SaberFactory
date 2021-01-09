@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -21,10 +22,16 @@ namespace SaberFactory.Helpers
             return result;
         }
 
-        public static async Task<byte[]> ReadResource(string path)
+        public static async Task<byte[]> ReadResourceAsync(string path)
         {
             using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(path);
+            if (stream == null) return null;
             return await ReadStreamAsync(stream);
+        }
+
+        public static async Task<string> BytesToString(byte[] data)
+        {
+            return await Task.Run(() => Encoding.UTF8.GetString(data));
         }
 
         public static async Task<AssetBundle> LoadAssetBundleAsync(byte[] data)

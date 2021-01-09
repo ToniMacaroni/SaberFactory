@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace SaberFactory.Instances
+namespace SaberFactory.Instances.Trail
 {
     internal abstract class TrailHandler
     {
@@ -15,6 +15,8 @@ namespace SaberFactory.Instances
         }
 
         public abstract void CreateTrail();
+
+        public abstract void DestroyTrail();
 
         public void SetPrefab(SaberTrailRenderer trailRenderer)
         {

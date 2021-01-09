@@ -1,0 +1,29 @@
+﻿<vertical bg="round-rect-panel" bg-color="#00000055" pad="2" xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+          xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
+
+	<text font-align='Center' text='~params-title' font-size='7' />
+
+	<vertical>
+		<custom-list id='custom-list' cell-size='20' select-cell='item-selected'>
+			<stack vertical-fit='Unconstrained'>
+				<bg bg='round-rect-panel' bg-color='#00000033' tags='hovered' />
+				<bg bg='round-rect-panel' bg-color='#00000055' tags='selected' />
+
+				<horizontal pad='2' spacing='2' child-expand-width='false' vertical-fit='Unconstrained'>
+					<image id='cover' pref-width='16' />
+					<vertical horizontal-fit='Unconstrained'>
+						<text text='~name' align='MidlineLeft' font-size='5.5' />
+						<text text='~author' color='#777' align='MidlineLeft' font-size='4.5' />
+					</vertical>
+				</horizontal>
+
+			</stack>
+		</custom-list>
+	</vertical>
+
+	<horizontal bg='round-rect-panel' background-color='#00000033' preferred-height='10'>
+		<page-button event-click='custom-list#PageDown' direction='Down' />
+		<page-button event-click='custom-list#PageUp' direction='Up' />
+	</horizontal>
+
+</vertical>

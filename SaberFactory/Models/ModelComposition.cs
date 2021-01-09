@@ -11,14 +11,14 @@ namespace SaberFactory.Models
         public readonly AssetTypeDefinition AssetTypeDefinition;
 
         private readonly BasePieceModel _modelLeft;
-        private readonly BasePieceModel _modelRigth;
+        private readonly BasePieceModel _modelRight;
         private readonly GameObject _additionalData;
 
         public ModelComposition(AssetTypeDefinition definition, BasePieceModel modelLeft, BasePieceModel modelRight, GameObject additionalData)
         {
             AssetTypeDefinition = definition;
             _modelLeft = modelLeft;
-            _modelRigth = modelRight;
+            _modelRight = modelRight;
             _additionalData = additionalData;
 
             if (_modelLeft != null)
@@ -26,9 +26,9 @@ namespace SaberFactory.Models
                 _modelLeft.ModelComposition = this;
             }
 
-            if (_modelRigth != null)
+            if (_modelRight != null)
             {
-                _modelRigth.ModelComposition = this;
+                _modelRight.ModelComposition = this;
             }
         }
 
@@ -39,8 +39,8 @@ namespace SaberFactory.Models
 
         public BasePieceModel GetRight()
         {
-            if (_modelRigth == null) return _modelLeft;
-            return _modelRigth;
+            if (_modelRight == null) return _modelLeft;
+            return _modelRight;
         }
 
         public GameObject GetAddidionalData()
@@ -56,7 +56,7 @@ namespace SaberFactory.Models
                 _modelLeft.Dispose();
             }
 
-            _modelRigth?.Dispose();
+            _modelRight?.Dispose();
         }
     }
 }

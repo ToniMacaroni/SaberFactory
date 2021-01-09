@@ -2,7 +2,6 @@
 using SaberFactory.Configuration;
 using SaberFactory.DataStore;
 using SaberFactory.Instances;
-using SaberFactory.Loaders;
 using SaberFactory.Models;
 using SaberFactory.Models.CustomSaber;
 using SiraUtil;
@@ -26,7 +25,18 @@ namespace SaberFactory.Installers
             Container.BindLoggerAsSiraLogger(_logger);
             Container.BindInstance(_config).AsSingle();
 
-            Container.Bind<MainAssetStore>().AsSingle();
+            Container.Bind<CommonResources>().AsSingle();
+
+            Container.Bind<EmbeddedAssetLoader>().AsSingle();
+
+            if (_config.LoadOnStart)
+            {
+                Container.BindInterfacesAndSelfTo<MainAssetStore>().AsSingle();
+            }
+            else
+            {
+                Container.Bind<MainAssetStore>().AsSingle();
+            }
 
             // Model stuff
             Container.Bind<SaberModel>().WithId("LeftSaberModel").AsCached().WithArguments(SaberType.SaberA);

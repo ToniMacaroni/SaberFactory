@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Net.NetworkInformation;
+﻿using System;
 using SaberFactory.Helpers;
 using SaberFactory.Models.CustomSaber;
-using UnityEngine;
 
 namespace SaberFactory.Models
 {
