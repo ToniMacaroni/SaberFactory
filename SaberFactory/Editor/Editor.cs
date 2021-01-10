@@ -41,7 +41,7 @@ namespace SaberFactory.Editor
             _saberFactoryUi.Initialize();
 
             // Create Pedestal
-            var pos = new Vector3(0, 0, 0.8f);
+            var pos = new Vector3(-0.5f, 0, 0.2f);
             await _pedestal.Instantiate(pos, Quaternion.identity);
 
             _saberContainer = new GameObject("Saber Container");

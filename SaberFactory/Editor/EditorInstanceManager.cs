@@ -39,10 +39,10 @@ namespace SaberFactory.Editor
         public void SetSelectedDefinition(AssetTypeDefinition definition, bool raiseEvents = false)
         {
             SelectedDefinition = definition;
+            CurrentPiece = GetPiece(definition);
 
             if (raiseEvents)
             {
-                CurrentPiece = GetPiece(definition);
                 if(CurrentPiece!=null) PieceInstanceCreated?.Invoke(CurrentPiece);
             }
         }

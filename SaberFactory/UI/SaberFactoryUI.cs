@@ -45,9 +45,11 @@ namespace SaberFactory.UI
 
             _curvedGO = _rootGO.CreateGameObject("Curved UI");
             _curvedGO.AddComponent<Canvas>();
+
             var canvasScaler = _curvedGO.AddComponent<CanvasScaler>();
             canvasScaler.referencePixelsPerUnit = 10;
             canvasScaler.scaleFactor = 3.44f;
+
             _container.InstantiateComponent<VRGraphicRaycaster>(_curvedGO);
             _curvedGO.AddComponent<CanvasRenderer>();
             _curvedCanvasSettings = _curvedGO.AddComponent<CurvedCanvasSettings>();
@@ -97,6 +99,11 @@ namespace SaberFactory.UI
         protected virtual void DidClose()
         {
 
+        }
+
+        public void SetRadius(float radius)
+        {
+            _curvedCanvasSettings.SetRadius(radius);
         }
 
         protected CustomScreen AddScreen(CustomScreen.InitData initData)
