@@ -3,6 +3,7 @@ using SaberFactory.Helpers;
 using SaberFactory.Instances.CustomSaber;
 using SaberFactory.Instances.Trail;
 using SaberFactory.Models;
+using SaberFactory.Models.CustomSaber;
 using SiraUtil.Tools;
 using UnityEngine;
 using Zenject;
@@ -23,6 +24,8 @@ namespace SaberFactory.Instances
         private readonly List<Material> _colorMaterials;
         private readonly SiraLog _logger;
 
+        private InstanceTrailData _instanceTrailData;
+
         private SaberInstance(SaberModel model, BasePieceInstance.Factory pieceFactory, SiraLog logger)
         {
             _logger = logger;
@@ -38,6 +41,16 @@ namespace SaberFactory.Instances
 
             _colorMaterials = new List<Material>();
             GetColorableMaterials(_colorMaterials);
+
+            SetupTrailData();
+        }
+
+        public void SetupTrailData()
+        {
+            if (GetCustomSaber(out var customsaber)) return;
+
+            // TODO: Setup sf trail data
+            _instanceTrailData = default;
         }
 
         public void SetParent(Transform parent)
@@ -60,12 +73,10 @@ namespace SaberFactory.Instances
 
         public void CreateTrail(SaberTrailRenderer rendererPrefab)
         {
-            if (PieceCollection.TryGetPiece(AssetTypeDefinition.CustomSaber, out var customsaber))
-            {
-                CreateCustomSaberTrail(customsaber as CustomSaberInstance, rendererPrefab);
-            }
-
-            TrailHandler?.CreateTrail();
+            TrailHandler = new TrailHandler(GameObject);
+            TrailHandler.SetPrefab(rendererPrefab);
+            TrailHandler.SetTrailData(_instanceTrailData);
+            TrailHandler.CreateTrail();
         }
 
         public void DestroyTrail()
@@ -78,21 +89,26 @@ namespace SaberFactory.Instances
             GameObject.TryDestroy();
         }
 
-        private void CreateCustomSaberTrail(CustomSaberInstance instance, SaberTrailRenderer rendererPrefab)
+        private bool GetCustomSaber(out CustomSaberInstance customSaberInstance)
         {
-            TrailHandler = new CustomSaberTrailHandler(GameObject);
-            TrailHandler.SetPrefab(rendererPrefab);
-            var data = instance.CustomSaberTrailData;
-            var constructionData = new TrailConstructionData
+            if (PieceCollection.TryGetPiece(AssetTypeDefinition.CustomSaber, out var instance))
             {
-                BottomTransform = data.PointStart,
-                TopTransform = data.PointEnd,
-                Material = data.Material,
-                Length = data.Length,
-                Whitestep = 0
-            };
+                customSaberInstance = instance as CustomSaberInstance;
+                return true;
+            }
 
-            TrailHandler.SetConstructionData(constructionData);
+            customSaberInstance = null;
+            return false;
+        }
+
+        public InstanceTrailData GetTrailData()
+        {
+            if (GetCustomSaber(out var customsaber))
+            {
+                return customsaber.GetInstanceTrailData(true);
+            }
+
+            return _instanceTrailData;
         }
 
         private void GetColorableMaterials(List<Material> materials)

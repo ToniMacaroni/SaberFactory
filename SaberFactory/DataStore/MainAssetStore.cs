@@ -59,7 +59,6 @@ namespace SaberFactory.DataStore
             foreach (var path in _customSaberAssetLoader.CollectFiles())
             {
                 var relativePath = PathTools.ToRelativePath(path);
-                _logger.Info(relativePath);
                 if(_modelCompositions.ContainsKey(relativePath)) continue;
 
                 var composition = await LoadModelCompositionAsync(relativePath);

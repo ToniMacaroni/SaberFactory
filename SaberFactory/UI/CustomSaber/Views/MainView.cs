@@ -22,7 +22,7 @@ namespace SaberFactory.UI.CustomSaber.Views
         [UIAction("#post-parse")]
         private void Setup()
         {
-            _saberSelectorView = CreateSubView<SaberSelectorView>(_subViewContainer, true);
+            _saberSelectorView = CreateSubView<SaberSelectorView>(_subViewContainer, switchToView: true);
             _trailSettingsView = CreateSubView<TrailSettingsView>(_subViewContainer);
         }
 

@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace SaberFactory.Helpers
 {
-    public static class AsyncReaders
+    public static class Readers
     {
         public static async Task<byte[]> ReadFileAsync(string path)
         {
@@ -22,11 +22,25 @@ namespace SaberFactory.Helpers
             return result;
         }
 
+        public static byte[] ReadStream(this Stream stream)
+        {
+            var result = new byte[stream.Length];
+            stream.Read(result, 0, result.Length);
+            return result;
+        }
+
         public static async Task<byte[]> ReadResourceAsync(string path)
         {
             using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(path);
             if (stream == null) return null;
             return await ReadStreamAsync(stream);
+        }
+
+        public static byte[] ReadResource(string path)
+        {
+            using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(path);
+            if (stream == null) return null;
+            return ReadStream(stream);
         }
 
         public static async Task<string> BytesToString(byte[] data)

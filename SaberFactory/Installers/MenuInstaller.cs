@@ -1,9 +1,9 @@
 ﻿using System;
 using SaberFactory.Editor;
 using SaberFactory.Instances;
-using SaberFactory.Tests;
 using SaberFactory.UI;
 using SaberFactory.UI.CustomSaber;
+using SaberFactory.UI.CustomSaber.Views;
 using SaberFactory.UI.Lib;
 using UnityEngine;
 using Zenject;
@@ -14,17 +14,12 @@ namespace SaberFactory.Installers
     {
         public override void InstallBindings()
         {
-            Container.BindInterfacesAndSelfTo<LoadingTester>().AsSingle();
-
             Container.Bind<BaseGameUiHandler>().AsSingle();
             Container.Bind<EditorInstanceManager>().AsSingle();
 
             Container
                 .BindFactory<Type, SubView.InitData, SubView, SubView.Factory>()
                 .FromFactory<SubViewFactory>();
-            Container
-                .BindFactory<Type, Transform, object, CustomUiComponent, CustomUiComponent.Factory>()
-                .FromFactory<CustomUiComponentFactory>();
             Container
                 .BindFactory<Type, CustomViewController.InitData, CustomViewController, CustomViewController.Factory>()
                 .FromFactory<ViewControllerFactory>();
@@ -36,6 +31,8 @@ namespace SaberFactory.Installers
             Container.BindInterfacesAndSelfTo<Editor.Editor>().AsSingle();
 
             Container.BindInterfacesAndSelfTo<SaberFactoryMenuButton>().AsSingle();
+
+            Container.Bind<TrailPreviewer>().AsSingle();
         }
     }
 }

@@ -25,6 +25,7 @@ namespace SaberFactory.UI.Lib
             canvas.additionalShaderChannels |= AdditionalCanvasShaderChannels.TexCoord1;
             canvas.additionalShaderChannels |= AdditionalCanvasShaderChannels.TexCoord2;
             canvas.additionalShaderChannels |= AdditionalCanvasShaderChannels.Tangent;
+
             _container.InstantiateComponent<VRGraphicRaycaster>(go);
 
             var vc = (CustomViewController) _container.InstantiateComponent(viewControllerType, go);

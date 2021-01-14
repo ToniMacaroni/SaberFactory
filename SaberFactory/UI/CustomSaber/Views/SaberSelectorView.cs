@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BeatSaberMarkupLanguage.Attributes;
+using BeatSaberMarkupLanguage.Components;
+using HMUI;
 using SaberFactory.DataStore;
 using SaberFactory.Editor;
 using SaberFactory.Models;
@@ -16,23 +19,15 @@ namespace SaberFactory.UI.CustomSaber.Views
 {
     internal class SaberSelectorView : SubView
     {
-        #region Custom Components
-
-        private SaberSelector _saberSelector;
-
-        #endregion
-
         [Inject] private readonly MainAssetStore _mainAssetStore = null;
         [Inject] private readonly EditorInstanceManager _editorInstanceManager = null;
 
-        [UIComponent("list-container")] private readonly Transform _listContainer = null;
+        [UIComponent("saber-list")] private readonly CustomList _saberList = null;
 
         [UIAction("#post-parse")]
         private async void Setup()
         {
-            _saberSelector =
-                CreateComponent<SaberSelector>(_listContainer, new SaberSelector.SaberSelectorParams("Sabers"));
-            _saberSelector.OnItemSelected += SaberSelected;
+            _saberList.OnItemSelected += SaberSelected;
             await LoadSabers();
         }
 
@@ -51,7 +46,7 @@ namespace SaberFactory.UI.CustomSaber.Views
 
         private void ShowSabers()
         {
-            _saberSelector.SetItems(_mainAssetStore.GetAllModelCompositions().Select(c => c.GetLeft()));
+            _saberList.SetItems(_mainAssetStore.GetAllModelCompositions().Select(c => c.GetLeft()));
         }
 
         private void SaberSelected(object item)

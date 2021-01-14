@@ -43,7 +43,7 @@ namespace SaberFactory
         private async Task<bool> CheckLoaded()
         {
             if (_assetBundle) return true;
-            var data = await AsyncReaders.ReadResourceAsync(BUNDLE_PATH);
+            var data = await Readers.ReadResourceAsync(BUNDLE_PATH);
 
             if (data == null)
             {
@@ -51,7 +51,7 @@ namespace SaberFactory
                 return false;
             }
 
-            _assetBundle = await AsyncReaders.LoadAssetBundleAsync(data);
+            _assetBundle = await Readers.LoadAssetBundleAsync(data);
 
             if (_assetBundle == null)
             {

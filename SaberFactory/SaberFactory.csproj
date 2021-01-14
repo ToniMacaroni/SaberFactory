@@ -65,6 +65,11 @@
       <HintPath>$(BeatSaberDir)\Libs\Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Polyglot">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Polyglot.dll</HintPath>
+      <Private>False</Private>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
     <Reference Include="SiraUtil">
       <HintPath>$(BeatSaberDir)\Plugins\SiraUtil.dll</HintPath>
       <Private>False</Private>
@@ -173,7 +178,7 @@
     <Compile Include="EmbeddedAssetLoader.cs" />
     <Compile Include="Editor\Pedestal.cs" />
     <Compile Include="Game\SFSaberModelController.cs" />
-    <Compile Include="Helpers\AsyncReaders.cs" />
+    <Compile Include="Helpers\Readers.cs" />
     <Compile Include="Helpers\BaseGameTypeExtension.cs" />
     <Compile Include="Helpers\PathTools.cs" />
     <Compile Include="Helpers\TypeValueRetriever.cs" />
@@ -183,7 +188,6 @@
     <Compile Include="Installers\MenuInstaller.cs" />
     <Compile Include="Instances\BasePieceInstance.cs" />
     <Compile Include="Instances\CustomSaber\CustomSaberInstance.cs" />
-    <Compile Include="Instances\CustomSaber\CustomSaberTrailHandler.cs" />
     <Compile Include="Instances\InstanceFactory.cs" />
     <Compile Include="Editor\EditorInstanceManager.cs" />
     <Compile Include="Instances\SectionInstantiator.cs" />
@@ -196,7 +200,7 @@
     <Compile Include="DataStore\StoreAsset.cs" />
     <Compile Include="Models\CustomSaber\CustomSaberModel.cs" />
     <Compile Include="Models\BasePieceModel.cs" />
-    <Compile Include="Models\CustomSaber\CustomSaberTrailData.cs" />
+    <Compile Include="Instances\Trail\InstanceTrailData.cs" />
     <Compile Include="Models\EAssetType.cs" />
     <Compile Include="Models\IStoreAssetParser.cs" />
     <Compile Include="Models\ModelComposition.cs" />
@@ -208,18 +212,22 @@
     <Compile Include="Plugin.cs" />
     <Compile Include="Configuration\PluginConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tests\LoadingTester.cs" />
     <Compile Include="UI\BaseGameUiHandler.cs" />
-    <Compile Include="UI\CustomSaber\CustomComponents\SaberSelector.cs" />
+    <Compile Include="UI\CustomSaber\CustomComponents\CustomCellList.cs" />
+    <Compile Include="UI\CustomSaber\CustomComponents\CustomList.cs" />
+    <Compile Include="UI\CustomSaber\CustomComponents\MaterialEditor.cs" />
     <Compile Include="UI\CustomSaber\CustomSaberUI.cs" />
     <Compile Include="UI\CustomSaber\Views\MainView.cs" />
     <Compile Include="UI\CustomSaber\Views\NavigationView.cs" />
     <Compile Include="UI\CustomSaber\Views\SaberSelectorView.cs" />
+    <Compile Include="UI\TrailPreviewer.cs" />
     <Compile Include="UI\CustomSaber\Views\TrailSettingsView.cs" />
     <Compile Include="UI\ICustomListItem.cs" />
-    <Compile Include="UI\Lib\BSML\BSMLCustomUIComponentTag.cs" />
+    <Compile Include="UI\Lib\BSML\CustomBackgroundable.cs" />
+    <Compile Include="UI\Lib\BSML\CustomComponentHandler.cs" />
+    <Compile Include="UI\Lib\BSML\CustomIconButton.cs" />
     <Compile Include="UI\Lib\CustomUiComponent.cs" />
-    <Compile Include="UI\Lib\CustomUiComponentFactory.cs" />
+    <Compile Include="UI\Lib\CustomUiComponentTag.cs" />
     <Compile Include="UI\Lib\CustomViewController.cs" />
     <Compile Include="UI\Lib\ISubViewHost.cs" />
     <Compile Include="UI\Lib\SubView.cs" />
@@ -243,7 +251,7 @@
     <EmbeddedResource Include="UI\CustomSaber\Views\MainView.bsml">
       <DependentUpon>MainView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\CustomSaber\Views\SaberSelector.bsml">
+    <EmbeddedResource Include="UI\CustomSaber\Views\SaberSelectorView.bsml">
       <DependentUpon>SaberSelectorView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\CustomSaber\Views\TrailSettingsView.bsml">
@@ -252,8 +260,14 @@
     <EmbeddedResource Include="UI\CustomSaber\Views\NavigationView.bsml">
       <DependentUpon>NavigationView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\CustomSaber\CustomComponents\SaberSelector.bsml">
-      <DependentUpon>SaberSelector.cs</DependentUpon>
+    <EmbeddedResource Include="UI\CustomSaber\CustomComponents\CustomCellList.bsml">
+      <DependentUpon>CustomCellList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\CustomSaber\CustomComponents\CustomList.bsml">
+      <DependentUpon>CustomList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\CustomSaber\CustomComponents\MaterialEditor.bsml">
+      <DependentUpon>MaterialEditor.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -266,6 +280,18 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Resources\Icons\blade-icon.png" />
+    <EmbeddedResource Include="Resources\Icons\customsaber-icon.png" />
+    <Content Include="Resources\Icons\emitter-icon.png" />
+    <Content Include="Resources\Icons\halo-icon.png" />
+    <Content Include="Resources\Icons\hilt-icon.png" />
+    <Content Include="Resources\Icons\model-icon.png" />
+    <Content Include="Resources\Icons\pommel-icon.png" />
+    <EmbeddedResource Include="Resources\Icons\trail-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Tests\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

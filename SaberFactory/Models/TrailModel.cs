@@ -2,12 +2,12 @@
 
 namespace SaberFactory.Models
 {
-    internal class TrailModel
+    internal struct TrailModel
     {
-        public Vector3 TrailPos;
-        public float TrailWidth;
-        public int TrailLength;
-        public float TrailOffset;
+        public Vector3 TrailPosOffset;
+        public float TrailWidthOffset;
+        public int TrailLengthOffset;
+        public Material Material;
         public float Whitestep;
     }
 }

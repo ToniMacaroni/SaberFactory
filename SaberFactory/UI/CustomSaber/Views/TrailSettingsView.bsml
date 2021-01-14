@@ -1,3 +1,12 @@
 ﻿<bg bg="round-rect-panel" bg-color="#00000033" xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
-  <text text='Here are the trail settings'/>
+	<vertical>
+		<vertical bg='round-rect-panel' bg-color='#00000033' child-align='MiddleCenter' child-expand-height='false'>
+			<text text='Offsets' />
+
+			<slider-setting text='Length' value='value-length' get-event='update-props' apply-on-change='true' integer-only='true' />
+			<slider-setting text='Width' value='value-width' get-event='update-props' apply-on-change='true' />
+
+			<button text='Edit Material' />
+		</vertical>
+	</vertical>
 </bg>

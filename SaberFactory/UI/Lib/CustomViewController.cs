@@ -9,7 +9,7 @@ using Zenject;
 
 namespace SaberFactory.UI.Lib
 {
-    internal class CustomViewController : ViewController
+    internal class CustomViewController : ViewController, INotifyPropertyChanged
     {
         public Action<bool, bool, bool> didActivate;
 
@@ -18,14 +18,12 @@ namespace SaberFactory.UI.Lib
         protected virtual string _resourceName => string.Join(".", GetType().Namespace, GetType().Name);
 
         protected SiraLog _logger;
-        protected CustomUiComponent.Factory _componentFactory;
         protected SubView.Factory _viewFactory;
 
         [Inject]
-        private void Construct(SiraLog logger, CustomUiComponent.Factory componentFactory, SubView.Factory viewFactory)
+        private void Construct(SiraLog logger, SubView.Factory viewFactory)
         {
             _logger = logger;
-            _componentFactory = componentFactory;
             _viewFactory = viewFactory;
 
             _subViewHandler = new SubViewHandler();
@@ -35,15 +33,16 @@ namespace SaberFactory.UI.Lib
         {
             if (firstActivation)
             {
-                await UIHelpers.ParseFromResource(_resourceName, gameObject, this);
+                await UIHelpers.ParseFromResourceAsync(_resourceName, gameObject, this);
             }
             
             didActivate?.Invoke(firstActivation, addedToHierarchy, screenSystemEnabling);
+            _subViewHandler.NotifyDidOpen();
         }
 
-        protected T CreateComponent<T>(Transform parent, object componentParams) where T : CustomUiComponent
+        protected override void DidDeactivate(bool removedFromHierarchy, bool screenSystemDisabling)
         {
-            return (T) _componentFactory.Create(typeof(T), parent, componentParams);
+            _subViewHandler.NotifyDidClose();
         }
 
         protected T CreateSubView<T>(Transform parent, bool switchToView = false) where T : SubView
@@ -55,6 +54,7 @@ namespace SaberFactory.UI.Lib
             };
 
             var view = (T) _viewFactory.Create(typeof(T), initData);
+            view.SubViewHandler = _subViewHandler;
             if(switchToView) _subViewHandler.SwitchView(view);
 
             return view;

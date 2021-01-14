@@ -18,7 +18,6 @@ namespace SaberFactory.Editor
         private readonly SaberSet _saberSet;
 
         private readonly Pedestal _pedestal;
-        private GameObject _saberContainer;
         private SaberInstance _spawnedSaber;
 
         private Editor(
@@ -41,12 +40,8 @@ namespace SaberFactory.Editor
             _saberFactoryUi.Initialize();
 
             // Create Pedestal
-            var pos = new Vector3(-0.5f, 0, 0.2f);
+            var pos = new Vector3(-0.3f, 0, 1.0f);
             await _pedestal.Instantiate(pos, Quaternion.identity);
-
-            _saberContainer = new GameObject("Saber Container");
-            _saberContainer.transform.position = pos + new Vector3(0, 1, 0);
-            _saberContainer.transform.eulerAngles = new Vector3(-90, 0, 0);
         }
 
         public void Dispose()
@@ -60,9 +55,14 @@ namespace SaberFactory.Editor
         {
             if (IsActive) return;
 
-            _editorInstanceManager.ModelCompositionSet += OnModelCompositionSet;
+            _editorInstanceManager.OnModelCompositionSet += OnModelCompositionSet;
 
             _pedestal.IsVisible = true;
+
+            if (_editorInstanceManager.CurrentModelComposition != null)
+            {
+                _editorInstanceManager.SetModelComposition(_editorInstanceManager.CurrentModelComposition);
+            }
 
             _saberFactoryUi.Open();
             _saberFactoryUi.OnClosePressed += Close;
@@ -74,7 +74,8 @@ namespace SaberFactory.Editor
         {
             if (!IsActive) return;
 
-            _editorInstanceManager.ModelCompositionSet -= OnModelCompositionSet;
+            _editorInstanceManager.OnModelCompositionSet -= OnModelCompositionSet;
+            _editorInstanceManager.DestroySaber();
             _spawnedSaber?.Destroy();
 
             _pedestal.IsVisible = false;
@@ -89,7 +90,7 @@ namespace SaberFactory.Editor
         {
             _spawnedSaber?.Destroy();
             _spawnedSaber = _editorInstanceManager.CreateSaber(_saberSet.LeftSaber, true, true);
-            _spawnedSaber.SetParent(_saberContainer.transform);
+            _spawnedSaber.SetParent(_pedestal.SaberContainerTransform);
         }
     }
 }

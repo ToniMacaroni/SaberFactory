@@ -6,12 +6,11 @@ namespace SaberFactory.Models.CustomSaber
 {
     internal class CustomSaberModel : BasePieceModel
     {
-        public TrailModel TrailModel;
+        public TrailModel? TrailModel;
         public SaberDescriptor SaberDescriptor;
 
         public CustomSaberModel(StoreAsset storeAsset, CommonResources commonResources) : base(storeAsset, commonResources)
         {
-            TrailModel = new TrailModel();
         }
 
         internal class Factory : PlaceholderFactory<StoreAsset, CustomSaberModel> {}

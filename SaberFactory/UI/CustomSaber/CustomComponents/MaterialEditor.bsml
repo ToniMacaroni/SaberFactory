@@ -1,0 +1,4 @@
+﻿<bg xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
+	<dropdown-list-setting id='material-dropdown' text='Material'/>
+	<dropdown-list-setting id='shader-dropdown' text='Shader'/>
+</bg>

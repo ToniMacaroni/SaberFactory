@@ -6,11 +6,11 @@
 	<vertical pad-bottom='5'>
 		<custom-list id='custom-list' cell-size='14' select-cell='item-selected'>
 			<stack vertical-fit='Unconstrained'>
-				<bg bg='round-rect-panel' bg-color='#00000033' tags='hovered' />
-				<bg bg='round-rect-panel' bg-color='#00000055' tags='selected' />
+				<!--<bg bg='round-rect-panel' bg-color='#00000033' tags='hovered' />
+				<bg bg='round-rect-panel' bg-color='#00000055' tags='selected' />-->
 
 				<horizontal pad='2' spacing='2' child-expand-width='false' vertical-fit='Unconstrained'>
-					<image id='cover' pref-width='10' />
+					<!--<image id='cover' pref-width='10' />-->
 					<vertical horizontal-fit='Unconstrained'>
 						<text text='~name' align='MidlineLeft' font-size='3.5' />
 						<text text='~author' color='#777' align='MidlineLeft' font-size='2.5' />

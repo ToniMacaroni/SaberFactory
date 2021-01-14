@@ -4,6 +4,7 @@ using SaberFactory.DataStore;
 using SaberFactory.Instances;
 using SaberFactory.Models;
 using SaberFactory.Models.CustomSaber;
+using SaberFactory.UI.Lib.BSML;
 using SiraUtil;
 using Zenject;
 
@@ -25,6 +26,7 @@ namespace SaberFactory.Installers
             Container.BindLoggerAsSiraLogger(_logger);
             Container.BindInstance(_config).AsSingle();
 
+            Container.BindInterfacesAndSelfTo<CustomComponentHandler>().AsSingle();
             Container.Bind<CommonResources>().AsSingle();
 
             Container.Bind<EmbeddedAssetLoader>().AsSingle();

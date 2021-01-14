@@ -19,6 +19,8 @@ namespace SaberFactory.Models
 
         protected CommonResources _commonResources;
 
+        protected bool _initialized;
+
         protected BasePieceModel(StoreAsset storeAsset, CommonResources commonResources)
         {
             StoreAsset = storeAsset;

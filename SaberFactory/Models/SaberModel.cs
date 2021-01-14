@@ -8,7 +8,7 @@ namespace SaberFactory.Models
     {
         public readonly PieceCollection<BasePieceModel> PieceCollection;
 
-        private TrailModel _trailModel;
+        private readonly TrailModel _trailModel;
 
         public readonly SaberType SaberType;
 
@@ -27,14 +27,33 @@ namespace SaberFactory.Models
                 : composition.GetRight();
         }
 
-        public TrailModel GetTrailModel()
+        public bool InitTrailModel()
         {
-            if (PieceCollection.TryGetPiece(AssetTypeDefinition.CustomSaber, out var model))
+            if (!GetCustomSaber(out var customsaber) || customsaber.TrailModel.HasValue) return false;
+            customsaber.TrailModel = new TrailModel();
+            return true;
+        }
+
+        public TrailModel? GetTrailModel()
+        {
+            if (GetCustomSaber(out var customsaber))
             {
-                return (model as CustomSaberModel).TrailModel;
+                return customsaber.TrailModel;
             }
 
             return _trailModel;
+        }
+
+        private bool GetCustomSaber(out CustomSaberModel customsaber)
+        {
+            if (PieceCollection.TryGetPiece(AssetTypeDefinition.CustomSaber, out var model))
+            {
+                customsaber = model as CustomSaberModel;
+                return true;
+            }
+
+            customsaber = null;
+            return false;
         }
     }
 }

@@ -14,38 +14,50 @@ namespace SaberFactory.UI.Lib
 
         public BSMLParserParams ParserParams { get; private set; }
 
+        public SubViewHandler SubViewHandler;
+
         protected virtual string _resourceName => string.Join(".", GetType().Namespace, GetType().Name);
 
         protected SiraLog _logger;
-        private CustomUiComponent.Factory _componentFactory;
 
         [Inject]
-        private async void Construct(SiraLog logger, CustomUiComponent.Factory componentFactory)
+        private async void Construct(SiraLog logger)
         {
             _logger = logger;
-            _componentFactory = componentFactory;
 
-            await Init();
+            ParserParams = await UIHelpers.ParseFromResourceAsync(_resourceName, gameObject, this);
+            Init();
         }
 
-        public virtual void Open()
+        public void Open()
         {
             gameObject.SetActive(true);
+            DidOpen();
         }
 
-        public virtual void Close()
+        public void Close()
         {
             gameObject.SetActive(false);
+            DidClose();
         }
 
-        protected T CreateComponent<T>(Transform parent, object componentParams) where T : CustomUiComponent
+        public virtual void DidOpen()
         {
-            return (T)_componentFactory.Create(typeof(T), parent, componentParams);
+
         }
 
-        private async Task Init()
+        public virtual void DidClose()
         {
-            ParserParams = await UIHelpers.ParseFromResource(_resourceName, gameObject, this);
+
+        }
+
+        public void GoBack()
+        {
+            SubViewHandler.GoBack();
+        }
+
+        protected virtual void Init()
+        {
         }
 
         internal class Factory : PlaceholderFactory<Type, InitData, SubView> {}

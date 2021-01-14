@@ -41,7 +41,7 @@ namespace SaberFactory.Loaders
         public override async Task<StoreAsset> LoadStoreAssetAsync(string relativePath)
         {
             var fullPath = PathTools.ToFullPath(relativePath);
-            var result = await AsyncReaders.LoadAssetFromAssetBundleAsync<GameObject>(fullPath, "_CustomSaber");
+            var result = await Readers.LoadAssetFromAssetBundleAsync<GameObject>(fullPath, "_CustomSaber");
             if (result == null) return null;
             return new StoreAsset(relativePath, result.Item1, result.Item2);
         }

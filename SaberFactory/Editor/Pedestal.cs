@@ -10,13 +10,21 @@ namespace SaberFactory.Editor
         {
             set
             {
-                if(_instance) _instance.SetActive(value);
+                if(_rootTransform) _rootTransform.gameObject.SetActive(value);
             }
         }
 
+        public Vector3 Position
+        {
+            get => _rootTransform.position;
+            set => _rootTransform.position = value;
+        }
+
+        public Transform SaberContainerTransform { get; private set; }
+
         private readonly EmbeddedAssetLoader _embeddedAssetLoader;
 
-        private GameObject _instance;
+        private Transform _rootTransform;
 
         public Pedestal(EmbeddedAssetLoader embeddedAssetLoader)
         {
@@ -25,16 +33,26 @@ namespace SaberFactory.Editor
 
         public async Task Instantiate(Vector3 pos, Quaternion rot)
         {
-            if (_instance) return;
+            if (_rootTransform) return;
+            _rootTransform = new GameObject("Pedestal Container").transform;
+
             var prefab = await _embeddedAssetLoader.LoadAsset<GameObject>("Pedestal");
             if (!prefab) return;
-            _instance = Object.Instantiate(prefab, pos, rot);
+            Object.Instantiate(prefab, _rootTransform, false);
+
+            SaberContainerTransform = _rootTransform.CreateGameObject("SaberContainer").transform;
+            SaberContainerTransform.localPosition += new Vector3(0, 1, 0);
+            SaberContainerTransform.localEulerAngles = new Vector3(-90, 0, 0);
+
+            _rootTransform.position = pos;
+            _rootTransform.rotation = rot;
+
             IsVisible = false;
         }
 
         public void Destroy()
         {
-            _instance.TryDestroy();
+            _rootTransform.gameObject.TryDestroy();
         }
     }
 }

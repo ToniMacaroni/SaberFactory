@@ -2,14 +2,15 @@
 using SaberFactory.Instances;
 using SaberFactory.Models;
 using SiraUtil.Tools;
+using UnityEngine;
 
 namespace SaberFactory.Editor
 {
     internal class EditorInstanceManager
     {
-        public event Action<SaberInstance> SaberInstanceCreated;
-        public event Action<BasePieceInstance> PieceInstanceCreated;
-        public event Action<ModelComposition> ModelCompositionSet; 
+        public event Action<SaberInstance> OnSaberInstanceCreated;
+        public event Action<BasePieceInstance> OnPieceInstanceCreated;
+        public event Action<ModelComposition> OnModelCompositionSet; 
 
         public AssetTypeDefinition SelectedDefinition { get; private set; }
         public SaberInstance CurrentSaber { get; private set; }
@@ -33,7 +34,7 @@ namespace SaberFactory.Editor
         {
             CurrentModelComposition = composition;
             _saberSet.SetModelComposition(CurrentModelComposition);
-            ModelCompositionSet?.Invoke(CurrentModelComposition);
+            OnModelCompositionSet?.Invoke(CurrentModelComposition);
         }
 
         public void SetSelectedDefinition(AssetTypeDefinition definition, bool raiseEvents = false)
@@ -43,7 +44,7 @@ namespace SaberFactory.Editor
 
             if (raiseEvents)
             {
-                if(CurrentPiece!=null) PieceInstanceCreated?.Invoke(CurrentPiece);
+                if(CurrentPiece!=null) OnPieceInstanceCreated?.Invoke(CurrentPiece);
             }
         }
 
@@ -53,14 +54,14 @@ namespace SaberFactory.Editor
 
             if (raiseSaberEvent)
             {
-                SaberInstanceCreated?.Invoke(CurrentSaber);
+                OnSaberInstanceCreated?.Invoke(CurrentSaber);
             }
 
             CurrentPiece = GetPiece(SelectedDefinition);
 
             if (raisePieceEvent && CurrentPiece != null)
             {
-                PieceInstanceCreated?.Invoke(CurrentPiece);
+                OnPieceInstanceCreated?.Invoke(CurrentPiece);
             }
 
             return CurrentSaber;

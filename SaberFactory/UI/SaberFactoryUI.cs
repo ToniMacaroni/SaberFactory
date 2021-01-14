@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using HMUI;
+using IPA.Utilities;
 using SaberFactory.Helpers;
 using SaberFactory.UI.Lib;
 using SiraUtil.Tools;
@@ -18,7 +19,7 @@ namespace SaberFactory.UI
         private readonly SiraLog _logger;
         private readonly CustomScreen.Factory _screenFactory;
         private readonly BaseGameUiHandler _baseGameUiHandler;
-        private readonly DiContainer _container;
+        private readonly PhysicsRaycasterWithCache _physicsRaycaster;
 
         protected List<CustomScreen> _screens;
 
@@ -26,12 +27,12 @@ namespace SaberFactory.UI
         protected GameObject _curvedGO;
         protected CurvedCanvasSettings _curvedCanvasSettings;
 
-        protected SaberFactoryUI(SiraLog logger, CustomScreen.Factory screenFactory, BaseGameUiHandler baseGameUiHandler, DiContainer container)
+        protected SaberFactoryUI(SiraLog logger, CustomScreen.Factory screenFactory, BaseGameUiHandler baseGameUiHandler, PhysicsRaycasterWithCache physicsRaycaster)
         {
             _logger = logger;
             _screenFactory = screenFactory;
             _baseGameUiHandler = baseGameUiHandler;
-            _container = container;
+            _physicsRaycaster = physicsRaycaster;
 
             _screens = new List<CustomScreen>();
         }
@@ -50,7 +51,9 @@ namespace SaberFactory.UI
             canvasScaler.referencePixelsPerUnit = 10;
             canvasScaler.scaleFactor = 3.44f;
 
-            _container.InstantiateComponent<VRGraphicRaycaster>(_curvedGO);
+            var vrgr = _curvedGO.AddComponent<VRGraphicRaycaster>();
+            vrgr.SetField("_physicsRaycaster", _physicsRaycaster);
+
             _curvedGO.AddComponent<CanvasRenderer>();
             _curvedCanvasSettings = _curvedGO.AddComponent<CurvedCanvasSettings>();
 
