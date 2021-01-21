@@ -1,0 +1,348 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C287398D-B333-4DFE-9C7E-9518D9D09745}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SaberFactory</RootNamespace>
+    <AssemblyName>SaberFactory</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>portable</DebugType>
+    <LocalRefsDir Condition="Exists('..\Refs')">..\Refs</LocalRefsDir>
+    <BeatSaberDir>$(LocalRefsDir)</BeatSaberDir>
+    <AppOutputBase>$(MSBuildProjectDirectory)\</AppOutputBase>
+    <!--<PathMap>$(AppOutputBase)=X:\$(AssemblyName)\</PathMap>-->
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <LangVersion>8.0</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="$(DefineConstants.Contains('CIBuild')) OR '$(NCrunch)' == '1'">
+    <DisableCopyToPlugins>True</DisableCopyToPlugins>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(NCrunch)' == '1'">
+    <DisableCopyToPlugins>True</DisableCopyToPlugins>
+    <DisableZipRelease>True</DisableZipRelease>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="BeatmapCore">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\BeatmapCore.dll</HintPath>
+      <Private>False</Private>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="BSML">
+      <HintPath>$(BeatSaberDir)\Plugins\BSML.dll</HintPath>
+      <Private>False</Private>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="CustomSaberComponents, Version=4.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Resources\CustomSaberComponents.dll</HintPath>
+    </Reference>
+    <Reference Include="GameplayCore">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\GameplayCore.dll</HintPath>
+      <Private>False</Private>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="MediaLoader">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\MediaLoader.dll</HintPath>
+      <Private>False</Private>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(BeatSaberDir)\Libs\Newtonsoft.Json.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Polyglot">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Polyglot.dll</HintPath>
+      <Private>False</Private>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="SiraUtil">
+      <HintPath>$(BeatSaberDir)\Plugins\SiraUtil.dll</HintPath>
+      <Private>False</Private>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Main">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Main.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="HMLib">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\HMLib.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="HMUI">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\HMUI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="IPA.Loader">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\IPA.Loader.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.TextMeshPro">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Unity.TextMeshPro.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.AnimationModule">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.AnimationModule.dll</HintPath>
+      <Private>False</Private>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="UnityEngine.AssetBundleModule">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.AssetBundleModule.dll</HintPath>
+      <Private>False</Private>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.ImageConversionModule">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.ImageConversionModule.dll</HintPath>
+      <Private>False</Private>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.UI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UIElementsModule">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.UIElementsModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UIModule">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.UIModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestAssetBundleModule">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.UnityWebRequestAssetBundleModule.dll</HintPath>
+      <Private>False</Private>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestModule">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.UnityWebRequestModule.dll</HintPath>
+      <Private>False</Private>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestTextureModule">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.UnityWebRequestTextureModule.dll</HintPath>
+      <Private>False</Private>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestWWWModule">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.UnityWebRequestWWWModule.dll</HintPath>
+      <Private>False</Private>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="UnityEngine.VRModule">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.VRModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="VRUI">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\VRUI.dll</HintPath>
+      <Private>False</Private>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Zenject">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Zenject.dll</HintPath>
+      <Private>False</Private>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Zenject-usage">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Zenject-usage.dll</HintPath>
+      <Private>False</Private>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CommonResources.cs" />
+    <Compile Include="DataStore\MainAssetStore.cs" />
+    <Compile Include="Editor\Editor.cs" />
+    <Compile Include="Editor\SFLogoAnim.cs" />
+    <Compile Include="EmbeddedAssetLoader.cs" />
+    <Compile Include="Editor\Pedestal.cs" />
+    <Compile Include="ESaberSlot.cs" />
+    <Compile Include="ESaberType.cs" />
+    <Compile Include="Game\EventPlayer.cs" />
+    <Compile Include="Game\SFSaberModelController.cs" />
+    <Compile Include="Helpers\BeatmapHelper.cs" />
+    <Compile Include="Helpers\CommonHelpers.cs" />
+    <Compile Include="Helpers\Readers.cs" />
+    <Compile Include="Helpers\BaseGameTypeExtension.cs" />
+    <Compile Include="Helpers\PathTools.cs" />
+    <Compile Include="Helpers\TypeValueRetriever.cs" />
+    <Compile Include="Helpers\UIHelpers.cs" />
+    <Compile Include="Installers\AppInstaller.cs" />
+    <Compile Include="Installers\GameInstaller.cs" />
+    <Compile Include="Installers\MenuInstaller.cs" />
+    <Compile Include="Instances\BasePieceInstance.cs" />
+    <Compile Include="Instances\CustomSaber\CustomSaberInstance.cs" />
+    <Compile Include="Instances\InstanceFactory.cs" />
+    <Compile Include="Editor\EditorInstanceManager.cs" />
+    <Compile Include="Instances\SectionInstantiator.cs" />
+    <Compile Include="Instances\Setters\PropertyBlockSetterHandler.cs" />
+    <Compile Include="Instances\Setters\CustomSaberPropertyBlockSetterHandler.cs" />
+    <Compile Include="Instances\Setters\TransformDataSetter.cs" />
+    <Compile Include="Instances\Trail\TrailHandler.cs" />
+    <Compile Include="Instances\SaberInstance.cs" />
+    <Compile Include="Instances\Trail\TrailConstructionData.cs" />
+    <Compile Include="Loaders\AssetBundleLoader.cs" />
+    <Compile Include="Models\AdditionalInstanceHandler.cs" />
+    <Compile Include="Models\CustomSaber\CustomSaberModelLoader.cs" />
+    <Compile Include="Loaders\CustomSaberAssetLoader.cs" />
+    <Compile Include="DataStore\StoreAsset.cs" />
+    <Compile Include="Models\CustomSaber\CustomSaberModel.cs" />
+    <Compile Include="Models\BasePieceModel.cs" />
+    <Compile Include="Instances\Trail\InstanceTrailData.cs" />
+    <Compile Include="Models\EAssetType.cs" />
+    <Compile Include="Models\IStoreAssetParser.cs" />
+    <Compile Include="Models\ModelComposition.cs" />
+    <Compile Include="Models\ModelMetaData.cs" />
+    <Compile Include="Models\PartEvents.cs" />
+    <Compile Include="Models\PieceCollection.cs" />
+    <Compile Include="Models\PropHandler\CustomSaberPropertyBlock.cs" />
+    <Compile Include="Models\PropHandler\PiecePropertyBlock.cs" />
+    <Compile Include="Models\PropHandler\TransformPropertyBlock.cs" />
+    <Compile Include="Models\SaberModel.cs" />
+    <Compile Include="Models\SaberSet.cs" />
+    <Compile Include="Instances\Trail\SFTrail.cs" />
+    <Compile Include="Models\TrailModel.cs" />
+    <Compile Include="Plugin.cs" />
+    <Compile Include="Configuration\PluginConfig.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Saving\SaveManager.cs" />
+    <Compile Include="Saving\SerializablePiece.cs" />
+    <Compile Include="Saving\SerializableSaber.cs" />
+    <Compile Include="Saving\SerializableSaberSet.cs" />
+    <Compile Include="Saving\SerializableTrail.cs" />
+    <Compile Include="UI\BaseGameUiHandler.cs" />
+    <Compile Include="UI\CustomSaber\CustomComponents\CustomCellList.cs" />
+    <Compile Include="UI\CustomSaber\CustomComponents\CustomList.cs" />
+    <Compile Include="UI\CustomSaber\CustomComponents\IconToggleButton.cs" />
+    <Compile Include="UI\CustomSaber\CustomComponents\LoadingPopup.cs" />
+    <Compile Include="UI\CustomSaber\CustomComponents\MaterialEditor.cs" />
+    <Compile Include="UI\CustomSaber\CustomSaberUI.cs" />
+    <Compile Include="UI\CustomSaber\Views\MainView.cs" />
+    <Compile Include="UI\CustomSaber\Views\NavigationView.cs" />
+    <Compile Include="UI\CustomSaber\Views\SaberSelectorView.cs" />
+    <Compile Include="UI\CustomSaber\Views\TransformSettingsView.cs" />
+    <Compile Include="UI\Lib\BSML\ButtonImageController.cs" />
+    <Compile Include="UI\Lib\BSML\ButtonStateColors.cs" />
+    <Compile Include="UI\Lib\BSML\CustomButtonTag.cs" />
+    <Compile Include="UI\Lib\BSML\CustomListTableData.cs" />
+    <Compile Include="UI\Lib\BSML\CustomListTag.cs" />
+    <Compile Include="UI\Lib\SliderController.cs" />
+    <Compile Include="UI\TrailPreviewer.cs" />
+    <Compile Include="UI\CustomSaber\Views\TrailSettingsView.cs" />
+    <Compile Include="UI\ICustomListItem.cs" />
+    <Compile Include="UI\Lib\BSML\CustomBackgroundable.cs" />
+    <Compile Include="UI\Lib\BSML\CustomComponentHandler.cs" />
+    <Compile Include="UI\Lib\BSML\CustomIconButton.cs" />
+    <Compile Include="UI\Lib\CustomUiComponent.cs" />
+    <Compile Include="UI\Lib\CustomUiComponentTag.cs" />
+    <Compile Include="UI\Lib\CustomViewController.cs" />
+    <Compile Include="UI\Lib\ISubViewHost.cs" />
+    <Compile Include="UI\Lib\SubView.cs" />
+    <Compile Include="UI\Lib\SubViewFactory.cs" />
+    <Compile Include="UI\Lib\SubViewHandler.cs" />
+    <Compile Include="UI\Lib\ViewControllerFactory.cs" />
+    <Compile Include="UI\SaberFactoryMenuButton.cs" />
+    <Compile Include="UI\SaberFactoryUI.cs" />
+    <Compile Include="UI\Lib\CustomScreen.cs" />
+    <Compile Include="UI\Lib\ScreenFactory.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="manifest.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Directory.Build.props" Condition="Exists('Directory.Build.props')" />
+    <None Include="Directory.Build.targets" Condition="Exists('Directory.Build.targets')" />
+    <EmbeddedResource Include="Resources\CustomSaberComponents.dll" />
+    <EmbeddedResource Include="Resources\assets" />
+    <None Include="SaberFactory.csproj.user" Condition="Exists('SaberFactory.csproj.user')" />
+    <EmbeddedResource Include="UI\CustomSaber\Views\MainView.bsml">
+      <DependentUpon>MainView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\CustomSaber\Views\SaberSelectorView.bsml">
+      <DependentUpon>SaberSelectorView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\CustomSaber\Views\TrailSettingsView.bsml">
+      <DependentUpon>TrailSettingsView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\CustomSaber\Views\NavigationView.bsml">
+      <DependentUpon>NavigationView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\CustomSaber\CustomComponents\CustomCellList.bsml">
+      <DependentUpon>CustomCellList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\CustomSaber\CustomComponents\CustomList.bsml">
+      <DependentUpon>CustomList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\CustomSaber\CustomComponents\MaterialEditor.bsml">
+      <DependentUpon>MaterialEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\CustomSaber\Views\TransformSettingsView.bsml">
+      <DependentUpon>TransformSettingsView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\CustomSaber\CustomComponents\IconToggleButton.bsml">
+      <DependentUpon>IconToggleButton.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\CustomSaber\CustomComponents\LoadingPopup.bsml">
+      <DependentUpon>LoadingPopup.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="BeatSaberModdingTools.Tasks">
+      <Version>1.2.3</Version>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Icons\blade-icon.png" />
+    <EmbeddedResource Include="Resources\Icons\customsaber-icon.png" />
+    <EmbeddedResource Include="Resources\Icons\emitter-icon.png" />
+    <EmbeddedResource Include="Resources\Icons\halo-icon.png" />
+    <EmbeddedResource Include="Resources\Icons\hilt-icon.png" />
+    <EmbeddedResource Include="Resources\Icons\model-icon.png" />
+    <EmbeddedResource Include="Resources\Icons\pommel-icon.png" />
+    <EmbeddedResource Include="Resources\Icons\trail-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Tests\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Icons\heart.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

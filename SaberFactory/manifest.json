@@ -1,0 +1,12 @@
+﻿{
+  "$schema": "https://raw.githubusercontent.com/bsmg/BSIPA-MetadataFileSchema/master/Schema.json",
+  "id": "SaberFactory",
+  "name": "Saber Factory",
+  "author": "Toni Macaroni",
+  "version": "2.0.0",
+  "description": "A highly customizable saber mod",
+  "gameVersion": "1.13.0",
+  "dependsOn": {
+    "BSIPA": "^4.0.5"
+  }
+}
