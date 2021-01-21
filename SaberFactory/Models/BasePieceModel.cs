@@ -1,5 +1,7 @@
 ﻿using System;
+using Newtonsoft.Json.Bson;
 using SaberFactory.DataStore;
+using SaberFactory.Models.PropHandler;
 using SaberFactory.UI;
 using UnityEngine;
 
@@ -9,7 +11,7 @@ namespace SaberFactory.Models
     /// Model related to everything that makes up a saber
     /// like parts, halos, accessories, custom sabers
     /// </summary>
-    internal class BasePieceModel : IDisposable, ICustomListItem
+    internal class BasePieceModel : IDisposable
     {
         public ModelComposition ModelComposition { get; set; }
 
@@ -19,7 +21,11 @@ namespace SaberFactory.Models
 
         protected CommonResources _commonResources;
 
-        protected bool _initialized;
+        public ESaberSlot SaberSlot;
+
+        public AdditionalInstanceHandler AdditionalInstanceHandler;
+
+        public PiecePropertyBlock PropertyBlock;
 
         protected BasePieceModel(StoreAsset storeAsset, CommonResources commonResources)
         {
@@ -27,12 +33,22 @@ namespace SaberFactory.Models
             _commonResources = commonResources;
         }
 
-        public virtual void Dispose()
+        public virtual void Init()
         {
         }
 
-        public virtual string ListName { get; }
-        public virtual string ListAuthor { get; }
-        public virtual Sprite ListCover { get; }
+        public virtual ModelMetaData GetMetaData()
+        {
+            return default;
+        }
+
+        public virtual void SyncFrom(BasePieceModel otherModel)
+        {
+            PropertyBlock.SyncFrom(otherModel.PropertyBlock);
+        }
+
+        public virtual void Dispose()
+        {
+        }
     }
 }

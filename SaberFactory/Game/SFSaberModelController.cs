@@ -1,5 +1,6 @@
 ﻿using System;
 using IPA.Utilities;
+using SaberFactory.Helpers;
 using SaberFactory.Instances;
 using SaberFactory.Models;
 using SiraUtil.Interfaces;
@@ -20,6 +21,7 @@ namespace SaberFactory.Game
         [Inject] private readonly SiraLog _logger = null;
         [Inject] private readonly SaberSet _saberSet = null;
         [Inject] private readonly SaberInstance.Factory _saberInstanceFactory = null;
+        [InjectOptional] private readonly EventPlayer _eventPlayer = null;
 
         private SaberInstance _saberInstance;
         private Color _saberColor;
@@ -32,7 +34,9 @@ namespace SaberFactory.Game
 
             _saberInstance.SetParent(parent);
             _saberInstance.CreateTrail(_saberTrail.GetField<SaberTrailRenderer, SaberTrail>("_trailRendererPrefab"));
-            _saberInstance.SetColor(_colorManager.ColorForSaberType(_saberInstance.Model.SaberType));
+            _saberInstance.SetColor(_colorManager.ColorForSaberType(_saberInstance.Model.SaberSlot.ToSaberType()));
+
+            _eventPlayer?.SetPartEventList(_saberInstance.Events, saber.saberType);
 
             _logger.Info("Instantiated Saber");
         }

@@ -1,65 +1,77 @@
-﻿using CustomSaber;
+﻿using System;
+using System.Runtime.InteropServices;
+using CustomSaber;
 using SaberFactory.Helpers;
 using SaberFactory.Models;
 using UnityEngine;
 
 namespace SaberFactory.Instances.Trail
 {
-    internal struct InstanceTrailData
+    internal class InstanceTrailData
     {
-        public Vector3 StartPos => PointStart.position + _startPosOffset;
-        public Vector3 EndPos => PointEnd.position;
-        public Material Material;
-        public int Length;
-        public float WhiteStep;
+        public TrailModel TrailModel { get; }
+        public Transform PointStart { get; }
+        public Transform PointEnd { get; }
 
-        public float Width => Mathf.Abs(EndPos.y - StartPos.y);
+        public Material Material => TrailModel.Material;
+        public int Length => TrailModel.Length;
+        public float WhiteStep => TrailModel.Whitestep;
 
-        public Transform PointStart { get; private set; }
-        public Transform PointEnd { get; private set; }
-        private int _length;
+        public float Width => Mathf.Abs(PointEnd.localPosition.z - PointStart.localPosition.z);
 
-        private Vector3 _startPosOffset;
-
-        public void ApplyModel(TrailModel? trailModel)
+        public InstanceTrailData(TrailModel trailModel, Transform pointStart, Transform pointEnd)
         {
-            if (!trailModel.HasValue) return;
-            var offsets = trailModel.Value;
+            TrailModel = trailModel;
+            PointStart = pointStart;
+            PointEnd = pointEnd;
 
-            _startPosOffset = new Vector3(0, offsets.TrailWidthOffset, 0);
-            Material = offsets.Material;
-            Length = _length + offsets.TrailLengthOffset;
-            WhiteStep = offsets.Whitestep;
+            Init(trailModel);
         }
 
-        public (Transform start, Transform end) CopyPoints()
+        public void Init(TrailModel trailModel)
         {
-            var start = PointStart.parent.CreateGameObject("InstancePointStart").transform;
-            start.position = StartPos;
-
-            var end = PointEnd.parent.CreateGameObject("InstancePointEnd").transform;
-            end.position = EndPos;
-
-            return (start, end);
+            SetWidth(trailModel.Width);
         }
 
-        public static InstanceTrailData FromCustomSaber(GameObject gameobject)
+        public void SetWidth(float width)
         {
-            var saberTrail = gameobject.GetComponent<CustomTrail>();
+            TrailModel.Width = width;
+            var pos = PointStart.localPosition;
+            pos.z = PointEnd.localPosition.z - width;
+            PointStart.localPosition = pos;
+        }
 
-            if (!saberTrail) return default;
+        public void SetLength(int length)
+        {
+            TrailModel.Length = length;
+        }
 
-            var data = new InstanceTrailData
+        public void SetWhitestep(float whitestep)
+        {
+            TrailModel.Whitestep = whitestep;
+        }
+
+        public static (InstanceTrailData, TrailModel) FromCustomSaber(GameObject saberObject, TrailModel trailModel)
+        {
+            var saberTrail = saberObject.GetComponent<CustomTrail>();
+
+            if (!saberTrail)
             {
-                PointStart = saberTrail.PointStart,
-                PointEnd = saberTrail.PointEnd,
-                Material = saberTrail.TrailMaterial,
-                _length = saberTrail.Length,
-                Length = saberTrail.Length,
-                WhiteStep = 0
-            };
+                return default;
+            }
 
-            return data;
+            var model = trailModel ?? new TrailModel(
+                Vector3.zero,
+                Mathf.Abs(saberTrail.PointEnd.localPosition.z - saberTrail.PointStart.localPosition.z),
+                saberTrail.Length,
+                saberTrail.TrailMaterial,
+                0);
+
+            if (!model.Material) model.Material = saberTrail.TrailMaterial;
+
+            var data = new InstanceTrailData(model, saberTrail.PointStart, saberTrail.PointEnd);
+
+            return (data, model);
         }
     }
 }

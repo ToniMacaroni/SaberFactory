@@ -1,4 +1,5 @@
-﻿using SaberFactory.Models;
+﻿using SaberFactory.Instances.Setters;
+using SaberFactory.Models;
 using UnityEngine;
 using Zenject;
 
@@ -6,6 +7,8 @@ namespace SaberFactory.Instances
 {
     internal class BasePieceInstance
     {
+        public PropertyBlockSetterHandler PropertyBlockSetterHandler { get; protected set; }
+
         public readonly BasePieceModel Model;
         public GameObject GameObject;
         public Transform CachedTransform;
@@ -25,6 +28,11 @@ namespace SaberFactory.Instances
         protected virtual GameObject Instantiate()
         {
             return new GameObject("BasePiece");
+        }
+
+        public virtual PartEvents GetEvents()
+        {
+            return null;
         }
 
         internal class Factory : PlaceholderFactory<BasePieceModel, BasePieceInstance> {}

@@ -11,14 +11,14 @@
 
         }
 
-        public void SwitchView(SubView newSubView)
+        public void SwitchView(SubView newSubView, bool notify = true)
         {
             if (CurrentSubView == newSubView) return;
 
             CurrentSubView?.Close();
             _previousSubView = CurrentSubView;
             CurrentSubView = newSubView;
-            CurrentSubView.Open();
+            CurrentSubView.Open(notify);
         }
 
         public void NotifyDidOpen()

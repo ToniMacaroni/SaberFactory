@@ -1,4 +1,6 @@
-﻿using SaberFactory.Instances.Trail;
+﻿using System.Runtime.InteropServices.WindowsRuntime;
+using SaberFactory.Instances.Setters;
+using SaberFactory.Instances.Trail;
 using SaberFactory.Models;
 using SaberFactory.Models.CustomSaber;
 using SiraUtil.Tools;
@@ -8,39 +10,48 @@ namespace SaberFactory.Instances.CustomSaber
 {
     internal class CustomSaberInstance : BasePieceInstance
     {
-        private InstanceTrailData _instanceTrailData;
-        public Transform BladeEnd { get; private set; }
+        private readonly SiraLog _logger;
+        public InstanceTrailData InstanceTrailData { get; private set; }
 
         public CustomSaberInstance(CustomSaberModel model, SiraLog logger) : base(model)
         {
-            InitializeTrailData(GameObject, model.TrailModel);
+            _logger = logger;
+            model.TrailModel = InitializeTrailData(GameObject, model.TrailModel);
         }
 
-        public void InitializeTrailData(GameObject saberObject, TrailModel? trailModel)
+        public TrailModel InitializeTrailData(GameObject saberObject, TrailModel trailModel)
         {
-            var trailData = InstanceTrailData.FromCustomSaber(saberObject);
-            if (trailModel.HasValue)
-            {
-                var tModel = trailModel.Value;
-                trailData.Length += tModel.TrailLengthOffset;
-                trailData.PointStart.localPosition += new Vector3(0, 0, tModel.TrailWidthOffset);
-                trailData.WhiteStep = tModel.Whitestep;
-            }
+            var (data, model) = InstanceTrailData.FromCustomSaber(saberObject, trailModel);
+            if (data == null || model == null) return null;
 
-            BladeEnd = trailData.PointEnd;
-            _instanceTrailData = trailData;
+            InstanceTrailData = data;
+
+            return model;
         }
 
-        public InstanceTrailData GetInstanceTrailData(bool applyModel)
+        public void ResetTrail()
         {
-            if (!applyModel) return _instanceTrailData;
-            _instanceTrailData.ApplyModel((Model as CustomSaberModel).TrailModel);
-            return _instanceTrailData;
+            var model = (CustomSaberModel) Model;
+            model.TrailModel = InitializeTrailData(GameObject, null);
+        }
+
+        public override PartEvents GetEvents()
+        {
+            return PartEvents.FromCustomSaber(GameObject);
         }
 
         protected override GameObject Instantiate()
         {
-            return Object.Instantiate(Model.Prefab, Vector3.zero, Quaternion.identity);
+            var instance = Object.Instantiate(GetSaberPrefab(), Vector3.zero, Quaternion.identity);
+            instance.SetActive(true);
+
+            PropertyBlockSetterHandler = new CustomSaberPropertyBlockSetterHandler(instance, Model as CustomSaberModel);
+            return instance;
+        }
+
+        private GameObject GetSaberPrefab()
+        {
+            return Model.AdditionalInstanceHandler.GetSaber(Model.SaberSlot);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using SaberFactory.Helpers;
+﻿using System;
+using SaberFactory.Helpers;
 using SaberFactory.Models.CustomSaber;
 using UnityEngine;
 
@@ -9,7 +10,7 @@ namespace SaberFactory.Instances.Trail
         public SFTrail TrailInstance { get; protected set; }
 
         protected SaberTrailRenderer _trailRenderer;
-        protected InstanceTrailData _InstanceTrailData;
+        protected InstanceTrailData _instanceTrailData;
 
         public TrailHandler(GameObject gameobject)
         {
@@ -21,18 +22,16 @@ namespace SaberFactory.Instances.Trail
             var trailInitData = new SFTrail.TrailInitData
             {
                 TrailColor = Color.white,
-                TrailLength = _InstanceTrailData.Length,
+                TrailLength = _instanceTrailData.Length,
                 TrailPrefab = _trailRenderer,
-                Whitestep = _InstanceTrailData.WhiteStep
+                Whitestep = _instanceTrailData.WhiteStep
             };
-
-            var (pointStart, pointEnd) = _InstanceTrailData.CopyPoints();
 
             TrailInstance.Setup(
                 trailInitData,
-                _InstanceTrailData.Material,
-                pointStart,
-                pointEnd
+                _instanceTrailData.Material,
+                _instanceTrailData.PointStart,
+                _instanceTrailData.PointEnd
                 );
         }
 
@@ -48,7 +47,7 @@ namespace SaberFactory.Instances.Trail
 
         public void SetTrailData(InstanceTrailData instanceTrailData)
         {
-            _InstanceTrailData = instanceTrailData;
+            _instanceTrailData = instanceTrailData;
         }
 
         public void SetColor(Color color)

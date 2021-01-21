@@ -4,6 +4,7 @@ using BeatSaberMarkupLanguage.Parser;
 using BeatSaberMarkupLanguage.Tags;
 using SaberFactory.Helpers;
 using UnityEngine;
+using UnityEngine.UI;
 using Zenject;
 
 namespace SaberFactory.UI.Lib
@@ -23,11 +24,13 @@ namespace SaberFactory.UI.Lib
 
         public override GameObject CreateObject(Transform parent)
         {
-            var go = parent.CreateGameObject(_type.Name);
-            go.AddComponent<RectTransform>();
-            var comp = go.AddComponent(_type);
-            UIHelpers.ParseFromResource(_resourceName, go, comp);
-            return go;
+            //var go = parent.CreateGameObject(_type.Name);
+            //go.AddComponent<RectTransform>();
+            //go.AddComponent<LayoutElement>();
+            //go.AddComponent<ContentSizeFitter>();
+            var comp = parent.gameObject.AddComponent(_type);
+            UIHelpers.ParseFromResource(_resourceName, parent.gameObject, comp);
+            return parent.gameObject;
         }
     }
 }

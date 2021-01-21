@@ -1,4 +1,20 @@
-﻿<vertical background='round-rect-panel' bg-color='#00000033' pad='2' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
-	<button-with-icon pref-width='15' preferred-height='15' on-click='Click_Saber' icon='SaberFactory.Resources.Icons.customsaber-icon.png'/>
-	<button-with-icon pref-width='15' preferred-height='15' on-click='Click_Trail' icon='SaberFactory.Resources.Icons.trail-icon.png'/>
+﻿<vertical background='round-rect-panel' bg-color='#00000070' pad='2' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
+	<custom-icon-btn
+		pref-width='15'
+		preferred-height='15'
+		on-click='Click_Saber'
+		icon='SaberFactory.Resources.Icons.customsaber-icon.png'
+		skew='0' show-line='false' normal-color='#00000055' hovered-color='#5ca5ff' show-fill='false'/>
+	<custom-icon-btn
+		pref-width='15'
+		preferred-height='15'
+		on-click='Click_Trail'
+		icon='SaberFactory.Resources.Icons.trail-icon.png'
+		skew='0' show-line='false' normal-color='#00000055' hovered-color='#5ca5ff' show-fill='false'/>
+	<custom-icon-btn
+		pref-width='15'
+		preferred-height='15'
+		on-click='Click_Exit'
+		icon='#ExitButton'
+		skew='0' show-line='false' normal-color='#00000055' hovered-color='#5ca5ff' show-fill='false'/>
 </vertical>

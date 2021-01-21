@@ -23,7 +23,7 @@ namespace SaberFactory.UI
 
         protected List<CustomScreen> _screens;
 
-        protected GameObject _rootGO;
+        public GameObject GameObject { get; private set; }
         protected GameObject _curvedGO;
         protected CurvedCanvasSettings _curvedCanvasSettings;
 
@@ -39,12 +39,12 @@ namespace SaberFactory.UI
 
         public void Initialize()
         {
-            _rootGO = new GameObject("Saber Factory UI");
-            _rootGO.transform.SetParent(_baseGameUiHandler.GetUIParent(), false);
-            _rootGO.transform.localPosition = new Vector3(0, 1.6f, 2.6f);
-            _rootGO.transform.localScale = new Vector3(0.02f, 0.02f, 0.02f);
+            GameObject = new GameObject("Saber Factory UI");
+            GameObject.transform.SetParent(_baseGameUiHandler.GetUIParent(), false);
+            GameObject.transform.localPosition = new Vector3(0, 1.1f, 2.6f);
+            GameObject.transform.localScale = new Vector3(0.02f, 0.02f, 0.02f);
 
-            _curvedGO = _rootGO.CreateGameObject("Curved UI");
+            _curvedGO = GameObject.CreateGameObject("Curved UI");
             _curvedGO.AddComponent<Canvas>();
 
             var canvasScaler = _curvedGO.AddComponent<CanvasScaler>();
@@ -111,7 +111,7 @@ namespace SaberFactory.UI
 
         protected CustomScreen AddScreen(CustomScreen.InitData initData)
         {
-            initData.Parent = initData.IsCurved ? _curvedGO.transform : _rootGO.transform;
+            initData.Parent = initData.IsCurved ? _curvedGO.transform : GameObject.transform;
             var screen = _screenFactory.Create(initData);
             _screens.Add(screen);
             return screen;

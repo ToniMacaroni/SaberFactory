@@ -55,7 +55,7 @@ namespace SaberFactory.UI.Lib
 
             var view = (T) _viewFactory.Create(typeof(T), initData);
             view.SubViewHandler = _subViewHandler;
-            if(switchToView) _subViewHandler.SwitchView(view);
+            if(switchToView) _subViewHandler.SwitchView(view, false);
 
             return view;
         }

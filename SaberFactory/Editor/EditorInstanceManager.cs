@@ -1,6 +1,7 @@
 ﻿using System;
 using SaberFactory.Instances;
 using SaberFactory.Models;
+using SaberFactory.Saving;
 using SiraUtil.Tools;
 using UnityEngine;
 
@@ -19,33 +20,43 @@ namespace SaberFactory.Editor
         
         private readonly SiraLog _logger;
         private readonly SaberSet _saberSet;
+        private readonly SaveManager _saveManager;
         private readonly SaberInstance.Factory _saberFactory;
 
-        public EditorInstanceManager(SiraLog logger, SaberSet saberSet, SaberInstance.Factory saberFactory)
+        public EditorInstanceManager(SiraLog logger, SaberSet saberSet, SaveManager saveManager, SaberInstance.Factory saberFactory)
         {
             _logger = logger;
             _saberSet = saberSet;
+            _saveManager = saveManager;
             _saberFactory = saberFactory;
 
             SelectedDefinition = AssetTypeDefinition.CustomSaber;
+
+            saveManager.OnSaberLoaded += delegate
+            {
+                if (saberSet.LeftSaber.GetCustomSaber(out var customsaber))
+                {
+                    SetModelComposition(customsaber.ModelComposition);
+                }
+            };
         }
 
         public void SetModelComposition(ModelComposition composition)
         {
+            CurrentModelComposition?.DestroyAdditionalInstances();
             CurrentModelComposition = composition;
             _saberSet.SetModelComposition(CurrentModelComposition);
             OnModelCompositionSet?.Invoke(CurrentModelComposition);
         }
 
-        public void SetSelectedDefinition(AssetTypeDefinition definition, bool raiseEvents = false)
+        /// <summary>
+        /// Copies settings from the current saber to the other one (if it exists)
+        /// </summary>
+        public void SyncSabers()
         {
-            SelectedDefinition = definition;
-            CurrentPiece = GetPiece(definition);
+            if (CurrentSaber == null) return;
 
-            if (raiseEvents)
-            {
-                if(CurrentPiece!=null) OnPieceInstanceCreated?.Invoke(CurrentPiece);
-            }
+            _saberSet.Sync(CurrentSaber.Model);
         }
 
         public SaberInstance CreateSaber(SaberModel model, bool raiseSaberEvent = false, bool raisePieceEvent = false)
@@ -69,6 +80,7 @@ namespace SaberFactory.Editor
 
         public void DestroySaber()
         {
+            CurrentModelComposition?.DestroyAdditionalInstances();
             CurrentSaber?.Destroy();
             CurrentSaber = null;
             CurrentPiece = null;

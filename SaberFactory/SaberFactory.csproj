@@ -41,6 +41,11 @@
     <DisableZipRelease>True</DisableZipRelease>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BeatmapCore">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\BeatmapCore.dll</HintPath>
+      <Private>False</Private>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
     <Reference Include="BSML">
       <HintPath>$(BeatSaberDir)\Plugins\BSML.dll</HintPath>
       <Private>False</Private>
@@ -104,6 +109,11 @@
     <Reference Include="UnityEngine">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.dll</HintPath>
       <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.AnimationModule">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.AnimationModule.dll</HintPath>
+      <Private>False</Private>
+      <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="UnityEngine.AssetBundleModule">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.AssetBundleModule.dll</HintPath>
@@ -175,9 +185,15 @@
     <Compile Include="CommonResources.cs" />
     <Compile Include="DataStore\MainAssetStore.cs" />
     <Compile Include="Editor\Editor.cs" />
+    <Compile Include="Editor\SFLogoAnim.cs" />
     <Compile Include="EmbeddedAssetLoader.cs" />
     <Compile Include="Editor\Pedestal.cs" />
+    <Compile Include="ESaberSlot.cs" />
+    <Compile Include="ESaberType.cs" />
+    <Compile Include="Game\EventPlayer.cs" />
     <Compile Include="Game\SFSaberModelController.cs" />
+    <Compile Include="Helpers\BeatmapHelper.cs" />
+    <Compile Include="Helpers\CommonHelpers.cs" />
     <Compile Include="Helpers\Readers.cs" />
     <Compile Include="Helpers\BaseGameTypeExtension.cs" />
     <Compile Include="Helpers\PathTools.cs" />
@@ -191,10 +207,14 @@
     <Compile Include="Instances\InstanceFactory.cs" />
     <Compile Include="Editor\EditorInstanceManager.cs" />
     <Compile Include="Instances\SectionInstantiator.cs" />
+    <Compile Include="Instances\Setters\PropertyBlockSetterHandler.cs" />
+    <Compile Include="Instances\Setters\CustomSaberPropertyBlockSetterHandler.cs" />
+    <Compile Include="Instances\Setters\TransformDataSetter.cs" />
     <Compile Include="Instances\Trail\TrailHandler.cs" />
     <Compile Include="Instances\SaberInstance.cs" />
     <Compile Include="Instances\Trail\TrailConstructionData.cs" />
     <Compile Include="Loaders\AssetBundleLoader.cs" />
+    <Compile Include="Models\AdditionalInstanceHandler.cs" />
     <Compile Include="Models\CustomSaber\CustomSaberModelLoader.cs" />
     <Compile Include="Loaders\CustomSaberAssetLoader.cs" />
     <Compile Include="DataStore\StoreAsset.cs" />
@@ -204,7 +224,12 @@
     <Compile Include="Models\EAssetType.cs" />
     <Compile Include="Models\IStoreAssetParser.cs" />
     <Compile Include="Models\ModelComposition.cs" />
+    <Compile Include="Models\ModelMetaData.cs" />
+    <Compile Include="Models\PartEvents.cs" />
     <Compile Include="Models\PieceCollection.cs" />
+    <Compile Include="Models\PropHandler\CustomSaberPropertyBlock.cs" />
+    <Compile Include="Models\PropHandler\PiecePropertyBlock.cs" />
+    <Compile Include="Models\PropHandler\TransformPropertyBlock.cs" />
     <Compile Include="Models\SaberModel.cs" />
     <Compile Include="Models\SaberSet.cs" />
     <Compile Include="Instances\Trail\SFTrail.cs" />
@@ -212,14 +237,28 @@
     <Compile Include="Plugin.cs" />
     <Compile Include="Configuration\PluginConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Saving\SaveManager.cs" />
+    <Compile Include="Saving\SerializablePiece.cs" />
+    <Compile Include="Saving\SerializableSaber.cs" />
+    <Compile Include="Saving\SerializableSaberSet.cs" />
+    <Compile Include="Saving\SerializableTrail.cs" />
     <Compile Include="UI\BaseGameUiHandler.cs" />
     <Compile Include="UI\CustomSaber\CustomComponents\CustomCellList.cs" />
     <Compile Include="UI\CustomSaber\CustomComponents\CustomList.cs" />
+    <Compile Include="UI\CustomSaber\CustomComponents\IconToggleButton.cs" />
+    <Compile Include="UI\CustomSaber\CustomComponents\LoadingPopup.cs" />
     <Compile Include="UI\CustomSaber\CustomComponents\MaterialEditor.cs" />
     <Compile Include="UI\CustomSaber\CustomSaberUI.cs" />
     <Compile Include="UI\CustomSaber\Views\MainView.cs" />
     <Compile Include="UI\CustomSaber\Views\NavigationView.cs" />
     <Compile Include="UI\CustomSaber\Views\SaberSelectorView.cs" />
+    <Compile Include="UI\CustomSaber\Views\TransformSettingsView.cs" />
+    <Compile Include="UI\Lib\BSML\ButtonImageController.cs" />
+    <Compile Include="UI\Lib\BSML\ButtonStateColors.cs" />
+    <Compile Include="UI\Lib\BSML\CustomButtonTag.cs" />
+    <Compile Include="UI\Lib\BSML\CustomListTableData.cs" />
+    <Compile Include="UI\Lib\BSML\CustomListTag.cs" />
+    <Compile Include="UI\Lib\SliderController.cs" />
     <Compile Include="UI\TrailPreviewer.cs" />
     <Compile Include="UI\CustomSaber\Views\TrailSettingsView.cs" />
     <Compile Include="UI\ICustomListItem.cs" />
@@ -269,6 +308,15 @@
     <EmbeddedResource Include="UI\CustomSaber\CustomComponents\MaterialEditor.bsml">
       <DependentUpon>MaterialEditor.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UI\CustomSaber\Views\TransformSettingsView.bsml">
+      <DependentUpon>TransformSettingsView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\CustomSaber\CustomComponents\IconToggleButton.bsml">
+      <DependentUpon>IconToggleButton.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\CustomSaber\CustomComponents\LoadingPopup.bsml">
+      <DependentUpon>LoadingPopup.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="BeatSaberModdingTools.Tasks">
@@ -281,17 +329,20 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\Icons\blade-icon.png" />
+    <EmbeddedResource Include="Resources\Icons\blade-icon.png" />
     <EmbeddedResource Include="Resources\Icons\customsaber-icon.png" />
-    <Content Include="Resources\Icons\emitter-icon.png" />
-    <Content Include="Resources\Icons\halo-icon.png" />
-    <Content Include="Resources\Icons\hilt-icon.png" />
-    <Content Include="Resources\Icons\model-icon.png" />
-    <Content Include="Resources\Icons\pommel-icon.png" />
+    <EmbeddedResource Include="Resources\Icons\emitter-icon.png" />
+    <EmbeddedResource Include="Resources\Icons\halo-icon.png" />
+    <EmbeddedResource Include="Resources\Icons\hilt-icon.png" />
+    <EmbeddedResource Include="Resources\Icons\model-icon.png" />
+    <EmbeddedResource Include="Resources\Icons\pommel-icon.png" />
     <EmbeddedResource Include="Resources\Icons\trail-icon.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Tests\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Icons\heart.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

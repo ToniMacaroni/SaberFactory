@@ -7,5 +7,6 @@ namespace SaberFactory.UI
         string ListName { get; }
         string ListAuthor { get; }
         Sprite ListCover { get; }
+        bool IsFavorite { get; }
     }
 }

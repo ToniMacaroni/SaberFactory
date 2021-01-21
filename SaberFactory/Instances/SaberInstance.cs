@@ -19,6 +19,7 @@ namespace SaberFactory.Instances
         public readonly Transform CachedTransform;
 
         public readonly PieceCollection<BasePieceInstance> PieceCollection;
+        public List<PartEvents> Events { get; private set; }
 
         private readonly SectionInstantiator _sectionInstantiator;
         private readonly List<Material> _colorMaterials;
@@ -39,18 +40,13 @@ namespace SaberFactory.Instances
             _sectionInstantiator = new SectionInstantiator(this, pieceFactory, PieceCollection);
             _sectionInstantiator.InstantiateSections();
 
+            GameObject.transform.localScale = new Vector3(model.SaberWidth, model.SaberWidth, 1);
+
             _colorMaterials = new List<Material>();
             GetColorableMaterials(_colorMaterials);
 
             SetupTrailData();
-        }
-
-        public void SetupTrailData()
-        {
-            if (GetCustomSaber(out var customsaber)) return;
-
-            // TODO: Setup sf trail data
-            _instanceTrailData = default;
+            InitializeEvents();
         }
 
         public void SetParent(Transform parent)
@@ -71,11 +67,32 @@ namespace SaberFactory.Instances
             }
         }
 
+        private void InitializeEvents()
+        {
+            Events = new List<PartEvents>();
+            foreach (BasePieceInstance piece in PieceCollection)
+            {
+                var events = piece.GetEvents();
+                if (events != null)
+                {
+                    Events.Add(events);
+                }
+            }
+        }
+
+        public void SetupTrailData()
+        {
+            if (GetCustomSaber(out var customsaber)) return;
+
+            // TODO: Setup sf trail data
+            _instanceTrailData = default;
+        }
+
         public void CreateTrail(SaberTrailRenderer rendererPrefab)
         {
             TrailHandler = new TrailHandler(GameObject);
             TrailHandler.SetPrefab(rendererPrefab);
-            TrailHandler.SetTrailData(_instanceTrailData);
+            TrailHandler.SetTrailData(GetTrailData());
             TrailHandler.CreateTrail();
         }
 
@@ -105,10 +122,16 @@ namespace SaberFactory.Instances
         {
             if (GetCustomSaber(out var customsaber))
             {
-                return customsaber.GetInstanceTrailData(true);
+                return customsaber.InstanceTrailData;
             }
 
             return _instanceTrailData;
+        }
+
+        public void SetSaberWidth(float width)
+        {
+            Model.SaberWidth = width;
+            GameObject.transform.localScale = new Vector3(width, width, 1);
         }
 
         private void GetColorableMaterials(List<Material> materials)

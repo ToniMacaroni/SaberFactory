@@ -1,7 +1,9 @@
-﻿using System.Reflection;
+﻿using System.IO;
+using System.Reflection;
 using IPA;
 using IPA.Config;
 using IPA.Config.Stores;
+using IPA.Utilities;
 using SaberFactory.Configuration;
 using SaberFactory.Helpers;
 using SaberFactory.Installers;
@@ -19,7 +21,9 @@ namespace SaberFactory
         {
             Assembly.Load(await Readers.ReadResourceAsync("SaberFactory.Resources.CustomSaberComponents.dll"));
 
-            zenjector.OnApp<AppInstaller>().WithParameters(logger, conf.Generated<PluginConfig>());
+            var saberFactoryDir = new DirectoryInfo(UnityGame.UserDataPath).CreateSubdirectory("Saber Factory");
+
+            zenjector.OnApp<AppInstaller>().WithParameters(logger, conf, saberFactoryDir);
             zenjector.OnMenu<Installers.MenuInstaller>();
             zenjector.OnGame<GameInstaller>();
         }

@@ -1,0 +1,8 @@
+﻿<bg xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
+	<vertical bg='round-rect-panel' bg-color='#00000033' child-align='MiddleCenter' child-expand-height='false' child-control-height='false' spacing='2' pad='3'>
+
+		<slider-setting text='Width' get-event='update-props' apply-on-change='true' min='0' max='30' />
+		<slider-setting text='Offset' get-event='update-props' apply-on-change='true' min='0' max='1'/>
+
+	</vertical>
+</bg>

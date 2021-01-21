@@ -8,43 +8,45 @@ namespace SaberFactory.Models
     {
         public readonly PieceCollection<BasePieceModel> PieceCollection;
 
-        private readonly TrailModel _trailModel;
+        public TrailModel TrailModel;
 
-        public readonly SaberType SaberType;
+        public readonly ESaberSlot SaberSlot;
 
-        private SaberModel(SaberType saberType)
+        public float SaberWidth = 1;
+
+        private SaberModel(ESaberSlot saberSlot)
         {
-            SaberType = saberType;
+            SaberSlot = saberSlot;
 
             PieceCollection = new PieceCollection<BasePieceModel>();
-            _trailModel = new TrailModel();
         }
 
         public void SetModelComposition(ModelComposition composition)
         {
-            PieceCollection[composition.AssetTypeDefinition] = SaberType.IsLeft()
+            PieceCollection[composition.AssetTypeDefinition] = SaberSlot==ESaberSlot.Left
                 ? composition.GetLeft()
                 : composition.GetRight();
         }
 
-        public bool InitTrailModel()
-        {
-            if (!GetCustomSaber(out var customsaber) || customsaber.TrailModel.HasValue) return false;
-            customsaber.TrailModel = new TrailModel();
-            return true;
-        }
-
-        public TrailModel? GetTrailModel()
+        public TrailModel GetTrailModel()
         {
             if (GetCustomSaber(out var customsaber))
             {
                 return customsaber.TrailModel;
             }
 
-            return _trailModel;
+            return TrailModel;
         }
 
-        private bool GetCustomSaber(out CustomSaberModel customsaber)
+        public void Sync()
+        {
+            foreach (BasePieceModel piece in PieceCollection)
+            {
+                piece.ModelComposition.Sync(piece);
+            }
+        }
+
+        public bool GetCustomSaber(out CustomSaberModel customsaber)
         {
             if (PieceCollection.TryGetPiece(AssetTypeDefinition.CustomSaber, out var model))
             {

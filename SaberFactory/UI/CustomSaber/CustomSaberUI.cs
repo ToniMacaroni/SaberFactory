@@ -1,4 +1,5 @@
-﻿using SaberFactory.UI.CustomSaber.Views;
+﻿using SaberFactory.Models;
+using SaberFactory.UI.CustomSaber.Views;
 using SaberFactory.UI.Lib;
 using SiraUtil.Tools;
 using UnityEngine;
@@ -9,6 +10,8 @@ namespace SaberFactory.UI.CustomSaber
 {
     internal class CustomSaberUI : SaberFactoryUI
     {
+        private readonly SaberSet _saberSet;
+
         #region Views
         private MainView _mainView;
         private NavigationView _navigationView;
@@ -18,9 +21,11 @@ namespace SaberFactory.UI.CustomSaber
             SiraLog logger,
             CustomScreen.Factory screenFactory,
             BaseGameUiHandler baseGameUiHandler,
-            PhysicsRaycasterWithCache physicsRaycaster)
+            PhysicsRaycasterWithCache physicsRaycaster,
+            SaberSet saberSet)
             : base(logger, screenFactory, baseGameUiHandler, physicsRaycaster)
         {
+            _saberSet = saberSet;
         }
 
         public override void SetupUI()
@@ -28,9 +33,9 @@ namespace SaberFactory.UI.CustomSaber
             var mainScreenInitData = new CustomScreen.InitData
             (
                 "Main Screen",
-                new Vector3(50, 0, 0),
+                new Vector3(-25, -10, 0),
                 Quaternion.identity, 
-                new Vector2(200, 150),
+                new Vector2(140, 140),
                 isCurved: true
             );
 
@@ -49,15 +54,17 @@ namespace SaberFactory.UI.CustomSaber
         protected override void DidOpen()
         {
             base.DidOpen();
-            _mainView.OnClosePressed += ClosePressed;
+            _navigationView.OnExit += ClosePressed;
             _navigationView.OnCategoryChanged += _mainView.ChangeCategory;
         }
 
         protected override void DidClose()
         {
             base.DidClose();
-            _mainView.OnClosePressed -= ClosePressed;
+            _navigationView.OnExit -= ClosePressed;
             _navigationView.OnCategoryChanged -= _mainView.ChangeCategory;
+
+            _saberSet.Save();
         }
     }
 }

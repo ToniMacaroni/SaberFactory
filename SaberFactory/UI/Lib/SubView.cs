@@ -29,10 +29,10 @@ namespace SaberFactory.UI.Lib
             Init();
         }
 
-        public void Open()
+        public void Open(bool notify = true)
         {
             gameObject.SetActive(true);
-            DidOpen();
+            if(notify) DidOpen();
         }
 
         public void Close()

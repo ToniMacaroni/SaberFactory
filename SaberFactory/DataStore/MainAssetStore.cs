@@ -17,6 +17,7 @@ namespace SaberFactory.DataStore
     {
         public event Action OnLoadingFinished;
         public bool IsLoading { get; private set; }
+        public Task CurrentTask;
 
         private readonly CustomSaberAssetLoader _customSaberAssetLoader;
         private readonly CustomSaberModelLoader _customSaberModelLoader;
@@ -27,25 +28,23 @@ namespace SaberFactory.DataStore
 
         private MainAssetStore(
             SiraLog logger,
-            CustomSaberModel.Factory customSaberModelFactory)
+            CustomSaberModelLoader customSaberModelLoader)
         {
             _logger = logger;
 
             _customSaberAssetLoader = new CustomSaberAssetLoader();
-            _customSaberModelLoader = new CustomSaberModelLoader(customSaberModelFactory);
+            _customSaberModelLoader = customSaberModelLoader;
 
             _modelCompositions = new Dictionary<string, ModelComposition>();
         }
 
-        public Task<ModelComposition> this[string name] => GetCompositionByPath(name);
+        public Task<ModelComposition> this[string path] => GetCompositionByPath(path);
 
         public async Task<ModelComposition> GetCompositionByPath(string path)
         {
             if (_modelCompositions.TryGetValue(path, out var result)) return result;
 
-            var composition = await LoadModelCompositionAsync(path);
-            _modelCompositions.Add(path, composition);
-            return composition;
+            return await LoadComposition(path);
         }
 
         public async void Initialize()
@@ -61,8 +60,7 @@ namespace SaberFactory.DataStore
                 var relativePath = PathTools.ToRelativePath(path);
                 if(_modelCompositions.ContainsKey(relativePath)) continue;
 
-                var composition = await LoadModelCompositionAsync(relativePath);
-                if(composition != null) _modelCompositions.Add(relativePath, composition);
+                await LoadComposition(relativePath);
             }
             sw.Stop();
             _logger.Info($"Loaded in {sw.Elapsed.Seconds} Seconds");
@@ -72,8 +70,13 @@ namespace SaberFactory.DataStore
 
         public async Task LoadAll()
         {
-            IsLoading = true;
-            await LoadAllCustomSabersAsync(false);
+            if (!IsLoading)
+            {
+                IsLoading = true;
+                CurrentTask = LoadAllCustomSabersAsync(false);
+            }
+
+            await CurrentTask;
             NotifyLoadingFinished();
         }
 
@@ -91,15 +94,23 @@ namespace SaberFactory.DataStore
             _modelCompositions.Clear();
         }
 
-        public void RegisterOneShotCallback(Action callback)
+        public  void Unload(string path)
         {
-            void OnFinished()
-            {
-                OnLoadingFinished -= OnFinished;
-                callback?.Invoke();
-            }
+            if (!_modelCompositions.TryGetValue(path, out var comp)) return;
+            comp.Dispose();
+            _modelCompositions.Remove(path);
+        }
 
-            OnLoadingFinished += OnFinished;
+        public async Task Reload(string path)
+        {
+            Unload(path);
+            await LoadComposition(path);
+        }
+
+        public async Task ReloadAll()
+        {
+            UnloadAll();
+            await LoadAll();
         }
 
         private void NotifyLoadingFinished()
@@ -125,6 +136,13 @@ namespace SaberFactory.DataStore
             var model = modelCreator.GetComposition(storeAsset);
 
             return model;
+        }
+
+        private async Task<ModelComposition> LoadComposition(string path)
+        {
+            var composition = await LoadModelCompositionAsync(path);
+            if(composition!=null) _modelCompositions.Add(path, composition);
+            return composition;
         }
     }
 }
