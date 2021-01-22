@@ -6,6 +6,7 @@ using BeatSaberMarkupLanguage.TypeHandlers;
 using HMUI;
 using SaberFactory.UI.Lib;
 using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
 using CustomListTableData = SaberFactory.UI.Lib.BSML.CustomListTableData;
 
@@ -21,7 +22,7 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
         [UIComponent("header-text")] private readonly TextMeshProUGUI _textMesh = null;
 
         private List<ICustomListItem> _listObjects;
-        private int _currentIdx;
+        private int _currentIdx = -1;
 
         public void SetItems(IEnumerable<ICustomListItem> items)
         {
@@ -77,6 +78,11 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
             _textMesh.text = text;
         }
 
+        private void SetBgColor(Color color)
+        {
+            _layoutElement.gameObject.GetComponent<Backgroundable>().background.color = color;
+        }
+
         [UIAction("item-selected")]
         private void ItemSelected(TableView _, int row)
         {
@@ -90,15 +96,23 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
             public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>
             {
                 {"title", new[] {"title", "header"}},
-                {"width", new[] {"width"}}
+                {"width", new[] {"width"}},
+                {"bgColor", new []{"bg-color"} }
             };
 
             public override Dictionary<string, Action<CustomList, string>> Setters =>
                 new Dictionary<string, Action<CustomList, string>>
                 {
                     {"title", (list, val) => list.SetText(val)},
-                    {"width", (list, val) => list.SetWidth(float.Parse(val)) }
+                    {"width", (list, val) => list.SetWidth(float.Parse(val)) },
+                    {"bgColor", SetBgColor }
                 };
+
+            private void SetBgColor(CustomList list, string hex)
+            {
+                ColorUtility.TryParseHtmlString(hex, out var color);
+                list.SetBgColor(color);
+            }
         }
     }
 }

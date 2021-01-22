@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components;
+using BeatSaberMarkupLanguage.Components.Settings;
 using HMUI;
 using SaberFactory.Configuration;
 using SaberFactory.DataStore;
@@ -32,6 +33,13 @@ namespace SaberFactory.UI.CustomSaber.Views
         [UIComponent("toggle-favorite")] private readonly IconToggleButton _toggleButtonFavorite = null;
         [UIComponent("loading-popup")] private readonly LoadingPopup _loadingPopup = null;
 
+        [UIValue("mod-enabled")]
+        private bool IsModEnabled
+        {
+            get => _pluginConfig.Enabled;
+            set => _pluginConfig.Enabled = value;
+        }
+
         [UIValue("saber-width")]
         private float _saberWidth
         {
@@ -56,6 +64,7 @@ namespace SaberFactory.UI.CustomSaber.Views
         [UIAction("#post-parse")]
         private async void Setup()
         {
+            //_modToggle.Value = _pluginConfig.Enabled;
             _saberList.OnItemSelected += SaberSelected;
             await LoadSabers();
         }
@@ -152,6 +161,15 @@ namespace SaberFactory.UI.CustomSaber.Views
             await _saberSet.Load("default");
             ShowSabers();
             _loadingPopup.Hide();
+        }
+
+        [UIAction("clicked-delete")]
+        private void ClickedDelete()
+        {
+            if (_currentComposition == null) return;
+            _editorInstanceManager.DestroySaber();
+            _mainAssetStore.Delete(_currentComposition.GetLeft().StoreAsset.Path);
+            ShowSabers();
         }
     }
 }

@@ -49,6 +49,12 @@ namespace SaberFactory.Editor
             OnModelCompositionSet?.Invoke(CurrentModelComposition);
         }
 
+        public void Refresh()
+        {
+            if (CurrentModelComposition == null) return;
+            SetModelComposition(CurrentModelComposition);
+        }
+
         /// <summary>
         /// Copies settings from the current saber to the other one (if it exists)
         /// </summary>
@@ -59,9 +65,10 @@ namespace SaberFactory.Editor
             _saberSet.Sync(CurrentSaber.Model);
         }
 
-        public SaberInstance CreateSaber(SaberModel model, bool raiseSaberEvent = false, bool raisePieceEvent = false)
+        public SaberInstance CreateSaber(SaberModel model, Transform parent, bool raiseSaberEvent = false, bool raisePieceEvent = false)
         {
             CurrentSaber = _saberFactory.Create(model);
+            CurrentSaber.SetParent(parent);
 
             if (raiseSaberEvent)
             {

@@ -9,7 +9,11 @@ namespace SaberFactory.UI.Lib
         public float Value
         {
             get => _slider.slider.value;
-            set => _slider.slider.value = value;
+            set
+            {
+                _slider.slider.value = value;
+                _slider.ReceiveValue();
+            }
         }
 
         public int IntValue

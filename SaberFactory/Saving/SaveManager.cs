@@ -11,6 +11,7 @@ using SaberFactory.DataStore;
 using SaberFactory.Editor;
 using SaberFactory.Helpers;
 using SaberFactory.Models;
+using SaberFactory.Models.CustomSaber;
 using UnityEngine;
 
 namespace SaberFactory.Saving
@@ -58,6 +59,7 @@ namespace SaberFactory.Saving
                 trail.Length = trailModel.Length;
                 trail.Width = trailModel.Width;
                 trail.Whitestep = trailModel.Whitestep;
+                trail.TrailOrigin = trailModel.TrailOrigin;
                 serializableSaber.Trail = trail;
             }
 
@@ -91,7 +93,11 @@ namespace SaberFactory.Saving
             var trail = serializableSaber.Trail;
             if (trail != null)
             {
-                var trailModel = new TrailModel(Vector3.zero, trail.Width, trail.Length, null, trail.Whitestep);
+                var trailModel = new TrailModel(Vector3.zero, trail.Width, trail.Length, null, trail.Whitestep, trail.TrailOrigin);
+                if (!string.IsNullOrEmpty(trail.TrailOrigin))
+                {
+                    await LoadFromTrailOrigin(trailModel, trail.TrailOrigin);
+                }
 
                 if (saberModel.GetCustomSaber(out var customsaber))
                 {
@@ -102,6 +108,14 @@ namespace SaberFactory.Saving
                     saberModel.TrailModel = trailModel;
                 }
             }
+        }
+
+        private async Task LoadFromTrailOrigin(TrailModel trailModel, string trailOrigin)
+        {
+            var comp = await _mainAssetStore[trailOrigin];
+            var originTrailModel = (comp?.GetLeft() as CustomSaberModel)?.GetColdTrail();
+            if (originTrailModel == null) return;
+            trailModel.Material = originTrailModel.Material;
         }
     }
 }

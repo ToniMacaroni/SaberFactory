@@ -12,6 +12,8 @@ namespace SaberFactory.Configuration
         [Ignore]
         public bool RuntimeFirstLaunch;
 
+        public bool Enabled { get; set; } = true;
+
         public bool FirstLaunch { get; set; } = true;
 
         public bool LoadOnStart { get; set; } = true;

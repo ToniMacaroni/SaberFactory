@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using SaberFactory.Helpers;
@@ -94,7 +95,7 @@ namespace SaberFactory.DataStore
             _modelCompositions.Clear();
         }
 
-        public  void Unload(string path)
+        public void Unload(string path)
         {
             if (!_modelCompositions.TryGetValue(path, out var comp)) return;
             comp.Dispose();
@@ -111,6 +112,13 @@ namespace SaberFactory.DataStore
         {
             UnloadAll();
             await LoadAll();
+        }
+
+        public void Delete(string path)
+        {
+            Unload(path);
+            var filePath = PathTools.ToFullPath(path);
+            File.Delete(filePath);
         }
 
         private void NotifyLoadingFinished()

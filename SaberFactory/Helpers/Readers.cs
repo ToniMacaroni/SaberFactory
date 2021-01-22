@@ -48,6 +48,14 @@ namespace SaberFactory.Helpers
             return await Task.Run(() => Encoding.UTF8.GetString(data));
         }
 
+        public static async Task<Texture2D> ReadTexture(string path)
+        {
+            var data = await ReadFileAsync(path);
+            var tex = new Texture2D(2, 2);
+            tex.LoadImage(data);
+            return tex;
+        }
+
         public static async Task<AssetBundle> LoadAssetBundleAsync(byte[] data)
         {
             var taskSource = new TaskCompletionSource<AssetBundle>();

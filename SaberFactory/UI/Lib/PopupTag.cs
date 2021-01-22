@@ -1,25 +1,22 @@
 ﻿using System;
 using System.Text.RegularExpressions;
-using BeatSaberMarkupLanguage;
-using BeatSaberMarkupLanguage.Parser;
 using BeatSaberMarkupLanguage.Tags;
 using HMUI;
 using SaberFactory.Helpers;
 using UnityEngine;
 using UnityEngine.UI;
-using Zenject;
 
 namespace SaberFactory.UI.Lib
 {
-    internal class CustomUiComponentTag : BSMLTag
+    internal class PopupTag : BSMLTag
     {
-        public override string[] Aliases => new[] {"this." + GetKebabCaseName()};
+        public override string[] Aliases => new[] { "this." + GetKebabCaseName() };
 
         protected string _resourceName => string.Join(".", _type.Namespace, _type.Name);
 
         private readonly Type _type;
 
-        public CustomUiComponentTag(Type type)
+        public PopupTag(Type type)
         {
             _type = type;
         }
@@ -28,13 +25,13 @@ namespace SaberFactory.UI.Lib
         {
             var go = parent.CreateGameObject(_type.Name);
             go.AddComponent<RectTransform>();
-            go.AddComponent<LayoutElement>();
+            //go.AddComponent<LayoutElement>();
 
-            var contentSizeFitter = go.AddComponent<ContentSizeFitter>();
-            contentSizeFitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
-            contentSizeFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+            //var contentSizeFitter = go.AddComponent<ContentSizeFitter>();
+            //contentSizeFitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
+            //contentSizeFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
-            go.AddComponent<StackLayoutGroup>();
+            //go.AddComponent<StackLayoutGroup>();
             var comp = go.AddComponent(_type);
             UIHelpers.ParseFromResource(_resourceName, go, comp);
             return go;
@@ -43,10 +40,10 @@ namespace SaberFactory.UI.Lib
         private string GetKebabCaseName()
         {
             return Regex.Replace(
-                    _type.Name,
-                    "(?<!^)([A-Z][a-z]|(?<=[a-z])[A-Z])",
-                    "-$1",
-                    RegexOptions.Compiled).Trim().ToLower();
+                _type.Name,
+                "(?<!^)([A-Z][a-z]|(?<=[a-z])[A-Z])",
+                "-$1",
+                RegexOptions.Compiled).Trim().ToLower();
         }
     }
 }

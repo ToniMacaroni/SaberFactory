@@ -35,7 +35,7 @@ namespace SaberFactory.UI.CustomSaber
                 "Main Screen",
                 new Vector3(-25, -10, 0),
                 Quaternion.identity, 
-                new Vector2(140, 140),
+                new Vector2(105, 140),
                 isCurved: true
             );
 

@@ -5,5 +5,6 @@
         public int Length;
         public float Width;
         public float Whitestep;
+        public string TrailOrigin;
     }
 }
