@@ -8,7 +8,7 @@
 		<!--<button text='Edit Material' on-click='edit-material' />-->
 		<horizontal>
 			<this.button text='Revert' on-click='revert-trail' hover-hint='Revert changes to Trail' />
-			<!--<this.button text='Edit Material' on-click='edit-material' hover-hint='Edit Material of Trail' />-->
+			<this.button text='Edit Material' on-click='edit-material' hover-hint='WIP' interactable='false' normal-color='#00000070'/>
 			<this.button text='Choose Trail' on-click='choose-trail' hover-hint='Use the Trail of another saber' />
 		</horizontal>
 	</vertical>
