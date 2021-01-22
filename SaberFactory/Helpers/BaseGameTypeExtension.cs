@@ -1,4 +1,5 @@
-﻿using HMUI;
+﻿using CustomSaber;
+using HMUI;
 using UnityEngine;
 
 namespace SaberFactory.Helpers
@@ -28,6 +29,12 @@ namespace SaberFactory.Helpers
             Object.Destroy(obj);
         }
 
+        public static void TryDestoryImmediate(this Object obj)
+        {
+            if (!obj) return;
+            Object.DestroyImmediate(obj);
+        }
+
         public static RectTransform AsRectTransform(this Transform transform)
         {
             return transform as RectTransform;
@@ -39,6 +46,23 @@ namespace SaberFactory.Helpers
             {
                 curvedCanvasSettingse.SetRadius(radius);
             }
+        }
+
+        public static float GetTransfomWidth(Transform t1, Transform t2)
+        {
+            return Mathf.Abs(t1.localPosition.z - t2.localPosition.z);
+        }
+
+        public static float GetWidth(this CustomTrail trail)
+        {
+            return GetTransfomWidth(trail.PointEnd, trail.PointStart);
+        }
+
+        public static void SetMaterial(this Renderer renderer, int index, Material material)
+        {
+            var mats = renderer.materials;
+            mats[index] = material;
+            renderer.materials = mats;
         }
     }
 }

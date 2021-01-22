@@ -17,15 +17,13 @@ namespace SaberFactory
     public class Plugin
     {
         [Init]
-        public async void Init(IPALogger logger, Config conf, Zenjector zenjector)
+        public void Init(IPALogger logger, Config conf, Zenjector zenjector)
         {
-            Assembly.Load(await Readers.ReadResourceAsync("SaberFactory.Resources.CustomSaberComponents.dll"));
-
             var saberFactoryDir = new DirectoryInfo(UnityGame.UserDataPath).CreateSubdirectory("Saber Factory");
 
             zenjector.OnApp<AppInstaller>().WithParameters(logger, conf, saberFactoryDir);
             zenjector.OnMenu<Installers.MenuInstaller>();
-            zenjector.OnGame<GameInstaller>();
+            zenjector.OnGame<GameInstaller>(false);
         }
 
         [OnStart]

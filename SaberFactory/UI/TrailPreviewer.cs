@@ -57,7 +57,7 @@ namespace SaberFactory.UI
             _renderer = _instance.GetComponentInChildren<Renderer>();
             _mesh = _instance.GetComponentInChildren<MeshFilter>().sharedMesh;
 
-            Material = trailData.Material;
+            Material = trailData.Material.Material;
             Length = trailData.Length;
             UpdateWidth();
         }

@@ -56,12 +56,17 @@ namespace SaberFactory.UI.Lib.BSML
             {
                 parser.RegisterTag(new CustomUiComponentTag(type));
             }
+
+            foreach (var type in GetListOfType<Popup>())
+            {
+                parser.RegisterTag(new PopupTag(type));
+            }
         }
 
         private List<T> InstantiateOfType<T>(params object[] constructorArgs)
         {
             List<T> objects = new List<T>();
-            foreach (Type type in Assembly.GetExecutingAssembly().GetTypes().Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(typeof(T)) && myType!=typeof(CustomUiComponentTag)))
+            foreach (Type type in Assembly.GetExecutingAssembly().GetTypes().Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(typeof(T)) && myType!=typeof(CustomUiComponentTag) && myType!=typeof(PopupTag)))
                 objects.Add((T)Activator.CreateInstance(type, constructorArgs));
 
             return objects;

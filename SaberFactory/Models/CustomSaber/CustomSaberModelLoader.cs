@@ -18,8 +18,13 @@ namespace SaberFactory.Models.CustomSaber
 
         public ModelComposition GetComposition(StoreAsset storeAsset)
         {
-            var modelLeft = _factory.Create(storeAsset);
-            var modelRight = _factory.Create(storeAsset);
+            var (leftSaber, rightSaber) = GetSabers(storeAsset.Prefab.transform);
+
+            var storeAssetLeft = new StoreAsset(storeAsset.Path, leftSaber, storeAsset.AssetBundle);
+            var storeAssetRight = new StoreAsset(storeAsset.Path, rightSaber, storeAsset.AssetBundle);
+
+            var modelLeft = _factory.Create(storeAssetLeft);
+            var modelRight = _factory.Create(storeAssetRight);
 
             modelLeft.SaberDescriptor = modelRight.SaberDescriptor = storeAsset.Prefab.GetComponent<SaberDescriptor>();
             modelLeft.SaberSlot = ESaberSlot.Left;
@@ -29,6 +34,20 @@ namespace SaberFactory.Models.CustomSaber
             composition.SetFavorite(_config.IsFavorite(storeAsset.Path));
 
             return composition;
+        }
+
+        private (GameObject leftSaber, GameObject rightSaber) GetSabers(Transform root)
+        {
+            GameObject leftSaber = null;
+            GameObject rightSaber = null;
+            foreach (Transform t in root)
+            {
+                if (t.name == "LeftSaber") leftSaber = t.gameObject;
+                else if (t.name == "RightSaber") rightSaber = t.gameObject;
+                if (leftSaber != null && rightSaber != null) break;
+            }
+
+            return (leftSaber, rightSaber);
         }
     }
 }

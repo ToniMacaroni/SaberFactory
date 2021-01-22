@@ -30,7 +30,7 @@ namespace SaberFactory.Models
 
         public void Destroy()
         {
-            _instance.TryDestroy();
+            _instance.TryDestoryImmediate();
         }
 
         public GameObject GetSaber(ESaberSlot saberSlot)

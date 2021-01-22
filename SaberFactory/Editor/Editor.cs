@@ -47,7 +47,7 @@ namespace SaberFactory.Editor
             _saberFactoryUi.Initialize();
 
             // Create Pedestal
-            var pos = new Vector3(0.3f, 0, 0.8f);
+            var pos = new Vector3(0.3f, 0, 0.9f);
             await _pedestal.Instantiate(pos, Quaternion.Euler(0, 25, 0));
         }
 
@@ -77,7 +77,7 @@ namespace SaberFactory.Editor
             }
             else
             {
-                _editorInstanceManager.SetModelComposition(_editorInstanceManager.CurrentModelComposition);
+                _editorInstanceManager.Refresh();
             }
 
             _saberFactoryUi.Open();
@@ -114,8 +114,7 @@ namespace SaberFactory.Editor
         private void OnModelCompositionSet(ModelComposition composition)
         {
             _spawnedSaber?.Destroy();
-            _spawnedSaber = _editorInstanceManager.CreateSaber(_saberSet.LeftSaber, true, true);
-            _spawnedSaber.SetParent(_pedestal.SaberContainerTransform);
+            _spawnedSaber = _editorInstanceManager.CreateSaber(_saberSet.LeftSaber, _pedestal.SaberContainerTransform, true, true);
         }
     }
 }

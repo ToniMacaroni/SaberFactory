@@ -29,7 +29,7 @@ namespace SaberFactory.Instances.Trail
 
             TrailInstance.Setup(
                 trailInitData,
-                _instanceTrailData.Material,
+                _instanceTrailData.Material.Material,
                 _instanceTrailData.PointStart,
                 _instanceTrailData.PointEnd
                 );

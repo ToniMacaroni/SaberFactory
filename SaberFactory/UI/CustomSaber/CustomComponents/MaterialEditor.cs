@@ -5,32 +5,48 @@ using BeatSaberMarkupLanguage.ViewControllers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using BeatSaberMarkupLanguage.Components.Settings;
 using SaberFactory.Editor;
 using SaberFactory.Instances;
 using SaberFactory.UI.Lib;
 using SiraUtil.Tools;
+using UnityEngine;
 using Zenject;
 
 
 namespace SaberFactory.UI.CustomSaber.CustomComponents
 {
-    internal class MaterialEditor : SubView
+    internal class MaterialEditor : Popup
     {
-        private BasePieceInstance _currentBasePieceInstance;
+        [UIComponent("material-dropdown")] private readonly DropDownListSetting _materialDropDown = null;
+        [UIComponent("prop-list")] private readonly PropList _propList = null;
 
-        [Inject] private readonly EditorInstanceManager _editorInstanceManager = null;
+        [UIValue("materials")] private List<object> _materials = new List<object>();
+        [UIValue("shaders")] private List<object> _shaders = new List<object>();
 
-        public override void DidOpen()
+        [UIAction("#post-parse")]
+        private void Setup()
         {
+            gameObject.SetActive(false);
         }
 
-        public override void DidClose()
+        public void Show(MaterialDescriptor materialDescriptor)
         {
+            _materialDropDown.gameObject.SetActive(false);
+            SetMaterial(materialDescriptor.Material);
+            gameObject.SetActive(true);
         }
 
-        public void SetMaterials()
+        public void Show(IEnumerable<MaterialDescriptor> materialDescriptors)
         {
+            _materialDropDown.gameObject.SetActive(true);
+            SetMaterial(materialDescriptors.First().Material);
+            gameObject.SetActive(true);
+        }
 
+        private void SetMaterial(Material material)
+        {
+            _propList.SetItems(material);
         }
     }
 }

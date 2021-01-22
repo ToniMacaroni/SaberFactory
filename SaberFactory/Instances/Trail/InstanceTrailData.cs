@@ -13,7 +13,7 @@ namespace SaberFactory.Instances.Trail
         public Transform PointStart { get; }
         public Transform PointEnd { get; }
 
-        public Material Material => TrailModel.Material;
+        public MaterialDescriptor Material => TrailModel.Material;
         public int Length => TrailModel.Length;
         public float WhiteStep => TrailModel.Whitestep;
 
@@ -62,12 +62,12 @@ namespace SaberFactory.Instances.Trail
 
             var model = trailModel ?? new TrailModel(
                 Vector3.zero,
-                Mathf.Abs(saberTrail.PointEnd.localPosition.z - saberTrail.PointStart.localPosition.z),
+                saberTrail.GetWidth(),
                 saberTrail.Length,
-                saberTrail.TrailMaterial,
+                new MaterialDescriptor(saberTrail.TrailMaterial),
                 0);
 
-            if (!model.Material) model.Material = saberTrail.TrailMaterial;
+            model.Material ??= new MaterialDescriptor(saberTrail.TrailMaterial);
 
             var data = new InstanceTrailData(model, saberTrail.PointStart, saberTrail.PointEnd);
 

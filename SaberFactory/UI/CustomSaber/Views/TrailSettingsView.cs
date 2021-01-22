@@ -2,11 +2,14 @@
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components.Settings;
 using HMUI;
+using SaberFactory.DataStore;
 using SaberFactory.Editor;
 using SaberFactory.Instances;
 using SaberFactory.Instances.CustomSaber;
 using SaberFactory.Instances.Trail;
 using SaberFactory.Models;
+using SaberFactory.Models.CustomSaber;
+using SaberFactory.UI.CustomSaber.CustomComponents;
 using SaberFactory.UI.Lib;
 using UnityEngine;
 using Zenject;
@@ -19,12 +22,15 @@ namespace SaberFactory.UI.CustomSaber.Views
         [Inject] private readonly TrailPreviewer _trailPreviewer = null;
         [Inject] private readonly EditorInstanceManager _editorInstanceManager = null;
         [Inject] private readonly ColorManager _colorManager = null;
+        [Inject] private readonly MainAssetStore _mainAssetStore = null;
 
         private InstanceTrailData _instanceTrailData;
 
         [UIComponent("length-slider")] private readonly SliderSetting _lengthSliderSetting = null;
         [UIComponent("width-slider")] private readonly SliderSetting _widthSliderSetting = null;
         [UIComponent("whitestep-slider")] private readonly SliderSetting _whitestepSliderSetting = null;
+        [UIComponent("material-editor")] private readonly MaterialEditor _materialEditor = null;
+        [UIComponent("choose-trail-popup")] private readonly ChooseTrailPopup _chooseTrailPopup = null;
 
         private SliderController _lengthSlider;
         private SliderController _widthSlider;
@@ -78,12 +84,18 @@ namespace SaberFactory.UI.CustomSaber.Views
             _instanceTrailData.SetWhitestep(val);
         }
 
-        private void ResetTrail()
+        private void SetTrailModel(TrailModel trailModel)
         {
             if (_editorInstanceManager.CurrentPiece is CustomSaberInstance customsaber)
             {
-                customsaber.ResetTrail();
+                var model = (CustomSaberModel)customsaber.Model;
+                model.TrailModel = trailModel;
             }
+        }
+
+        private void ResetTrail()
+        {
+            SetTrailModel(null);
         }
 
         private void CreateTrail(SaberInstance saberInstance)
@@ -109,6 +121,32 @@ namespace SaberFactory.UI.CustomSaber.Views
         private void UpdateProps()
         {
             ParserParams.EmitEvent("update-props");
+        }
+
+        [UIAction("edit-material")]
+        private void EditMaterial()
+        {
+            _materialEditor.Show(_instanceTrailData.Material);
+        }
+
+        [UIAction("revert-trail")]
+        private void ClickRevertTrail()
+        {
+            _trailPreviewer.Destroy();
+            ResetTrail();
+            _editorInstanceManager.Refresh();
+        }
+
+        [UIAction("choose-trail")]
+        private void ClickChooseTrail()
+        {
+            _chooseTrailPopup.Show(_mainAssetStore.GetAllModelCompositions(), model =>
+            {
+                if (model == null) return;
+                _trailPreviewer.Destroy();
+                SetTrailModel(model);
+                _editorInstanceManager.Refresh();
+            });
         }
     }
 }

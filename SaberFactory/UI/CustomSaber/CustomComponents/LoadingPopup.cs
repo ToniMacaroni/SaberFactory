@@ -11,24 +11,22 @@ using UnityEngine;
 
 namespace SaberFactory.UI.CustomSaber.CustomComponents
 {
-    internal class LoadingPopup : CustomUiComponent
+    internal class LoadingPopup : Popup
     {
-        [UIObject("root")] private readonly GameObject _root = null;
-
-        public void Show()
-        {
-            _root.SetActive(true);
-        }
-
-        public void Hide()
-        {
-            _root.SetActive(false);
-        }
-
         [UIAction("#post-parse")]
         private void Setup()
         {
-            _root.SetActive(false);
+            Hide();
+        }
+
+        public new void Show()
+        {
+            base.Show();
+        }
+
+        public new void Hide()
+        {
+            base.Hide();
         }
     }
 }

@@ -1,9 +1,12 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Reflection;
 using IPA.Config;
 using IPA.Config.Stores;
 using IPA.Logging;
 using SaberFactory.Configuration;
 using SaberFactory.DataStore;
+using SaberFactory.Helpers;
 using SaberFactory.Instances;
 using SaberFactory.Models;
 using SaberFactory.Models.CustomSaber;
@@ -36,6 +39,8 @@ namespace SaberFactory.Installers
                 pluginConfig.RuntimeFirstLaunch = true;
             }
 
+            LoadCSComponents();
+
             Container.BindLoggerAsSiraLogger(_logger);
             Container.BindInstance(pluginConfig).AsSingle();
 
@@ -46,6 +51,8 @@ namespace SaberFactory.Installers
             Container.Bind<EmbeddedAssetLoader>().AsSingle();
 
             Container.Bind<CustomSaberModelLoader>().AsSingle();
+
+            Container.Bind<TextureStore>().AsSingle();
 
             if (pluginConfig.LoadOnStart)
             {
@@ -73,6 +80,18 @@ namespace SaberFactory.Installers
             Container.BindFactory<BasePieceModel, BasePieceInstance, BasePieceInstance.Factory>()
                 .FromFactory<InstanceFactory>();
             Container.BindFactory<SaberModel, SaberInstance, SaberInstance.Factory>();
+        }
+
+        private async void LoadCSComponents()
+        {
+            try
+            {
+                Assembly.Load(await Readers.ReadResourceAsync("SaberFactory.Resources.CustomSaberComponents.dll"));
+            }
+            catch (Exception )
+            {
+                _logger.Info("Couldn't load custom saber components");
+            }
         }
     }
 }
