@@ -7,6 +7,9 @@ Mod Download => **[Releases](https://github.com/ToniMacaroni/SaberFactory/releas
 To get more content and help with the mod or creation of content  
 join the the **[Saber Factory Discord](https://discord.gg/G9dtW5s)** server
 
+| [:heart: Sponsor](https://ko-fi.com/tonimacaroni)  |
+| ------------- |
+
 ## What is Saber Factory?
 Simply said: An all-rounder when it comes to sabers.
 
