@@ -191,8 +191,8 @@
     <Compile Include="Editor\SFLogoAnim.cs" />
     <Compile Include="EmbeddedAssetLoader.cs" />
     <Compile Include="Editor\Pedestal.cs" />
-    <Compile Include="ESaberSlot.cs" />
-    <Compile Include="ESaberType.cs" />
+    <Compile Include="Models\ESaberSlot.cs" />
+    <Compile Include="Models\ESaberType.cs" />
     <Compile Include="Game\EventPlayer.cs" />
     <Compile Include="Game\EventPlayerInterface.cs" />
     <Compile Include="Game\SFSaberModelController.cs" />

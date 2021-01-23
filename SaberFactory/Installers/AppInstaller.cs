@@ -20,48 +20,39 @@ namespace SaberFactory.Installers
     internal class AppInstaller : Installer
     {
         private readonly Logger _logger;
-        private readonly Config _conf;
+        private readonly PluginConfig _config;
         private readonly DirectoryInfo _saberFactoryDir;
 
-        private AppInstaller(Logger logger, Config conf, DirectoryInfo saberFactoryDir)
+        private AppInstaller(Logger logger, PluginConfig config, DirectoryInfo saberFactoryDir)
         {
             _logger = logger;
-            _conf = conf;
+            _config = config;
             _saberFactoryDir = saberFactoryDir;
         }
 
         public override void InstallBindings()
         {
-            var pluginConfig = _conf.Generated<PluginConfig>();
-            if (pluginConfig.FirstLaunch)
+            if (_config.FirstLaunch)
             {
-                pluginConfig.FirstLaunch = false;
-                pluginConfig.RuntimeFirstLaunch = true;
+                _config.FirstLaunch = false;
+                _config.RuntimeFirstLaunch = true;
             }
 
-            LoadCSComponents();
-
             Container.BindLoggerAsSiraLogger(_logger);
-            Container.BindInstance(pluginConfig).AsSingle();
+            Container.BindInstance(_config).AsSingle();
 
             Container.Bind<SaveManager>().AsSingle().WithArguments(_saberFactoryDir.CreateSubdirectory("Presets"));
             Container.BindInterfacesAndSelfTo<CustomComponentHandler>().AsSingle();
             Container.Bind<CommonResources>().AsSingle();
 
-            Container.Bind<EmbeddedAssetLoader>().AsSingle();
+            Container.BindInterfacesAndSelfTo<EmbeddedAssetLoader>().AsSingle();
 
             Container.Bind<CustomSaberModelLoader>().AsSingle();
 
             Container.Bind<TextureStore>().AsSingle();
 
-            if (pluginConfig.LoadOnStart)
-            {
-                Container.BindInterfacesAndSelfTo<MainAssetStore>().AsSingle();
-            }
-            else
-            {
-                Container.Bind<MainAssetStore>().AsSingle();
-            }
+            Container.BindInterfacesAndSelfTo<MainAssetStore>().AsSingle()
+                .OnInstantiated<MainAssetStore>(OnMainAssetStoreInstansiated);
 
             // Model stuff
             Container.Bind<SaberModel>().WithId("LeftSaberModel").AsCached().WithArguments(ESaberSlot.Left);
@@ -72,6 +63,14 @@ namespace SaberFactory.Installers
             InstallFactories();
         }
 
+        private async void OnMainAssetStoreInstansiated(InjectContext ctx, MainAssetStore mainAssetStore)
+        {
+            if (_config.LoadOnStart)
+            {
+                await mainAssetStore.LoadAll();
+            }
+        }
+
         private void InstallFactories()
         {
             Container.BindFactory<StoreAsset, CustomSaberModel, CustomSaberModel.Factory>();
@@ -80,18 +79,6 @@ namespace SaberFactory.Installers
             Container.BindFactory<BasePieceModel, BasePieceInstance, BasePieceInstance.Factory>()
                 .FromFactory<InstanceFactory>();
             Container.BindFactory<SaberModel, SaberInstance, SaberInstance.Factory>();
-        }
-
-        private async void LoadCSComponents()
-        {
-            try
-            {
-                Assembly.Load(await Readers.ReadResourceAsync("SaberFactory.Resources.CustomSaberComponents.dll"));
-            }
-            catch (Exception )
-            {
-                _logger.Info("Couldn't load custom saber components");
-            }
         }
     }
 }
