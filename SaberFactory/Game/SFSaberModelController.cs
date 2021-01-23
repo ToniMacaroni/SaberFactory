@@ -24,7 +24,7 @@ namespace SaberFactory.Game
         [InjectOptional] private readonly EventPlayer _eventPlayer = null;
 
         private SaberInstance _saberInstance;
-        private Color _saberColor;
+        private Color? _saberColor;
 
         public override void Init(Transform parent, Saber saber)
         {
@@ -34,7 +34,7 @@ namespace SaberFactory.Game
 
             _saberInstance.SetParent(parent);
             _saberInstance.CreateTrail(_saberTrail.GetField<SaberTrailRenderer, SaberTrail>("_trailRendererPrefab"));
-            _saberInstance.SetColor(_colorManager.ColorForSaberType(_saberInstance.Model.SaberSlot.ToSaberType()));
+            SetColor(_saberColor ?? _colorManager.ColorForSaberType(_saberInstance.Model.SaberSlot.ToSaberType()));
 
             _eventPlayer?.SetPartEventList(_saberInstance.Events, saber.saberType);
 
@@ -47,6 +47,6 @@ namespace SaberFactory.Game
             _saberInstance.SetColor(color);
         }
 
-        public Color Color => _saberColor;
+        public Color Color => _saberColor.GetValueOrDefault();
     }
 }
