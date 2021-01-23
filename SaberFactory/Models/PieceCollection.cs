@@ -44,5 +44,7 @@ namespace SaberFactory.Models
         {
             return _pieceModels.Values.GetEnumerator();
         }
+
+        public int PieceCount => _pieceModels.Count;
     }
 }

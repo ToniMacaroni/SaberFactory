@@ -55,5 +55,7 @@ namespace SaberFactory.Models
             customsaber = null;
             return false;
         }
+
+        public bool IsEmpty => PieceCollection.PieceCount == 0;
     }
 }
