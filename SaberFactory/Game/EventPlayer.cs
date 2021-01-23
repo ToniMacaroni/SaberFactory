@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using CustomSaber;
-using IPA.Utilities;
+﻿using IPA.Utilities;
 using SaberFactory.Configuration;
 using SaberFactory.Models;
-using SiraUtil.Tools;
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
@@ -16,6 +13,7 @@ namespace SaberFactory.Game
     {
         private List<PartEvents> _partEventsList;
         private SaberType _saberType;
+        private bool _didInit;
 
         [Inject] private readonly PluginConfig _pluginConfig = null;
 
@@ -38,6 +36,8 @@ namespace SaberFactory.Game
             _saberType = saberType;
 
             if (!_pluginConfig.EnableEvents) return;
+
+            _didInit = true;
 
             // OnSlice LevelEnded Combobreak
             _beatmapObjectManager.noteWasCutEvent += OnNoteCut;
@@ -223,17 +223,20 @@ namespace SaberFactory.Game
 
         public void Dispose()
         {
-            _beatmapObjectManager.noteWasCutEvent -= OnNoteCut;
-            _beatmapObjectManager.noteWasMissedEvent -= OnNoteMiss;
+            if (_didInit)
+            {
+                _beatmapObjectManager.noteWasCutEvent -= OnNoteCut;
+                _beatmapObjectManager.noteWasMissedEvent -= OnNoteMiss;
 
-            _obstacleSaberSparkleEffectManager.sparkleEffectDidStartEvent -= SaberStartCollide;
-            _obstacleSaberSparkleEffectManager.sparkleEffectDidEndEvent -= SaberEndCollide;
+                _obstacleSaberSparkleEffectManager.sparkleEffectDidStartEvent -= SaberStartCollide;
+                _obstacleSaberSparkleEffectManager.sparkleEffectDidEndEvent -= SaberEndCollide;
 
-            _energyCounter.gameEnergyDidReach0Event -= InvokeOnLevelFail;
+                _energyCounter.gameEnergyDidReach0Event -= InvokeOnLevelFail;
 
-            _scoreController.multiplierDidChangeEvent += MultiplayerDidChange;
+                _scoreController.multiplierDidChangeEvent -= MultiplayerDidChange;
 
-            _scoreController.comboDidChangeEvent += InvokeComboChanged;
+                _scoreController.comboDidChangeEvent -= InvokeComboChanged;
+            }
         }
     }
 }
