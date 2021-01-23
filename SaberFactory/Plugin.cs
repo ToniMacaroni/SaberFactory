@@ -1,20 +1,17 @@
-﻿using System;
-using System.IO;
-using System.Reflection;
-using IPA;
+﻿using IPA;
 using IPA.Config;
 using IPA.Config.Stores;
 using IPA.Utilities;
 using SaberFactory.Configuration;
-using SaberFactory.Helpers;
 using SaberFactory.Installers;
 using SiraUtil.Zenject;
+using System.IO;
 using IPALogger = IPA.Logging.Logger;
 
 namespace SaberFactory
 {
 
-    [Plugin(RuntimeOptions.SingleStartInit)]
+    [Plugin(RuntimeOptions.DynamicInit)]
     public class Plugin
     {
         private IPALogger _logger;

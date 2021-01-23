@@ -52,7 +52,7 @@ namespace SaberFactory.Instances.Trail
 
         public void SetColor(Color color)
         {
-            if (!TrailInstance) return;
+            if (TrailInstance == null) return;
             TrailInstance.Color = color;
         }
     }
