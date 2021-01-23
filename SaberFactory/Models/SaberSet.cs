@@ -57,5 +57,7 @@ namespace SaberFactory.Models
             var otherSaber = fromModel == LeftSaber ? RightSaber : LeftSaber;
             otherSaber.SaberWidth = fromModel.SaberWidth;
         }
+
+        public bool IsEmpty => LeftSaber.IsEmpty && RightSaber.IsEmpty;
     }
 }

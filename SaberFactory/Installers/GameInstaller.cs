@@ -1,6 +1,7 @@
 ﻿using SaberFactory.Configuration;
 using SaberFactory.Game;
 using SaberFactory.Helpers;
+using SaberFactory.Models;
 using SiraUtil.Interfaces;
 using Zenject;
 
@@ -11,7 +12,7 @@ namespace SaberFactory.Installers
         public override void InstallBindings()
         {
             var config = Container.Resolve<PluginConfig>();
-            if (!config.Enabled) return;
+            if (!config.Enabled || Container.Resolve<SaberSet>().IsEmpty) return;
 
             if (Container.HasBinding<GameplayCoreSceneSetupData>())
             {
