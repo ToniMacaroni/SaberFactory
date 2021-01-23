@@ -1,6 +1,6 @@
-﻿using System;
-using BeatSaberMarkupLanguage.MenuButtons;
+﻿using BeatSaberMarkupLanguage.MenuButtons;
 using SiraUtil.Tools;
+using System;
 using Zenject;
 
 namespace SaberFactory.UI
@@ -31,7 +31,8 @@ namespace SaberFactory.UI
 
         public void Dispose()
         {
-            if(MenuButtons.IsSingletonAvailable) MenuButtons.instance.UnregisterButton(_menuButton);
+            if (MenuButtons.IsSingletonAvailable && BeatSaberMarkupLanguage.BSMLParser.IsSingletonAvailable)
+                MenuButtons.instance.UnregisterButton(_menuButton);
         }
     }
 }
