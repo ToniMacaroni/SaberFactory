@@ -1,9 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Reflection;
-using IPA.Config;
-using IPA.Config.Stores;
-using IPA.Logging;
+﻿using IPA.Logging;
 using SaberFactory.Configuration;
 using SaberFactory.DataStore;
 using SaberFactory.Helpers;
@@ -13,6 +8,9 @@ using SaberFactory.Models.CustomSaber;
 using SaberFactory.Saving;
 using SaberFactory.UI.Lib.BSML;
 using SiraUtil;
+using System;
+using System.IO;
+using System.Reflection;
 using Zenject;
 
 namespace SaberFactory.Installers
@@ -20,29 +18,28 @@ namespace SaberFactory.Installers
     internal class AppInstaller : Installer
     {
         private readonly Logger _logger;
-        private readonly Config _conf;
+        private readonly PluginConfig _conf;
         private readonly DirectoryInfo _saberFactoryDir;
 
-        private AppInstaller(Logger logger, Config conf, DirectoryInfo saberFactoryDir)
+        private AppInstaller(Logger logger, PluginConfig conf, DirectoryInfo saberFactoryDir)
         {
-            _logger = logger;
             _conf = conf;
+            _logger = logger;
             _saberFactoryDir = saberFactoryDir;
         }
 
         public override void InstallBindings()
         {
-            var pluginConfig = _conf.Generated<PluginConfig>();
-            if (pluginConfig.FirstLaunch)
+            if (_conf.FirstLaunch)
             {
-                pluginConfig.FirstLaunch = false;
-                pluginConfig.RuntimeFirstLaunch = true;
+                _conf.FirstLaunch = false;
+                _conf.RuntimeFirstLaunch = true;
             }
 
             LoadCSComponents();
 
             Container.BindLoggerAsSiraLogger(_logger);
-            Container.BindInstance(pluginConfig).AsSingle();
+            Container.BindInstance(_conf).AsSingle();
 
             Container.Bind<SaveManager>().AsSingle().WithArguments(_saberFactoryDir.CreateSubdirectory("Presets"));
             Container.BindInterfacesAndSelfTo<CustomComponentHandler>().AsSingle();
@@ -54,7 +51,7 @@ namespace SaberFactory.Installers
 
             Container.Bind<TextureStore>().AsSingle();
 
-            if (pluginConfig.LoadOnStart)
+            if (_conf.LoadOnStart)
             {
                 Container.BindInterfacesAndSelfTo<MainAssetStore>().AsSingle();
             }
