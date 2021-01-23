@@ -14,7 +14,7 @@ using Zenject;
 
 namespace SaberFactory.DataStore
 {
-    internal class MainAssetStore : IInitializable
+    internal class MainAssetStore : IDisposable
     {
         public event Action OnLoadingFinished;
         public bool IsLoading { get; private set; }
@@ -48,9 +48,9 @@ namespace SaberFactory.DataStore
             return await LoadComposition(path);
         }
 
-        public async void Initialize()
+        public void Dispose()
         {
-            await LoadAll();
+            UnloadAll();
         }
 
         public async Task LoadAllCustomSabersAsync(bool fireEvent)

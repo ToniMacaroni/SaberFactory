@@ -88,8 +88,8 @@ namespace SaberFactory.UI
             var newVerts = new Vector3[4];
             newVerts[0] = new Vector3(0, 0, locPosStart.z); // bottom left
             newVerts[1] = new Vector3(0, 0, locPosEnd.z); // top left
-            newVerts[2] = new Vector3(1f, 0, 0); // top right
-            newVerts[3] = new Vector3(1f, 0, -1f); // bottom right
+            newVerts[2] = new Vector3(1f, 0, locPosEnd.z); // top right
+            newVerts[3] = new Vector3(1f, 0, locPosStart.z); // bottom right
             _mesh.vertices = newVerts;
         }
 

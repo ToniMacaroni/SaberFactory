@@ -14,13 +14,18 @@ namespace SaberFactory
     [Plugin(RuntimeOptions.DynamicInit)]
     public class Plugin
     {
+        private IPALogger _logger;
+
         [Init]
         public void Init(IPALogger logger, Config conf, Zenjector zenjector)
         {
-            var saberFactoryDir = new DirectoryInfo(UnityGame.UserDataPath).CreateSubdirectory("Saber Factory");
+            _logger = logger;
 
-            var config = conf.Generated<PluginConfig>();
-            zenjector.OnApp<AppInstaller>().WithParameters(logger, config, saberFactoryDir);
+            var pluginConfig = conf.Generated<PluginConfig>();
+            var saberFactoryDir = new DirectoryInfo(UnityGame.UserDataPath).CreateSubdirectory("Saber Factory");
+            LoadCSDescriptors();
+
+            zenjector.OnApp<AppInstaller>().WithParameters(logger, pluginConfig, saberFactoryDir);
             zenjector.OnMenu<Installers.MenuInstaller>();
             zenjector.OnGame<GameInstaller>(false);
         }
@@ -33,6 +38,18 @@ namespace SaberFactory
         [OnExit]
         public void OnApplicationQuit()
         {
+        }
+
+        private async void LoadCSDescriptors()
+        {
+            try
+            {
+                Assembly.Load(await Readers.ReadResourceAsync("SaberFactory.Resources.CustomSaberComponents.dll"));
+            }
+            catch (Exception)
+            {
+                _logger.Info("Couldn't load custom saber descriptors");
+            }
         }
     }
 }

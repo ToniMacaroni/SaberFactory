@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using SaberFactory.Helpers;
 using SiraUtil.Tools;
@@ -7,7 +8,7 @@ using Object = UnityEngine.Object;
 
 namespace SaberFactory
 {
-    internal class EmbeddedAssetLoader
+    internal class EmbeddedAssetLoader : IDisposable
     {
         public static readonly string BUNDLE_PATH = "SaberFactory.Resources.assets";
 
@@ -60,6 +61,14 @@ namespace SaberFactory
             }
 
             return true;
+        }
+
+        public void Dispose()
+        {
+            if (_assetBundle)
+            {
+                _assetBundle.Unload(true);
+            }
         }
     }
 }
