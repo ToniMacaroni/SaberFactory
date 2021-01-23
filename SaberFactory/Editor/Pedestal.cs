@@ -52,7 +52,10 @@ namespace SaberFactory.Editor
 
         public void Destroy()
         {
-            _rootTransform.gameObject.TryDestroy();
+            if (_rootTransform != null)
+            {
+                _rootTransform.gameObject.TryDestroy();
+            }
         }
     }
 }
