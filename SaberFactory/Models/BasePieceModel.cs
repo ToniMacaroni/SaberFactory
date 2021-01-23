@@ -1,8 +1,6 @@
 ﻿using System;
-using Newtonsoft.Json.Bson;
 using SaberFactory.DataStore;
 using SaberFactory.Models.PropHandler;
-using SaberFactory.UI;
 using UnityEngine;
 
 namespace SaberFactory.Models

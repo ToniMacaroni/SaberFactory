@@ -1,17 +1,10 @@
-﻿using BeatSaberMarkupLanguage;
-using BeatSaberMarkupLanguage.Attributes;
+﻿using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components;
-using BeatSaberMarkupLanguage.ViewControllers;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using HMUI;
 using SaberFactory.UI.Lib;
 using SaberFactory.UI.Lib.BSML;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using CustomListTableData = SaberFactory.UI.Lib.BSML.CustomListTableData;
 
 
 namespace SaberFactory.UI.CustomSaber.CustomComponents

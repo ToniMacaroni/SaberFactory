@@ -1,5 +1,4 @@
-﻿using System;
-using BeatSaberMarkupLanguage.Attributes;
+﻿using BeatSaberMarkupLanguage.Attributes;
 using SaberFactory.UI.Lib;
 using UnityEngine;
 

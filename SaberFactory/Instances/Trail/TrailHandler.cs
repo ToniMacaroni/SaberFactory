@@ -1,6 +1,4 @@
-﻿using System;
-using SaberFactory.Helpers;
-using SaberFactory.Models.CustomSaber;
+﻿using SaberFactory.Helpers;
 using UnityEngine;
 
 namespace SaberFactory.Instances.Trail

@@ -1,11 +1,8 @@
 ﻿using System;
 using SaberFactory.Editor;
-using SaberFactory.Instances;
 using SaberFactory.UI;
 using SaberFactory.UI.CustomSaber;
-using SaberFactory.UI.CustomSaber.Views;
 using SaberFactory.UI.Lib;
-using UnityEngine;
 using Zenject;
 
 namespace SaberFactory.Installers

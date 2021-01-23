@@ -1,4 +1,5 @@
-﻿using IPA;
+﻿using System;
+using IPA;
 using IPA.Config;
 using IPA.Config.Stores;
 using IPA.Utilities;
@@ -6,6 +7,8 @@ using SaberFactory.Configuration;
 using SaberFactory.Installers;
 using SiraUtil.Zenject;
 using System.IO;
+using System.Reflection;
+using SaberFactory.Helpers;
 using IPALogger = IPA.Logging.Logger;
 
 namespace SaberFactory

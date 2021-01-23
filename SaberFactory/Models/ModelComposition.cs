@@ -1,5 +1,4 @@
 ﻿using System;
-using SaberFactory.Models.CustomSaber;
 using SaberFactory.UI;
 using UnityEngine;
 

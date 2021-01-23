@@ -1,7 +1,6 @@
 ﻿using System;
 using SaberFactory.Helpers;
 using SaberFactory.Instances.Trail;
-using SaberFactory.Models;
 using SiraUtil.Tools;
 using UnityEngine;
 using Object = UnityEngine.Object;

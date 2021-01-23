@@ -3,7 +3,6 @@ using SaberFactory.Helpers;
 using SaberFactory.Instances.CustomSaber;
 using SaberFactory.Instances.Trail;
 using SaberFactory.Models;
-using SaberFactory.Models.CustomSaber;
 using SiraUtil.Tools;
 using UnityEngine;
 using Zenject;

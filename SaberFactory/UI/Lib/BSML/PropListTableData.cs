@@ -5,7 +5,6 @@ using System.Reflection;
 using BeatSaberMarkupLanguage;
 using HMUI;
 using IPA.Utilities;
-using SaberFactory.Helpers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

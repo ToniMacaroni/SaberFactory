@@ -1,5 +1,4 @@
-﻿using JetBrains.Annotations;
-using SaberFactory.Models.PropHandler;
+﻿using SaberFactory.Models.PropHandler;
 using UnityEngine;
 
 namespace SaberFactory.Instances.Setters
