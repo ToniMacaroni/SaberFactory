@@ -4,7 +4,6 @@ using SaberFactory.UI.Lib;
 using SiraUtil.Tools;
 using UnityEngine;
 using VRUIControls;
-using Zenject;
 
 namespace SaberFactory.UI.CustomSaber
 {

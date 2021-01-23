@@ -1,14 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using IPA.Config;
-using JetBrains.Annotations;
 using Newtonsoft.Json;
 using SaberFactory.DataStore;
-using SaberFactory.Editor;
 using SaberFactory.Helpers;
 using SaberFactory.Models;
 using SaberFactory.Models.CustomSaber;

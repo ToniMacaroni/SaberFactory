@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using BeatSaberMarkupLanguage;
 using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Tags;
-using BeatSaberMarkupLanguage.TypeHandlers;
 using HMUI;
-using IPA.Utilities;
 using SaberFactory.Helpers;
 using UnityEngine;
 using UnityEngine.UI;

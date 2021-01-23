@@ -1,5 +1,4 @@
-﻿using System;
-using SaberFactory.Configuration;
+﻿using SaberFactory.Configuration;
 using SaberFactory.DataStore;
 using UnityEngine;
 

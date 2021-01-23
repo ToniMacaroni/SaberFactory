@@ -1,16 +1,12 @@
 ﻿using BeatSaberMarkupLanguage;
 using BeatSaberMarkupLanguage.Attributes;
-using BeatSaberMarkupLanguage.Components;
-using BeatSaberMarkupLanguage.ViewControllers;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using BeatSaberMarkupLanguage.Parser;
 using BeatSaberMarkupLanguage.TypeHandlers;
 using SaberFactory.UI.Lib;
 using SaberFactory.UI.Lib.BSML;
 using UnityEngine;
-using UnityEngine.UI;
 
 
 namespace SaberFactory.UI.CustomSaber.CustomComponents

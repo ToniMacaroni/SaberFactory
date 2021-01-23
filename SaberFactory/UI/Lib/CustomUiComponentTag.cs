@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Text.RegularExpressions;
-using BeatSaberMarkupLanguage;
-using BeatSaberMarkupLanguage.Parser;
 using BeatSaberMarkupLanguage.Tags;
 using HMUI;
 using SaberFactory.Helpers;
 using UnityEngine;
 using UnityEngine.UI;
-using Zenject;
 
 namespace SaberFactory.UI.Lib
 {

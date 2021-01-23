@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using BeatSaberMarkupLanguage;
+﻿using System.Linq;
 using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Tags;
-using BeatSaberMarkupLanguage.TypeHandlers;
 using HMUI;
 using SaberFactory.Helpers;
 using TMPro;

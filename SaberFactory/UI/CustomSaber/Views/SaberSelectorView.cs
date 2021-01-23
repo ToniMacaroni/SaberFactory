@@ -1,22 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using BeatSaberMarkupLanguage.Attributes;
-using BeatSaberMarkupLanguage.Components;
-using BeatSaberMarkupLanguage.Components.Settings;
-using HMUI;
 using SaberFactory.Configuration;
 using SaberFactory.DataStore;
 using SaberFactory.Editor;
-using SaberFactory.Instances;
 using SaberFactory.Models;
-using SaberFactory.Models.CustomSaber;
-using SaberFactory.Saving;
 using SaberFactory.UI.CustomSaber.CustomComponents;
 using SaberFactory.UI.Lib;
-using UnityEngine;
 using Zenject;
 
 

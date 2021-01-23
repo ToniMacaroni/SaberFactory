@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using BeatSaberMarkupLanguage.Attributes;
+﻿using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components.Settings;
 using HMUI;
 using SaberFactory.DataStore;
@@ -11,7 +10,6 @@ using SaberFactory.Models;
 using SaberFactory.Models.CustomSaber;
 using SaberFactory.UI.CustomSaber.CustomComponents;
 using SaberFactory.UI.Lib;
-using UnityEngine;
 using Zenject;
 
 

@@ -8,7 +8,6 @@ using SiraUtil.Tools;
 using UnityEngine;
 using UnityEngine.UI;
 using VRUIControls;
-using Zenject;
 
 namespace SaberFactory.UI
 {

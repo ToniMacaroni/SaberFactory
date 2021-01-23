@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using BeatSaberMarkupLanguage.Parser;
 using SaberFactory.Helpers;
 using SiraUtil.Tools;

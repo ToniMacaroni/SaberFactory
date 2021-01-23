@@ -1,6 +1,4 @@
-﻿using System;
-using SaberFactory.Helpers;
-using SaberFactory.Models.CustomSaber;
+﻿using SaberFactory.Models.CustomSaber;
 
 namespace SaberFactory.Models
 {

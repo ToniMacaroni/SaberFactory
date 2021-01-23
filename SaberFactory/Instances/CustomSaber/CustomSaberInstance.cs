@@ -1,5 +1,4 @@
-﻿using System.Runtime.InteropServices.WindowsRuntime;
-using SaberFactory.Instances.Setters;
+﻿using SaberFactory.Instances.Setters;
 using SaberFactory.Instances.Trail;
 using SaberFactory.Models;
 using SaberFactory.Models.CustomSaber;
