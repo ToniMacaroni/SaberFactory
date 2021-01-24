@@ -23,15 +23,10 @@ namespace SaberFactory.UI.Lib
         {
             var go = parent.CreateGameObject(_type.Name);
             go.AddComponent<RectTransform>();
-            //go.AddComponent<LayoutElement>();
 
-            //var contentSizeFitter = go.AddComponent<ContentSizeFitter>();
-            //contentSizeFitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
-            //contentSizeFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+            var comp = (Popup)go.AddComponent(_type);
+            comp.Parse(_resourceName);
 
-            //go.AddComponent<StackLayoutGroup>();
-            var comp = go.AddComponent(_type);
-            UIHelpers.ParseFromResource(_resourceName, go, comp);
             return go;
         }
 

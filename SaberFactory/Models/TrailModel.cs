@@ -12,14 +12,17 @@ namespace SaberFactory.Models
         public float Whitestep;
 
         public string TrailOrigin;
+        public bool ClampTexture;
+        public TextureWrapMode? OriginalTextureWrapMode;
 
-        public TrailModel(Vector3 trailPosOffset, float width, int length, MaterialDescriptor material, float whitestep, string trailOrigin = "")
+        public TrailModel(Vector3 trailPosOffset, float width, int length, MaterialDescriptor material, float whitestep, TextureWrapMode? originalTextureWrapMode, string trailOrigin = "")
         {
             TrailPosOffset = trailPosOffset;
             Width = width;
             Length = length;
             Material = material;
             Whitestep = whitestep;
+            OriginalTextureWrapMode = originalTextureWrapMode;
             TrailOrigin = trailOrigin;
         }
     }

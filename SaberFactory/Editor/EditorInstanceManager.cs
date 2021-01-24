@@ -20,19 +20,19 @@ namespace SaberFactory.Editor
         
         private readonly SiraLog _logger;
         private readonly SaberSet _saberSet;
-        private readonly SaveManager _saveManager;
+        private readonly PresetSaveManager _presetSaveManager;
         private readonly SaberInstance.Factory _saberFactory;
 
-        public EditorInstanceManager(SiraLog logger, SaberSet saberSet, SaveManager saveManager, SaberInstance.Factory saberFactory)
+        public EditorInstanceManager(SiraLog logger, SaberSet saberSet, PresetSaveManager presetSaveManager, SaberInstance.Factory saberFactory)
         {
             _logger = logger;
             _saberSet = saberSet;
-            _saveManager = saveManager;
+            _presetSaveManager = presetSaveManager;
             _saberFactory = saberFactory;
 
             SelectedDefinition = AssetTypeDefinition.CustomSaber;
 
-            saveManager.OnSaberLoaded += delegate
+            presetSaveManager.OnSaberLoaded += delegate
             {
                 if (saberSet.LeftSaber.GetCustomSaber(out var customsaber))
                 {

@@ -20,6 +20,8 @@ namespace SaberFactory.Configuration
 
         public bool EnableEvents { get; set; } = true;
 
+        public bool CreateCustomSabersFolder { get; set; } = true;
+
         [UseConverter(typeof(ListConverter<string>))]
         public List<string> Favorites { get; set; } = new List<string>();
 

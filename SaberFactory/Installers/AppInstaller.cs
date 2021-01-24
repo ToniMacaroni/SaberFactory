@@ -36,7 +36,7 @@ namespace SaberFactory.Installers
             Container.BindLoggerAsSiraLogger(_logger);
             Container.BindInstance(_config).AsSingle();
 
-            Container.Bind<SaveManager>().AsSingle().WithArguments(_saberFactoryDir.CreateSubdirectory("Presets"));
+            Container.Bind<PresetSaveManager>().AsSingle().WithArguments(_saberFactoryDir.CreateSubdirectory("Presets"));
             Container.BindInterfacesAndSelfTo<CustomComponentHandler>().AsSingle();
             Container.Bind<CommonResources>().AsSingle();
 
@@ -50,8 +50,8 @@ namespace SaberFactory.Installers
                 .OnInstantiated<MainAssetStore>(OnMainAssetStoreInstansiated);
 
             // Model stuff
-            Container.Bind<SaberModel>().WithId("LeftSaberModel").AsCached().WithArguments(ESaberSlot.Left);
-            Container.Bind<SaberModel>().WithId("RightSaberModel").AsCached().WithArguments(ESaberSlot.Right);
+            Container.Bind<SaberModel>().WithId(ESaberSlot.Left).AsCached().WithArguments(ESaberSlot.Left);
+            Container.Bind<SaberModel>().WithId(ESaberSlot.Right).AsCached().WithArguments(ESaberSlot.Right);
 
             Container.Bind<SaberSet>().AsSingle();
 

@@ -6,18 +6,18 @@ namespace SaberFactory.Models
 {
     internal class SaberSet
     {
-        private readonly SaveManager _saveManager;
+        private readonly PresetSaveManager _presetSaveManager;
         public SaberModel LeftSaber { get; set; }
         public SaberModel RightSaber { get; set; }
 
         public Task CurrentLoadingTask { get; private set; }
 
         private SaberSet(
-            [Inject(Id = "LeftSaberModel")] SaberModel leftSaber,
-            [Inject(Id = "RightSaberModel")] SaberModel rightSaber,
-            SaveManager saveManager)
+            [Inject(Id = ESaberSlot.Left)] SaberModel leftSaber,
+            [Inject(Id = ESaberSlot.Right)] SaberModel rightSaber,
+            PresetSaveManager presetSaveManager)
         {
-            _saveManager = saveManager;
+            _presetSaveManager = presetSaveManager;
             LeftSaber = leftSaber;
             RightSaber = rightSaber;
 
@@ -42,12 +42,12 @@ namespace SaberFactory.Models
 
         public void Save(string fileName)
         {
-            _saveManager.SaveSaber(this, fileName);
+            _presetSaveManager.SaveSaber(this, fileName);
         }
 
         public async Task Load(string fileName)
         {
-            CurrentLoadingTask = _saveManager.LoadSaber(this, fileName);
+            CurrentLoadingTask = _presetSaveManager.LoadSaber(this, fileName);
             await CurrentLoadingTask;
         }
 

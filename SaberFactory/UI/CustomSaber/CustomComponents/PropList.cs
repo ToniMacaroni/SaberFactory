@@ -1,9 +1,15 @@
-﻿using BeatSaberMarkupLanguage.Attributes;
+﻿using System;
+using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
+using HMUI;
+using SaberFactory.Helpers;
 using SaberFactory.UI.Lib;
 using SaberFactory.UI.Lib.BSML;
+using SaberFactory.UI.Lib.PropCells;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 
@@ -11,47 +17,59 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
 {
     internal class PropList : CustomUiComponent
     {
-        [UIComponent("root-vertical")] private readonly LayoutElement _layoutElement = null;
-        [UIComponent("item-list")] private readonly PropListTableData _list = null;
-        //[UIComponent("header-text")] private readonly TextMeshProUGUI _textMesh = null;
+        [UIObject("item-container")] private readonly GameObject _itemContainer = null;
 
-        public void SetItems(Material material)
+        private List<BasePropCell> _cells = new List<BasePropCell>();
+
+        public void SetItems(IEnumerable<PropertyDescriptor> props)
         {
-            SetupProps(material);
-        }
-
-        private void SetupProps(Material material)
-        {
-            var data = new List<PropListTableData.PropertyDescriptor>();
-
-            var shader = material.shader;
-            var propCount = shader.GetPropertyCount();
-
-            for (int i = 0; i < propCount; i++)
+            Clear();
+            foreach (var propertyDescriptor in props)
             {
-                var propName = shader.GetPropertyName(i);
-                var propType = shader.GetPropertyType(i);
-                var cell = new PropListTableData.PropertyDescriptor();
-                data.Add(cell);
+                AddCell(propertyDescriptor);
             }
-
-            _list.data = data;
-            _list.tableView.ReloadData();
         }
 
-        private void SetWidth(float width)
+        public void Clear()
         {
-            _layoutElement.preferredWidth = width;
+            foreach (Transform t in _itemContainer.transform)
+            {
+                t.gameObject.TryDestroy();
+            }
+            _cells.Clear();
         }
 
-        //private void SetText(string text)
-        //{
-        //    _textMesh.text = text;
-        //}
-
-        private void SetBgColor(Color color)
+        public void AddCell(PropertyDescriptor data)
         {
-            _layoutElement.gameObject.GetComponent<Backgroundable>().background.color = color;
+            if (data.PropObject == null) return;
+
+            var go = _itemContainer.CreateGameObject("PropCell");
+            go.AddComponent<RectTransform>();
+            var layoutElement = go.AddComponent<LayoutElement>();
+            layoutElement.preferredHeight = 16;
+            layoutElement.preferredWidth = 60;
+
+            var contentSizeFitter = go.AddComponent<ContentSizeFitter>();
+            contentSizeFitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
+            contentSizeFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+
+            //go.AddComponent<StackLayoutGroup>();
+
+            var cellType = data.Type switch
+            {
+                EPropertyType.Float => typeof(FloatPropCell),
+                EPropertyType.Bool => typeof(BoolPropCell),
+                EPropertyType.Color => typeof(ColorPropCell),
+                EPropertyType.Texture => typeof(TexturePropCell),
+                _ => throw new ArgumentOutOfRangeException()
+            };
+
+            var comp = (BasePropCell)go.AddComponent(cellType);
+            UIHelpers.ParseFromResource(comp.ContentLocation, go, comp);
+            comp.SetData(data);
+            _cells.Add(comp);
         }
+
+        
     }
 }

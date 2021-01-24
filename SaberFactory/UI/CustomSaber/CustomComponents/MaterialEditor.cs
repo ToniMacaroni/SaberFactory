@@ -1,10 +1,12 @@
-﻿using BeatSaberMarkupLanguage.Attributes;
+﻿using System;
+using BeatSaberMarkupLanguage.Attributes;
 using System.Collections.Generic;
 using System.Linq;
 using BeatSaberMarkupLanguage.Components.Settings;
 using SaberFactory.Instances;
 using SaberFactory.UI.Lib;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 
 namespace SaberFactory.UI.CustomSaber.CustomComponents
@@ -20,26 +22,89 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
         [UIAction("#post-parse")]
         private void Setup()
         {
-            gameObject.SetActive(false);
+            Hide();
         }
 
         public void Show(MaterialDescriptor materialDescriptor)
         {
-            _materialDropDown.gameObject.SetActive(false);
+            _materialDropDown.transform.parent.gameObject.SetActive(false);
             SetMaterial(materialDescriptor.Material);
             gameObject.SetActive(true);
         }
 
         public void Show(IEnumerable<MaterialDescriptor> materialDescriptors)
         {
-            _materialDropDown.gameObject.SetActive(true);
+            _materialDropDown.transform.parent.gameObject.SetActive(true);
             SetMaterial(materialDescriptors.First().Material);
             gameObject.SetActive(true);
         }
 
         private void SetMaterial(Material material)
         {
-            _propList.SetItems(material);
+            var props = new List<PropertyDescriptor>();
+
+            var shader = material.shader;
+            var propCount = shader.GetPropertyCount();
+
+            for (int i = 0; i < propCount; i++)
+            {
+                var propName = shader.GetPropertyName(i);
+                var propId = shader.GetPropertyNameId(i);
+                var propType = shader.GetPropertyType(i);
+                var type = GetTypeFromShaderType(propType);
+                if (type == EPropertyType.Unhandled) continue;
+
+                var propObject = GetPropObject(propType, propId, material);
+                var callback = ConstructCallback(propType, propId, material);
+
+                var cell = new PropertyDescriptor(propName, type, propObject, callback);
+                props.Add(cell);
+            }
+
+            _propList.SetItems(props);
+        }
+
+        private EPropertyType GetTypeFromShaderType(ShaderPropertyType type)
+        {
+            return type switch
+            {
+                ShaderPropertyType.Float => EPropertyType.Float,
+                ShaderPropertyType.Color => EPropertyType.Color,
+                ShaderPropertyType.Texture => EPropertyType.Texture,
+                _ => EPropertyType.Unhandled
+            };
+        }
+
+        private object GetPropObject(ShaderPropertyType type, int propId, Material material)
+        {
+            return type switch
+            {
+                ShaderPropertyType.Float => material.GetFloat(propId),
+                ShaderPropertyType.Color => material.GetColor(propId),
+                ShaderPropertyType.Texture => material.GetTexture(propId),
+                _ => null
+            };
+        }
+
+        private Action<object> ConstructCallback(ShaderPropertyType type, int propId, Material material)
+        {
+            return type switch
+            {
+                ShaderPropertyType.Float => (obj) => { material.SetFloat(propId, (float)obj); }
+                ,
+                ShaderPropertyType.Color => (obj) => { material.SetColor(propId, (Color)obj); }
+                ,
+                ShaderPropertyType.Texture => (obj) => { material.SetTexture(propId, (Texture2D)obj); }
+                ,
+                _ => null
+            };
+        }
+
+        [UIAction("click-close")]
+        private void ClickClose()
+        {
+            _propList.Clear();
+            Hide();
         }
     }
 }

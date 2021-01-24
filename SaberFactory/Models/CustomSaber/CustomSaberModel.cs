@@ -39,7 +39,7 @@ namespace SaberFactory.Models.CustomSaber
                 trail.GetWidth(),
                 trail.Length,
                 new MaterialDescriptor(trail.TrailMaterial),
-                0,
+                0, trail.TrailMaterial.mainTexture?.wrapMode,
                 StoreAsset.Path);
         }
 

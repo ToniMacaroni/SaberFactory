@@ -5,10 +5,11 @@ using BeatSaberMarkupLanguage.Parser;
 using BeatSaberMarkupLanguage.TypeHandlers;
 using HMUI;
 using IPA.Utilities;
+using SaberFactory.UI.Lib.BSML;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace SaberFactory.UI.Lib.BSML
+namespace SaberFactory.UI.Lib
 {
     [ComponentHandler(typeof(PropListTableData))]
     public class PropListTableDataHandler : TypeHandler
@@ -30,16 +31,16 @@ namespace SaberFactory.UI.Lib.BSML
         {
             var tableData = (PropListTableData)componentType.component;
 
-            if (componentType.data.TryGetValue("selectCell", out string selectCell))
-            {
-                tableData.tableView.didSelectCellWithIdxEvent += delegate (TableView table, int index)
-                {
-                    if (!parserParams.actions.TryGetValue(selectCell, out BSMLAction action))
-                        throw new Exception("select-cell action '" + componentType.data["onClick"] + "' not found");
+            //if (componentType.data.TryGetValue("selectCell", out string selectCell))
+            //{
+            //    tableData.tableView.didSelectCellWithIdxEvent += delegate (TableView table, int index)
+            //    {
+            //        if (!parserParams.actions.TryGetValue(selectCell, out BSMLAction action))
+            //            throw new Exception("select-cell action '" + componentType.data["onClick"] + "' not found");
 
-                    action.Invoke(table, index);
-                };
-            }
+            //        action.Invoke(table, index);
+            //    };
+            //}
 
             if (componentType.data.TryGetValue("listDirection", out string listDirection))
                 tableData.tableView.SetField("_tableType", (TableView.TableType)Enum.Parse(typeof(TableView.TableType), listDirection));
@@ -55,7 +56,7 @@ namespace SaberFactory.UI.Lib.BSML
             {
                 if (!parserParams.values.TryGetValue(value, out BSMLValue contents))
                     throw new Exception("value '" + value + "' not found");
-                tableData.data = contents.GetValue() as List<PropListTableData.PropertyDescriptor>;
+                tableData.data = contents.GetValue() as List<PropertyDescriptor>;
                 tableData.tableView.ReloadData();
             }
 

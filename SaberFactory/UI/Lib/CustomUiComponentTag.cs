@@ -32,8 +32,10 @@ namespace SaberFactory.UI.Lib
             contentSizeFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
             go.AddComponent<StackLayoutGroup>();
-            var comp = go.AddComponent(_type);
-            UIHelpers.ParseFromResource(_resourceName, go, comp);
+
+            var comp = (CustomUiComponent)go.AddComponent(_type);
+            comp.Parse(_resourceName);
+
             return go;
         }
 
