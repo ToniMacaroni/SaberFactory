@@ -10,8 +10,6 @@ namespace SaberFactory.UI.Lib
     {
         public override string[] Aliases => new[] { "this." + GetKebabCaseName() };
 
-        protected string _resourceName => string.Join(".", _type.Namespace, _type.Name);
-
         private readonly Type _type;
 
         public PopupTag(Type type)
@@ -23,15 +21,9 @@ namespace SaberFactory.UI.Lib
         {
             var go = parent.CreateGameObject(_type.Name);
             go.AddComponent<RectTransform>();
-            //go.AddComponent<LayoutElement>();
 
-            //var contentSizeFitter = go.AddComponent<ContentSizeFitter>();
-            //contentSizeFitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
-            //contentSizeFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+            var comp = (Popup)go.AddComponent(_type);
 
-            //go.AddComponent<StackLayoutGroup>();
-            var comp = go.AddComponent(_type);
-            UIHelpers.ParseFromResource(_resourceName, go, comp);
             return go;
         }
 

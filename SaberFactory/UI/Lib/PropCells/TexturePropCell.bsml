@@ -1,0 +1,7 @@
+﻿<stack xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
+	<image id='bg' source='#RoundRect10'/>
+	<horizontal ignore-layout='true' anchor-pos-x='2'>
+		<text id='prop-name' align='Left' text='Tex' />
+	</horizontal>
+	<image ignore-layout='true' id='texture' size-delta-x='16' size-delta-y='13' anchor-min-x='1' anchor-max-x='1' anchor-pos-x='-9' />
+</stack>

@@ -15,18 +15,12 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
         private Action<TrailModel> _callback;
         private ModelComposition _selectedComposition;
 
-        [UIAction("#post-parse")]
-        private void Setup()
-        {
-            gameObject.SetActive(false);
-            _saberList.OnItemSelected += SaberSelected;
-        }
-
         public void Show(IList<ModelComposition> comps, Action<TrailModel> callback)
         {
+            Show();
+            _saberList.OnItemSelected += SaberSelected;
             _saberList.SetItems(comps);
             _callback = callback;
-            Show();
         }
 
         private void SaberSelected(ICustomListItem item)
@@ -37,6 +31,7 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
         [UIAction("click-select")]
         private void ClickSelect()
         {
+            _saberList.OnItemSelected -= SaberSelected;
             Hide();
 
             if (_selectedComposition == null)

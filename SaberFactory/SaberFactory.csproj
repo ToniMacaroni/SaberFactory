@@ -243,7 +243,9 @@
     <Compile Include="Plugin.cs" />
     <Compile Include="Configuration\PluginConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Saving\SaveManager.cs" />
+    <Compile Include="Saving\PresetSaveManager.cs" />
+    <Compile Include="Saving\SerializableMaterial.cs" />
+    <Compile Include="Saving\SerializableMaterialProperty.cs" />
     <Compile Include="Saving\SerializablePiece.cs" />
     <Compile Include="Saving\SerializableSaber.cs" />
     <Compile Include="Saving\SerializableSaberSet.cs" />
@@ -257,21 +259,34 @@
     <Compile Include="UI\CustomSaber\CustomComponents\MaterialEditor.cs" />
     <Compile Include="UI\CustomSaber\CustomComponents\PropList.cs" />
     <Compile Include="UI\CustomSaber\CustomSaberUI.cs" />
+    <Compile Include="UI\CustomSaber\ENavigationCategory.cs" />
+    <Compile Include="UI\CustomSaber\INavigationCategoryView.cs" />
+    <Compile Include="UI\CustomSaber\NavigationButton.cs" />
     <Compile Include="UI\CustomSaber\Views\MainView.cs" />
     <Compile Include="UI\CustomSaber\Views\NavigationView.cs" />
     <Compile Include="UI\CustomSaber\Views\SaberSelectorView.cs" />
+    <Compile Include="UI\CustomSaber\Views\SettingsView.cs" />
     <Compile Include="UI\CustomSaber\Views\TransformSettingsView.cs" />
     <Compile Include="UI\Lib\BSML\ButtonImageController.cs" />
     <Compile Include="UI\Lib\BSML\ButtonStateColors.cs" />
     <Compile Include="UI\Lib\BSML\CustomButtonTag.cs" />
     <Compile Include="UI\Lib\BSML\CustomListTableData.cs" />
     <Compile Include="UI\Lib\BSML\CustomListTag.cs" />
-    <Compile Include="UI\Lib\BSML\PropListTableData.cs" />
-    <Compile Include="UI\Lib\BSML\PropListTableDataHandler.cs" />
+    <Compile Include="UI\Lib\CustomParsable.cs" />
+    <Compile Include="UI\Lib\PropCell.cs" />
+    <Compile Include="UI\Lib\PropCells\BasePropCell.cs" />
+    <Compile Include="UI\Lib\PropCells\BoolPropCell.cs" />
+    <Compile Include="UI\Lib\PropCells\ColorPropCell.cs" />
+    <Compile Include="UI\Lib\PropCells\FloatPropCell.cs" />
+    <Compile Include="UI\Lib\PropCells\TexturePropCell.cs" />
+    <Compile Include="UI\Lib\PropertyDescriptor.cs" />
+    <Compile Include="UI\Lib\PropListTableData.cs" />
+    <Compile Include="UI\Lib\PropListTableDataHandler.cs" />
     <Compile Include="UI\Lib\BSML\PropListTag.cs" />
     <Compile Include="UI\Lib\Popup.cs" />
     <Compile Include="UI\Lib\PopupTag.cs" />
     <Compile Include="UI\Lib\SliderController.cs" />
+    <Compile Include="UI\Lib\ToggleController.cs" />
     <Compile Include="UI\TrailPreviewer.cs" />
     <Compile Include="UI\CustomSaber\Views\TrailSettingsView.cs" />
     <Compile Include="UI\ICustomListItem.cs" />
@@ -336,6 +351,13 @@
     <EmbeddedResource Include="UI\CustomSaber\CustomComponents\PropList.bsml">
       <DependentUpon>PropList.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UI\Lib\PropCells\FloatPropCell.bsml" />
+    <EmbeddedResource Include="UI\Lib\PropCells\BoolPropCell.bsml" />
+    <EmbeddedResource Include="UI\Lib\PropCells\ColorPropCell.bsml" />
+    <EmbeddedResource Include="UI\Lib\PropCells\TexturePropCell.bsml" />
+    <EmbeddedResource Include="UI\CustomSaber\Views\SettingsView.bsml">
+      <DependentUpon>SettingsView.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="BeatSaberModdingTools.Tasks">
@@ -362,6 +384,13 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\Icons\heart.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Icons\cog.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Icons\discord.png" />
+    <EmbeddedResource Include="Resources\Icons\profile.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

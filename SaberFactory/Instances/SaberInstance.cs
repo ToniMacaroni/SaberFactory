@@ -89,6 +89,9 @@ namespace SaberFactory.Instances
 
         public void CreateTrail(SaberTrailRenderer rendererPrefab)
         {
+            var trailData = GetTrailData();
+            if (trailData.Length == 0) return;
+
             TrailHandler = new TrailHandler(GameObject);
             TrailHandler.SetPrefab(rendererPrefab);
             TrailHandler.SetTrailData(GetTrailData());

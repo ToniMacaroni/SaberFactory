@@ -8,6 +8,7 @@ using SaberFactory.Installers;
 using SiraUtil.Zenject;
 using System.IO;
 using System.Reflection;
+using System.Threading.Tasks;
 using SaberFactory.Helpers;
 using IPALogger = IPA.Logging.Logger;
 
@@ -20,13 +21,21 @@ namespace SaberFactory
         private IPALogger _logger;
 
         [Init]
-        public void Init(IPALogger logger, Config conf, Zenjector zenjector)
+        public async void Init(IPALogger logger, Config conf, Zenjector zenjector)
         {
             _logger = logger;
 
             var pluginConfig = conf.Generated<PluginConfig>();
             var saberFactoryDir = new DirectoryInfo(UnityGame.UserDataPath).CreateSubdirectory("Saber Factory");
-            LoadCSDescriptors();
+
+            // Only create the folder if it's enabled
+            // since some people don't want to have the folder in the top game directory
+            if (pluginConfig.CreateCustomSabersFolder)
+            {
+                Directory.CreateDirectory(Path.Combine(UnityGame.InstallPath, "CustomSabers"));
+            }
+
+            if(!await LoadCSDescriptors()) return;
 
             zenjector.OnApp<AppInstaller>().WithParameters(logger, pluginConfig, saberFactoryDir);
             zenjector.OnMenu<Installers.MenuInstaller>();
@@ -43,15 +52,21 @@ namespace SaberFactory
         {
         }
 
-        private async void LoadCSDescriptors()
+        /// <summary>
+        /// Load the SaberDecriptor / CustomTrail / EventManager classes
+        /// from the CustomSaber namespace so they can be accessed in Saber Factory
+        /// </summary>
+        private async Task<bool> LoadCSDescriptors()
         {
             try
             {
                 Assembly.Load(await Readers.ReadResourceAsync("SaberFactory.Resources.CustomSaberComponents.dll"));
+                return true;
             }
             catch (Exception)
             {
                 _logger.Info("Couldn't load custom saber descriptors");
+                return false;
             }
         }
     }

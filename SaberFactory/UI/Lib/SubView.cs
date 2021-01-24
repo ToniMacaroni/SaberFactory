@@ -15,21 +15,29 @@ namespace SaberFactory.UI.Lib
 
         public SubViewHandler SubViewHandler;
 
+        private bool _firstActivation = true;
+
         protected virtual string _resourceName => string.Join(".", GetType().Namespace, GetType().Name);
 
         protected SiraLog _logger;
 
         [Inject]
-        private async void Construct(SiraLog logger)
+        private void Construct(SiraLog logger)
         {
             _logger = logger;
-
-            ParserParams = await UIHelpers.ParseFromResourceAsync(_resourceName, gameObject, this);
-            Init();
         }
 
-        public void Open(bool notify = true)
+        public async void Open(bool notify = true)
         {
+            if (_firstActivation)
+            {
+                ParserParams = await UIHelpers.ParseFromResourceAsync(_resourceName, gameObject, this);
+                _logger.Info("Hey test");
+                gameObject.SetActive(false);
+                _firstActivation = false;
+                Init();
+            }
+
             gameObject.SetActive(true);
             if(notify) DidOpen();
         }

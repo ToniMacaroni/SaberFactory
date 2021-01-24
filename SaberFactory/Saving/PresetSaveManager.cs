@@ -11,14 +11,14 @@ using UnityEngine;
 
 namespace SaberFactory.Saving
 {
-    internal class SaveManager
+    internal class PresetSaveManager
     {
         public event Action OnSaberLoaded;
 
         private readonly MainAssetStore _mainAssetStore;
         private readonly DirectoryInfo _presetDir;
 
-        private SaveManager(MainAssetStore mainAssetStore, DirectoryInfo presetDir)
+        private PresetSaveManager(MainAssetStore mainAssetStore, DirectoryInfo presetDir)
         {
             _mainAssetStore = mainAssetStore;
             _presetDir = presetDir;
@@ -55,6 +55,8 @@ namespace SaberFactory.Saving
                 trail.Width = trailModel.Width;
                 trail.Whitestep = trailModel.Whitestep;
                 trail.TrailOrigin = trailModel.TrailOrigin;
+                trail.ClampTexture = trailModel.ClampTexture;
+                trail.Material = SerializableMaterial.FromMaterial(trailModel.Material.Material);
                 serializableSaber.Trail = trail;
             }
 
@@ -88,14 +90,28 @@ namespace SaberFactory.Saving
             var trail = serializableSaber.Trail;
             if (trail != null)
             {
-                var trailModel = new TrailModel(Vector3.zero, trail.Width, trail.Length, null, trail.Whitestep, trail.TrailOrigin);
+                var trailModel = new TrailModel(Vector3.zero, trail.Width, trail.Length, null, trail.Whitestep, null, trail.TrailOrigin);
+                trailModel.ClampTexture = trail.ClampTexture;
+
+                // if trail comes from another saber
                 if (!string.IsNullOrEmpty(trail.TrailOrigin))
                 {
                     await LoadFromTrailOrigin(trailModel, trail.TrailOrigin);
                 }
 
+                // assign trailmodel to custom saber or saber factory saber
+                // depending on which trail type is being used
                 if (saberModel.GetCustomSaber(out var customsaber))
                 {
+                    if (trailModel.Material == null)
+                    {
+                        var csTrail = customsaber.GetColdTrail();
+                        trailModel.Material = csTrail.Material;
+                        trailModel.OriginalTextureWrapMode = csTrail.OriginalTextureWrapMode;
+                    }
+
+                    trail.Material?.ApplyToMaterial(trailModel.Material.Material);
+
                     customsaber.TrailModel = trailModel;
                 }
                 else
@@ -105,12 +121,19 @@ namespace SaberFactory.Saving
             }
         }
 
+        /// <summary>
+        /// Load trail from another saber
+        /// </summary>
+        /// <param name="trailModel">TrailModel to load the other saber's data into</param>
+        /// <param name="trailOrigin">Path of the other saber</param>
+        /// <returns></returns>
         private async Task LoadFromTrailOrigin(TrailModel trailModel, string trailOrigin)
         {
             var comp = await _mainAssetStore[trailOrigin];
             var originTrailModel = (comp?.GetLeft() as CustomSaberModel)?.GetColdTrail();
             if (originTrailModel == null) return;
             trailModel.Material = originTrailModel.Material;
+            trailModel.OriginalTextureWrapMode = originTrailModel.OriginalTextureWrapMode;
         }
     }
 }

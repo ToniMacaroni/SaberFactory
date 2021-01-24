@@ -12,10 +12,29 @@ namespace SaberFactory.Instances.Trail
         public Transform PointEnd { get; }
 
         public MaterialDescriptor Material => TrailModel.Material;
-        public int Length => TrailModel.Length;
-        public float WhiteStep => TrailModel.Whitestep;
+        public int Length
+        {
+            get => TrailModel.Length;
+            set => SetLength(value);
+        }
 
-        public float Width => Mathf.Abs(PointEnd.localPosition.z - PointStart.localPosition.z);
+        public float WhiteStep
+        {
+            get => TrailModel.Whitestep;
+            set => SetWhitestep(value);
+        }
+
+        public float Width
+        {
+            get => Mathf.Abs(PointEnd.localPosition.z - PointStart.localPosition.z);
+            set => SetWidth(value);
+        }
+
+        public bool ClampTexture
+        {
+            get => TrailModel.ClampTexture;
+            set => SetClampTexture(value);
+        }
 
         public InstanceTrailData(TrailModel trailModel, Transform pointStart, Transform pointEnd)
         {
@@ -28,6 +47,7 @@ namespace SaberFactory.Instances.Trail
 
         public void Init(TrailModel trailModel)
         {
+            SetClampTexture(trailModel.ClampTexture);
             SetWidth(trailModel.Width);
         }
 
@@ -49,6 +69,17 @@ namespace SaberFactory.Instances.Trail
             TrailModel.Whitestep = whitestep;
         }
 
+        public void SetClampTexture(bool shouldClampTexture)
+        {
+            TrailModel.ClampTexture = shouldClampTexture;
+            if (TrailModel.OriginalTextureWrapMode.HasValue)
+            {
+                TrailModel.Material.Material.mainTexture.wrapMode =
+                    shouldClampTexture ? TextureWrapMode.Clamp : TrailModel.OriginalTextureWrapMode.Value;
+            }
+                
+        }
+
         public static (InstanceTrailData, TrailModel) FromCustomSaber(GameObject saberObject, TrailModel trailModel)
         {
             var saberTrail = saberObject.GetComponent<CustomTrail>();
@@ -63,9 +94,13 @@ namespace SaberFactory.Instances.Trail
                 saberTrail.GetWidth(),
                 saberTrail.Length,
                 new MaterialDescriptor(saberTrail.TrailMaterial),
-                0);
+                0, saberTrail.TrailMaterial.mainTexture?.wrapMode);
 
-            model.Material ??= new MaterialDescriptor(saberTrail.TrailMaterial);
+            if (model.Material == null)
+            {
+                model.Material = new MaterialDescriptor(saberTrail.TrailMaterial);
+                model.OriginalTextureWrapMode = model.Material.Material.mainTexture?.wrapMode;
+            }
 
             var data = new InstanceTrailData(model, saberTrail.PointStart, saberTrail.PointEnd);
 

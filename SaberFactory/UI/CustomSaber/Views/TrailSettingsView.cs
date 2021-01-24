@@ -15,8 +15,10 @@ using Zenject;
 
 namespace SaberFactory.UI.CustomSaber.Views
 {
-    internal class TrailSettingsView : SubView
+    internal class TrailSettingsView : SubView, INavigationCategoryView
     {
+        public ENavigationCategory Category => ENavigationCategory.Trail;
+
         [Inject] private readonly TrailPreviewer _trailPreviewer = null;
         [Inject] private readonly EditorInstanceManager _editorInstanceManager = null;
         [Inject] private readonly ColorManager _colorManager = null;
@@ -27,12 +29,16 @@ namespace SaberFactory.UI.CustomSaber.Views
         [UIComponent("length-slider")] private readonly SliderSetting _lengthSliderSetting = null;
         [UIComponent("width-slider")] private readonly SliderSetting _widthSliderSetting = null;
         [UIComponent("whitestep-slider")] private readonly SliderSetting _whitestepSliderSetting = null;
+        [UIComponent("clamp-checkbox")] private readonly ToggleSetting _clampToggleSetting = null;
+
         [UIComponent("material-editor")] private readonly MaterialEditor _materialEditor = null;
         [UIComponent("choose-trail-popup")] private readonly ChooseTrailPopup _chooseTrailPopup = null;
 
         private SliderController _lengthSlider;
         private SliderController _widthSlider;
         private SliderController _whitestepSlider;
+        private ToggleController _clampToggle;
+
 
         [UIAction("#post-parse")]
         private void Setup()
@@ -40,6 +46,7 @@ namespace SaberFactory.UI.CustomSaber.Views
             _lengthSlider = new SliderController(_lengthSliderSetting);
             _widthSlider = new SliderController(_widthSliderSetting);
             _whitestepSlider = new SliderController(_whitestepSliderSetting);
+            _clampToggle = new ToggleController(_clampToggleSetting);
         }
 
         public override void DidOpen()
@@ -63,23 +70,29 @@ namespace SaberFactory.UI.CustomSaber.Views
             _lengthSlider.Value = _instanceTrailData.Length;
             _widthSlider.Value = _instanceTrailData.Width;
             _whitestepSlider.Value = _instanceTrailData.WhiteStep;
+            _clampToggle.Value = _instanceTrailData.ClampTexture;
         }
 
         private void SetLength(RangeValuesTextSlider slider, float val)
         {
-            _instanceTrailData.SetLength((int)val);
+            _instanceTrailData.Length = (int) val;
             _trailPreviewer.SetLength(val);
         }
 
         private void SetWidth(RangeValuesTextSlider slider, float val)
         {
-            _instanceTrailData.SetWidth(val);
+            _instanceTrailData.Width = val;
             _trailPreviewer.UpdateWidth();
         }
 
         private void SetWhitestep(RangeValuesTextSlider slider, float val)
         {
-            _instanceTrailData.SetWhitestep(val);
+            _instanceTrailData.WhiteStep = val;
+        }
+
+        private void SetClampMode(bool shouldClamp)
+        {
+            _instanceTrailData.ClampTexture = shouldClamp;
         }
 
         private void SetTrailModel(TrailModel trailModel)
@@ -101,6 +114,7 @@ namespace SaberFactory.UI.CustomSaber.Views
             _lengthSlider.RemoveEvent(SetLength);
             _widthSlider.RemoveEvent(SetWidth);
             _whitestepSlider.RemoveEvent(SetWhitestep);
+            _clampToggle.RemoveEvent();
 
             var trailData = saberInstance?.GetTrailData();
             if (trailData == null) return;
@@ -112,6 +126,7 @@ namespace SaberFactory.UI.CustomSaber.Views
             _lengthSlider.AddEvent(SetLength);
             _widthSlider.AddEvent(SetWidth);
             _whitestepSlider.AddEvent(SetWhitestep);
+            _clampToggle.SetEvent(SetClampMode);
 
             _trailPreviewer.SetColor(_colorManager.ColorForSaberType(SaberType.SaberA));
         }

@@ -3,7 +3,8 @@
 
 namespace SaberFactory.UI.CustomSaber.Views
 {
-    internal class TransformSettingsView : SubView
+    internal class TransformSettingsView : SubView, INavigationCategoryView
     {
+        public ENavigationCategory Category => ENavigationCategory.Transform;
     }
 }

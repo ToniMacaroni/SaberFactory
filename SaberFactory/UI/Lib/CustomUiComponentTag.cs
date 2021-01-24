@@ -12,8 +12,6 @@ namespace SaberFactory.UI.Lib
     {
         public override string[] Aliases => new[] {"this." + GetKebabCaseName()};
 
-        protected string _resourceName => string.Join(".", _type.Namespace, _type.Name);
-
         private readonly Type _type;
 
         public CustomUiComponentTag(Type type)
@@ -32,8 +30,10 @@ namespace SaberFactory.UI.Lib
             contentSizeFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
             go.AddComponent<StackLayoutGroup>();
-            var comp = go.AddComponent(_type);
-            UIHelpers.ParseFromResource(_resourceName, go, comp);
+
+            var comp = (CustomUiComponent)go.AddComponent(_type);
+            comp.Parse();
+
             return go;
         }
 

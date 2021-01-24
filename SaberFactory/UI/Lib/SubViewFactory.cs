@@ -17,7 +17,6 @@ namespace SaberFactory.UI.Lib
         public SubView Create(Type subViewType, SubView.InitData initData)
         {
             var go = initData.Parent.CreateGameObject(initData.Name);
-            go.SetActive(false);
 
             var rt = go.AddComponent<RectTransform>();
             rt.localEulerAngles = Vector3.zero;

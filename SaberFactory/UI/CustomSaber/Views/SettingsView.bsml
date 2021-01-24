@@ -1,0 +1,26 @@
+﻿<bg xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
+	<vertical bg="round-rect-panel" bg-color="#00000070" size-delta-y="-70" pad="2">
+		<horizontal pad='2' bg='round-rect-panel' bg-color='#67b0f550'>
+			<checkbox text='Saber Factory Enabled' value='mod-enabled' apply-on-change='true' />
+		</horizontal>
+		<horizontal pad='2' bg='round-rect-panel' bg-color='#00000050'>
+			<checkbox text='Enable Events' value='events-enabled' apply-on-change='true' />
+		</horizontal>
+		<horizontal bg='round-rect-panel' bg-color='#67b0f550' pad='2'>
+			<custom-icon-btn
+				pref-width='15'
+				preferred-height='15'
+				on-click='profile-clicked'
+				icon='SaberFactory.Resources.Icons.profile.png'
+				hover-hint='Support me on Ko-Fi'
+				skew='0' show-line='false' normal-color='#00000000' hovered-color='#ffffff20' use-gradient='false'/>
+			<custom-icon-btn
+				pref-width='15'
+				preferred-height='15'
+				on-click='discord-clicked'
+				icon='SaberFactory.Resources.Icons.discord.png'
+				hover-hint='Join our lovely server for help with the mod'
+				skew='0' show-line='false' normal-color='#00000000' hovered-color='#ffffff20' use-gradient='false'/>
+		</horizontal>
+	</vertical>
+</bg>

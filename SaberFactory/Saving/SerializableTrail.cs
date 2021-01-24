@@ -6,5 +6,7 @@
         public float Width;
         public float Whitestep;
         public string TrailOrigin;
+        public bool ClampTexture;
+        public SerializableMaterial Material;
     }
 }
