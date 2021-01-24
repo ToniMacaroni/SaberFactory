@@ -12,8 +12,10 @@ using Zenject;
 
 namespace SaberFactory.UI.CustomSaber.Views
 {
-    internal class SaberSelectorView : SubView
+    internal class SaberSelectorView : SubView, INavigationCategoryView
     {
+        public ENavigationCategory Category => ENavigationCategory.Saber;
+
         [Inject] private readonly MainAssetStore _mainAssetStore = null;
         [Inject] private readonly SaberSet _saberSet = null;
         [Inject] private readonly EditorInstanceManager _editorInstanceManager = null;

@@ -259,9 +259,13 @@
     <Compile Include="UI\CustomSaber\CustomComponents\MaterialEditor.cs" />
     <Compile Include="UI\CustomSaber\CustomComponents\PropList.cs" />
     <Compile Include="UI\CustomSaber\CustomSaberUI.cs" />
+    <Compile Include="UI\CustomSaber\ENavigationCategory.cs" />
+    <Compile Include="UI\CustomSaber\INavigationCategoryView.cs" />
+    <Compile Include="UI\CustomSaber\NavigationButton.cs" />
     <Compile Include="UI\CustomSaber\Views\MainView.cs" />
     <Compile Include="UI\CustomSaber\Views\NavigationView.cs" />
     <Compile Include="UI\CustomSaber\Views\SaberSelectorView.cs" />
+    <Compile Include="UI\CustomSaber\Views\SettingsView.cs" />
     <Compile Include="UI\CustomSaber\Views\TransformSettingsView.cs" />
     <Compile Include="UI\Lib\BSML\ButtonImageController.cs" />
     <Compile Include="UI\Lib\BSML\ButtonStateColors.cs" />
@@ -351,6 +355,9 @@
     <EmbeddedResource Include="UI\Lib\PropCells\BoolPropCell.bsml" />
     <EmbeddedResource Include="UI\Lib\PropCells\ColorPropCell.bsml" />
     <EmbeddedResource Include="UI\Lib\PropCells\TexturePropCell.bsml" />
+    <EmbeddedResource Include="UI\CustomSaber\Views\SettingsView.bsml">
+      <DependentUpon>SettingsView.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="BeatSaberModdingTools.Tasks">
@@ -377,6 +384,13 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\Icons\heart.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Icons\cog.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Icons\discord.png" />
+    <EmbeddedResource Include="Resources\Icons\profile.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,4 +1,6 @@
-﻿using BeatSaberMarkupLanguage.Attributes;
+﻿using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using BeatSaberMarkupLanguage.Attributes;
 using SaberFactory.UI.Lib;
 using UnityEngine;
 
@@ -11,34 +13,46 @@ namespace SaberFactory.UI.CustomSaber.Views
 
         private SaberSelectorView _saberSelectorView;
         private TrailSettingsView _trailSettingsView;
+        private SettingsView _settingsView;
         private TransformSettingsView _transformSettingsView;
 
         #endregion
+
+        private Dictionary<ENavigationCategory, INavigationCategoryView> _navViews;
 
         [UIComponent("SubViewContainer")] private readonly Transform _subViewContainer = null;
 
         [UIAction("#post-parse")]
         private void Setup()
         {
-            _saberSelectorView = CreateSubView<SaberSelectorView>(_subViewContainer, switchToView: true);
-            _trailSettingsView = CreateSubView<TrailSettingsView>(_subViewContainer);
-            _transformSettingsView = CreateSubView<TransformSettingsView>(_subViewContainer);
+            _navViews = new Dictionary<ENavigationCategory, INavigationCategoryView>();
+
+            _saberSelectorView = AddView<SaberSelectorView>(true);
+            _trailSettingsView = AddView<TrailSettingsView>();
+            _settingsView = AddView<SettingsView>();
+            _transformSettingsView = AddView<TransformSettingsView>();
         }
 
-        public void ChangeCategory(NavigationView.ENavigationCategory category)
+        public void ChangeCategory(ENavigationCategory category)
         {
-            switch (category)
+            if (_navViews.TryGetValue(category, out var view))
             {
-                case NavigationView.ENavigationCategory.Saber:
-                    _subViewHandler.SwitchView(_saberSelectorView);
-                    break;
-                case NavigationView.ENavigationCategory.Transform:
-                    _subViewHandler.SwitchView(_transformSettingsView);
-                    break;
-                case NavigationView.ENavigationCategory.Trail:
-                    _subViewHandler.SwitchView(_trailSettingsView);
-                    break;
+                if (view is SubView subView)
+                {
+                    _subViewHandler.SwitchView(subView);
+                }
             }
+        }
+
+        private T AddView<T>(bool switchToView = false, Transform container = null) where T : SubView
+        {
+            var view = CreateSubView<T>(container ?? _subViewContainer, switchToView);
+            if (view is INavigationCategoryView navView)
+            {
+                _navViews.Add(navView.Category, navView);
+            }
+
+            return view;
         }
     }
 }

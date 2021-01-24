@@ -15,8 +15,10 @@ using Zenject;
 
 namespace SaberFactory.UI.CustomSaber.Views
 {
-    internal class TrailSettingsView : SubView
+    internal class TrailSettingsView : SubView, INavigationCategoryView
     {
+        public ENavigationCategory Category => ENavigationCategory.Trail;
+
         [Inject] private readonly TrailPreviewer _trailPreviewer = null;
         [Inject] private readonly EditorInstanceManager _editorInstanceManager = null;
         [Inject] private readonly ColorManager _colorManager = null;
@@ -36,6 +38,7 @@ namespace SaberFactory.UI.CustomSaber.Views
         private SliderController _widthSlider;
         private SliderController _whitestepSlider;
         private ToggleController _clampToggle;
+
 
         [UIAction("#post-parse")]
         private void Setup()

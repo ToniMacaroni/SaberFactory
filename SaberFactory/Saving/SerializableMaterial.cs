@@ -24,7 +24,6 @@ namespace SaberFactory.Saving
 
         public void SetProp(Material material, SerializableMaterialProperty prop)
         {
-            Console.WriteLine(prop.Value.GetType().Name);
             switch (prop.Type)
             {
                 case ShaderPropertyType.Float:
