@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SaberFactory.UI.Lib.PropCells
+﻿namespace SaberFactory.UI.Lib.PropCells
 {
     internal class BoolPropCell : BasePropCell
     {

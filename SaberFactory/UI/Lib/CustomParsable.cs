@@ -1,5 +1,4 @@
-﻿using System.Windows.Forms;
-using BeatSaberMarkupLanguage.Parser;
+﻿using BeatSaberMarkupLanguage.Parser;
 using SaberFactory.Helpers;
 using UnityEngine;
 

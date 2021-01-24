@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-namespace SaberFactory.UI.Lib
+﻿namespace SaberFactory.UI.Lib
 {
     internal abstract class CustomUiComponent : CustomParsable
     {

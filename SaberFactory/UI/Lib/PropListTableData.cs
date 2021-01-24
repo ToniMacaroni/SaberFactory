@@ -6,7 +6,6 @@ using BeatSaberMarkupLanguage;
 using HMUI;
 using IPA.Utilities;
 using SaberFactory.Helpers;
-using SaberFactory.UI.Lib.BSML;
 using SaberFactory.UI.Lib.PropCells;
 using UnityEngine;
 

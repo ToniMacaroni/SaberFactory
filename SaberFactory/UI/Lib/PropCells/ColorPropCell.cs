@@ -1,8 +1,6 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components.Settings;
-using SaberFactory.Helpers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

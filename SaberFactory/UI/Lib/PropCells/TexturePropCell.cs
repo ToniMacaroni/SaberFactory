@@ -1,5 +1,4 @@
-﻿using System;
-using BeatSaberMarkupLanguage;
+﻿using BeatSaberMarkupLanguage;
 using BeatSaberMarkupLanguage.Attributes;
 using TMPro;
 using UnityEngine;

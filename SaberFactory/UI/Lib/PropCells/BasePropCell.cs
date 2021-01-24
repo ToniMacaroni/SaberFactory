@@ -1,5 +1,4 @@
 ﻿using System;
-using HMUI;
 using UnityEngine;
 
 namespace SaberFactory.UI.Lib.PropCells

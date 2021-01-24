@@ -5,7 +5,6 @@ using BeatSaberMarkupLanguage.Parser;
 using BeatSaberMarkupLanguage.TypeHandlers;
 using HMUI;
 using IPA.Utilities;
-using SaberFactory.UI.Lib.BSML;
 using UnityEngine;
 using UnityEngine.UI;
 

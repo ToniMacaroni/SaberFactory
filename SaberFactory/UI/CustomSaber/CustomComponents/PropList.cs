@@ -1,15 +1,10 @@
 ﻿using System;
 using BeatSaberMarkupLanguage.Attributes;
-using BeatSaberMarkupLanguage.Components;
 using System.Collections.Generic;
-using System.Runtime.InteropServices.WindowsRuntime;
-using HMUI;
 using SaberFactory.Helpers;
 using SaberFactory.UI.Lib;
-using SaberFactory.UI.Lib.BSML;
 using SaberFactory.UI.Lib.PropCells;
 using UnityEngine;
-using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 
