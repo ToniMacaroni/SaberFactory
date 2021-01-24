@@ -103,9 +103,12 @@ namespace SaberFactory.Saving
                 // depending on which trail type is being used
                 if (saberModel.GetCustomSaber(out var customsaber))
                 {
-                    var csTrail = customsaber.GetColdTrail();
-                    trailModel.Material = csTrail.Material;
-                    trailModel.OriginalTextureWrapMode = csTrail.OriginalTextureWrapMode;
+                    if (trailModel.Material == null)
+                    {
+                        var csTrail = customsaber.GetColdTrail();
+                        trailModel.Material = csTrail.Material;
+                        trailModel.OriginalTextureWrapMode = csTrail.OriginalTextureWrapMode;
+                    }
 
                     trail.Material?.ApplyToMaterial(trailModel.Material.Material);
 

@@ -19,24 +19,18 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
         [UIValue("materials")] private List<object> _materials = new List<object>();
         [UIValue("shaders")] private List<object> _shaders = new List<object>();
 
-        [UIAction("#post-parse")]
-        private void Setup()
-        {
-            Hide();
-        }
-
         public void Show(MaterialDescriptor materialDescriptor)
         {
+            Show();
             _materialDropDown.transform.parent.gameObject.SetActive(false);
             SetMaterial(materialDescriptor.Material);
-            gameObject.SetActive(true);
         }
 
         public void Show(IEnumerable<MaterialDescriptor> materialDescriptors)
         {
+            Show();
             _materialDropDown.transform.parent.gameObject.SetActive(true);
             SetMaterial(materialDescriptors.First().Material);
-            gameObject.SetActive(true);
         }
 
         private void SetMaterial(Material material)
@@ -103,7 +97,6 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
         [UIAction("click-close")]
         private void ClickClose()
         {
-            _propList.Clear();
             Hide();
         }
     }

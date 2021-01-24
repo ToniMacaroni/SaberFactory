@@ -1,4 +1,5 @@
-﻿using BeatSaberMarkupLanguage.Parser;
+﻿using System.Windows.Forms;
+using BeatSaberMarkupLanguage.Parser;
 using SaberFactory.Helpers;
 using UnityEngine;
 
@@ -8,17 +9,19 @@ namespace SaberFactory.UI.Lib
     {
         public BSMLParserParams ParserParams { get; private set; }
 
-        private string _resourcePath;
+        protected string _resourceName => string.Join(".", GetType().Namespace, GetType().Name);
 
-        public virtual void Parse(string resourcePath)
+        public virtual void Parse()
         {
-            _resourcePath = resourcePath;
-            ParserParams = UIHelpers.ParseFromResource(resourcePath, gameObject, this);
+            ParserParams = UIHelpers.ParseFromResource(_resourceName, gameObject, this);
         }
 
-        public void Reparse()
+        public void UnParse()
         {
-            Parse(_resourcePath);
+            foreach (Transform t in transform)
+            {
+                t.gameObject.TryDestroy();
+            }
         }
     }
 }

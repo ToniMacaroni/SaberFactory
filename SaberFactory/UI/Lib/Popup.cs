@@ -4,12 +4,12 @@
     {
         protected void Show()
         {
-            gameObject.SetActive(true);
+            Parse();
         }
 
         protected void Hide()
         {
-            gameObject.SetActive(false);
+            UnParse();
         }
     }
 }

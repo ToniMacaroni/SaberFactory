@@ -10,8 +10,6 @@ namespace SaberFactory.UI.Lib
     {
         public override string[] Aliases => new[] { "this." + GetKebabCaseName() };
 
-        protected string _resourceName => string.Join(".", _type.Namespace, _type.Name);
-
         private readonly Type _type;
 
         public PopupTag(Type type)
@@ -25,7 +23,6 @@ namespace SaberFactory.UI.Lib
             go.AddComponent<RectTransform>();
 
             var comp = (Popup)go.AddComponent(_type);
-            comp.Parse(_resourceName);
 
             return go;
         }

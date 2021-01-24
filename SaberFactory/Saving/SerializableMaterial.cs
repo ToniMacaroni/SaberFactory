@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -23,6 +24,7 @@ namespace SaberFactory.Saving
 
         public void SetProp(Material material, SerializableMaterialProperty prop)
         {
+            Console.WriteLine(prop.Value.GetType().Name);
             switch (prop.Type)
             {
                 case ShaderPropertyType.Float:
@@ -31,7 +33,18 @@ namespace SaberFactory.Saving
                 case ShaderPropertyType.Range:
                     material.SetFloat(prop.Name, (float)(double) prop.Value);
                     break;
+                case ShaderPropertyType.Color:
+                    material.SetColor(prop.Name, Cast<SerializableColor>(prop.Value).ToColor());
+                    break;
+                case ShaderPropertyType.Vector:
+                    material.SetVector(prop.Name, Cast<SerializableVector4>(prop.Value).ToVector());
+                    break;
             }
+        }
+
+        public T Cast<T>(object obj)
+        {
+            return ((JObject) obj).ToObject<T>();
         }
 
         public static SerializableMaterial FromMaterial(Material material)
