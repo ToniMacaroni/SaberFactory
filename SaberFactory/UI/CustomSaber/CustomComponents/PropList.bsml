@@ -5,8 +5,8 @@
 		<page-button event-click='item-list#PageDown' direction='Down' pref-width='8'/>
 		<page-button event-click='item-list#PageUp' direction='Up' pref-width='8'/>
 	</horizontal>-->
-	<scroll-view id='item-container' pref-width='60' child-control-height='true' spacing='20' pad-bottom='10' pad-top='10'>
+	<this.scroll-view id='item-container' pref-width='60' child-control-height='true' spacing='20' pad-bottom='10' pad-top='10'>
 		<!--<vertical id='item-container' pref-width='60' preferred-height='100'>
 		</vertical>-->
-	</scroll-view>
+	</this.scroll-view>
 </vertical>

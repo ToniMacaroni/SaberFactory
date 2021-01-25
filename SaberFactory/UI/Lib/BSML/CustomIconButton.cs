@@ -51,6 +51,11 @@ namespace SaberFactory.UI.Lib.BSML
             buttonStateColors.Image = btnImageController.BackgroundImage;
             noTransitionsButton.selectionStateDidChangeEvent += buttonStateColors.SelectionDidChange;
 
+            if (!button.gameObject.activeSelf)
+            {
+                button.gameObject.SetActive(true);
+            }
+
             return button.gameObject;
         }
     }

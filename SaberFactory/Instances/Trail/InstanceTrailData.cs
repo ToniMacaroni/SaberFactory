@@ -1,6 +1,8 @@
-﻿using CustomSaber;
+﻿using System;
+using CustomSaber;
 using SaberFactory.Helpers;
 using SaberFactory.Models;
+using SaberFactory.Models.CustomSaber;
 using UnityEngine;
 
 namespace SaberFactory.Instances.Trail
@@ -80,6 +82,21 @@ namespace SaberFactory.Instances.Trail
                 
         }
 
+        public void RevertMaterialForCustomSaber(CustomSaberModel saber)
+        {
+            TrailModel.Material.Revert();
+
+            var saberTrail = saber.StoreAsset.Prefab.GetComponent<CustomTrail>();
+            if (saberTrail == null) return;
+
+            saberTrail.TrailMaterial = TrailModel.Material.Material;
+        }
+
+        public void RevertMaterial()
+        {
+            TrailModel.Material.Revert();
+        }
+
         public static (InstanceTrailData, TrailModel) FromCustomSaber(GameObject saberObject, TrailModel trailModel)
         {
             var saberTrail = saberObject.GetComponent<CustomTrail>();
@@ -102,7 +119,17 @@ namespace SaberFactory.Instances.Trail
                 model.OriginalTextureWrapMode = model.Material.Material.mainTexture?.wrapMode;
             }
 
-            var data = new InstanceTrailData(model, saberTrail.PointStart, saberTrail.PointEnd);
+            Transform pointStart = saberTrail.PointStart;
+            Transform pointEnd = saberTrail.PointEnd;
+
+            // Correction for sabers that have the transforms set the other way around
+            if (pointStart.localPosition.z > pointEnd.localPosition.z)
+            {
+                pointStart = saberTrail.PointEnd;
+                pointEnd = saberTrail.PointStart;
+            }
+
+            var data = new InstanceTrailData(model, pointStart, pointEnd);
 
             return (data, model);
         }

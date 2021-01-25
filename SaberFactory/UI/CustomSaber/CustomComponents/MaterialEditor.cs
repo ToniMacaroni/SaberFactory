@@ -42,7 +42,7 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
 
             for (int i = 0; i < propCount; i++)
             {
-                var propName = shader.GetPropertyName(i);
+                var propName = shader.GetPropertyDescription(i);
                 var propId = shader.GetPropertyNameId(i);
                 var propType = shader.GetPropertyType(i);
                 var type = GetTypeFromShaderType(propType);
