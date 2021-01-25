@@ -102,7 +102,17 @@ namespace SaberFactory.Instances.Trail
                 model.OriginalTextureWrapMode = model.Material.Material.mainTexture?.wrapMode;
             }
 
-            var data = new InstanceTrailData(model, saberTrail.PointStart, saberTrail.PointEnd);
+            Transform pointStart = saberTrail.PointStart;
+            Transform pointEnd = saberTrail.PointEnd;
+
+            // Correction for sabers that have the transforms set the other way around
+            if (pointStart.localPosition.z > pointEnd.localPosition.z)
+            {
+                pointStart = saberTrail.PointEnd;
+                pointEnd = saberTrail.PointStart;
+            }
+
+            var data = new InstanceTrailData(model, pointStart, pointEnd);
 
             return (data, model);
         }
