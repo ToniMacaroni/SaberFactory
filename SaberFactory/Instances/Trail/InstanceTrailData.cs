@@ -1,6 +1,8 @@
-﻿using CustomSaber;
+﻿using System;
+using CustomSaber;
 using SaberFactory.Helpers;
 using SaberFactory.Models;
+using SaberFactory.Models.CustomSaber;
 using UnityEngine;
 
 namespace SaberFactory.Instances.Trail
@@ -78,6 +80,21 @@ namespace SaberFactory.Instances.Trail
                     shouldClampTexture ? TextureWrapMode.Clamp : TrailModel.OriginalTextureWrapMode.Value;
             }
                 
+        }
+
+        public void RevertMaterialForCustomSaber(CustomSaberModel saber)
+        {
+            TrailModel.Material.Revert();
+
+            var saberTrail = saber.StoreAsset.Prefab.GetComponent<CustomTrail>();
+            if (saberTrail == null) return;
+
+            saberTrail.TrailMaterial = TrailModel.Material.Material;
+        }
+
+        public void RevertMaterial()
+        {
+            TrailModel.Material.Revert();
         }
 
         public static (InstanceTrailData, TrailModel) FromCustomSaber(GameObject saberObject, TrailModel trailModel)

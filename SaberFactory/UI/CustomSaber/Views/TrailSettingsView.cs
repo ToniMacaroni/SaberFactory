@@ -3,6 +3,7 @@ using BeatSaberMarkupLanguage.Components.Settings;
 using HMUI;
 using SaberFactory.DataStore;
 using SaberFactory.Editor;
+using SaberFactory.Helpers;
 using SaberFactory.Instances;
 using SaberFactory.Instances.CustomSaber;
 using SaberFactory.Instances.Trail;
@@ -106,6 +107,7 @@ namespace SaberFactory.UI.CustomSaber.Views
 
         private void ResetTrail()
         {
+            _instanceTrailData.RevertMaterialForCustomSaber(_editorInstanceManager.CurrentPiece.Cast<CustomSaberInstance>().Model.Cast<CustomSaberModel>());
             SetTrailModel(null);
         }
 
