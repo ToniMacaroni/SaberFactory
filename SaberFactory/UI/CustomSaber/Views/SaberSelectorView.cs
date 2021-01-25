@@ -25,13 +25,6 @@ namespace SaberFactory.UI.CustomSaber.Views
         [UIComponent("toggle-favorite")] private readonly IconToggleButton _toggleButtonFavorite = null;
         [UIComponent("loading-popup")] private readonly LoadingPopup _loadingPopup = null;
 
-        [UIValue("mod-enabled")]
-        private bool IsModEnabled
-        {
-            get => _pluginConfig.Enabled;
-            set => _pluginConfig.Enabled = value;
-        }
-
         [UIValue("saber-width")]
         private float _saberWidth
         {
@@ -56,7 +49,6 @@ namespace SaberFactory.UI.CustomSaber.Views
         [UIAction("#post-parse")]
         private async void Setup()
         {
-            //_modToggle.Value = _pluginConfig.Enabled;
             _saberList.OnItemSelected += SaberSelected;
             await LoadSabers();
         }

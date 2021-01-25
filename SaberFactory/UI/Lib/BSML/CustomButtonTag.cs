@@ -65,6 +65,11 @@ namespace SaberFactory.UI.Lib.BSML
             if (stackLayoutGroup != null)
                 externalComponents.components.Add(stackLayoutGroup);
 
+            if (!button.gameObject.activeSelf)
+            {
+                button.gameObject.SetActive(true);
+            }
+
             return button.gameObject;
         }
     }

@@ -32,7 +32,6 @@ namespace SaberFactory.UI.Lib
             if (_firstActivation)
             {
                 ParserParams = await UIHelpers.ParseFromResourceAsync(_resourceName, gameObject, this);
-                _logger.Info("Hey test");
                 gameObject.SetActive(false);
                 _firstActivation = false;
                 Init();

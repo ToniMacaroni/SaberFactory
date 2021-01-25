@@ -1,6 +1,5 @@
 ﻿<div xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
      xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
-	<checkbox value='mod-enabled' ignore-layout='true' text='Saber Factory Enabled' apply-on-change='true' anchor-pos-y='-1' anchor-pos-x='-9' size-delta-x='-30' />
 	<horizontal spacing='5' child-expand-width='false' child-control-width='false' child-align='MiddleCenter' pref-height='100'>
 		<vertical spacing='0.5'>
 			<this.custom-list id='saber-list' title='Saber-Os' width='80' />

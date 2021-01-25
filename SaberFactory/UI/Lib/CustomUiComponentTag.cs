@@ -33,6 +33,7 @@ namespace SaberFactory.UI.Lib
 
             var comp = (CustomUiComponent)go.AddComponent(_type);
             comp.Parse();
+            if(!comp.gameObject.activeSelf) comp.gameObject.SetActive(true);
 
             return go;
         }
