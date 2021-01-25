@@ -1,7 +1,7 @@
 ﻿<bg size-delta-x="0" bg="round-rect-panel" bg-color="#333" xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
 	<vertical>
 		<dropdown-list-setting id='material-dropdown' text='Material' options='materials'/>
-		<dropdown-list-setting id='shader-dropdown' text='Shader' options='shaders'/>
+		<!--<dropdown-list-setting id='shader-dropdown' text='Shader' options='shaders'/>-->
 		<this.prop-list id='prop-list' pref-height='60' />
 		<this.button text='Close' on-click='click-close' normal-color='#ffffff50' />
 	</vertical>
