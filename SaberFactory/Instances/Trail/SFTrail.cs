@@ -67,7 +67,7 @@ namespace SaberFactory.Instances.Trail
         {
             if (_inited)
             {
-                _trailRenderer.UpdateMesh(this._trailElementCollection, this._color);
+                _trailRenderer.UpdateMesh(_trailElementCollection, _color);
             }
             if (_trailRenderer)
             {
