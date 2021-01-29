@@ -20,5 +20,5 @@ Change the shape, shaders, material properties, textures and more of parts and s
 **You can use and customize both parts and custom sabers in saber factory**
 
 ## How do I install it
-1) Download the first zip from [Here](https://github.com/ToniMacaroni/SaberFactory/releases)
+1) Download the first zip from [Here](https://github.com/ToniMacaroni/SaberFactoryV2/releases)
 2) Unpack it in your Beat Saber directory
