@@ -192,6 +192,7 @@
     <Compile Include="DataStore\MainAssetStore.cs" />
     <Compile Include="DataStore\TextureAsset.cs" />
     <Compile Include="DataStore\TextureStore.cs" />
+    <Compile Include="EAssetType.cs" />
     <Compile Include="Editor\Editor.cs" />
     <Compile Include="Editor\SFLogoAnim.cs" />
     <Compile Include="EmbeddedAssetLoader.cs" />

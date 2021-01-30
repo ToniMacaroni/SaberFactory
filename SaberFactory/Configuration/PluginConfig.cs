@@ -22,6 +22,11 @@ namespace SaberFactory.Configuration
 
         public bool CreateCustomSabersFolder { get; set; } = true;
 
+        public int LoadingThreads { get; set; } = 2;
+
+        [UseConverter(typeof(EnumConverter<EAssetTypeConfiguration>))]
+        public EAssetTypeConfiguration AssetType { get; set; } = EAssetTypeConfiguration.None;
+
         [UseConverter(typeof(ListConverter<string>))]
         public List<string> Favorites { get; set; } = new List<string>();
 

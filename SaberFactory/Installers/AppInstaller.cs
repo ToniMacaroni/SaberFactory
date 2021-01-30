@@ -62,7 +62,7 @@ namespace SaberFactory.Installers
         {
             if (_config.LoadOnStart)
             {
-                await mainAssetStore.LoadAll();
+                await mainAssetStore.LoadAllAsync(_config.AssetType);
             }
         }
 

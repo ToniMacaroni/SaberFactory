@@ -56,7 +56,7 @@ namespace SaberFactory.UI.CustomSaber.Views
         public async Task LoadSabers()
         {
             _loadingPopup.Show();
-            await _mainAssetStore.LoadAll();
+            await _mainAssetStore.LoadAllCustomSabersAsync();
             ShowSabers();
             _loadingPopup.Hide();
         }
