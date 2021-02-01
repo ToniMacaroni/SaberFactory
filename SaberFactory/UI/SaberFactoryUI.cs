@@ -11,6 +11,9 @@ using VRUIControls;
 
 namespace SaberFactory.UI
 {
+    /// <summary>
+    /// Base class to build ui configurations upon
+    /// </summary>
     internal class SaberFactoryUI
     {
         public event Action OnClosePressed;

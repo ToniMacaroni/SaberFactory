@@ -13,18 +13,19 @@ namespace SaberFactory.Loaders
     {
         public override string HandledExtension => ".saber";
 
-        public override IEnumerable<string> CollectFiles()
+        public override ISet<AssetMetaPath> CollectFiles()
         {
             var dir1 = new DirectoryInfo(Path.Combine(UnityGame.InstallPath, "CustomSabers"));
             var dir2 = new DirectoryInfo(Path.Combine(PathTools.SaberFactoryUserPath, "CustomSabers"));
 
-            var paths = new HashSet<string>();
+            var paths = new HashSet<AssetMetaPath>();
 
             if (dir1.Exists)
             {
                 foreach (var path in dir1.EnumerateFiles("*.saber", SearchOption.AllDirectories))
                 {
-                    paths.Add(path.FullName);
+                    paths.Add(new AssetMetaPath(path.FullName));
+                    
                 }
             }
 
@@ -32,7 +33,7 @@ namespace SaberFactory.Loaders
             {
                 foreach (var path in dir2.EnumerateFiles("*.saber", SearchOption.AllDirectories))
                 {
-                    paths.Add(path.FullName);
+                    paths.Add(new AssetMetaPath(path.FullName));
                 }
             }
 

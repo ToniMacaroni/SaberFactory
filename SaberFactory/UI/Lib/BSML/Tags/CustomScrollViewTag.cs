@@ -10,7 +10,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using VRUIControls;
 
-namespace SaberFactory.UI.Lib.BSML
+namespace SaberFactory.UI.Lib.BSML.Tags
 {
     public class CustomScrollViewTag : BSMLTag
     {
@@ -82,20 +82,21 @@ namespace SaberFactory.UI.Lib.BSML
             (child.transform as RectTransform).sizeDelta = new Vector2(0, -1);
 
             scrollView.SetField<ScrollView, RectTransform>("_contentRectTransform", parentObj.transform as RectTransform);
-            gameObject.SetActive(true);
 
-            Man(rectTransform);
+            Man(gameObject, rectTransform);
 
             return child;
         }
 
-        private async void Man(RectTransform rect)
+        // Getting rebuild loop error if I do this directly
+        private async void Man(GameObject root, RectTransform rect)
         {
             await Task.Delay(50);
             rect.anchorMin = new Vector2(0, 1);
             rect.anchorMax = new Vector2(1, 1);
             rect.sizeDelta = new Vector2(0, 0);
             rect.pivot = new Vector2(0.5f, 1);
+            root.SetActive(true);
         }
     }
 }

@@ -5,6 +5,9 @@ using Zenject;
 
 namespace SaberFactory.Instances
 {
+    /// <summary>
+    /// Class for managing an instance of a piece <seealso cref="BasePieceModel"/>
+    /// </summary>
     internal class BasePieceInstance
     {
         public PropertyBlockSetterHandler PropertyBlockSetterHandler { get; protected set; }

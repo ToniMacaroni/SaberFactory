@@ -192,15 +192,16 @@
     <Compile Include="DataStore\MainAssetStore.cs" />
     <Compile Include="DataStore\TextureAsset.cs" />
     <Compile Include="DataStore\TextureStore.cs" />
-    <Compile Include="EAssetType.cs" />
+    <Compile Include="EAssetTypeConfiguration.cs" />
     <Compile Include="Editor\Editor.cs" />
     <Compile Include="Editor\SFLogoAnim.cs" />
     <Compile Include="EmbeddedAssetLoader.cs" />
     <Compile Include="Editor\Pedestal.cs" />
+    <Compile Include="Loaders\AssetMetaPath.cs" />
+    <Compile Include="Models\PreloadMetaData.cs" />
     <Compile Include="Models\ESaberSlot.cs" />
     <Compile Include="Models\ESaberType.cs" />
     <Compile Include="Game\EventPlayer.cs" />
-    <Compile Include="Game\EventPlayerInterface.cs" />
     <Compile Include="Game\SFSaberModelController.cs" />
     <Compile Include="Helpers\BeatmapHelper.cs" />
     <Compile Include="Helpers\CommonHelpers.cs" />
@@ -224,7 +225,6 @@
     <Compile Include="Instances\Setters\TransformDataSetter.cs" />
     <Compile Include="Instances\Trail\TrailHandler.cs" />
     <Compile Include="Instances\SaberInstance.cs" />
-    <Compile Include="Instances\Trail\TrailConstructionData.cs" />
     <Compile Include="Loaders\AssetBundleLoader.cs" />
     <Compile Include="Models\AdditionalInstanceHandler.cs" />
     <Compile Include="Models\CustomSaber\CustomSaberModelLoader.cs" />
@@ -264,6 +264,7 @@
     <Compile Include="UI\CustomSaber\CustomComponents\LoadingPopup.cs" />
     <Compile Include="UI\CustomSaber\CustomComponents\MaterialEditor.cs" />
     <Compile Include="UI\CustomSaber\CustomComponents\PropList.cs" />
+    <Compile Include="UI\CustomSaber\CustomComponents\TexturePickerPopup.cs" />
     <Compile Include="UI\CustomSaber\CustomSaberUI.cs" />
     <Compile Include="UI\CustomSaber\ENavigationCategory.cs" />
     <Compile Include="UI\CustomSaber\INavigationCategoryView.cs" />
@@ -275,11 +276,14 @@
     <Compile Include="UI\CustomSaber\Views\TransformSettingsView.cs" />
     <Compile Include="UI\Lib\BSML\ButtonImageController.cs" />
     <Compile Include="UI\Lib\BSML\ButtonStateColors.cs" />
-    <Compile Include="UI\Lib\BSML\CustomButtonTag.cs" />
+    <Compile Include="UI\Lib\BSML\Tags\CustomButtonTag.cs" />
     <Compile Include="UI\Lib\BSML\CustomListTableData.cs" />
-    <Compile Include="UI\Lib\BSML\CustomListTag.cs" />
-    <Compile Include="UI\Lib\BSML\CustomScrollViewTag.cs" />
+    <Compile Include="UI\Lib\BSML\Tags\CustomListTag.cs" />
+    <Compile Include="UI\Lib\BSML\Tags\CustomScrollViewTag.cs" />
+    <Compile Include="UI\Lib\ComponentPlaceholderFactory.cs" />
     <Compile Include="UI\Lib\CustomParsable.cs" />
+    <Compile Include="UI\Lib\DynamicTypeFactory.cs" />
+    <Compile Include="UI\Lib\ICustomParsable.cs" />
     <Compile Include="UI\Lib\PropCell.cs" />
     <Compile Include="UI\Lib\PropCells\BasePropCell.cs" />
     <Compile Include="UI\Lib\PropCells\BoolPropCell.cs" />
@@ -289,11 +293,12 @@
     <Compile Include="UI\Lib\PropertyDescriptor.cs" />
     <Compile Include="UI\Lib\PropListTableData.cs" />
     <Compile Include="UI\Lib\PropListTableDataHandler.cs" />
-    <Compile Include="UI\Lib\BSML\PropListTag.cs" />
+    <Compile Include="UI\Lib\BSML\Tags\PropListTag.cs" />
     <Compile Include="UI\Lib\Popup.cs" />
-    <Compile Include="UI\Lib\PopupTag.cs" />
+    <Compile Include="UI\Lib\BSML\Tags\PopupTag.cs" />
     <Compile Include="UI\Lib\SliderController.cs" />
     <Compile Include="UI\Lib\ToggleController.cs" />
+    <Compile Include="UI\Lib\UIFactoryAttribute.cs" />
     <Compile Include="UI\TrailPreviewer.cs" />
     <Compile Include="UI\CustomSaber\Views\TrailSettingsView.cs" />
     <Compile Include="UI\ICustomListItem.cs" />
@@ -301,7 +306,7 @@
     <Compile Include="UI\Lib\BSML\CustomComponentHandler.cs" />
     <Compile Include="UI\Lib\BSML\CustomIconButton.cs" />
     <Compile Include="UI\Lib\CustomUiComponent.cs" />
-    <Compile Include="UI\Lib\CustomUiComponentTag.cs" />
+    <Compile Include="UI\Lib\BSML\Tags\CustomUiComponentTag.cs" />
     <Compile Include="UI\Lib\CustomViewController.cs" />
     <Compile Include="UI\Lib\ISubViewHost.cs" />
     <Compile Include="UI\Lib\SubView.cs" />
@@ -364,6 +369,9 @@
     <EmbeddedResource Include="UI\Lib\PropCells\TexturePropCell.bsml" />
     <EmbeddedResource Include="UI\CustomSaber\Views\SettingsView.bsml">
       <DependentUpon>SettingsView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\CustomSaber\CustomComponents\TexturePickerPopup.bsml">
+      <DependentUpon>TexturePickerPopup.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

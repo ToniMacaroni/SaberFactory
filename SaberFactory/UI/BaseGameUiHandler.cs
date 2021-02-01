@@ -5,6 +5,9 @@ using Screen = HMUI.Screen;
 
 namespace SaberFactory.UI
 {
+    /// <summary>
+    /// Class to dismiss and present the game ui system
+    /// </summary>
     internal class BaseGameUiHandler
     {
         private readonly HierarchyManager _hierarchyManager;

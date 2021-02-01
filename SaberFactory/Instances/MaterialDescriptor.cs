@@ -2,6 +2,10 @@
 
 namespace SaberFactory.Instances
 {
+    /// <summary>
+    /// Extension class for <see cref="Material"/> with more information
+    /// and possibly to revert a changed <see cref="Material"/>
+    /// </summary>
     internal class MaterialDescriptor
     {
         public Material Material;

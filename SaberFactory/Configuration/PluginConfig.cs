@@ -20,6 +20,8 @@ namespace SaberFactory.Configuration
 
         public bool EnableEvents { get; set; } = true;
 
+        public bool RandomSaber { get; set; } = false;
+
         public bool CreateCustomSabersFolder { get; set; } = true;
 
         public int LoadingThreads { get; set; } = 2;

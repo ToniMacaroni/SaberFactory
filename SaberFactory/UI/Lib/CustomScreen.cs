@@ -7,6 +7,10 @@ using Zenject;
 
 namespace SaberFactory.UI.Lib
 {
+    /// <summary>
+    /// Implementation of a <see cref="HMUI.Screen"/>
+    /// basically a container for viewcontrollers
+    /// </summary>
     internal class CustomScreen : HMUI.Screen
     {
         public ViewController CurrentViewController { get; private set; }

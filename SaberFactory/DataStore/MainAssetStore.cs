@@ -16,6 +16,9 @@ using SiraUtil.Tools;
 
 namespace SaberFactory.DataStore
 {
+    /// <summary>
+    /// Class for managing store assets ie. parts and custom sabers
+    /// </summary>
     internal class MainAssetStore : IDisposable
     {
         private static readonly int MAX_LOADING_THREADS = 15;
@@ -30,6 +33,7 @@ namespace SaberFactory.DataStore
         private readonly SiraLog _logger;
 
         private readonly Dictionary<string, ModelComposition> _modelCompositions;
+        private readonly Dictionary<string, PreloadMetaData> _metaData;
 
         private MainAssetStore(
             PluginConfig config,
@@ -43,6 +47,7 @@ namespace SaberFactory.DataStore
             _customSaberModelLoader = customSaberModelLoader;
 
             _modelCompositions = new Dictionary<string, ModelComposition>();
+            _metaData = new Dictionary<string, PreloadMetaData>();
         }
 
         public Task<ModelComposition> this[string path] => GetCompositionByPath(path);
@@ -71,6 +76,11 @@ namespace SaberFactory.DataStore
             //}
         }
 
+        public async Task LoadAllMetaAsync(EAssetTypeConfiguration assetType)
+        {
+            await LoadAllCustomSaberMetaDataAsync();
+        }
+
         public async Task LoadAllCustomSabersAsync()
         {
             if (!IsLoading)
@@ -83,9 +93,26 @@ namespace SaberFactory.DataStore
             IsLoading = false;
         }
 
+        public async Task LoadAllCustomSaberMetaDataAsync()
+        {
+            if (!IsLoading)
+            {
+                IsLoading = true;
+                CurrentTask = LoadAllCustomSaberMetaDataAsyncInternal();
+            }
+
+            await CurrentTask;
+            IsLoading = false;
+        }
+
         public List<ModelComposition> GetAllModelCompositions()
         {
             return _modelCompositions.Values.ToList();
+        }
+
+        public List<PreloadMetaData> GetAllMetaData()
+        {
+            return _metaData.Values.ToList();
         }
 
         public void UnloadAll()
@@ -128,7 +155,12 @@ namespace SaberFactory.DataStore
             threads = Math.Min(threads, MAX_LOADING_THREADS);
 
             var tasks = new List<Task>();
-            var files = new ConcurrentQueue<string>(_customSaberAssetLoader.CollectFiles());
+            var files = new ConcurrentQueue<string>();
+
+            foreach (var assetMetaPath in _customSaberAssetLoader.CollectFiles())
+            {
+                files.Enqueue(assetMetaPath.Path);
+            }
 
             _logger.Info($"{files.Count} custom sabers found");
             if (files.Count == 0) return;
@@ -155,6 +187,43 @@ namespace SaberFactory.DataStore
 
             sw.Stop();
             _logger.Info($"Loaded in {sw.Elapsed.Seconds}.{sw.Elapsed.Milliseconds}s");
+        }
+
+        private async Task LoadAllCustomSaberMetaDataAsyncInternal()
+        {
+            await LoadAllMetaDataForLoader(_customSaberAssetLoader, true);
+        }
+
+        private async Task LoadAllMetaDataForLoader(AssetBundleLoader loader, bool createIfNotExisting = false)
+        {
+            var sw = Stopwatch.StartNew();
+
+            foreach (var assetMetaPath in _customSaberAssetLoader.CollectFiles())
+            {
+                var relativePath = PathTools.ToRelativePath(assetMetaPath.MetaDataPath);
+                if (_metaData.TryGetValue(relativePath, out _)) continue;
+
+                if (!assetMetaPath.HasMetaData)
+                {
+                    if (createIfNotExisting)
+                    {
+                        var comp = await this[PathTools.ToRelativePath(assetMetaPath.Path)];
+                        if(comp==null)continue;
+                        var metaData = new PreloadMetaData(assetMetaPath, comp);
+                        metaData.SaveToFile();
+                        _metaData.Add(relativePath, metaData);
+                    }
+                }
+                else
+                {
+                    var metaData = new PreloadMetaData(assetMetaPath);
+                    metaData.IsFavorite = _config.IsFavorite(PathTools.ToRelativePath(assetMetaPath.Path));
+                    _metaData.Add(relativePath,metaData);
+                }
+            }
+
+            sw.Stop();
+            _logger.Info($"Loaded Metadata in {sw.Elapsed.Seconds}.{sw.Elapsed.Milliseconds}s");
         }
 
         private void AddModelComposition(string key, ModelComposition modelComposition)

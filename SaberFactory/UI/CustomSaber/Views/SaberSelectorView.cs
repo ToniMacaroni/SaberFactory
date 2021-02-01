@@ -1,9 +1,11 @@
-﻿using System.Linq;
+﻿using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using BeatSaberMarkupLanguage.Attributes;
 using SaberFactory.Configuration;
 using SaberFactory.DataStore;
 using SaberFactory.Editor;
+using SaberFactory.Helpers;
 using SaberFactory.Models;
 using SaberFactory.UI.CustomSaber.CustomComponents;
 using SaberFactory.UI.Lib;
@@ -56,28 +58,41 @@ namespace SaberFactory.UI.CustomSaber.Views
         public async Task LoadSabers()
         {
             _loadingPopup.Show();
-            await _mainAssetStore.LoadAllCustomSabersAsync();
+            await _mainAssetStore.LoadAllCustomSaberMetaDataAsync();
             ShowSabers();
             _loadingPopup.Hide();
         }
 
         private void ShowSabers()
         {
-            var sabers = 
-                from comp in _mainAssetStore.GetAllModelCompositions()
-                orderby comp.IsFavorite descending 
-                select comp;
+            //var sabers = 
+            //    from comp in _mainAssetStore.GetAllModelCompositions()
+            //    orderby comp.IsFavorite descending 
+            //    select comp;
 
-            _saberList.SetItems(sabers);
+            var metas = from meta in _mainAssetStore.GetAllMetaData()
+                orderby meta.IsFavorite descending
+                select meta;
+
+            _saberList.SetItems(metas);
 
             _currentComposition = _editorInstanceManager.CurrentModelComposition;
             _saberList.Select(_currentComposition);
             UpdateUi();
         }
 
-        private void SaberSelected(object item)
+        private async void SaberSelected(object item)
         {
-            _currentComposition = (ModelComposition) item;
+            if (item is PreloadMetaData metaData)
+            {
+                var relativePath = PathTools.ToRelativePath(metaData.AssetMetaPath.Path);
+                _currentComposition = await _mainAssetStore[relativePath];
+            }
+            else
+            {
+                _currentComposition = (ModelComposition) item;
+            }
+
             _editorInstanceManager.SetModelComposition(_currentComposition);
             UpdateUi();
         }

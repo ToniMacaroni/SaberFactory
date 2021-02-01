@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace SaberFactory.Instances.Trail
 {
+    /// <summary>
+    /// Class used for rendering the trail on the saber
+    /// </summary>
     internal class SFTrail : SaberTrail
     {
         [SerializeField] private Material _customMaterial;

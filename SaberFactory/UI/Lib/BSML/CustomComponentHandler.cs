@@ -6,6 +6,7 @@ using BeatSaberMarkupLanguage;
 using BeatSaberMarkupLanguage.Macros;
 using BeatSaberMarkupLanguage.Tags;
 using BeatSaberMarkupLanguage.TypeHandlers;
+using SaberFactory.UI.Lib.BSML.Tags;
 using SiraUtil.Tools;
 using Zenject;
 
@@ -15,6 +16,12 @@ namespace SaberFactory.UI.Lib.BSML
     {
         private readonly SiraLog _logger;
         public static bool Registered { get; private set; }
+
+        #region Factories
+
+        [Inject] private readonly Popup.Factory _popupFactory = null;
+
+        #endregion
 
         private CustomComponentHandler(SiraLog logger)
         {
@@ -59,7 +66,7 @@ namespace SaberFactory.UI.Lib.BSML
 
             foreach (var type in GetListOfType<Popup>())
             {
-                parser.RegisterTag(new PopupTag(type));
+                parser.RegisterTag(new PopupTag(type, _popupFactory));
             }
         }
 

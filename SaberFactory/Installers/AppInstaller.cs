@@ -37,17 +37,17 @@ namespace SaberFactory.Installers
             Container.BindInstance(_config).AsSingle();
 
             Container.Bind<PresetSaveManager>().AsSingle().WithArguments(_saberFactoryDir.CreateSubdirectory("Presets"));
-            Container.BindInterfacesAndSelfTo<CustomComponentHandler>().AsSingle();
             Container.Bind<CommonResources>().AsSingle();
 
             Container.BindInterfacesAndSelfTo<EmbeddedAssetLoader>().AsSingle();
 
             Container.Bind<CustomSaberModelLoader>().AsSingle();
 
-            Container.Bind<TextureStore>().AsSingle();
+            Container.Bind<TextureStore>().AsSingle().WithArguments(_saberFactoryDir.CreateSubdirectory("Textures"));
 
             Container.BindInterfacesAndSelfTo<MainAssetStore>().AsSingle()
                 .OnInstantiated<MainAssetStore>(OnMainAssetStoreInstansiated);
+
 
             // Model stuff
             Container.Bind<SaberModel>().WithId(ESaberSlot.Left).AsCached().WithArguments(ESaberSlot.Left);
@@ -62,7 +62,7 @@ namespace SaberFactory.Installers
         {
             if (_config.LoadOnStart)
             {
-                await mainAssetStore.LoadAllAsync(_config.AssetType);
+                await mainAssetStore.LoadAllMetaAsync(_config.AssetType);
             }
         }
 

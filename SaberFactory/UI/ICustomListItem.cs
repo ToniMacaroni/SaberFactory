@@ -2,6 +2,9 @@
 
 namespace SaberFactory.UI
 {
+    /// <summary>
+    /// Interface to provide information shown in a custom list
+    /// </summary>
     internal interface ICustomListItem
     {
         string ListName { get; }

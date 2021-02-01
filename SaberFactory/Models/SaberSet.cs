@@ -4,6 +4,9 @@ using Zenject;
 
 namespace SaberFactory.Models
 {
+    /// <summary>
+    /// Stores currently used left and right saber model implementation
+    /// </summary>
     internal class SaberSet
     {
         private readonly PresetSaveManager _presetSaveManager;

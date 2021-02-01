@@ -3,6 +3,8 @@ using IPA.Utilities;
 using SaberFactory.Helpers;
 using SaberFactory.Instances;
 using SaberFactory.Models;
+using SaberFactory.UI.CustomSaber.CustomComponents;
+using SaberFactory.UI.Lib;
 using SiraUtil.Interfaces;
 using SiraUtil.Tools;
 using UnityEngine;

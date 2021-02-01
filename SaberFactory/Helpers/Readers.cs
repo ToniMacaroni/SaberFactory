@@ -124,7 +124,7 @@ namespace SaberFactory.Helpers
                     return;
                 }
 
-                var assetRequest = createRequest.assetBundle.LoadAssetAsync<T>("_CustomSaber");
+                var assetRequest = createRequest.assetBundle.LoadAssetAsync<T>(assetName);
                 assetRequest.completed += delegate
                 {
                     tcs.SetResult(new Tuple<T, AssetBundle>((T)assetRequest.asset, createRequest.assetBundle));

@@ -6,7 +6,7 @@ using SaberFactory.Helpers;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace SaberFactory.UI.Lib
+namespace SaberFactory.UI.Lib.BSML.Tags
 {
     internal class CustomUiComponentTag : BSMLTag
     {
