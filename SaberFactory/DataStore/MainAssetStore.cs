@@ -105,14 +105,24 @@ namespace SaberFactory.DataStore
             IsLoading = false;
         }
 
-        public List<ModelComposition> GetAllModelCompositions()
+        public IEnumerable<ModelComposition> GetAllModelCompositions()
         {
-            return _modelCompositions.Values.ToList();
+            return _modelCompositions.Values;
         }
 
-        public List<PreloadMetaData> GetAllMetaData()
+        public IEnumerable<ModelComposition> GetAllModelCompositions(AssetTypeDefinition assetType)
         {
-            return _metaData.Values.ToList();
+            return _modelCompositions.Values.Where(x => x.AssetTypeDefinition.Equals(assetType));
+        }
+
+        public IEnumerable<PreloadMetaData> GetAllMetaData()
+        {
+            return _metaData.Values;
+        }
+
+        public IEnumerable<PreloadMetaData> GetAllMetaData(AssetTypeDefinition assetType)
+        {
+            return _metaData.Values.Where(x => x.AssetTypeDefinition.Equals(assetType));
         }
 
         public void UnloadAll()
@@ -122,6 +132,7 @@ namespace SaberFactory.DataStore
                 modelCompositions.Dispose();
             }
             _modelCompositions.Clear();
+            _metaData.Clear();
         }
 
         public void Unload(string path)
@@ -129,6 +140,7 @@ namespace SaberFactory.DataStore
             if (!_modelCompositions.TryGetValue(path, out var comp)) return;
             comp.Dispose();
             _modelCompositions.Remove(path);
+            _metaData.Remove(path+".meta");
         }
 
         public async Task Reload(string path)
@@ -145,6 +157,11 @@ namespace SaberFactory.DataStore
 
         public void Delete(string path)
         {
+            if (_metaData.TryGetValue(path + ".meta", out var meta) && meta.AssetMetaPath.HasMetaData)
+            {
+                File.Delete(meta.AssetMetaPath.MetaDataPath);
+            }
+
             Unload(path);
             var filePath = PathTools.ToFullPath(path);
             File.Delete(filePath);
@@ -209,7 +226,7 @@ namespace SaberFactory.DataStore
                     {
                         var comp = await this[PathTools.ToRelativePath(assetMetaPath.Path)];
                         if(comp==null)continue;
-                        var metaData = new PreloadMetaData(assetMetaPath, comp);
+                        var metaData = new PreloadMetaData(assetMetaPath, comp, comp.AssetTypeDefinition);
                         metaData.SaveToFile();
                         _metaData.Add(relativePath, metaData);
                     }

@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using SaberFactory.Helpers;
 using SaberFactory.UI;
 using UnityEngine;
 
@@ -10,6 +11,8 @@ namespace SaberFactory.Loaders
         public string MetaDataPath;
 
         public bool HasMetaData => !string.IsNullOrEmpty(MetaDataPath) && File.Exists(MetaDataPath);
+        public string RelativePath => PathTools.ToRelativePath(Path);
+        public string RelativeMetaDataPath => PathTools.ToRelativePath(MetaDataPath);
 
         public AssetMetaPath(string path, string metaDataPath = null)
         {

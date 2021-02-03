@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Threading.Tasks;
 using IPA.Utilities;
+using SaberFactory.Configuration;
 using SaberFactory.Helpers;
 using SaberFactory.Instances;
 using SaberFactory.Models;
@@ -23,19 +25,21 @@ namespace SaberFactory.Game
         [Inject] private readonly SiraLog _logger = null;
         [Inject] private readonly SaberSet _saberSet = null;
         [Inject] private readonly SaberInstance.Factory _saberInstanceFactory = null;
+        [Inject] private readonly GameSaberSetup _gameSaberSetup = null;
         [InjectOptional] private readonly EventPlayer _eventPlayer = null;
 
         private SaberInstance _saberInstance;
         private Color? _saberColor;
 
-        public override void Init(Transform parent, Saber saber)
+        public override async void Init(Transform parent, Saber saber)
         {
+            await _gameSaberSetup.SetupTask;
+
             transform.SetParent(parent, false);
 
             var saberModel = saber.saberType == SaberType.SaberA ? _saberSet.LeftSaber : _saberSet.RightSaber;
 
             _saberInstance = _saberInstanceFactory.Create(saberModel);
-
             _saberInstance.SetParent(transform);
             _saberInstance.CreateTrail(_saberTrail.GetField<SaberTrailRenderer, SaberTrail>("_trailRendererPrefab"));
             SetColor(_saberColor ?? _colorManager.ColorForSaberType(_saberInstance.Model.SaberSlot.ToSaberType()));

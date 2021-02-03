@@ -11,6 +11,7 @@ namespace SaberFactory.Models
     internal class PreloadMetaData : ICustomListItem
     {
         public readonly AssetMetaPath AssetMetaPath;
+        public AssetTypeDefinition AssetTypeDefinition { get; private set; }
 
         private string _name;
         private string _author;
@@ -28,9 +29,10 @@ namespace SaberFactory.Models
             LoadFromFile(assetMetaPath.MetaDataPath);
         }
 
-        public PreloadMetaData(AssetMetaPath assetMetaPath, ICustomListItem customListItem)
+        public PreloadMetaData(AssetMetaPath assetMetaPath, ICustomListItem customListItem, AssetTypeDefinition assetTypeDefinition)
         {
             AssetMetaPath = assetMetaPath;
+            AssetTypeDefinition = assetTypeDefinition;
             _name = customListItem.ListName;
             _author = customListItem.ListAuthor;
             _coverSprite = customListItem.ListCover;
@@ -46,10 +48,12 @@ namespace SaberFactory.Models
             var ser = new SerializableMeta();
             ser.Name = _name;
             ser.Author = _author;
+            ser.AssetTypeDefinition = AssetTypeDefinition;
 
-            if (_coverSprite != null && _coverSprite.texture.isReadable)
+            if (_coverSprite != null)
             {
-                ser.CoverData = _coverSprite?.texture.EncodeToPNG();
+                var tex = _coverSprite.texture;
+                ser.CoverData = GetTextureData(tex);
             }
 
 
@@ -69,6 +73,34 @@ namespace SaberFactory.Models
             _name = ser.Name;
             _author = ser.Author;
             _coverData = ser.CoverData;
+            AssetTypeDefinition = ser.AssetTypeDefinition;
+        }
+
+        /// <summary>
+        /// Get Texture png data from non-readable texture
+        /// </summary>
+        /// <param name="tex">The texture to read from</param>
+        /// <returns>png bytes</returns>
+        private byte[] GetTextureData(Texture2D tex)
+        {
+            RenderTexture tmp = RenderTexture.GetTemporary(
+                tex.width,
+                tex.height,
+                0,
+                RenderTextureFormat.Default,
+                RenderTextureReadWrite.Default);
+
+            Graphics.Blit(tex, tmp);
+
+            RenderTexture previous = RenderTexture.active;
+            RenderTexture.active = tmp;
+            Texture2D myTexture2D = new Texture2D(tex.width, tex.height);
+            myTexture2D.ReadPixels(new Rect(0, 0, tmp.width, tmp.height), 0, 0);
+            myTexture2D.Apply();
+            RenderTexture.active = previous;
+            RenderTexture.ReleaseTemporary(tmp);
+
+            return myTexture2D.EncodeToPNG();
         }
 
         private Texture2D LoadTexture()
@@ -95,6 +127,7 @@ namespace SaberFactory.Models
             public string Name;
             public string Author;
             public byte[] CoverData;
+            public AssetTypeDefinition AssetTypeDefinition;
         }
     }
 }

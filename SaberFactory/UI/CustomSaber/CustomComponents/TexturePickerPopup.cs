@@ -19,7 +19,6 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
     {
         [UIComponent("item-list")] private readonly CustomListTableData _itemList = null;
 
-        [Inject] private readonly SiraLog _logger = null;
         [Inject] private readonly TextureStore _textureStore = null;
 
         private Action<Texture2D> _onSelectedCallback = null;
@@ -42,7 +41,6 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
 
         public void RefreshList(List<TextureAsset> items)
         {
-            _logger.Info($"List {_itemList!=null}");
             _textureAssets = items;
             var cells = new List<CustomListTableData.CustomCellInfo>();
             foreach (var textureAsset in _textureAssets)

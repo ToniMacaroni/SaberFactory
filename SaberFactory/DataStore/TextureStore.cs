@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using SaberFactory.Helpers;
 
@@ -27,6 +28,11 @@ namespace SaberFactory.DataStore
             return await LoadTexture(path);
         }
 
+        public TextureAsset GetTextureEndsWith(string path)
+        {
+            return _textureAssets.Values.FirstOrDefault(x => x.Name.EndsWith(path));
+        }
+
         public bool HasTexture(string path)
         {
             return _textureAssets.ContainsKey(path);
@@ -51,7 +57,6 @@ namespace SaberFactory.DataStore
 
         public void UnloadAll()
         {
-            // TODO: Check if valid
             _textureAssets.Clear();
         }
 
@@ -65,6 +70,8 @@ namespace SaberFactory.DataStore
             var tex = await Readers.ReadTexture(path);
             if (!tex) return null;
 
+            tex.name = path;
+
             var texAsset = new TextureAsset(Path.GetFileName(path), path, tex, EAssetOrigin.FileSystem);
 
             _textureAssets.Add(texAsset.Path, texAsset);
@@ -75,7 +82,7 @@ namespace SaberFactory.DataStore
         {
             foreach (var texFile in _textureDirectory.EnumerateFiles("*.png", SearchOption.AllDirectories))
             {
-                await LoadTexture(texFile.FullName);
+                await LoadTexture(PathTools.ToRelativePath(texFile.FullName));
             }
         }
     }

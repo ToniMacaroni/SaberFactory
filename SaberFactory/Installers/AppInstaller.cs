@@ -46,7 +46,7 @@ namespace SaberFactory.Installers
             Container.Bind<TextureStore>().AsSingle().WithArguments(_saberFactoryDir.CreateSubdirectory("Textures"));
 
             Container.BindInterfacesAndSelfTo<MainAssetStore>().AsSingle()
-                .OnInstantiated<MainAssetStore>(OnMainAssetStoreInstansiated);
+                .OnInstantiated<MainAssetStore>(OnMainAssetStoreInstantiated);
 
 
             // Model stuff
@@ -58,19 +58,15 @@ namespace SaberFactory.Installers
             InstallFactories();
         }
 
-        private async void OnMainAssetStoreInstansiated(InjectContext ctx, MainAssetStore mainAssetStore)
+        private async void OnMainAssetStoreInstantiated(InjectContext ctx, MainAssetStore mainAssetStore)
         {
-            if (_config.LoadOnStart)
-            {
-                await mainAssetStore.LoadAllMetaAsync(_config.AssetType);
-            }
+            await mainAssetStore.LoadAllMetaAsync(_config.AssetType);
         }
 
         private void InstallFactories()
         {
             Container.BindFactory<StoreAsset, CustomSaberModel, CustomSaberModel.Factory>();
 
-            //Container.BindFactory<BasePieceModel, BasePieceInstance, BasePieceInstance.Factory>().FromFactory<InstanceFactory>();
             Container.BindFactory<BasePieceModel, BasePieceInstance, BasePieceInstance.Factory>()
                 .FromFactory<InstanceFactory>();
             Container.BindFactory<SaberModel, SaberInstance, SaberInstance.Factory>();

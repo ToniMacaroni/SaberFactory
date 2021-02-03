@@ -19,11 +19,18 @@ namespace SaberFactory.UI.Lib.PropCells
             if (!(data.PropObject is Texture2D tex)) return;
 
             OnChangeCallback = data.ChangedCallback;
-            _propName.text = data.Text;
+            _propName.text = ShortenText(data.Text, 14);
             _propTexture.sprite = Utilities.LoadSpriteFromTexture(tex);
 
             _backgroundImage.type = Image.Type.Sliced;
             _backgroundImage.color = new Color(1, 0, 0, 0.5f);
+        }
+
+        private string ShortenText(string text, int length)
+        {
+            if (text.Length < length) return text;
+
+            return text.Substring(0, length) + "...";
         }
 
         [UIAction("click-select")]

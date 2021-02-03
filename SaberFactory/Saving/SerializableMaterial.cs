@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -10,18 +12,18 @@ namespace SaberFactory.Saving
         public string ShaderName;
         public List<SerializableMaterialProperty> Properties;
 
-        public void ApplyToMaterial(Material material)
+        public async Task ApplyToMaterial(Material material, Func<string, Task<Texture2D>> textureResolve)
         {
             var shader = material.shader;
             if (ShaderName != shader.name) return;
 
             foreach (var prop in Properties)
             {
-                SetProp(material, prop);
+                await SetProp(material, prop, textureResolve);
             }
         }
 
-        public void SetProp(Material material, SerializableMaterialProperty prop)
+        public async Task SetProp(Material material, SerializableMaterialProperty prop, Func<string, Task<Texture2D>> textureResolve)
         {
             switch (prop.Type)
             {
@@ -36,6 +38,15 @@ namespace SaberFactory.Saving
                     break;
                 case ShaderPropertyType.Vector:
                     material.SetVector(prop.Name, Cast<SerializableVector4>(prop.Value).ToVector());
+                    break;
+                case ShaderPropertyType.Texture:
+                    var name = prop.Value as string;
+                    var tex = await textureResolve(name);
+                    if (tex)
+                    {
+                        material.SetTexture(prop.Name, tex);
+                    }
+
                     break;
             }
         }
