@@ -5,29 +5,21 @@ using SaberFactory.Helpers;
 
 namespace SaberFactory.Loaders
 {
+    /// <summary>
+    /// Base class for loading store assets
+    /// </summary>
     internal abstract class AssetBundleLoader
     {
+        /// <summary>
+        /// File extension to look for while loading
+        /// </summary>
         public abstract string HandledExtension { get; }
 
-        public async Task<IEnumerable<StoreAsset>> LoadAllStoreAssetsAsync(IEnumerable<string> paths)
-        {
-            var assets = new List<StoreAsset>();
-            foreach (var path in paths)
-            {
-                var relativePath = PathTools.ToRelativePath(path);
-                assets.Add(await LoadStoreAssetAsync(relativePath));
-            }
-
-            return assets;
-        }
-
-        public async Task<IEnumerable<StoreAsset>> LoadAllStoreAssetsAsync()
-        {
-            var paths = CollectFiles();
-            return await LoadAllStoreAssetsAsync(paths);
-        }
-
-        public abstract IEnumerable<string> CollectFiles();
+        /// <summary>
+        /// Get all the loadable file paths
+        /// </summary>
+        /// <returns></returns>
+        public abstract ISet<AssetMetaPath> CollectFiles();
 
         public abstract Task<StoreAsset> LoadStoreAssetAsync(string relativePath);
     }

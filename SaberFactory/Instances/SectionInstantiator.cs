@@ -1,7 +1,11 @@
-﻿using SaberFactory.Models;
+﻿using System;
+using SaberFactory.Models;
 
 namespace SaberFactory.Instances
 {
+    /// <summary>
+    /// Class used to instantiate all the parts and pieces of a saber and keeping track of them
+    /// </summary>
     internal class SectionInstantiator
     {
         private readonly SaberInstance _saberInstance;

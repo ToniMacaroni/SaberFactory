@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace SaberFactory.Models
 {
+    /// <summary>
+    /// Stores information on how to build a trail
+    /// </summary>
     internal class TrailModel
     {
         public Vector3 TrailPosOffset;

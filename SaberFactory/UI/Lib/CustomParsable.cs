@@ -1,10 +1,14 @@
 ﻿using BeatSaberMarkupLanguage.Parser;
+using Newtonsoft.Json.Bson;
 using SaberFactory.Helpers;
 using UnityEngine;
 
 namespace SaberFactory.UI.Lib
 {
-    internal class CustomParsable : MonoBehaviour
+    /// <summary>
+    /// Direct implementation of <see cref="ICustomParsable"/>
+    /// </summary>
+    internal class CustomParsable : MonoBehaviour, ICustomParsable
     {
         public BSMLParserParams ParserParams { get; private set; }
 
@@ -15,7 +19,7 @@ namespace SaberFactory.UI.Lib
             ParserParams = UIHelpers.ParseFromResource(_resourceName, gameObject, this);
         }
 
-        public void UnParse()
+        public void Unparse()
         {
             foreach (Transform t in transform)
             {

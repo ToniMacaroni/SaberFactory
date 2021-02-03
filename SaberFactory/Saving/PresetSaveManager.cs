@@ -16,11 +16,13 @@ namespace SaberFactory.Saving
         public event Action OnSaberLoaded;
 
         private readonly MainAssetStore _mainAssetStore;
+        private readonly TextureStore _textureStore;
         private readonly DirectoryInfo _presetDir;
 
-        private PresetSaveManager(MainAssetStore mainAssetStore, DirectoryInfo presetDir)
+        private PresetSaveManager(MainAssetStore mainAssetStore, TextureStore textureStore, DirectoryInfo presetDir)
         {
             _mainAssetStore = mainAssetStore;
+            _textureStore = textureStore;
             _presetDir = presetDir;
         }
 
@@ -110,7 +112,7 @@ namespace SaberFactory.Saving
                         trailModel.OriginalTextureWrapMode = csTrail.OriginalTextureWrapMode;
                     }
 
-                    trail.Material?.ApplyToMaterial(trailModel.Material.Material);
+                    trail.Material?.ApplyToMaterial(trailModel.Material.Material, ResolveTexture);
 
                     customsaber.TrailModel = trailModel;
                 }
@@ -119,6 +121,12 @@ namespace SaberFactory.Saving
                     saberModel.TrailModel = trailModel;
                 }
             }
+        }
+
+        private async Task<Texture2D> ResolveTexture(string name)
+        {
+            if (_textureStore.IsLoading) await _textureStore.CurrentLoadingTask;
+            return (await _textureStore[name])?.Texture;
         }
 
         /// <summary>

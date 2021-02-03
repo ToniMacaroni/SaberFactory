@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace SaberFactory.Instances
 {
+    /// <summary>
+    /// Implementation of a <see cref="MaterialDescriptor"/> that is closely tied to a renderer
+    /// </summary>
     internal class RendererMaterialDescriptor : MaterialDescriptor
     {
         private readonly Renderer _renderer;

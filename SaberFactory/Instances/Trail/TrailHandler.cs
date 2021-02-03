@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace SaberFactory.Instances.Trail
 {
+    /// <summary>
+    /// Class for interfacing with the direct trail rendering implementation
+    /// </summary>
     internal class TrailHandler
     {
         public SFTrail TrailInstance { get; protected set; }

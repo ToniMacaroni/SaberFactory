@@ -3,6 +3,10 @@ using System.Collections.Generic;
 
 namespace SaberFactory.Models
 {
+    /// <summary>
+    /// Class for managing a collection of parts
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     internal class PieceCollection<T> : IEnumerable
     {
         private readonly Dictionary<AssetTypeDefinition, T> _pieceModels;

@@ -17,6 +17,7 @@ namespace SaberFactory.Saving
                 ShaderPropertyType.Range => material.GetFloat(name),
                 ShaderPropertyType.Color => SerializableColor.FromColor(material.GetColor(name)),
                 ShaderPropertyType.Vector => SerializableVector4.FromVector(material.GetVector(name)),
+                ShaderPropertyType.Texture => material.GetTexture(name).name,
                 _ => null
             };
 

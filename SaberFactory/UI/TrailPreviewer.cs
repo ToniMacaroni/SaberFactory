@@ -7,6 +7,9 @@ using Object = UnityEngine.Object;
 
 namespace SaberFactory.UI
 {
+    /// <summary>
+    /// Class for previewing the saber trail in the editor
+    /// </summary>
     internal class TrailPreviewer
     {
         public Material Material

@@ -9,6 +9,9 @@ using Zenject;
 
 namespace SaberFactory.Editor
 {
+    /// <summary>
+    /// Class for managing the presentation of the saber factory editor
+    /// </summary>
     internal class Editor : IInitializable, IDisposable
     {
         public bool IsActive { get; private set; }

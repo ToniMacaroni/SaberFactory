@@ -1,21 +1,25 @@
 ﻿using BeatSaberMarkupLanguage.Attributes;
 using System;
 using System.Collections.Generic;
+using SaberFactory.DataStore;
 using SaberFactory.Models;
 using SaberFactory.Models.CustomSaber;
 using SaberFactory.UI.Lib;
+using Zenject;
 
 
 namespace SaberFactory.UI.CustomSaber.CustomComponents
 {
     internal class ChooseTrailPopup : Popup
     {
+        [Inject] private readonly MainAssetStore _mainAssetStore = null;
+
         [UIComponent("saber-list")] private readonly CustomList _saberList = null;
 
         private Action<TrailModel> _callback;
-        private ModelComposition _selectedComposition;
+        private PreloadMetaData _selectedComposition;
 
-        public void Show(IList<ModelComposition> comps, Action<TrailModel> callback)
+        public void Show(IEnumerable<PreloadMetaData> comps, Action<TrailModel> callback)
         {
             Show();
             _saberList.OnItemSelected += SaberSelected;
@@ -25,11 +29,11 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
 
         private void SaberSelected(ICustomListItem item)
         {
-            _selectedComposition = (ModelComposition) item;
+            _selectedComposition = (PreloadMetaData) item;
         }
 
         [UIAction("click-select")]
-        private void ClickSelect()
+        private async void ClickSelect()
         {
             _saberList.OnItemSelected -= SaberSelected;
             Hide();
@@ -40,7 +44,15 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
                 return;
             }
 
-            var model = (CustomSaberModel) _selectedComposition.GetLeft();
+            var comp = await _mainAssetStore[_selectedComposition.AssetMetaPath.RelativePath];
+
+            if (comp == null)
+            {
+                _callback?.Invoke(null);
+                return;
+            }
+
+            var model = (CustomSaberModel) comp.GetLeft();
             _callback?.Invoke(model.GetColdTrail());
         }
     }

@@ -5,7 +5,7 @@ using UnityEngine;
 namespace SaberFactory.Models
 {
     /// <summary>
-    /// Stores multiple piece models + additional detached game objects in a composition
+    /// Stores left and right piece models + additional detached game objects in a composition
     /// </summary>
     internal class ModelComposition : IDisposable, ICustomListItem
     {

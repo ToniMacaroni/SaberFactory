@@ -3,6 +3,10 @@ using UnityEngine;
 
 namespace SaberFactory.Models
 {
+    /// <summary>
+    /// Class for handling gameobject outside of the left and right sabers or parts
+    /// Mostly used for custom sabers
+    /// </summary>
     internal class AdditionalInstanceHandler
     {
         public bool IsInstantiated => _instance != null;

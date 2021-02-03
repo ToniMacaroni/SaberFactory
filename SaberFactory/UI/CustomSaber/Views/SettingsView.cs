@@ -42,6 +42,17 @@ namespace SaberFactory.UI.CustomSaber.Views
             }
         }
 
+        [UIValue("random-sabers")]
+        private bool _randomSabers
+        {
+            get => _pluginConfig.RandomSaber;
+            set
+            {
+                _pluginConfig.RandomSaber = value;
+                OnPropertyChanged();
+            }
+        }
+
         [UIAction("profile-clicked")]
         private void ProfileClicked()
         {

@@ -33,6 +33,11 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
             SetMaterial(materialDescriptors.First().Material);
         }
 
+        public void Close()
+        {
+            Hide();
+        }
+
         private void SetMaterial(Material material)
         {
             var props = new List<PropertyDescriptor>();
@@ -97,7 +102,7 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
         [UIAction("click-close")]
         private void ClickClose()
         {
-            Hide();
+            Close();
         }
     }
 }

@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Security.Permissions;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace SaberFactory.Helpers
 {
@@ -99,12 +102,36 @@ namespace SaberFactory.Helpers
             return new Tuple<T, AssetBundle>(asset, assetBundle);
         }
 
-        public static async Task<Tuple<T, AssetBundle>> LoadAssetFromAssetBundleAsync<T>(string path,
-            string assetName) where T : UnityEngine.Object
+        //public static async Task<Tuple<T, AssetBundle>> LoadAssetFromAssetBundleAsync<T>(string path,
+        //    string assetName) where T : UnityEngine.Object
+        //{
+        //    var fileData = await ReadFileAsync(path);
+        //    if (fileData == null) return null;
+        //    var asset = await LoadAssetFromAssetBundleAsync<T>(fileData, assetName);
+        //    return asset;
+        //}
+
+        public static async Task<Tuple<T, AssetBundle>> LoadAssetFromAssetBundleAsync<T>(string path, string assetName) where T : Object
         {
-            var fileData = await ReadFileAsync(path);
-            if (fileData == null) return null;
-            return await LoadAssetFromAssetBundleAsync<T>(fileData, assetName);
+            var tcs = new TaskCompletionSource<Tuple<T, AssetBundle>>();
+
+            var createRequest = AssetBundle.LoadFromFileAsync(path);
+            createRequest.completed += delegate
+            {
+                if (!createRequest.assetBundle)
+                {
+                    tcs.SetResult(null);
+                    return;
+                }
+
+                var assetRequest = createRequest.assetBundle.LoadAssetAsync<T>(assetName);
+                assetRequest.completed += delegate
+                {
+                    tcs.SetResult(new Tuple<T, AssetBundle>((T)assetRequest.asset, createRequest.assetBundle));
+                };
+            };
+
+            return await tcs.Task;
         }
     }
 }

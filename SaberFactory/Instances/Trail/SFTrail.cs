@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace SaberFactory.Instances.Trail
 {
+    /// <summary>
+    /// Class used for rendering the trail on the saber
+    /// </summary>
     internal class SFTrail : SaberTrail
     {
         [SerializeField] private Material _customMaterial;
@@ -67,7 +70,7 @@ namespace SaberFactory.Instances.Trail
         {
             if (_inited)
             {
-                _trailRenderer.UpdateMesh(this._trailElementCollection, this._color);
+                _trailRenderer.UpdateMesh(_trailElementCollection, _color);
             }
             if (_trailRenderer)
             {

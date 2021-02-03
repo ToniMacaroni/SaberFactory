@@ -1,4 +1,6 @@
-﻿namespace SaberFactory.Models
+﻿using System;
+
+namespace SaberFactory.Models
 {
     internal enum EAssetType
     {
@@ -15,6 +17,7 @@
         CustomSaber
     }
 
+    [Serializable]
     internal readonly struct AssetTypeDefinition
     {
         public static readonly AssetTypeDefinition CustomSaber = new AssetTypeDefinition(EAssetType.Model, EAssetSubType.CustomSaber);

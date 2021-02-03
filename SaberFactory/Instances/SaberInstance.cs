@@ -9,6 +9,9 @@ using Zenject;
 
 namespace SaberFactory.Instances
 {
+    /// <summary>
+    /// Class for managing an instance of a saber <seealso cref="SaberModel"/>
+    /// </summary>
     internal class SaberInstance
     {
         public TrailHandler TrailHandler { get; private set; }

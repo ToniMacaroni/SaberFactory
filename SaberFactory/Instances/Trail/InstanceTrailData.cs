@@ -7,6 +7,9 @@ using UnityEngine;
 
 namespace SaberFactory.Instances.Trail
 {
+    /// <summary>
+    /// Class for managing an instance of a trail and saving / loading from a trail model
+    /// </summary>
     internal class InstanceTrailData
     {
         public TrailModel TrailModel { get; }
@@ -74,7 +77,8 @@ namespace SaberFactory.Instances.Trail
         public void SetClampTexture(bool shouldClampTexture)
         {
             TrailModel.ClampTexture = shouldClampTexture;
-            if (TrailModel.OriginalTextureWrapMode.HasValue)
+            if (TrailModel.OriginalTextureWrapMode.HasValue &&
+                TrailModel.Material.Material.mainTexture!=null)
             {
                 TrailModel.Material.Material.mainTexture.wrapMode =
                     shouldClampTexture ? TextureWrapMode.Clamp : TrailModel.OriginalTextureWrapMode.Value;

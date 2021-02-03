@@ -37,17 +37,17 @@ namespace SaberFactory.Installers
             Container.BindInstance(_config).AsSingle();
 
             Container.Bind<PresetSaveManager>().AsSingle().WithArguments(_saberFactoryDir.CreateSubdirectory("Presets"));
-            Container.BindInterfacesAndSelfTo<CustomComponentHandler>().AsSingle();
             Container.Bind<CommonResources>().AsSingle();
 
             Container.BindInterfacesAndSelfTo<EmbeddedAssetLoader>().AsSingle();
 
             Container.Bind<CustomSaberModelLoader>().AsSingle();
 
-            Container.Bind<TextureStore>().AsSingle();
+            Container.Bind<TextureStore>().AsSingle().WithArguments(_saberFactoryDir.CreateSubdirectory("Textures"));
 
             Container.BindInterfacesAndSelfTo<MainAssetStore>().AsSingle()
-                .OnInstantiated<MainAssetStore>(OnMainAssetStoreInstansiated);
+                .OnInstantiated<MainAssetStore>(OnMainAssetStoreInstantiated);
+
 
             // Model stuff
             Container.Bind<SaberModel>().WithId(ESaberSlot.Left).AsCached().WithArguments(ESaberSlot.Left);
@@ -58,19 +58,15 @@ namespace SaberFactory.Installers
             InstallFactories();
         }
 
-        private async void OnMainAssetStoreInstansiated(InjectContext ctx, MainAssetStore mainAssetStore)
+        private async void OnMainAssetStoreInstantiated(InjectContext ctx, MainAssetStore mainAssetStore)
         {
-            if (_config.LoadOnStart)
-            {
-                await mainAssetStore.LoadAll();
-            }
+            await mainAssetStore.LoadAllMetaAsync(_config.AssetType);
         }
 
         private void InstallFactories()
         {
             Container.BindFactory<StoreAsset, CustomSaberModel, CustomSaberModel.Factory>();
 
-            //Container.BindFactory<BasePieceModel, BasePieceInstance, BasePieceInstance.Factory>().FromFactory<InstanceFactory>();
             Container.BindFactory<BasePieceModel, BasePieceInstance, BasePieceInstance.Factory>()
                 .FromFactory<InstanceFactory>();
             Container.BindFactory<SaberModel, SaberInstance, SaberInstance.Factory>();

@@ -2,6 +2,9 @@
 
 namespace SaberFactory.Models
 {
+    /// <summary>
+    /// Stores information on how to build a saber instance
+    /// </summary>
     internal class SaberModel
     {
         public readonly PieceCollection<BasePieceModel> PieceCollection;

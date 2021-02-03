@@ -7,6 +7,9 @@ using UnityEngine;
 
 namespace SaberFactory.Editor
 {
+    /// <summary>
+    /// Class used to pass instances between different parts of the editor
+    /// </summary>
     internal class EditorInstanceManager
     {
         public event Action<SaberInstance> OnSaberInstanceCreated;

@@ -42,7 +42,7 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
             go.AddComponent<RectTransform>();
             var layoutElement = go.AddComponent<LayoutElement>();
             layoutElement.preferredHeight = 16;
-            layoutElement.preferredWidth = 60;
+            layoutElement.preferredWidth = 70;
 
             var contentSizeFitter = go.AddComponent<ContentSizeFitter>();
             contentSizeFitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;

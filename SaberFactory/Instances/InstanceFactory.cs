@@ -7,6 +7,10 @@ using Zenject;
 
 namespace SaberFactory.Instances
 {
+    /// <summary>
+    /// Factory for creating a piece instance given a piece model
+    /// returns the appropriate instance implementation for the model
+    /// </summary>
     internal class InstanceFactory : IFactory<BasePieceModel, BasePieceInstance>
     {
         private readonly SiraLog _logger;
