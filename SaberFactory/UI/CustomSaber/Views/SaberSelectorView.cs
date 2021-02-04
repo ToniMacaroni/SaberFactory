@@ -58,7 +58,7 @@ namespace SaberFactory.UI.CustomSaber.Views
         public async Task LoadSabers()
         {
             _loadingPopup.Show();
-            await _mainAssetStore.LoadAllCustomSaberMetaDataAsync();
+            await _mainAssetStore.LoadAllMetaAsync(_pluginConfig.AssetType);
             ShowSabers();
             _loadingPopup.Hide();
         }
@@ -77,7 +77,12 @@ namespace SaberFactory.UI.CustomSaber.Views
             _saberList.SetItems(metas);
 
             _currentComposition = _editorInstanceManager.CurrentModelComposition;
-            _saberList.Select(_currentComposition);
+
+            if (_currentComposition != null)
+            {
+                _saberList.Select(_mainAssetStore.GetMetaDataForComposition(_currentComposition)?.ListName);
+            }
+
             UpdateUi();
         }
 

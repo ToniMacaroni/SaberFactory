@@ -2,9 +2,12 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using JetBrains.Annotations;
 using SaberFactory.Configuration;
+using SaberFactory.UI.CustomSaber.CustomComponents;
 using SaberFactory.UI.Lib;
+using UnityEngine;
 using Zenject;
 
 
@@ -18,7 +21,15 @@ namespace SaberFactory.UI.CustomSaber.Views
         public ENavigationCategory Category => ENavigationCategory.Settings;
 
         [Inject] private readonly PluginConfig _pluginConfig = null;
+        [Inject] private readonly PluginManager _pluginManager = null;
 
+        [UIComponent("changelog-popup")] private readonly ChangelogPopup _changelogPopup = null;
+        [UIObject("github-button")] private readonly GameObject _githubButton = null;
+
+        public override void DidClose()
+        {
+            _changelogPopup.Hide();
+        }
 
         [UIValue("mod-enabled")]
         private bool _modEnabled
@@ -53,6 +64,16 @@ namespace SaberFactory.UI.CustomSaber.Views
             }
         }
 
+        [UIAction("#post-parse")]
+        private async void Setup()
+        {
+            var release = await _pluginManager.GetNewestReleaseAsync(CancellationToken.None);
+            if (release != null && !release.IsLocalNewest)
+            {
+                _githubButton.SetActive(true);
+            }
+        }
+
         [UIAction("profile-clicked")]
         private void ProfileClicked()
         {
@@ -63,6 +84,14 @@ namespace SaberFactory.UI.CustomSaber.Views
         private void DiscordClicked()
         {
             Process.Start(DISCORD_URL);
+        }
+
+        [UIAction("github-clicked")]
+        private async void GithubClicked()
+        {
+            var release = await _pluginManager.GetNewestReleaseAsync(CancellationToken.None);
+            if (release == null) return;
+            _changelogPopup.Show(release);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
