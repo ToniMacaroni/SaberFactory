@@ -41,6 +41,7 @@ namespace SaberFactory.Saving
                     break;
                 case ShaderPropertyType.Texture:
                     var name = prop.Value as string;
+                    if (string.IsNullOrEmpty(name)) break;
                     var tex = await textureResolve(name);
                     if (tex)
                     {
