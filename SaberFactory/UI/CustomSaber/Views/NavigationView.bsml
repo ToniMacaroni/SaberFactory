@@ -13,9 +13,19 @@
 	<custom-icon-btn
 		pref-width='15'
 		preferred-height='15'
+		on-click='Click_Settings'
+		icon='SaberFactory.Resources.Icons.cog.png'
+		hover-hint='Set up Saber Factory'
+		skew='0' show-line='false' normal-color='#00000055' hovered-color='#5ca5ff' show-fill='false'>
+		<text id='settings-notify-text' active='false' text='Update' align='TopGeoAligned' color='lime'/>
+	</custom-icon-btn>
+
+	<custom-icon-btn
+		pref-width='15'
+		preferred-height='15'
 		on-click='Click_Exit'
 		icon='#ExitButton'
 		hover-hint='Exit this earths atomosphere'
-		skew='0' show-line='false' normal-color='#00000055' hovered-color='#5ca5ff' show-fill='false'/>
-
+		skew='0' show-line='false' normal-color='#00000055' hovered-color='#5ca5ff' show-fill='false'>
+	</custom-icon-btn>
 </vertical>

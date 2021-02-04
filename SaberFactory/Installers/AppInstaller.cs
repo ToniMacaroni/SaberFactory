@@ -35,6 +35,7 @@ namespace SaberFactory.Installers
 
             Container.BindLoggerAsSiraLogger(_logger);
             Container.BindInstance(_config).AsSingle();
+            Container.Bind<PluginManager>().AsSingle();
 
             Container.Bind<PresetSaveManager>().AsSingle().WithArguments(_saberFactoryDir.CreateSubdirectory("Presets"));
             Container.Bind<CommonResources>().AsSingle();

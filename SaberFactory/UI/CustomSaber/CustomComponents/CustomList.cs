@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.TypeHandlers;
@@ -58,6 +59,14 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
             if (item == null || _listObjects == null) return;
             var idx = _listObjects.IndexOf(item);
             Select(idx, scroll);
+        }
+
+        public void Select(string listName, bool scroll = true)
+        {
+            if (string.IsNullOrEmpty(listName)) return;
+            var item = _listObjects.FirstOrDefault(x => x.ListName == listName);
+            if (item == null) return;
+            Select(item, scroll);
         }
 
         public void Select(int idx, bool scroll = true)
