@@ -152,7 +152,7 @@ namespace SaberFactory.DataStore
         public async Task ReloadAll()
         {
             UnloadAll();
-            await LoadAllCustomSabersAsync();
+            await LoadAllCustomSaberMetaDataAsync();
         }
 
         public void Delete(string path)
