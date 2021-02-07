@@ -12,6 +12,7 @@ using SaberFactory.Models;
 using SaberFactory.Models.CustomSaber;
 using SaberFactory.UI.CustomSaber.CustomComponents;
 using SaberFactory.UI.Lib;
+using UnityEngine;
 using Zenject;
 
 
@@ -27,6 +28,9 @@ namespace SaberFactory.UI.CustomSaber.Views
         [Inject] private readonly MainAssetStore _mainAssetStore = null;
 
         private InstanceTrailData _instanceTrailData;
+
+        [UIObject("main-container")] private readonly GameObject _mainContainer = null;
+        [UIObject("no-trail-container")] private readonly GameObject _noTrailContainer = null;
 
         [UIComponent("length-slider")] private readonly SliderSetting _lengthSliderSetting = null;
         [UIComponent("width-slider")] private readonly SliderSetting _widthSliderSetting = null;
@@ -124,7 +128,18 @@ namespace SaberFactory.UI.CustomSaber.Views
             _clampToggle.RemoveEvent();
 
             var trailData = saberInstance?.GetTrailData();
-            if (trailData == null) return;
+
+            // Show no trail container and return
+            if (trailData == null)
+            {
+                if(_mainContainer.activeSelf) _mainContainer.SetActive(false);
+                if(!_noTrailContainer.activeSelf) _noTrailContainer.SetActive(true);
+                return;
+            }
+
+            // Show main container in case it wans't active
+            if (_noTrailContainer.activeSelf) _noTrailContainer.SetActive(false);
+            if (!_mainContainer.activeSelf) _mainContainer.SetActive(true);
 
             _trailPreviewer.Create(saberInstance.GameObject.transform.parent, trailData);
 
