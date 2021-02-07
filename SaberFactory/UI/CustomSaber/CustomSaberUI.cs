@@ -35,7 +35,8 @@ namespace SaberFactory.UI.CustomSaber
                 new Vector3(-25, -10, 0),
                 Quaternion.identity, 
                 new Vector2(105, 140),
-                isCurved: true
+                isCurved: true,
+                CustomScreen.EAnimationType.Horizontal
             );
 
             var navigationInitData = new CustomScreen.InitData(
@@ -43,7 +44,8 @@ namespace SaberFactory.UI.CustomSaber
                 new Vector3(-90, 0, 0),
                 Quaternion.Euler(0, 305, 0),
                 new Vector2(30, 70),
-                isCurved: true
+                isCurved: true,
+                CustomScreen.EAnimationType.Vertical
             );
 
             _mainView = AddScreen(mainScreenInitData).CreateViewController<MainView>();

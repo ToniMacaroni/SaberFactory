@@ -1,10 +1,12 @@
-﻿using System.Linq;
+﻿using System.Collections;
+using System.Linq;
 using System.Threading.Tasks;
 using BeatSaberMarkupLanguage;
 using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Tags;
 using HMUI;
 using IPA.Utilities;
+using SaberFactory.Helpers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -56,7 +58,7 @@ namespace SaberFactory.UI.Lib.BSML.Tags
             verticalLayout.childControlWidth = true;
             verticalLayout.childAlignment = TextAnchor.UpperCenter;
 
-            RectTransform rectTransform = parentObj.transform as RectTransform;
+            RectTransform rectTransform = parentObj.transform.AsRectTransform();
 
             parentObj.AddComponent<LayoutElement>();
             parentObj.AddComponent<ScrollViewContent>().scrollView = scrollView;
@@ -77,26 +79,25 @@ namespace SaberFactory.UI.Lib.BSML.Tags
             ExternalComponents externalComponents = child.AddComponent<ExternalComponents>();
             externalComponents.components.Add(scrollView);
             externalComponents.components.Add(scrollView.transform);
-            externalComponents.components.Add(gameObject.AddComponent<LayoutElement>());
 
-            (child.transform as RectTransform).sizeDelta = new Vector2(0, -1);
+            child.transform.AsRectTransform().sizeDelta = new Vector2(0, -1);
 
             scrollView.SetField<ScrollView, RectTransform>("_contentRectTransform", parentObj.transform as RectTransform);
 
-            Man(gameObject, rectTransform);
+            SharedCoroutineStarter.instance.StartCoroutine(Man(gameObject, rectTransform));
 
             return child;
         }
 
-        // Getting rebuild loop error if I do this directly
-        private async void Man(GameObject root, RectTransform rect)
+        private IEnumerator Man(GameObject gameObject, RectTransform rectTransform)
         {
-            await Task.Delay(50);
-            rect.anchorMin = new Vector2(0, 1);
-            rect.anchorMax = new Vector2(1, 1);
-            rect.sizeDelta = new Vector2(0, 0);
-            rect.pivot = new Vector2(0.5f, 1);
-            root.SetActive(true);
+            gameObject.SetActive(true);
+            yield return new WaitForEndOfFrame();
+
+            rectTransform.anchorMin = new Vector2(0, 1);
+            rectTransform.anchorMax = new Vector2(1, 1);
+            rectTransform.sizeDelta = new Vector2(0, 0);
+            rectTransform.pivot = new Vector2(0.5f, 1);
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using BeatSaberMarkupLanguage;
@@ -34,6 +36,47 @@ namespace SaberFactory.Helpers
         {
             image.SetField("_gradient", gradient);
             image.SetVerticesDirty();
+        }
+
+        public static IEnumerator AnimationCoroutine(Action<float> transitionAnimation)
+        {
+            yield return null;
+            float elapsedTime = 0.0f;
+            while (elapsedTime < 0.400000005960464)
+            {
+                float num = Easing.OutQuart(elapsedTime / 0.4f);
+                transitionAnimation?.Invoke(num);
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+            transitionAnimation?.Invoke(1f);
+        }
+
+        public static IEnumerator DoHorizontalTransition(this ViewController viewController)
+        {
+            float moveOffset = 20f;
+            yield return AnimationCoroutine(t =>
+            {
+                viewController.transform.localPosition = new Vector3(moveOffset * (1f - t), 0, 0);
+            });
+        }
+
+        public static IEnumerator DoVerticalTransition(this ViewController viewController)
+        {
+            float moveOffset = 20f;
+            yield return AnimationCoroutine(t =>
+            {
+                viewController.transform.localPosition = new Vector3(0, moveOffset * (1f - t), 0);
+            });
+        }
+
+        public static IEnumerator DoZTransition(this ViewController viewController)
+        {
+            float moveOffset = 20f;
+            yield return AnimationCoroutine(t =>
+            {
+                viewController.transform.localPosition = new Vector3(0, 0, moveOffset * (1f - t));
+            });
         }
     }
 }
