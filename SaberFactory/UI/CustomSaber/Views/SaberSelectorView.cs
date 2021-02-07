@@ -65,11 +65,6 @@ namespace SaberFactory.UI.CustomSaber.Views
 
         private void ShowSabers()
         {
-            //var sabers = 
-            //    from comp in _mainAssetStore.GetAllModelCompositions()
-            //    orderby comp.IsFavorite descending 
-            //    select comp;
-
             var metas = from meta in _mainAssetStore.GetAllMetaData()
                 orderby meta.IsFavorite descending
                 select meta;

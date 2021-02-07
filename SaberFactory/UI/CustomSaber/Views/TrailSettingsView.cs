@@ -109,8 +109,11 @@ namespace SaberFactory.UI.CustomSaber.Views
 
         private void ResetTrail()
         {
-            _instanceTrailData.RevertMaterialForCustomSaber(_editorInstanceManager.CurrentPiece.Cast<CustomSaberInstance>().Model.Cast<CustomSaberModel>());
-            SetTrailModel(null);
+            if (_editorInstanceManager.CurrentPiece is CustomSaberInstance cs)
+            {
+                _instanceTrailData.RevertMaterialForCustomSaber(cs.Model as CustomSaberModel);
+                SetTrailModel(null);
+            }
         }
 
         private void CreateTrail(SaberInstance saberInstance)

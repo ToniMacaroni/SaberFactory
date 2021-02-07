@@ -204,6 +204,7 @@
     <Compile Include="EmbeddedAssetLoader.cs" />
     <Compile Include="Editor\Pedestal.cs" />
     <Compile Include="Game\GameSaberSetup.cs" />
+    <Compile Include="Helpers\MaterialHelpers.cs" />
     <Compile Include="Loaders\AssetMetaPath.cs" />
     <Compile Include="Models\PreloadMetaData.cs" />
     <Compile Include="Models\ESaberSlot.cs" />

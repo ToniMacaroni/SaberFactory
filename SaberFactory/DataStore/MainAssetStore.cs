@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
+using IPA.Utilities.Async;
 using SaberFactory.Configuration;
 using SaberFactory.Helpers;
 using SaberFactory.Loaders;
@@ -182,7 +183,7 @@ namespace SaberFactory.DataStore
             var tasks = new List<Task>();
             var files = new ConcurrentQueue<string>();
 
-            foreach (var assetMetaPath in _customSaberAssetLoader.CollectFiles())
+            foreach (var assetMetaPath in await _customSaberAssetLoader.CollectFiles())
             {
                 files.Enqueue(assetMetaPath.Path);
             }
@@ -223,29 +224,35 @@ namespace SaberFactory.DataStore
         {
             var sw = Stopwatch.StartNew();
 
-            foreach (var assetMetaPath in _customSaberAssetLoader.CollectFiles())
+            await Task.Run(async () =>
             {
-                var relativePath = PathTools.ToRelativePath(assetMetaPath.MetaDataPath);
-                if (_metaData.TryGetValue(relativePath, out _)) continue;
-
-                if (!assetMetaPath.HasMetaData)
+                foreach (var assetMetaPath in await _customSaberAssetLoader.CollectFiles())
                 {
-                    if (createIfNotExisting)
+                    var relativePath = PathTools.ToRelativePath(assetMetaPath.MetaDataPath);
+                    if (_metaData.TryGetValue(relativePath, out _)) continue;
+
+                    if (!assetMetaPath.HasMetaData)
                     {
-                        var comp = await this[PathTools.ToRelativePath(assetMetaPath.Path)];
-                        if(comp==null)continue;
-                        var metaData = new PreloadMetaData(assetMetaPath, comp, comp.AssetTypeDefinition);
-                        metaData.SaveToFile();
+                        if (createIfNotExisting)
+                        {
+                            var comp = await await UnityMainThreadTaskScheduler.Factory.StartNew(() => this[PathTools.ToRelativePath(assetMetaPath.Path)]);
+
+                            if (comp == null) continue;
+
+                            var metaData = new PreloadMetaData(assetMetaPath, comp, comp.AssetTypeDefinition);
+                            await metaData.SaveToFile();
+                            _metaData.Add(relativePath, metaData);
+                        }
+                    }
+                    else
+                    {
+                        var metaData = new PreloadMetaData(assetMetaPath);
+                        await metaData.LoadFromFile();
+                        metaData.IsFavorite = _config.IsFavorite(PathTools.ToRelativePath(assetMetaPath.Path));
                         _metaData.Add(relativePath, metaData);
                     }
                 }
-                else
-                {
-                    var metaData = new PreloadMetaData(assetMetaPath);
-                    metaData.IsFavorite = _config.IsFavorite(PathTools.ToRelativePath(assetMetaPath.Path));
-                    _metaData.Add(relativePath,metaData);
-                }
-            }
+            });
 
             sw.Stop();
             _logger.Info($"Loaded Metadata in {sw.Elapsed.Seconds}.{sw.Elapsed.Milliseconds}s");

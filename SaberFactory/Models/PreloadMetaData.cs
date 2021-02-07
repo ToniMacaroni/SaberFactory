@@ -1,7 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Threading.Tasks;
 using BeatSaberMarkupLanguage;
+using IPA.Utilities.Async;
 using SaberFactory.Loaders;
 using SaberFactory.UI;
 using UnityEngine;
@@ -26,7 +28,6 @@ namespace SaberFactory.Models
         public PreloadMetaData(AssetMetaPath assetMetaPath)
         {
             AssetMetaPath = assetMetaPath;
-            LoadFromFile(assetMetaPath.MetaDataPath);
         }
 
         public PreloadMetaData(AssetMetaPath assetMetaPath, ICustomListItem customListItem, AssetTypeDefinition assetTypeDefinition)
@@ -38,42 +39,56 @@ namespace SaberFactory.Models
             _coverSprite = customListItem.ListCover;
         }
 
-        public void SaveToFile()
+        public async Task SaveToFile()
         {
-            if (AssetMetaPath.HasMetaData)
+            await UnityMainThreadTaskScheduler.Factory.StartNew(() =>
             {
-                File.Delete(AssetMetaPath.MetaDataPath);
-            }
+                if (AssetMetaPath.HasMetaData)
+                {
+                    File.Delete(AssetMetaPath.MetaDataPath);
+                }
 
-            var ser = new SerializableMeta();
-            ser.Name = _name;
-            ser.Author = _author;
-            ser.AssetTypeDefinition = AssetTypeDefinition;
+                var ser = new SerializableMeta();
+                ser.Name = _name;
+                ser.Author = _author;
+                ser.AssetTypeDefinition = AssetTypeDefinition;
 
-            if (_coverSprite != null)
-            {
-                var tex = _coverSprite.texture;
-                ser.CoverData = GetTextureData(tex);
-            }
+                if (_coverSprite != null)
+                {
+                    var tex = _coverSprite.texture;
+                    ser.CoverData = GetTextureData(tex);
+                }
 
+                var fs = new FileStream(AssetMetaPath.MetaDataPath, FileMode.Create, FileAccess.Write, FileShare.Write);
+                var formatter = new BinaryFormatter();
+                formatter.Serialize(fs, ser);
+                fs.Close();
 
-            var fs = new FileStream(AssetMetaPath.MetaDataPath, FileMode.Create, FileAccess.Write, FileShare.Write);
-            var formatter = new BinaryFormatter();
-            formatter.Serialize(fs, ser);
-            fs.Close();
+            });
+
         }
 
-        private void LoadFromFile(string path)
+        public async Task LoadFromFile()
+        {
+            await LoadFromFile(AssetMetaPath.MetaDataPath);
+        }
+
+        public async Task LoadFromFile(string path)
         {
             var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
             var formatter = new BinaryFormatter();
             var ser = (SerializableMeta)formatter.Deserialize(fs);
             fs.Close();
 
-            _name = ser.Name;
-            _author = ser.Author;
-            _coverData = ser.CoverData;
-            AssetTypeDefinition = ser.AssetTypeDefinition;
+            await UnityMainThreadTaskScheduler.Factory.StartNew(() =>
+            {
+                _name = ser.Name;
+                _author = ser.Author;
+                _coverData = ser.CoverData;
+                AssetTypeDefinition = ser.AssetTypeDefinition;
+
+                LoadSprite();
+            });
         }
 
         /// <summary>

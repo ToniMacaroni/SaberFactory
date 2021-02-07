@@ -11,5 +11,11 @@
         {
             return (T) obj;
         }
+
+        public static T CastChecked<T>(this object obj)
+        {
+            if (obj is T ret) return ret;
+            return default;
+        }
     }
 }

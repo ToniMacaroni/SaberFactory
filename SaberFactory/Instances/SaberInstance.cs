@@ -63,10 +63,7 @@ namespace SaberFactory.Instances
                 material.color = color;
             }
 
-            if (TrailHandler != null)
-            {
-                TrailHandler.TrailInstance.Color = color;
-            }
+            TrailHandler?.SetColor(color);
         }
 
         private void InitializeEvents()
@@ -93,7 +90,7 @@ namespace SaberFactory.Instances
         public void CreateTrail(SaberTrailRenderer rendererPrefab)
         {
             var trailData = GetTrailData();
-            if (trailData.Length == 0) return;
+            if (trailData == null || trailData.Length == 0) return;
 
             TrailHandler = new TrailHandler(GameObject);
             TrailHandler.SetPrefab(rendererPrefab);
@@ -141,18 +138,31 @@ namespace SaberFactory.Instances
 
         private void GetColorableMaterials(List<Material> materials)
         {
-            var customsaber = PieceCollection[AssetTypeDefinition.CustomSaber];
+            bool CheckSfMaterial(Material mat)
+            {
+                bool check = mat.TryGetFloat("_UseColorScheme", out var val) && val > 0.5f;
+                check |= mat.TryGetFloat("_CustomColors", out val) && val > 0;
+                return check;
+            }
+
+            bool CheckCsMaterial(Material mat)
+            {
+                bool check = PieceCollection.HasPiece(AssetTypeDefinition.CustomSaber);
+                check &= mat.TryGetFloat("_Glow", out var val) && val > 0;
+                check |= mat.TryGetFloat("_Bloom", out val) && val > 0;
+                return check;
+            }
 
             foreach (var renderer in GameObject.GetComponentsInChildren<Renderer>())
             {
                 foreach (var material in renderer.materials)
                 {
                     // color for saber factory models
-                    if (material.HasProperty("_UseColorScheme") && material.GetFloat("_UseColorScheme") > 0.5f || material.HasProperty("_CustomColors") && material.GetFloat("_CustomColors") > 0)
+                    if (CheckSfMaterial(material))
                         materials.Add(material);
 
                     // color for custom saber models
-                    else if (PieceCollection.HasPiece(AssetTypeDefinition.CustomSaber) && (material.HasProperty("_Glow") && material.GetFloat("_Glow") > 0 || material.HasProperty("_Bloom") && material.GetFloat("_Bloom") > 0))
+                    else if (CheckCsMaterial(material))
                         materials.Add(material);
                 }
             }
