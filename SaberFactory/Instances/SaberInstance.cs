@@ -93,7 +93,7 @@ namespace SaberFactory.Instances
 
             if (trailData is null)
             {
-                if (backupTrail is not null)
+                if (backupTrail is {})
                 {
                     TrailHandler = new TrailHandler(GameObject, backupTrail);
                     TrailHandler.SetPrefab(rendererPrefab);

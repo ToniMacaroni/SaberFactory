@@ -62,7 +62,7 @@ namespace SaberFactory.UI.Lib
 
             float moveOffset = 20;
 
-            if (_previousSubView is not null)
+            if (_previousSubView is {})
             {
                 var toDismissCG = _previousSubView.GetComponent<CanvasGroup>();
                 float baseCanvasGroupAlpha = toDismissCG.alpha;

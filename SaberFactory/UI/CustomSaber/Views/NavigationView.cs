@@ -27,7 +27,7 @@ namespace SaberFactory.UI.CustomSaber.Views
         [UIAction("#post-parse")]
         private async void Setup()
         {
-            if (_navButtons is not null && _navButtons.Count > 0)
+            if (_navButtons is {} && _navButtons.Count > 0)
             {
                 _currentSelectedNavButton = ((NavButtonWrapper) _navButtons[0]).NavButton;
                 _currentSelectedNavButton.SetState(true, false);
