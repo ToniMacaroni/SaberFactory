@@ -16,6 +16,8 @@ namespace SaberFactory.Instances.Trail
         public Transform PointStart { get; }
         public Transform PointEnd { get; }
 
+        public bool IsTrailReversed { get; private set; }
+
         public MaterialDescriptor Material => TrailModel.Material;
         public int Length
         {
@@ -41,11 +43,12 @@ namespace SaberFactory.Instances.Trail
             set => SetClampTexture(value);
         }
 
-        public InstanceTrailData(TrailModel trailModel, Transform pointStart, Transform pointEnd)
+        public InstanceTrailData(TrailModel trailModel, Transform pointStart, Transform pointEnd, bool isTrailReversed)
         {
             TrailModel = trailModel;
             PointStart = pointStart;
             PointEnd = pointEnd;
+            IsTrailReversed = isTrailReversed;
 
             Init(trailModel);
         }
@@ -125,13 +128,15 @@ namespace SaberFactory.Instances.Trail
             Transform pointEnd = saberTrail.PointEnd;
 
             // Correction for sabers that have the transforms set up the other way around
+            bool isTrailReversed = false;
             if (pointStart.localPosition.z > pointEnd.localPosition.z)
             {
                 pointStart = saberTrail.PointEnd;
                 pointEnd = saberTrail.PointStart;
+                isTrailReversed = true;
             }
 
-            var data = new InstanceTrailData(trailModel, pointStart, pointEnd);
+            var data = new InstanceTrailData(trailModel, pointStart, pointEnd, isTrailReversed);
 
             return data;
         }

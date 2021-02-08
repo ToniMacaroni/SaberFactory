@@ -46,6 +46,7 @@ namespace SaberFactory.Models.CustomSaber
 
         private TrailModel _trailModel;
         private bool? _hasTrail;
+        private bool _didReparentTrail;
 
         public CustomSaberModel(StoreAsset storeAsset, CommonResources commonResources) : base(storeAsset, commonResources)
         {
@@ -77,6 +78,8 @@ namespace SaberFactory.Models.CustomSaber
                 wrapMode = tex.wrapMode;
             }
 
+            FixTrailParents();
+
             return new TrailModel(
                 Vector3.zero,
                 trail.GetWidth(),
@@ -84,6 +87,24 @@ namespace SaberFactory.Models.CustomSaber
                 new MaterialDescriptor(trail.TrailMaterial),
                 0, wrapMode,
                 addTrailOrigin ? StoreAsset.Path : null);
+        }
+
+        /// <summary>
+        /// Reparent trail transforms to specified parent
+        /// so we don't have to care about scaling and rotations afterwards
+        /// </summary>
+        /// <param name="parent">Transform to parent the trail transforms to</param>
+        /// <param name="trail"></param>
+        public void FixTrailParents()
+        {
+            if (_didReparentTrail) return;
+
+            var trail = Prefab.GetComponent<CustomTrail>();
+
+            trail.PointStart.SetParent(Prefab.transform, true);
+            trail.PointEnd.SetParent(Prefab.transform, true);
+
+            _didReparentTrail = true;
         }
 
         internal class Factory : PlaceholderFactory<StoreAsset, CustomSaberModel> {}

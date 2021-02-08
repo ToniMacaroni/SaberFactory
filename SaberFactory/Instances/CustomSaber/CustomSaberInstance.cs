@@ -1,4 +1,5 @@
-﻿using SaberFactory.Instances.Setters;
+﻿using SaberFactory.Helpers;
+using SaberFactory.Instances.Setters;
 using SaberFactory.Instances.Trail;
 using SaberFactory.Models;
 using SaberFactory.Models.CustomSaber;
@@ -37,6 +38,7 @@ namespace SaberFactory.Instances.CustomSaber
 
         protected override GameObject Instantiate()
         {
+            Model.Cast<CustomSaberModel>().FixTrailParents();
             var instance = Object.Instantiate(GetSaberPrefab(), Vector3.zero, Quaternion.identity);
             instance.SetActive(true);
 

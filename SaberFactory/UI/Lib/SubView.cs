@@ -44,7 +44,6 @@ namespace SaberFactory.UI.Lib
 
         public void Close()
         {
-            //gameObject.SetActive(false);
             DidClose();
         }
 

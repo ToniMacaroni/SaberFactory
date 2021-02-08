@@ -31,7 +31,8 @@ namespace SaberFactory.UI
         private Renderer _renderer;
         private Mesh _mesh;
 
-        private InstanceTrailData _instanceTrailData;
+        private Transform _pointStart;
+        private Transform _pointEnd;
 
         public TrailPreviewer(SiraLog logger, EmbeddedAssetLoader assetLoader)
         {
@@ -53,7 +54,17 @@ namespace SaberFactory.UI
 
         public void Create(Transform parent, InstanceTrailData trailData)
         {
-            _instanceTrailData = trailData;
+            if (trailData.IsTrailReversed)
+            {
+                _pointStart = trailData.PointEnd;
+                _pointEnd = trailData.PointStart;
+            }
+            else
+            {
+                _pointStart = trailData.PointStart;
+                _pointEnd = trailData.PointEnd;
+            }
+
             _instance = Object.Instantiate(_prefab, trailData.PointEnd.position, Quaternion.Euler(-90, 25, 0), parent);
             _transform = _instance.transform;
             _renderer = _instance.GetComponentInChildren<Renderer>();
@@ -84,8 +95,8 @@ namespace SaberFactory.UI
 
         public void UpdateWidth()
         {
-            var locPosStart = _instance.transform.InverseTransformPoint(_instanceTrailData.PointStart.position);
-            var locPosEnd = _instance.transform.InverseTransformPoint(_instanceTrailData.PointEnd.position);
+            var locPosStart = _instance.transform.InverseTransformPoint(_pointStart.position);
+            var locPosEnd = _instance.transform.InverseTransformPoint(_pointEnd.position);
 
             var newVerts = new Vector3[4];
             newVerts[0] = new Vector3(0, 0, locPosStart.z); // bottom left

@@ -12,7 +12,7 @@ namespace SaberFactory.DataStore
         public readonly string NameWithoutExtension;
         public readonly string Extension;
 
-        public readonly GameObject Prefab;
+        public GameObject Prefab;
 
         public readonly AssetBundle AssetBundle;
 

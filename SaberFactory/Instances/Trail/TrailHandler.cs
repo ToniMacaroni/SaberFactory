@@ -71,11 +71,19 @@ namespace SaberFactory.Instances.Trail
                     Whitestep = _instanceTrailData.WhiteStep
                 };
 
+                Transform pointStart = _instanceTrailData.IsTrailReversed
+                    ? _instanceTrailData.PointEnd
+                    : _instanceTrailData.PointStart;
+
+                Transform pointEnd = _instanceTrailData.IsTrailReversed
+                    ? _instanceTrailData.PointStart
+                    : _instanceTrailData.PointEnd;
+
                 TrailInstance.Setup(
                     trailInitData,
                     _instanceTrailData.Material.Material,
-                    _instanceTrailData.PointStart,
-                    _instanceTrailData.PointEnd
+                    pointStart,
+                    pointEnd
                 );
             }
         }
