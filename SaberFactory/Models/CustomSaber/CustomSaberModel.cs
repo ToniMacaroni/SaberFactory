@@ -97,13 +97,14 @@ namespace SaberFactory.Models.CustomSaber
         public void FixTrailParents()
         {
             if (_didReparentTrail) return;
+            _didReparentTrail = true;
 
             var trail = Prefab.GetComponent<CustomTrail>();
 
+            if (trail is null) return;
+
             trail.PointStart.SetParent(Prefab.transform, true);
             trail.PointEnd.SetParent(Prefab.transform, true);
-
-            _didReparentTrail = true;
         }
 
         internal class Factory : PlaceholderFactory<StoreAsset, CustomSaberModel> {}
