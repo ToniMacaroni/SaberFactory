@@ -7,6 +7,7 @@ using BeatSaberMarkupLanguage;
 using BeatSaberMarkupLanguage.Parser;
 using HMUI;
 using IPA.Utilities;
+using SaberFactory.UI.Lib;
 using UnityEngine;
 
 namespace SaberFactory.Helpers
@@ -52,31 +53,49 @@ namespace SaberFactory.Helpers
             transitionAnimation?.Invoke(1f);
         }
 
-        public static IEnumerator DoHorizontalTransition(this ViewController viewController)
+        public static IEnumerator DoHorizontalTransition(this Transform transform)
         {
             float moveOffset = 20f;
             yield return AnimationCoroutine(t =>
             {
-                viewController.transform.localPosition = new Vector3(moveOffset * (1f - t), 0, 0);
+                transform.localPosition = new Vector3(moveOffset * (1f - t), 0, 0);
             });
         }
 
-        public static IEnumerator DoVerticalTransition(this ViewController viewController)
+        public static IEnumerator DoVerticalTransition(this Transform transform)
         {
             float moveOffset = 20f;
             yield return AnimationCoroutine(t =>
             {
-                viewController.transform.localPosition = new Vector3(0, moveOffset * (1f - t), 0);
+                transform.localPosition = new Vector3(0, moveOffset * (1f - t), 0);
             });
         }
 
-        public static IEnumerator DoZTransition(this ViewController viewController)
+        public static IEnumerator DoZTransition(this Transform transform)
         {
             float moveOffset = 20f;
             yield return AnimationCoroutine(t =>
             {
-                viewController.transform.localPosition = new Vector3(0, 0, moveOffset * (1f - t));
+                transform.localPosition = new Vector3(0, 0, moveOffset * (1f - t));
             });
+        }
+
+        public static IEnumerator Animate(this IAnimatableUi animatable)
+        {
+            if(!(animatable is MonoBehaviour comp)) yield break;
+
+            switch (animatable.AnimationType)
+            {
+                case IAnimatableUi.EAnimationType.Horizontal:
+                    yield return DoHorizontalTransition(comp.transform);
+                    break;
+                case IAnimatableUi.EAnimationType.Vertical:
+                    yield return DoVerticalTransition(comp.transform);
+                    break;
+                case IAnimatableUi.EAnimationType.Z:
+                    yield return DoZTransition(comp.transform);
+                    break;
+            }
         }
     }
 }

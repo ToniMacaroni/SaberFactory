@@ -35,6 +35,7 @@ namespace SaberFactory.UI.CustomSaber.Views
         }
 
         private ModelComposition _currentComposition;
+        private PreloadMetaData _currentPreloadMetaData;
 
         public override void DidOpen()
         {
@@ -59,15 +60,17 @@ namespace SaberFactory.UI.CustomSaber.Views
         {
             _loadingPopup.Show();
             await _mainAssetStore.LoadAllMetaAsync(_pluginConfig.AssetType);
-            ShowSabers();
+            await ShowSabers(500);
             _loadingPopup.Hide();
         }
 
-        private void ShowSabers()
+        private async Task ShowSabers(int delay = 0)
         {
             var metas = from meta in _mainAssetStore.GetAllMetaData()
                 orderby meta.IsFavorite descending
                 select meta;
+
+            if(delay>0) await Task.Delay(delay);
 
             _saberList.SetItems(metas);
 
@@ -85,6 +88,7 @@ namespace SaberFactory.UI.CustomSaber.Views
         {
             if (item is PreloadMetaData metaData)
             {
+                _currentPreloadMetaData = metaData;
                 var relativePath = PathTools.ToRelativePath(metaData.AssetMetaPath.Path);
                 _currentComposition = await _mainAssetStore[relativePath];
             }
@@ -109,11 +113,22 @@ namespace SaberFactory.UI.CustomSaber.Views
             _toggleButtonFavorite.SetState(_currentComposition.IsFavorite, false);
         }
 
+        private void SetSaberWidth(float width)
+        {
+            _editorInstanceManager.CurrentSaber?.SetSaberWidth(width);
+        }
+
+        private float GetSaberWidth()
+        {
+            return _editorInstanceManager.CurrentSaber?.Model.SaberWidth ?? 1;
+        }
+
         [UIAction("toggled-favorite")]
-        private void ToggledFavorite(bool isOn)
+        private async void ToggledFavorite(bool isOn)
         {
             if (_currentComposition == null) return;
             _currentComposition.SetFavorite(isOn);
+            _currentPreloadMetaData?.SetFavorite(isOn);
 
             if (isOn)
             {
@@ -124,17 +139,7 @@ namespace SaberFactory.UI.CustomSaber.Views
                 _pluginConfig.RemoveFavorite(_currentComposition.GetLeft().StoreAsset.Path);
             }
 
-            ShowSabers();
-        }
-
-        private void SetSaberWidth(float width)
-        {
-            _editorInstanceManager.CurrentSaber?.SetSaberWidth(width);
-        }
-
-        private float GetSaberWidth()
-        {
-            return _editorInstanceManager.CurrentSaber?.Model.SaberWidth ?? 1;
+            await ShowSabers();
         }
 
         [UIAction("clicked-reload")]
@@ -146,7 +151,7 @@ namespace SaberFactory.UI.CustomSaber.Views
             _editorInstanceManager.DestroySaber();
             await _mainAssetStore.Reload(_currentComposition.GetLeft().StoreAsset.Path);
             await _saberSet.Load("default");
-            ShowSabers();
+            await ShowSabers();
             _loadingPopup.Hide();
         }
 
@@ -158,17 +163,17 @@ namespace SaberFactory.UI.CustomSaber.Views
             _editorInstanceManager.DestroySaber();
             await _mainAssetStore.ReloadAll();
             await _saberSet.Load("default");
-            ShowSabers();
+            await ShowSabers();
             _loadingPopup.Hide();
         }
 
         [UIAction("clicked-delete")]
-        private void ClickedDelete()
+        private async void ClickedDelete()
         {
             if (_currentComposition == null) return;
             _editorInstanceManager.DestroySaber();
             _mainAssetStore.Delete(_currentComposition.GetLeft().StoreAsset.Path);
-            ShowSabers();
+            await ShowSabers();
         }
     }
 }

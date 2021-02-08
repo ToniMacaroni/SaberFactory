@@ -20,7 +20,6 @@ namespace SaberFactory.UI.Lib
 
         private SiraLog _logger;
         private CustomViewController.Factory _viewControllerFactory;
-        private EAnimationType _animationType;
 
         [Inject]
         private void Construct(SiraLog logger, CustomViewController.Factory viewControllerFactory)
@@ -48,8 +47,6 @@ namespace SaberFactory.UI.Lib
                 var curvedCanvasSettings = gameObject.AddComponent<CurvedCanvasSettings>();
                 curvedCanvasSettings.SetRadius(initData.CurveRadius);
             }
-
-            _animationType = initData.AnimationType;
         }
 
         public T CreateViewController<T>() where T : CustomViewController
@@ -67,18 +64,7 @@ namespace SaberFactory.UI.Lib
         public virtual void Open()
         {
             SetRootViewController(CurrentViewController, ViewController.AnimationType.In);
-            switch (_animationType)
-            {
-                case EAnimationType.Horizontal:
-                    StartCoroutine(CurrentViewController.DoHorizontalTransition());
-                    break;
-                case EAnimationType.Vertical:
-                    StartCoroutine(CurrentViewController.DoVerticalTransition());
-                    break;
-                case EAnimationType.Z:
-                    StartCoroutine(CurrentViewController.DoZTransition());
-                    break;
-            }
+            StartCoroutine(CurrentViewController.Cast<CustomViewController>().Animate());
         }
 
         public virtual void Close()
@@ -97,24 +83,15 @@ namespace SaberFactory.UI.Lib
             public bool IsCurved;
             public float CurveRadius;
             public Transform Parent;
-            public EAnimationType AnimationType;
 
-            public InitData(string name, Vector3 position, Quaternion rotation, Vector2 size, bool isCurved, EAnimationType animationType) : this()
+            public InitData(string name, Vector3 position, Quaternion rotation, Vector2 size, bool isCurved) : this()
             {
                 Name = name;
                 Position = position;
                 Rotation = rotation;
                 Size = size;
                 IsCurved = isCurved;
-                AnimationType = animationType;
             }
-        }
-
-        internal enum EAnimationType
-        {
-            Horizontal,
-            Vertical,
-            Z
         }
     }
 }

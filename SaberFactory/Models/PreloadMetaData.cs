@@ -91,6 +91,11 @@ namespace SaberFactory.Models
             });
         }
 
+        public void SetFavorite(bool isFavorite)
+        {
+            IsFavorite = isFavorite;
+        }
+
         /// <summary>
         /// Get Texture png data from non-readable texture
         /// </summary>

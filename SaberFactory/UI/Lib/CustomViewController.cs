@@ -9,7 +9,7 @@ using Zenject;
 
 namespace SaberFactory.UI.Lib
 {
-    internal class CustomViewController : ViewController, INotifyPropertyChanged
+    internal class CustomViewController : ViewController, INotifyPropertyChanged, IAnimatableUi
     {
         public Action<bool, bool, bool> didActivate;
 
@@ -81,5 +81,7 @@ namespace SaberFactory.UI.Lib
             public Transform Parent;
             public CustomScreen Screen;
         }
+
+        public new virtual IAnimatableUi.EAnimationType AnimationType => IAnimatableUi.EAnimationType.Horizontal;
     }
 }

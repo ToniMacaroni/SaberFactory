@@ -57,5 +57,7 @@ namespace SaberFactory.UI.CustomSaber.Views
         {
             OnExit?.Invoke();
         }
+
+        public override IAnimatableUi.EAnimationType AnimationType => IAnimatableUi.EAnimationType.Vertical;
     }
 }

@@ -293,6 +293,7 @@
     <Compile Include="UI\Lib\ComponentPlaceholderFactory.cs" />
     <Compile Include="UI\Lib\CustomParsable.cs" />
     <Compile Include="UI\Lib\DynamicTypeFactory.cs" />
+    <Compile Include="UI\Lib\IAnimatableUi.cs" />
     <Compile Include="UI\Lib\ICustomParsable.cs" />
     <Compile Include="UI\Lib\PropCell.cs" />
     <Compile Include="UI\Lib\PropCells\BasePropCell.cs" />
