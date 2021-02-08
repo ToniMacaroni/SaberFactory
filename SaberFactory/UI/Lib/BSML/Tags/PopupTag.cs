@@ -2,7 +2,6 @@
 using System.Text.RegularExpressions;
 using BeatSaberMarkupLanguage.Tags;
 using SaberFactory.Helpers;
-using SaberFactory.UI.CustomSaber.CustomComponents;
 using UnityEngine;
 
 namespace SaberFactory.UI.Lib.BSML.Tags

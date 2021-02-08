@@ -24,6 +24,10 @@ namespace SaberFactory.Configuration
 
         public bool CreateCustomSabersFolder { get; set; } = true;
 
+        public float TrailWidthMax { get; set; } = 1;
+
+        public float GlobalSaberWidthMax { get; set; } = 3;
+
         public int LoadingThreads { get; set; } = 2;
 
         [UseConverter(typeof(EnumConverter<EAssetTypeConfiguration>))]

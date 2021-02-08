@@ -53,7 +53,7 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
             }
 
             var model = (CustomSaberModel) comp.GetLeft();
-            _callback?.Invoke(model.GetColdTrail());
+            _callback?.Invoke(model.GrabTrail(true));
         }
     }
 }

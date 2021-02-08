@@ -1,7 +1,5 @@
 ﻿using System.IO;
 using SaberFactory.Helpers;
-using SaberFactory.UI;
-using UnityEngine;
 
 namespace SaberFactory.Loaders
 {

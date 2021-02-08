@@ -9,11 +9,11 @@ using Zenject;
 
 namespace SaberFactory.UI.Lib
 {
-    internal class CustomViewController : ViewController, INotifyPropertyChanged
+    internal class CustomViewController : ViewController, INotifyPropertyChanged, IAnimatableUi
     {
         public Action<bool, bool, bool> didActivate;
 
-        protected SubViewHandler _subViewHandler;
+        protected SubViewSwitcher SubViewSwitcher;
 
         protected virtual string _resourceName => string.Join(".", GetType().Namespace, GetType().Name);
 
@@ -26,7 +26,7 @@ namespace SaberFactory.UI.Lib
             _logger = logger;
             _viewFactory = viewFactory;
 
-            _subViewHandler = new SubViewHandler();
+            SubViewSwitcher = new SubViewSwitcher();
         }
 
         protected override async void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
@@ -37,12 +37,12 @@ namespace SaberFactory.UI.Lib
             }
             
             didActivate?.Invoke(firstActivation, addedToHierarchy, screenSystemEnabling);
-            _subViewHandler.NotifyDidOpen();
+            SubViewSwitcher.NotifyDidOpen();
         }
 
         protected override void DidDeactivate(bool removedFromHierarchy, bool screenSystemDisabling)
         {
-            _subViewHandler.NotifyDidClose();
+            SubViewSwitcher.NotifyDidClose();
         }
 
         protected T CreateSubView<T>(Transform parent, bool switchToView = false) where T : SubView
@@ -54,8 +54,8 @@ namespace SaberFactory.UI.Lib
             };
 
             var view = (T) _viewFactory.Create(typeof(T), initData);
-            view.SubViewHandler = _subViewHandler;
-            if(switchToView) _subViewHandler.SwitchView(view, false);
+            view.SubViewSwitcher = SubViewSwitcher;
+            if(switchToView) SubViewSwitcher.SwitchView(view, false);
 
             return view;
         }
@@ -81,5 +81,7 @@ namespace SaberFactory.UI.Lib
             public Transform Parent;
             public CustomScreen Screen;
         }
+
+        public new virtual IAnimatableUi.EAnimationType AnimationType => IAnimatableUi.EAnimationType.Horizontal;
     }
 }

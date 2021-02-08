@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using IPA.Utilities;
@@ -13,31 +12,34 @@ namespace SaberFactory.Loaders
     {
         public override string HandledExtension => ".saber";
 
-        public override ISet<AssetMetaPath> CollectFiles()
+        public override async Task<ISet<AssetMetaPath>> CollectFiles()
         {
-            var dir1 = new DirectoryInfo(Path.Combine(UnityGame.InstallPath, "CustomSabers"));
-            var dir2 = new DirectoryInfo(Path.Combine(PathTools.SaberFactoryUserPath, "CustomSabers"));
-
-            var paths = new HashSet<AssetMetaPath>();
-
-            if (dir1.Exists)
+            return await Task.Run(() =>
             {
-                foreach (var path in dir1.EnumerateFiles("*.saber", SearchOption.AllDirectories))
-                {
-                    paths.Add(new AssetMetaPath(path.FullName));
-                    
-                }
-            }
+                var dir1 = new DirectoryInfo(Path.Combine(UnityGame.InstallPath, "CustomSabers"));
+                var dir2 = new DirectoryInfo(Path.Combine(PathTools.SaberFactoryUserPath, "CustomSabers"));
 
-            if (dir2.Exists)
-            {
-                foreach (var path in dir2.EnumerateFiles("*.saber", SearchOption.AllDirectories))
-                {
-                    paths.Add(new AssetMetaPath(path.FullName));
-                }
-            }
+                var paths = new HashSet<AssetMetaPath>();
 
-            return paths;
+                if (dir1.Exists)
+                {
+                    foreach (var path in dir1.EnumerateFiles("*.saber", SearchOption.AllDirectories))
+                    {
+                        paths.Add(new AssetMetaPath(path.FullName));
+
+                    }
+                }
+
+                if (dir2.Exists)
+                {
+                    foreach (var path in dir2.EnumerateFiles("*.saber", SearchOption.AllDirectories))
+                    {
+                        paths.Add(new AssetMetaPath(path.FullName));
+                    }
+                }
+
+                return paths;
+            });
         }
 
         public override async Task<StoreAsset> LoadStoreAssetAsync(string relativePath)

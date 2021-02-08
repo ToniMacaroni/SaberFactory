@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using SaberFactory.DataStore;
-using SaberFactory.Helpers;
 
 namespace SaberFactory.Loaders
 {
@@ -19,7 +18,7 @@ namespace SaberFactory.Loaders
         /// Get all the loadable file paths
         /// </summary>
         /// <returns></returns>
-        public abstract ISet<AssetMetaPath> CollectFiles();
+        public abstract Task<ISet<AssetMetaPath>> CollectFiles();
 
         public abstract Task<StoreAsset> LoadStoreAssetAsync(string relativePath);
     }

@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using SaberFactory.Configuration;
 using SaberFactory.Models;
-using Zenject;
 
 namespace SaberFactory.Game
 {

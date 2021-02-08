@@ -1,10 +1,9 @@
-﻿using System.Linq;
-using BeatSaberMarkupLanguage.Attributes;
+﻿using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components.Settings;
 using HMUI;
+using SaberFactory.Configuration;
 using SaberFactory.DataStore;
 using SaberFactory.Editor;
-using SaberFactory.Helpers;
 using SaberFactory.Instances;
 using SaberFactory.Instances.CustomSaber;
 using SaberFactory.Instances.Trail;
@@ -12,6 +11,7 @@ using SaberFactory.Models;
 using SaberFactory.Models.CustomSaber;
 using SaberFactory.UI.CustomSaber.CustomComponents;
 using SaberFactory.UI.Lib;
+using UnityEngine;
 using Zenject;
 
 
@@ -25,8 +25,12 @@ namespace SaberFactory.UI.CustomSaber.Views
         [Inject] private readonly EditorInstanceManager _editorInstanceManager = null;
         [Inject] private readonly ColorManager _colorManager = null;
         [Inject] private readonly MainAssetStore _mainAssetStore = null;
+        [Inject] private readonly PluginConfig _pluginConfig = null;
 
         private InstanceTrailData _instanceTrailData;
+
+        [UIObject("main-container")] private readonly GameObject _mainContainer = null;
+        [UIObject("no-trail-container")] private readonly GameObject _noTrailContainer = null;
 
         [UIComponent("length-slider")] private readonly SliderSetting _lengthSliderSetting = null;
         [UIComponent("width-slider")] private readonly SliderSetting _widthSliderSetting = null;
@@ -35,6 +39,8 @@ namespace SaberFactory.UI.CustomSaber.Views
 
         [UIComponent("material-editor")] private readonly MaterialEditor _materialEditor = null;
         [UIComponent("choose-trail-popup")] private readonly ChooseTrailPopup _chooseTrailPopup = null;
+
+        [UIValue("trail-width-max")] private float _trailWidthMax => _pluginConfig.TrailWidthMax;
 
         private SliderController _lengthSlider;
         private SliderController _widthSlider;
@@ -109,8 +115,11 @@ namespace SaberFactory.UI.CustomSaber.Views
 
         private void ResetTrail()
         {
-            _instanceTrailData.RevertMaterialForCustomSaber(_editorInstanceManager.CurrentPiece.Cast<CustomSaberInstance>().Model.Cast<CustomSaberModel>());
-            SetTrailModel(null);
+            if (_editorInstanceManager.CurrentPiece is CustomSaberInstance cs)
+            {
+                _instanceTrailData.RevertMaterialForCustomSaber(cs.Model as CustomSaberModel);
+                SetTrailModel(null);
+            }
         }
 
         private void CreateTrail(SaberInstance saberInstance)
@@ -121,7 +130,18 @@ namespace SaberFactory.UI.CustomSaber.Views
             _clampToggle.RemoveEvent();
 
             var trailData = saberInstance?.GetTrailData();
-            if (trailData == null) return;
+
+            // Show no trail container and return
+            if (trailData == null)
+            {
+                if(_mainContainer.activeSelf) _mainContainer.SetActive(false);
+                if(!_noTrailContainer.activeSelf) _noTrailContainer.SetActive(true);
+                return;
+            }
+
+            // Show main container in case it wans't active
+            if (_noTrailContainer.activeSelf) _noTrailContainer.SetActive(false);
+            if (!_mainContainer.activeSelf) _mainContainer.SetActive(true);
 
             _trailPreviewer.Create(saberInstance.GameObject.transform.parent, trailData);
 

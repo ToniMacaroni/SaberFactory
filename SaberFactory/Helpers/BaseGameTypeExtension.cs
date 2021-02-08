@@ -50,11 +50,13 @@ namespace SaberFactory.Helpers
 
         public static float GetTransfomWidth(Transform t1, Transform t2)
         {
+            if (t1 == null || t2 == null) return 0;
             return Mathf.Abs(t1.localPosition.z - t2.localPosition.z);
         }
 
         public static float GetWidth(this CustomTrail trail)
         {
+            if (trail == null) return 0;
             return GetTransfomWidth(trail.PointEnd, trail.PointStart);
         }
 

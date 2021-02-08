@@ -1,19 +1,24 @@
 ﻿<bg xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
-	<vertical bg='round-rect-panel' bg-color='#00000070' child-align='MiddleCenter' child-expand-height='false' child-control-height='false' spacing='2' pad='3' size-delta-y='-70'>
+	<div id='main-container'>
+		<vertical bg='round-rect-panel' bg-color='#00000070' child-align='MiddleCenter' child-expand-height='false' child-control-height='false' spacing='2' pad='3' size-delta-y='-70'>
 
-		<slider-setting id='length-slider' text='Length' get-event='update-props' apply-on-change='true' integer-only='true' min='0' max='30' />
-		<slider-setting id='width-slider' text='Width' get-event='update-props' apply-on-change='true' min='0' max='1'/>
-		<slider-setting id='whitestep-slider' text='Whitestep' get-event='update-props' apply-on-change='true' min='0' max='0.3'/>
-		<checkbox id='clamp-checkbox' text='Clamp Texture' apply-on-change='true' hover-hint='Enable this if you see lines on the border of the trail' />
+			<slider-setting id='length-slider' text='Length' get-event='update-props' apply-on-change='true' integer-only='true' min='0' max='30' />
+			<slider-setting id='width-slider' text='Width' get-event='update-props' apply-on-change='true' min='0' max='~trail-width-max'/>
+			<slider-setting id='whitestep-slider' text='Whitestep' get-event='update-props' apply-on-change='true' min='0' max='0.3'/>
+			<checkbox id='clamp-checkbox' text='Clamp Texture' apply-on-change='true' hover-hint='Enable this if you see lines on the border of the trail' />
 
-		<!--<button text='Edit Material' on-click='edit-material' />-->
-		<horizontal>
-			<this.button text='Revert' on-click='revert-trail' hover-hint='Revert changes to Trail' />
-			<this.button text='Edit Material' on-click='edit-material' hover-hint='Edit the material of the trail'/>
-			<this.button text='Choose Trail' on-click='choose-trail' hover-hint='Use the Trail of another saber' />
-		</horizontal>
-	</vertical>
+			<!--<button text='Edit Material' on-click='edit-material' />-->
+			<horizontal>
+				<this.button text='Revert' on-click='revert-trail' hover-hint='Revert changes to Trail' />
+				<this.button text='Edit Material' on-click='edit-material' hover-hint='Edit the material of the trail'/>
+				<this.button text='Choose Trail' on-click='choose-trail' hover-hint='Use the Trail of another saber' />
+			</horizontal>
+		</vertical>
 
-	<this.material-editor id='material-editor' />
-	<this.choose-trail-popup id='choose-trail-popup' />
+		<this.material-editor id='material-editor' />
+		<this.choose-trail-popup id='choose-trail-popup' />
+	</div>
+	<div id='no-trail-container' active='false'>
+		<text align='Center' font-size='7' text='This saber has no trail'/>
+	</div>
 </bg>

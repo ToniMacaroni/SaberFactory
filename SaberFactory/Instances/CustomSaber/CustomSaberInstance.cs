@@ -1,4 +1,5 @@
-﻿using SaberFactory.Instances.Setters;
+﻿using SaberFactory.Helpers;
+using SaberFactory.Instances.Setters;
 using SaberFactory.Instances.Trail;
 using SaberFactory.Models;
 using SaberFactory.Models.CustomSaber;
@@ -15,23 +16,19 @@ namespace SaberFactory.Instances.CustomSaber
         public CustomSaberInstance(CustomSaberModel model, SiraLog logger) : base(model)
         {
             _logger = logger;
-            model.TrailModel = InitializeTrailData(GameObject, model.TrailModel);
+            InitializeTrailData(GameObject, model.TrailModel);
         }
 
-        public TrailModel InitializeTrailData(GameObject saberObject, TrailModel trailModel)
+        public void InitializeTrailData(GameObject saberObject, TrailModel trailModel)
         {
-            var (data, model) = InstanceTrailData.FromCustomSaber(saberObject, trailModel);
-            if (data == null || model == null) return null;
-
-            InstanceTrailData = data;
-
-            return model;
+            InstanceTrailData = InstanceTrailData.FromCustomSaber(saberObject, trailModel);
         }
 
         public void ResetTrail()
         {
             var model = (CustomSaberModel) Model;
-            model.TrailModel = InitializeTrailData(GameObject, null);
+            model.TrailModel = null;
+            InitializeTrailData(GameObject, null);
         }
 
         public override PartEvents GetEvents()
@@ -41,6 +38,7 @@ namespace SaberFactory.Instances.CustomSaber
 
         protected override GameObject Instantiate()
         {
+            Model.Cast<CustomSaberModel>().FixTrailParents();
             var instance = Object.Instantiate(GetSaberPrefab(), Vector3.zero, Quaternion.identity);
             instance.SetActive(true);
 

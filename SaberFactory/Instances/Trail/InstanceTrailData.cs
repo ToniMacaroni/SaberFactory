@@ -1,5 +1,4 @@
-﻿using System;
-using CustomSaber;
+﻿using CustomSaber;
 using SaberFactory.Helpers;
 using SaberFactory.Models;
 using SaberFactory.Models.CustomSaber;
@@ -15,6 +14,8 @@ namespace SaberFactory.Instances.Trail
         public TrailModel TrailModel { get; }
         public Transform PointStart { get; }
         public Transform PointEnd { get; }
+
+        public bool IsTrailReversed { get; private set; }
 
         public MaterialDescriptor Material => TrailModel.Material;
         public int Length
@@ -41,11 +42,12 @@ namespace SaberFactory.Instances.Trail
             set => SetClampTexture(value);
         }
 
-        public InstanceTrailData(TrailModel trailModel, Transform pointStart, Transform pointEnd)
+        public InstanceTrailData(TrailModel trailModel, Transform pointStart, Transform pointEnd, bool isTrailReversed)
         {
             TrailModel = trailModel;
             PointStart = pointStart;
             PointEnd = pointEnd;
+            IsTrailReversed = isTrailReversed;
 
             Init(trailModel);
         }
@@ -78,10 +80,10 @@ namespace SaberFactory.Instances.Trail
         {
             TrailModel.ClampTexture = shouldClampTexture;
             if (TrailModel.OriginalTextureWrapMode.HasValue &&
-                TrailModel.Material.Material.mainTexture!=null)
+                TrailModel.Material.IsValid &&
+                TrailModel.Material.Material.TryGetMainTexture(out var tex))
             {
-                TrailModel.Material.Material.mainTexture.wrapMode =
-                    shouldClampTexture ? TextureWrapMode.Clamp : TrailModel.OriginalTextureWrapMode.Value;
+                tex.wrapMode = shouldClampTexture ? TextureWrapMode.Clamp : TrailModel.OriginalTextureWrapMode.GetValueOrDefault();
             }
                 
         }
@@ -101,41 +103,41 @@ namespace SaberFactory.Instances.Trail
             TrailModel.Material.Revert();
         }
 
-        public static (InstanceTrailData, TrailModel) FromCustomSaber(GameObject saberObject, TrailModel trailModel)
+        public static InstanceTrailData FromCustomSaber(GameObject saberObject, TrailModel trailModel)
         {
             var saberTrail = saberObject.GetComponent<CustomTrail>();
 
-            if (!saberTrail)
+            if (!saberTrail || trailModel == null)
             {
-                return default;
+                return null;
             }
 
-            var model = trailModel ?? new TrailModel(
-                Vector3.zero,
-                saberTrail.GetWidth(),
-                saberTrail.Length,
-                new MaterialDescriptor(saberTrail.TrailMaterial),
-                0, saberTrail.TrailMaterial.mainTexture?.wrapMode);
-
-            if (model.Material == null)
+            // if trail comes from the preset save system
+            // the model comes without the material assigned
+            if (trailModel.Material == null)
             {
-                model.Material = new MaterialDescriptor(saberTrail.TrailMaterial);
-                model.OriginalTextureWrapMode = model.Material.Material.mainTexture?.wrapMode;
+                trailModel.Material = new MaterialDescriptor(saberTrail.TrailMaterial);
+                if (trailModel.Material.Material.TryGetMainTexture(out var tex))
+                {
+                    trailModel.OriginalTextureWrapMode = tex.wrapMode;
+                }
             }
 
             Transform pointStart = saberTrail.PointStart;
             Transform pointEnd = saberTrail.PointEnd;
 
-            // Correction for sabers that have the transforms set the other way around
+            // Correction for sabers that have the transforms set up the other way around
+            bool isTrailReversed = false;
             if (pointStart.localPosition.z > pointEnd.localPosition.z)
             {
                 pointStart = saberTrail.PointEnd;
                 pointEnd = saberTrail.PointStart;
+                isTrailReversed = true;
             }
 
-            var data = new InstanceTrailData(model, pointStart, pointEnd);
+            var data = new InstanceTrailData(trailModel, pointStart, pointEnd, isTrailReversed);
 
-            return (data, model);
+            return data;
         }
     }
 }

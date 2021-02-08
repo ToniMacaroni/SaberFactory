@@ -10,10 +10,14 @@ namespace SaberFactory.Instances
     {
         public Material Material;
 
+        public bool IsValid => Material != null;
+
         private readonly Material _originalMaterial;
 
         public MaterialDescriptor(Material material)
         {
+            if (material == null) return;
+
             Material = material;
             _originalMaterial = new Material(material);
         }

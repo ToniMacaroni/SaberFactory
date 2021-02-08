@@ -107,7 +107,7 @@ namespace SaberFactory.Saving
                 {
                     if (trailModel.Material == null)
                     {
-                        var csTrail = customsaber.GetColdTrail();
+                        var csTrail = customsaber.GrabTrail(true);
                         trailModel.Material = csTrail.Material;
                         trailModel.OriginalTextureWrapMode = csTrail.OriginalTextureWrapMode;
                     }
@@ -138,7 +138,7 @@ namespace SaberFactory.Saving
         private async Task LoadFromTrailOrigin(TrailModel trailModel, string trailOrigin)
         {
             var comp = await _mainAssetStore[trailOrigin];
-            var originTrailModel = (comp?.GetLeft() as CustomSaberModel)?.GetColdTrail();
+            var originTrailModel = (comp?.GetLeft() as CustomSaberModel)?.GrabTrail(true);
             if (originTrailModel == null) return;
             trailModel.Material = originTrailModel.Material;
             trailModel.OriginalTextureWrapMode = originTrailModel.OriginalTextureWrapMode;

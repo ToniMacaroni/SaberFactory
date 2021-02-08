@@ -38,7 +38,7 @@ namespace SaberFactory.UI.CustomSaber.Views
             {
                 if (view is SubView subView)
                 {
-                    _subViewHandler.SwitchView(subView);
+                    SubViewSwitcher.SwitchView(subView);
                 }
             }
         }
