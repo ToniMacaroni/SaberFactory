@@ -28,6 +28,9 @@ namespace SaberFactory.UI.CustomSaber.Views
         [UIComponent("toggle-favorite")] private readonly IconToggleButton _toggleButtonFavorite = null;
         [UIComponent("loading-popup")] private readonly LoadingPopup _loadingPopup = null;
 
+        [UIValue("global-saber-width-max")]
+        private float _globalSaberWidthMax => _pluginConfig.GlobalSaberWidthMax;
+
         [UIValue("saber-width")]
         private float _saberWidth
         {

@@ -2,6 +2,7 @@
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components.Settings;
 using HMUI;
+using SaberFactory.Configuration;
 using SaberFactory.DataStore;
 using SaberFactory.Editor;
 using SaberFactory.Helpers;
@@ -26,6 +27,7 @@ namespace SaberFactory.UI.CustomSaber.Views
         [Inject] private readonly EditorInstanceManager _editorInstanceManager = null;
         [Inject] private readonly ColorManager _colorManager = null;
         [Inject] private readonly MainAssetStore _mainAssetStore = null;
+        [Inject] private readonly PluginConfig _pluginConfig = null;
 
         private InstanceTrailData _instanceTrailData;
 
@@ -39,6 +41,8 @@ namespace SaberFactory.UI.CustomSaber.Views
 
         [UIComponent("material-editor")] private readonly MaterialEditor _materialEditor = null;
         [UIComponent("choose-trail-popup")] private readonly ChooseTrailPopup _chooseTrailPopup = null;
+
+        [UIValue("trail-width-max")] private float _trailWidthMax => _pluginConfig.TrailWidthMax;
 
         private SliderController _lengthSlider;
         private SliderController _widthSlider;
