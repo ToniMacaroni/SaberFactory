@@ -1,5 +1,4 @@
 ﻿using BeatSaberMarkupLanguage.Parser;
-using Newtonsoft.Json.Bson;
 using SaberFactory.Helpers;
 using UnityEngine;
 

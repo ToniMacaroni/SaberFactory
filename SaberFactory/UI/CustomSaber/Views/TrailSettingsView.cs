@@ -1,11 +1,9 @@
-﻿using System.Linq;
-using BeatSaberMarkupLanguage.Attributes;
+﻿using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components.Settings;
 using HMUI;
 using SaberFactory.Configuration;
 using SaberFactory.DataStore;
 using SaberFactory.Editor;
-using SaberFactory.Helpers;
 using SaberFactory.Instances;
 using SaberFactory.Instances.CustomSaber;
 using SaberFactory.Instances.Trail;

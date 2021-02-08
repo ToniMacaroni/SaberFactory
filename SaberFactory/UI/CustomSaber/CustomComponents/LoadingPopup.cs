@@ -1,5 +1,4 @@
-﻿using BeatSaberMarkupLanguage.Attributes;
-using SaberFactory.UI.Lib;
+﻿using SaberFactory.UI.Lib;
 
 
 namespace SaberFactory.UI.CustomSaber.CustomComponents

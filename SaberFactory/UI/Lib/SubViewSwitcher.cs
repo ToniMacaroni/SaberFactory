@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Threading;
 using System.Threading.Tasks;
-using HMUI;
 using UnityEngine;
 
 namespace SaberFactory.UI.Lib

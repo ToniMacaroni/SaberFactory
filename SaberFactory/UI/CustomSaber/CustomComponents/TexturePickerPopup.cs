@@ -1,14 +1,11 @@
-﻿using BeatSaberMarkupLanguage;
-using BeatSaberMarkupLanguage.Attributes;
+﻿using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components;
-using BeatSaberMarkupLanguage.ViewControllers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using HMUI;
 using SaberFactory.DataStore;
 using SaberFactory.UI.Lib;
-using SiraUtil.Tools;
 using UnityEngine;
 using Zenject;
 

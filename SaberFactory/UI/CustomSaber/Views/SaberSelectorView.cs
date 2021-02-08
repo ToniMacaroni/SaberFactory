@@ -1,5 +1,4 @@
-﻿using System.IO;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using BeatSaberMarkupLanguage.Attributes;
 using SaberFactory.Configuration;
@@ -9,7 +8,6 @@ using SaberFactory.Helpers;
 using SaberFactory.Models;
 using SaberFactory.UI.CustomSaber.CustomComponents;
 using SaberFactory.UI.Lib;
-using UnityEngine;
 using Zenject;
 
 

@@ -1,5 +1,4 @@
-﻿using System;
-using SaberFactory.Models;
+﻿using SaberFactory.Models;
 
 namespace SaberFactory.Instances
 {

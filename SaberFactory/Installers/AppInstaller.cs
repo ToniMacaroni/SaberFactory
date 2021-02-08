@@ -5,7 +5,6 @@ using SaberFactory.Instances;
 using SaberFactory.Models;
 using SaberFactory.Models.CustomSaber;
 using SaberFactory.Saving;
-using SaberFactory.UI.Lib.BSML;
 using SiraUtil;
 using System.IO;
 using Zenject;

@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace SaberFactory.UI.Lib
 {

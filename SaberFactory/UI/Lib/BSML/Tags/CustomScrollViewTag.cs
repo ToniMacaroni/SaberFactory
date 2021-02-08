@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Linq;
-using System.Threading.Tasks;
 using BeatSaberMarkupLanguage;
 using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Tags;

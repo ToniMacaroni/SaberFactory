@@ -1,7 +1,6 @@
 ﻿using System;
 using IPA.Utilities;
 using SaberFactory.Helpers;
-using SiraUtil;
 using UnityEngine;
 
 namespace SaberFactory.Instances.Trail

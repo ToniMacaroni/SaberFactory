@@ -1,12 +1,9 @@
-﻿using System.Collections;
-using BeatSaberMarkupLanguage;
-using HMUI;
+﻿using HMUI;
 using SaberFactory.Helpers;
 using SiraUtil.Tools;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
-using Screen = HMUI.Screen;
 
 namespace SaberFactory.UI.Lib
 {
