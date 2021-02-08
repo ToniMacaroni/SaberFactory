@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using BeatSaberMarkupLanguage.Attributes;
+using SaberFactory.UI.CustomSaber.CustomComponents;
 using SaberFactory.UI.Lib;
 using TMPro;
 using Zenject;
@@ -18,12 +19,20 @@ namespace SaberFactory.UI.CustomSaber.Views
         
         public ENavigationCategory CurrentCategory { get; private set; }
 
+        private NavButton _currentSelectedNavButton;
+
         [UIComponent("settings-notify-text")] private readonly TextMeshProUGUI _settingsNotifyText = null;
         [UIValue("nav-buttons")] private List<object> _navButtons;
 
         [UIAction("#post-parse")]
         private async void Setup()
         {
+            if (_navButtons is not null && _navButtons.Count > 0)
+            {
+                _currentSelectedNavButton = ((NavButtonWrapper) _navButtons[0]).NavButton;
+                _currentSelectedNavButton.SetState(true, false);
+            }
+
             var release = await _pluginManager.GetNewestReleaseAsync(CancellationToken.None);
             if (release!=null && !release.IsLocalNewest)
             {
@@ -34,25 +43,39 @@ namespace SaberFactory.UI.CustomSaber.Views
         private void Awake()
         {
             _navButtons = new List<object>();
-            _navButtons.Add(new NavigationButton(ENavigationCategory.Saber, "SaberFactory.Resources.Icons.customsaber-icon.png", ClickedCategory, "Select a saber"));
-            _navButtons.Add(new NavigationButton(ENavigationCategory.Trail, "SaberFactory.Resources.Icons.trail-icon.png", ClickedCategory, "Edit the trail"));
-            //_navButtons.Add(new NavigationButton(ENavigationCategory.Settings, "SaberFactory.Resources.Icons.cog.png", ClickedCategory, "Setup Saber Factory"));
-            //_navButtons.Add(new NavigationButton(ENavigationCategory.Transform, "SaberFactory.Resources.Icons.customsaber-icon.png", ClickedCategory));
+
+            var saberButton = new NavButtonWrapper(
+                ENavigationCategory.Saber,
+                "SaberFactory.Resources.Icons.customsaber-icon.png",
+                ClickedCategory,
+                "Select a saber");
+
+            var trailButton = new NavButtonWrapper(
+                ENavigationCategory.Trail,
+                "SaberFactory.Resources.Icons.trail-icon.png",
+                ClickedCategory,
+                "Edit the trail");
+
+            _navButtons.Add(saberButton);
+            _navButtons.Add(trailButton);
         }
 
-        private void ClickedCategory(ENavigationCategory cateogory)
+        private void ClickedCategory(NavButton button, ENavigationCategory category)
         {
-            CurrentCategory = cateogory;
-            OnCategoryChanged?.Invoke(cateogory);
+            if(_currentSelectedNavButton==button) return;
+            _currentSelectedNavButton?.Deselect();
+            _currentSelectedNavButton = button;
+            CurrentCategory = category;
+            OnCategoryChanged?.Invoke(category);
         }
 
-        [UIAction("Click_Settings")]
-        private void ClickSettings()
+        [UIAction("clicked-settings")]
+        private void ClickSettings(NavButton button, string _)
         {
-            ClickedCategory(ENavigationCategory.Settings);
+            ClickedCategory(button, ENavigationCategory.Settings);
         }
 
-        [UIAction("Click_Exit")]
+        [UIAction("clicked-exit")]
         private void ClickExit()
         {
             OnExit?.Invoke();

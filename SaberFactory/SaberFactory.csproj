@@ -273,12 +273,13 @@
     <Compile Include="UI\CustomSaber\CustomComponents\IconToggleButton.cs" />
     <Compile Include="UI\CustomSaber\CustomComponents\LoadingPopup.cs" />
     <Compile Include="UI\CustomSaber\CustomComponents\MaterialEditor.cs" />
+    <Compile Include="UI\CustomSaber\CustomComponents\NavButton.cs" />
     <Compile Include="UI\CustomSaber\CustomComponents\PropList.cs" />
     <Compile Include="UI\CustomSaber\CustomComponents\TexturePickerPopup.cs" />
     <Compile Include="UI\CustomSaber\CustomSaberUI.cs" />
     <Compile Include="UI\CustomSaber\ENavigationCategory.cs" />
     <Compile Include="UI\CustomSaber\INavigationCategoryView.cs" />
-    <Compile Include="UI\CustomSaber\NavigationButton.cs" />
+    <Compile Include="UI\CustomSaber\NavButtonWrapper.cs" />
     <Compile Include="UI\CustomSaber\Views\MainView.cs" />
     <Compile Include="UI\CustomSaber\Views\NavigationView.cs" />
     <Compile Include="UI\CustomSaber\Views\SaberSelectorView.cs" />
@@ -386,6 +387,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\CustomSaber\CustomComponents\ChangelogPopup.bsml">
       <DependentUpon>ChangelogPopup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\CustomSaber\CustomComponents\NavButton.bsml">
+      <DependentUpon>NavButton.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
