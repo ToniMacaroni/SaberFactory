@@ -23,6 +23,8 @@ namespace SaberFactory.UI.Lib
             rt.localScale = rt.anchorMax = Vector3.one;
             rt.anchorMin = rt.sizeDelta = Vector2.zero;
 
+            go.AddComponent<CanvasGroup>();
+
             var subView = (SubView) _container.InstantiateComponent(subViewType, go);
             return subView;
         }

@@ -323,7 +323,7 @@
     <Compile Include="UI\Lib\ISubViewHost.cs" />
     <Compile Include="UI\Lib\SubView.cs" />
     <Compile Include="UI\Lib\SubViewFactory.cs" />
-    <Compile Include="UI\Lib\SubViewHandler.cs" />
+    <Compile Include="UI\Lib\SubViewSwitcher.cs" />
     <Compile Include="UI\Lib\ViewControllerFactory.cs" />
     <Compile Include="UI\SaberFactoryMenuButton.cs" />
     <Compile Include="UI\SaberFactoryUI.cs" />

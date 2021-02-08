@@ -1,4 +1,4 @@
-﻿<vertical background='round-rect-panel' pref-width='16' bg-color='#00000070' pad='2' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
+﻿<vertical background='round-rect-panel' pref-width='16' bg-color='#666666bb' pad='2' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
 	
 	<macro.for-each items='nav-buttons'>
 		<this.nav-button

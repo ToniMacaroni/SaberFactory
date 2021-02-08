@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using BeatSaberMarkupLanguage.Parser;
 using SaberFactory.Helpers;
 using SiraUtil.Tools;
@@ -13,7 +14,7 @@ namespace SaberFactory.UI.Lib
 
         public BSMLParserParams ParserParams { get; private set; }
 
-        public SubViewHandler SubViewHandler;
+        public SubViewSwitcher SubViewSwitcher;
 
         private bool _firstActivation = true;
 
@@ -27,7 +28,7 @@ namespace SaberFactory.UI.Lib
             _logger = logger;
         }
 
-        public async void Open(bool notify = true)
+        public async Task Open(bool notify = true)
         {
             if (_firstActivation)
             {
@@ -43,7 +44,7 @@ namespace SaberFactory.UI.Lib
 
         public void Close()
         {
-            gameObject.SetActive(false);
+            //gameObject.SetActive(false);
             DidClose();
         }
 
@@ -59,7 +60,7 @@ namespace SaberFactory.UI.Lib
 
         public void GoBack()
         {
-            SubViewHandler.GoBack();
+            SubViewSwitcher.GoBack();
         }
 
         protected virtual void Init()

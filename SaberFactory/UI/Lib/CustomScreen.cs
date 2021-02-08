@@ -61,10 +61,10 @@ namespace SaberFactory.UI.Lib
             return (T)CurrentViewController;
         }
 
-        public virtual void Open()
+        public virtual async void Open()
         {
             SetRootViewController(CurrentViewController, ViewController.AnimationType.In);
-            StartCoroutine(CurrentViewController.Cast<CustomViewController>().Animate());
+            await CurrentViewController.Cast<CustomViewController>().Animate();
         }
 
         public virtual void Close()

@@ -39,61 +39,60 @@ namespace SaberFactory.Helpers
             image.SetVerticesDirty();
         }
 
-        public static IEnumerator AnimationCoroutine(Action<float> transitionAnimation)
+        public static async Task AnimationCoroutine(Action<float> transitionAnimation)
         {
-            yield return null;
             float elapsedTime = 0.0f;
-            while (elapsedTime < 0.400000005960464)
+            while (elapsedTime < 0.7f)
             {
-                float num = Easing.OutQuart(elapsedTime / 0.4f);
+                float num = Easing.OutQuart(elapsedTime / 0.8f);
                 transitionAnimation?.Invoke(num);
                 elapsedTime += Time.deltaTime;
-                yield return null;
+                await Task.Yield();
             }
             transitionAnimation?.Invoke(1f);
         }
 
-        public static IEnumerator DoHorizontalTransition(this Transform transform)
+        public static async Task DoHorizontalTransition(this Transform transform)
         {
             float moveOffset = 20f;
-            yield return AnimationCoroutine(t =>
+            await AnimationCoroutine(t =>
             {
                 transform.localPosition = new Vector3(moveOffset * (1f - t), 0, 0);
             });
         }
 
-        public static IEnumerator DoVerticalTransition(this Transform transform)
+        public static async Task DoVerticalTransition(this Transform transform)
         {
             float moveOffset = 20f;
-            yield return AnimationCoroutine(t =>
+            await AnimationCoroutine(t =>
             {
                 transform.localPosition = new Vector3(0, moveOffset * (1f - t), 0);
             });
         }
 
-        public static IEnumerator DoZTransition(this Transform transform)
+        public static async Task DoZTransition(this Transform transform)
         {
             float moveOffset = 20f;
-            yield return AnimationCoroutine(t =>
+            await AnimationCoroutine(t =>
             {
                 transform.localPosition = new Vector3(0, 0, moveOffset * (1f - t));
             });
         }
 
-        public static IEnumerator Animate(this IAnimatableUi animatable)
+        public static async Task Animate(this IAnimatableUi animatable)
         {
-            if(!(animatable is MonoBehaviour comp)) yield break;
+            if(!(animatable is MonoBehaviour comp)) return;
 
             switch (animatable.AnimationType)
             {
                 case IAnimatableUi.EAnimationType.Horizontal:
-                    yield return DoHorizontalTransition(comp.transform);
+                    await DoHorizontalTransition(comp.transform);
                     break;
                 case IAnimatableUi.EAnimationType.Vertical:
-                    yield return DoVerticalTransition(comp.transform);
+                    await DoVerticalTransition(comp.transform);
                     break;
                 case IAnimatableUi.EAnimationType.Z:
-                    yield return DoZTransition(comp.transform);
+                    await DoZTransition(comp.transform);
                     break;
             }
         }
