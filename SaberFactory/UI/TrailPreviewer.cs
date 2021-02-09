@@ -83,7 +83,6 @@ namespace SaberFactory.UI
 
         public void SetColor(Color color)
         {
-            _renderer.sharedMaterial.color = color;
             var newColors = new Color[4];
             for (int i = 0; i < newColors.Length; i++)
             {

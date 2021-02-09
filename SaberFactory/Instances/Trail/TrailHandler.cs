@@ -104,13 +104,9 @@ namespace SaberFactory.Instances.Trail
 
         public void SetColor(Color color)
         {
-            if (TrailInstance is SFTrail sfTrail)
+            if (TrailInstance is {})
             {
-                sfTrail.Color = color;
-            }
-            else
-            {
-                TrailInstance?.SetField("_color", color);
+                TrailInstance.Color = color;
             }
         }
     }

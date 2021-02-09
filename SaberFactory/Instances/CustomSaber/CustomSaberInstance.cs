@@ -1,4 +1,5 @@
-﻿using SaberFactory.Helpers;
+﻿using System.Collections.Generic;
+using SaberFactory.Helpers;
 using SaberFactory.Instances.Setters;
 using SaberFactory.Instances.Trail;
 using SaberFactory.Models;
@@ -34,6 +35,41 @@ namespace SaberFactory.Instances.CustomSaber
         public override PartEvents GetEvents()
         {
             return PartEvents.FromCustomSaber(GameObject);
+        }
+
+        protected override void GetColorableMaterials(List<Material> materials)
+        {
+            foreach (Renderer renderer in GameObject.GetComponentsInChildren<Renderer>())
+            {
+                if (renderer is null)
+                {
+                    continue;
+                }
+
+                foreach (Material renderMaterial in renderer.materials)
+                {
+                    if (renderMaterial is null || !renderMaterial.HasProperty(MaterialProperties.MainColor))
+                    {
+                        continue;
+                    }
+
+                    if (renderMaterial.TryGetFloat(MaterialProperties.CustomColors, out var val))
+                    {
+                        if (val > 0)
+                        {
+                            materials.Add(renderMaterial);
+                        }
+                    }
+                    else if (renderMaterial.TryGetFloat(MaterialProperties.Glow, out val) && val > 0)
+                    {
+                        materials.Add(renderMaterial);
+                    }
+                    else if (renderMaterial.TryGetFloat(MaterialProperties.Bloom, out val) && val > 0)
+                    {
+                        materials.Add(renderMaterial);
+                    }
+                }
+            }
         }
 
         protected override GameObject Instantiate()

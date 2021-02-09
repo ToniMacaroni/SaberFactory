@@ -3,6 +3,7 @@ using SaberFactory.Helpers;
 using SaberFactory.Instances.CustomSaber;
 using SaberFactory.Instances.Trail;
 using SaberFactory.Models;
+using SiraUtil.Interfaces;
 using SiraUtil.Tools;
 using UnityEngine;
 using Zenject;
@@ -24,7 +25,6 @@ namespace SaberFactory.Instances
         public List<PartEvents> Events { get; private set; }
 
         private readonly SectionInstantiator _sectionInstantiator;
-        private readonly List<Material> _colorMaterials;
         private readonly SiraLog _logger;
 
         private InstanceTrailData _instanceTrailData;
@@ -44,9 +44,6 @@ namespace SaberFactory.Instances
 
             GameObject.transform.localScale = new Vector3(model.SaberWidth, model.SaberWidth, 1);
 
-            _colorMaterials = new List<Material>();
-            GetColorableMaterials(_colorMaterials);
-
             SetupTrailData();
             InitializeEvents();
         }
@@ -58,9 +55,9 @@ namespace SaberFactory.Instances
 
         public void SetColor(Color color)
         {
-            foreach (var material in _colorMaterials)
+            foreach (BasePieceInstance piece in PieceCollection)
             {
-                material.color = color;
+                piece.SetColor(color);
             }
 
             TrailHandler?.SetColor(color);
@@ -145,38 +142,6 @@ namespace SaberFactory.Instances
         {
             Model.SaberWidth = width;
             GameObject.transform.localScale = new Vector3(width, width, 1);
-        }
-
-        private void GetColorableMaterials(List<Material> materials)
-        {
-            bool CheckSfMaterial(Material mat)
-            {
-                bool check = mat.TryGetFloat("_UseColorScheme", out var val) && val > 0.5f;
-                check |= mat.TryGetFloat("_CustomColors", out val) && val > 0;
-                return check;
-            }
-
-            bool CheckCsMaterial(Material mat)
-            {
-                bool check = PieceCollection.HasPiece(AssetTypeDefinition.CustomSaber);
-                check &= mat.TryGetFloat("_Glow", out var val) && val > 0;
-                check |= mat.TryGetFloat("_Bloom", out val) && val > 0;
-                return check;
-            }
-
-            foreach (var renderer in GameObject.GetComponentsInChildren<Renderer>())
-            {
-                foreach (var material in renderer.materials)
-                {
-                    // color for saber factory models
-                    if (CheckSfMaterial(material))
-                        materials.Add(material);
-
-                    // color for custom saber models
-                    else if (CheckCsMaterial(material))
-                        materials.Add(material);
-                }
-            }
         }
 
         internal class Factory : PlaceholderFactory<SaberModel, SaberInstance> {}
