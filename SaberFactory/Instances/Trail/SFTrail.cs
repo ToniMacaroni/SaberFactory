@@ -1,5 +1,6 @@
 ﻿using System;
 using IPA.Utilities;
+using SaberFactory.Models;
 using UnityEngine;
 
 namespace SaberFactory.Instances.Trail
@@ -23,22 +24,10 @@ namespace SaberFactory.Instances.Trail
         [SerializeField] private int _trailLength;
         [SerializeField] private float _whitestep;
 
-        [SerializeField] private SaberTrailRenderer _trailRendererCopy;
-
         public Color Color
         {
             get => _color;
             set => _color = value;
-        }
-
-        public override void Awake()
-        {
-            // Initialization For tricksaber
-            if (_trailRenderer == null && _trailRendererCopy != null)
-            {
-                SetupProps();
-                _trailRenderer = _trailRendererCopy = Instantiate(_trailRendererPrefab, Vector3.zero, Quaternion.identity);
-            }
         }
 
         public void Setup(TrailInitData initData, Material trailMaterial, Transform start, Transform end)
@@ -52,18 +41,18 @@ namespace SaberFactory.Instances.Trail
             _trailLength = initData.TrailLength;
             _whitestep = initData.Whitestep;
 
-            SetupProps();
+            SetupProps(initData.Granularity, initData.SamplingFrequency);
 
             _trailRendererPrefab = initData.TrailPrefab;
-            _trailRenderer = _trailRendererCopy = Instantiate(_trailRendererPrefab, Vector3.zero, Quaternion.identity);
+            _trailRenderer = Instantiate(_trailRendererPrefab, Vector3.zero, Quaternion.identity);
         }
 
-        private void SetupProps()
+        private void SetupProps(int granularity, int samplingFrequency)
         {
             _trailDuration = _trailLength * 0.01f;
             _whiteSectionMaxDuration = _whitestep;
-            _samplingFrequency = 80;
-            _granularity = 60;
+            _granularity = granularity;
+            _samplingFrequency = samplingFrequency;
         }
 
         public override void OnEnable()
@@ -80,8 +69,6 @@ namespace SaberFactory.Instances.Trail
 
         public override void Init()
         {
-            if (_trailRenderer == null) _trailRenderer = _trailRendererCopy;
-
             _sampleStep = 1f / _samplingFrequency;
             Vector3 bottomPos = _start.position;
             Vector3 topPos = _end.position;
@@ -140,6 +127,9 @@ namespace SaberFactory.Instances.Trail
             public int TrailLength;
             public float Whitestep;
             public Color TrailColor;
+
+            public int Granularity;
+            public int SamplingFrequency;
         }
     }
 }

@@ -254,6 +254,7 @@
     <Compile Include="Models\SaberSet.cs" />
     <Compile Include="Instances\Trail\SFTrail.cs" />
     <Compile Include="Models\TrailModel.cs" />
+    <Compile Include="Models\TrailSettings.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Configuration\PluginConfig.cs" />
     <Compile Include="PluginManager.cs" />

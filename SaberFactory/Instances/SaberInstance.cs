@@ -84,7 +84,7 @@ namespace SaberFactory.Instances
             _instanceTrailData = default;
         }
 
-        public void CreateTrail(SaberTrailRenderer rendererPrefab, SaberTrail backupTrail = null)
+        public void CreateTrail(SaberTrailRenderer rendererPrefab, TrailSettings trailSettings, SaberTrail backupTrail = null)
         {
             var trailData = GetTrailData();
 
@@ -94,7 +94,7 @@ namespace SaberFactory.Instances
                 {
                     TrailHandler = new TrailHandler(GameObject, backupTrail);
                     TrailHandler.SetPrefab(rendererPrefab);
-                    TrailHandler.CreateTrail();
+                    TrailHandler.CreateTrail(trailSettings);
                 }
 
                 return;
@@ -103,7 +103,7 @@ namespace SaberFactory.Instances
             TrailHandler = new TrailHandler(GameObject);
             TrailHandler.SetPrefab(rendererPrefab);
             TrailHandler.SetTrailData(GetTrailData());
-            TrailHandler.CreateTrail();
+            TrailHandler.CreateTrail(trailSettings);
         }
 
         public void DestroyTrail()

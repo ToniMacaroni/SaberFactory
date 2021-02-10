@@ -1,6 +1,7 @@
 ﻿using System;
 using IPA.Utilities;
 using SaberFactory.Helpers;
+using SaberFactory.Models;
 using UnityEngine;
 
 namespace SaberFactory.Instances.Trail
@@ -27,7 +28,7 @@ namespace SaberFactory.Instances.Trail
             _backupTrail = backupTrail;
         }
 
-        public void CreateTrail()
+        public void CreateTrail(TrailSettings trailSettings)
         {
             if (_trailRenderer is null)
             {
@@ -50,7 +51,9 @@ namespace SaberFactory.Instances.Trail
                     TrailColor = Color.white,
                     TrailLength = 15,
                     TrailPrefab = _trailRenderer,
-                    Whitestep = 0.02f
+                    Whitestep = 0.02f,
+                    Granularity = trailSettings.Granularity,
+                    SamplingFrequency = trailSettings.SamplingFrequency
                 };
 
                 TrailInstance.Setup(
@@ -67,7 +70,9 @@ namespace SaberFactory.Instances.Trail
                     TrailColor = Color.white,
                     TrailLength = _instanceTrailData.Length,
                     TrailPrefab = _trailRenderer,
-                    Whitestep = _instanceTrailData.WhiteStep
+                    Whitestep = _instanceTrailData.WhiteStep,
+                    Granularity = trailSettings.Granularity,
+                    SamplingFrequency = trailSettings.SamplingFrequency
                 };
 
                 Transform pointStart = _instanceTrailData.IsTrailReversed
