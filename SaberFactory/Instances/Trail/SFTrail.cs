@@ -30,6 +30,10 @@ namespace SaberFactory.Instances.Trail
             set => _color = value;
         }
 
+        public override void Awake()
+        {
+        }
+
         public void Setup(TrailInitData initData, Material trailMaterial, Transform start, Transform end)
         {
             Color = initData.TrailColor;
@@ -41,18 +45,14 @@ namespace SaberFactory.Instances.Trail
             _trailLength = initData.TrailLength;
             _whitestep = initData.Whitestep;
 
-            SetupProps(initData.Granularity, initData.SamplingFrequency);
+            _trailDuration = _trailLength * 0.01f;
+            _whiteSectionMaxDuration = _whitestep;
+
+            _granularity = initData.Granularity;
+            _samplingFrequency = initData.SamplingFrequency;
 
             _trailRendererPrefab = initData.TrailPrefab;
             _trailRenderer = Instantiate(_trailRendererPrefab, Vector3.zero, Quaternion.identity);
-        }
-
-        private void SetupProps(int granularity, int samplingFrequency)
-        {
-            _trailDuration = _trailLength * 0.01f;
-            _whiteSectionMaxDuration = _whitestep;
-            _granularity = granularity;
-            _samplingFrequency = samplingFrequency;
         }
 
         public override void OnEnable()
