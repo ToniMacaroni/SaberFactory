@@ -20,6 +20,8 @@ namespace SaberFactory.Models
         public SaberModel RightSaber { get; set; }
         public Task CurrentLoadingTask { get; private set; }
 
+        public TrailSettings TrailSettings;
+
         private readonly PresetSaveManager _presetSaveManager;
         private readonly PluginConfig _config;
         private readonly MainAssetStore _mainAssetStore;
@@ -38,6 +40,8 @@ namespace SaberFactory.Models
             _mainAssetStore = mainAssetStore;
             LeftSaber = leftSaber;
             RightSaber = rightSaber;
+
+            TrailSettings = new TrailSettings();
 
             Load();
         }

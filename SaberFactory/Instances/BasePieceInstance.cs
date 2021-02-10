@@ -1,4 +1,6 @@
-﻿using SaberFactory.Instances.Setters;
+﻿using System.Collections.Generic;
+using SaberFactory.Helpers;
+using SaberFactory.Instances.Setters;
 using SaberFactory.Models;
 using UnityEngine;
 using Zenject;
@@ -15,6 +17,8 @@ namespace SaberFactory.Instances
         public readonly BasePieceModel Model;
         public GameObject GameObject;
         public Transform CachedTransform;
+
+        private List<Material> _colorableMaterials;
 
         protected BasePieceInstance(BasePieceModel model)
         {
@@ -37,6 +41,22 @@ namespace SaberFactory.Instances
         {
             return null;
         }
+
+        public virtual void SetColor(Color color)
+        {
+            if (_colorableMaterials is null)
+            {
+                _colorableMaterials = new List<Material>();
+                GetColorableMaterials(_colorableMaterials);
+            }
+
+            foreach (var material in _colorableMaterials)
+            {
+                material.SetColor(MaterialProperties.MainColor, color);
+            }
+        }
+
+        protected virtual void GetColorableMaterials(List<Material> materials) { }
 
         internal class Factory : PlaceholderFactory<BasePieceModel, BasePieceInstance> {}
     }

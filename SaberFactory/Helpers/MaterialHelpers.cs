@@ -24,5 +24,21 @@ namespace SaberFactory.Helpers
             val = material.GetFloat(propName);
             return true;
         }
+
+        public static void SetMainColor(this Material material, Color color)
+        {
+            if (material.HasProperty(MaterialProperties.MainColor))
+            {
+                material.SetColor(MaterialProperties.MainColor, color);
+            }
+        }
+    }
+
+    internal static class MaterialProperties
+    {
+        public static readonly string MainColor = "_Color";
+        public static readonly string CustomColors = "_CustomColors";
+        public static readonly string Glow = "_Glow";
+        public static readonly string Bloom = "_Bloom";
     }
 }

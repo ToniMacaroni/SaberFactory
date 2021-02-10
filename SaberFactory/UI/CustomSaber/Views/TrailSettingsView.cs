@@ -132,7 +132,7 @@ namespace SaberFactory.UI.CustomSaber.Views
             var trailData = saberInstance?.GetTrailData();
 
             // Show no trail container and return
-            if (trailData == null)
+            if (trailData is null)
             {
                 if(_mainContainer.activeSelf) _mainContainer.SetActive(false);
                 if(!_noTrailContainer.activeSelf) _noTrailContainer.SetActive(true);
