@@ -1,13 +1,17 @@
 ﻿<bg xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
 	
-	<vertical bg="round-rect-panel" bg-color="#00000070" size-delta-y="-70" pad="2">
+	<vertical bg="round-rect-panel" bg-color="#00000070" size-delta-y="-60" pad="2">
 
 		<horizontal pad='2' bg='round-rect-panel' bg-color='#67b0f550'>
 			<checkbox text='Saber Factory Enabled' value='mod-enabled' apply-on-change='true' />
 		</horizontal>
 		<vertical pad='2' bg='round-rect-panel' bg-color='#00000050'>
-			<checkbox text='Enable Events' value='events-enabled' apply-on-change='true' />
-			<checkbox text='Random Sabers' value='random-sabers' apply-on-change='true' />
+			<checkbox text='Enable Events' value='events-enabled' apply-on-change='true'
+			          hover-hint='Enable events on the saber (like fc effects)'/>
+			<checkbox text='Random Sabers' value='random-sabers' apply-on-change='true'
+			          hover-hint='Choose a random saber on every song start'/>
+			<checkbox text='Animate Saber Selection' value='animate-saber-selection' apply-on-change='true'
+			          hover-hint='Animate the saber appearing on the pedestal'/>
 		</vertical>
 
 

@@ -23,14 +23,12 @@ namespace SaberFactory.Editor
         
         private readonly SiraLog _logger;
         private readonly SaberSet _saberSet;
-        private readonly PresetSaveManager _presetSaveManager;
         private readonly SaberInstance.Factory _saberFactory;
 
         public EditorInstanceManager(SiraLog logger, SaberSet saberSet, PresetSaveManager presetSaveManager, SaberInstance.Factory saberFactory)
         {
             _logger = logger;
             _saberSet = saberSet;
-            _presetSaveManager = presetSaveManager;
             _saberFactory = saberFactory;
 
             SelectedDefinition = AssetTypeDefinition.CustomSaber;

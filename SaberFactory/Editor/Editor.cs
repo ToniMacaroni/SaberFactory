@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Threading;
 using SaberFactory.Configuration;
+using SaberFactory.Helpers;
 using SaberFactory.Instances;
 using SaberFactory.Models;
 using SaberFactory.UI;
@@ -21,6 +23,7 @@ namespace SaberFactory.Editor
         private readonly SaberFactoryUI _saberFactoryUi;
         private readonly EditorInstanceManager _editorInstanceManager;
         private readonly SaberSet _saberSet;
+        private readonly PlayerDataModel _playerDataModel;
 
         private readonly Pedestal _pedestal;
         private readonly SFLogoAnim _sfLogoAnim;
@@ -33,13 +36,15 @@ namespace SaberFactory.Editor
             SaberFactoryUI saberFactoryUi,
             EditorInstanceManager editorInstanceManager,
             EmbeddedAssetLoader embeddedAssetLoader,
-            SaberSet saberSet)
+            SaberSet saberSet,
+            PlayerDataModel playerDataModel)
         {
             _logger = logger;
             _pluginConfig = pluginConfig;
             _saberFactoryUi = saberFactoryUi;
             _editorInstanceManager = editorInstanceManager;
             _saberSet = saberSet;
+            _playerDataModel = playerDataModel;
 
             _pedestal = new Pedestal(embeddedAssetLoader);
             _sfLogoAnim = new SFLogoAnim(embeddedAssetLoader);
@@ -114,10 +119,21 @@ namespace SaberFactory.Editor
             IsActive = false;
         }
 
-        private void OnModelCompositionSet(ModelComposition composition)
+        private async void OnModelCompositionSet(ModelComposition composition)
         {
             _spawnedSaber?.Destroy();
             _spawnedSaber = _editorInstanceManager.CreateSaber(_saberSet.LeftSaber, _pedestal.SaberContainerTransform, true, true);
+
+            _spawnedSaber.SetColor(_playerDataModel.playerData.colorSchemesSettings.GetSelectedColorScheme().saberAColor);
+
+            if (_pluginConfig.AnimateSaberSelection)
+            {
+                await AnimationHelper.AsyncAnimation(0.3f, CancellationToken.None, t =>
+                {
+                    _pedestal.SaberContainerTransform.localScale = new Vector3(t, t, t);
+                });
+            }
+            
         }
     }
 }

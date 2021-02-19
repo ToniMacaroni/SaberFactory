@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using CustomSaber;
 using SaberFactory.Helpers;
 using SaberFactory.Instances.Setters;
 using SaberFactory.Instances.Trail;
@@ -20,16 +21,48 @@ namespace SaberFactory.Instances.CustomSaber
             InitializeTrailData(GameObject, model.TrailModel);
         }
 
+        /// <summary>
+        /// Creates an <see cref="InstanceTrailData"/> object
+        /// with the correct trail transforms
+        /// </summary>
+        /// <param name="saberObject">The saber gameobject that the <see cref="CustomTrail"/> component is on</param>
+        /// <param name="trailModel">The <see cref="TrailModel"/> to use</param>
         public void InitializeTrailData(GameObject saberObject, TrailModel trailModel)
         {
-            InstanceTrailData = InstanceTrailData.FromCustomSaber(saberObject, trailModel);
-        }
+            var saberTrail = saberObject?.GetComponent<CustomTrail>();
 
-        public void ResetTrail()
-        {
-            var model = (CustomSaberModel) Model;
-            model.TrailModel = null;
-            InitializeTrailData(GameObject, null);
+            if (saberTrail is null || trailModel is null)
+            {
+                return;
+            }
+
+            // if trail comes from the preset save system
+            // the model comes without the material assigned
+            // so we assign 
+            if (trailModel.Material is null)
+            {
+                trailModel.Material = new MaterialDescriptor(saberTrail.TrailMaterial);
+
+                // set texture wrap mode
+                if (trailModel.Material.Material.TryGetMainTexture(out var tex))
+                {
+                    trailModel.OriginalTextureWrapMode = tex.wrapMode;
+                }
+            }
+
+            Transform pointStart = saberTrail.PointStart;
+            Transform pointEnd = saberTrail.PointEnd;
+
+            // Correction for sabers that have the transforms set up the other way around
+            bool isTrailReversed = pointStart.localPosition.z > pointEnd.localPosition.z;
+
+            if (isTrailReversed)
+            {
+                pointStart = saberTrail.PointEnd;
+                pointEnd = saberTrail.PointStart;
+            }
+
+            InstanceTrailData = new InstanceTrailData(trailModel, pointStart, pointEnd, isTrailReversed);
         }
 
         public override PartEvents GetEvents()

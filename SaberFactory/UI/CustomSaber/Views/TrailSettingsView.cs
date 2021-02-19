@@ -4,6 +4,7 @@ using HMUI;
 using SaberFactory.Configuration;
 using SaberFactory.DataStore;
 using SaberFactory.Editor;
+using SaberFactory.Helpers;
 using SaberFactory.Instances;
 using SaberFactory.Instances.CustomSaber;
 using SaberFactory.Instances.Trail;
@@ -23,7 +24,7 @@ namespace SaberFactory.UI.CustomSaber.Views
 
         [Inject] private readonly TrailPreviewer _trailPreviewer = null;
         [Inject] private readonly EditorInstanceManager _editorInstanceManager = null;
-        [Inject] private readonly ColorManager _colorManager = null;
+        [Inject] private readonly PlayerDataModel _playerDataModel = null;
         [Inject] private readonly MainAssetStore _mainAssetStore = null;
         [Inject] private readonly PluginConfig _pluginConfig = null;
 
@@ -62,6 +63,9 @@ namespace SaberFactory.UI.CustomSaber.Views
             CreateTrail(_editorInstanceManager.CurrentSaber);
 
             _editorInstanceManager.OnSaberInstanceCreated += CreateTrail;
+
+            _chooseTrailPopup.OnSelected += TrailPopupSelectionChanged;
+            _chooseTrailPopup.OnSelectionChanged += TrailPopupSelectionChanged;
         }
 
         public override void DidClose()
@@ -70,6 +74,9 @@ namespace SaberFactory.UI.CustomSaber.Views
             _instanceTrailData = null;
             _trailPreviewer.Destroy();
             _editorInstanceManager.OnSaberInstanceCreated -= CreateTrail;
+
+            _chooseTrailPopup.OnSelected -= TrailPopupSelectionChanged;
+            _chooseTrailPopup.OnSelectionChanged -= TrailPopupSelectionChanged;
         }
 
         private void LoadFromModel(InstanceTrailData trailData)
@@ -152,7 +159,22 @@ namespace SaberFactory.UI.CustomSaber.Views
             _whitestepSlider.AddEvent(SetWhitestep);
             _clampToggle.SetEvent(SetClampMode);
 
-            _trailPreviewer.SetColor(_colorManager.ColorForSaberType(SaberType.SaberA));
+            _trailPreviewer.SetColor(_playerDataModel.playerData.colorSchemesSettings.GetSelectedColorScheme().saberAColor);
+        }
+
+        private void TrailPopupSelectionChanged(TrailModel trailModel)
+        {
+            if (trailModel is null)
+            {
+                _trailPreviewer.Destroy();
+                SetTrailModel(_editorInstanceManager.CurrentModelComposition.GetLeft().Cast<CustomSaberModel>().GrabTrail(false));
+                _editorInstanceManager.Refresh();
+                return;
+            }
+
+            _trailPreviewer.Destroy();
+            SetTrailModel(trailModel);
+            _editorInstanceManager.Refresh();
         }
 
         private void UpdateProps()
@@ -177,13 +199,7 @@ namespace SaberFactory.UI.CustomSaber.Views
         [UIAction("choose-trail")]
         private void ClickChooseTrail()
         {
-            _chooseTrailPopup.Show(_mainAssetStore.GetAllMetaData(AssetTypeDefinition.CustomSaber), model =>
-            {
-                if (model == null) return;
-                _trailPreviewer.Destroy();
-                SetTrailModel(model);
-                _editorInstanceManager.Refresh();
-            });
+            _chooseTrailPopup.Show(_mainAssetStore.GetAllMetaData(AssetTypeDefinition.CustomSaber));
         }
     }
 }

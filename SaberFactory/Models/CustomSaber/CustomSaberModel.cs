@@ -47,7 +47,7 @@ namespace SaberFactory.Models.CustomSaber
         private bool? _hasTrail;
         private bool _didReparentTrail;
 
-        public CustomSaberModel(StoreAsset storeAsset, CommonResources commonResources) : base(storeAsset, commonResources)
+        public CustomSaberModel(StoreAsset storeAsset) : base(storeAsset)
         {
             PropertyBlock = new CustomSaberPropertyBlock();
         }
@@ -86,6 +86,14 @@ namespace SaberFactory.Models.CustomSaber
                 new MaterialDescriptor(trail.TrailMaterial),
                 0, wrapMode,
                 addTrailOrigin ? StoreAsset.Path : null);
+        }
+
+        /// <summary>
+        /// Resets the trail using the original <see cref="CustomTrail"/> component
+        /// </summary>
+        public void ResetTrail()
+        {
+            TrailModel = GrabTrail(false);
         }
 
         /// <summary>

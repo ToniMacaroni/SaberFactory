@@ -1,5 +1,5 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using BeatSaberMarkupLanguage;
 using BeatSaberMarkupLanguage.Parser;
@@ -37,60 +37,47 @@ namespace SaberFactory.Helpers
             image.SetVerticesDirty();
         }
 
-        public static async Task AnimationCoroutine(Action<float> transitionAnimation)
-        {
-            float elapsedTime = 0.0f;
-            while (elapsedTime < 0.7f)
-            {
-                float num = Easing.OutQuart(elapsedTime / 0.8f);
-                transitionAnimation?.Invoke(num);
-                elapsedTime += Time.deltaTime;
-                await Task.Yield();
-            }
-            transitionAnimation?.Invoke(1f);
-        }
-
-        public static async Task DoHorizontalTransition(this Transform transform)
+        public static async Task DoHorizontalTransition(this Transform transform, CancellationToken cancelToken)
         {
             float moveOffset = 20f;
-            await AnimationCoroutine(t =>
+            await AnimationHelper.AsyncAnimation(0.8f, cancelToken, t =>
             {
                 transform.localPosition = new Vector3(moveOffset * (1f - t), 0, 0);
             });
         }
 
-        public static async Task DoVerticalTransition(this Transform transform)
+        public static async Task DoVerticalTransition(this Transform transform, CancellationToken cancelToken)
         {
             float moveOffset = 20f;
-            await AnimationCoroutine(t =>
+            await AnimationHelper.AsyncAnimation(0.8f, cancelToken, t =>
             {
                 transform.localPosition = new Vector3(0, moveOffset * (1f - t), 0);
             });
         }
 
-        public static async Task DoZTransition(this Transform transform)
+        public static async Task DoZTransition(this Transform transform, CancellationToken cancelToken)
         {
             float moveOffset = 20f;
-            await AnimationCoroutine(t =>
+            await AnimationHelper.AsyncAnimation(0.8f, cancelToken, t =>
             {
                 transform.localPosition = new Vector3(0, 0, moveOffset * (1f - t));
             });
         }
 
-        public static async Task Animate(this IAnimatableUi animatable)
+        public static async Task AnimateIn(this IAnimatableUi animatable, CancellationToken cancelToken)
         {
             if(!(animatable is MonoBehaviour comp)) return;
 
             switch (animatable.AnimationType)
             {
                 case IAnimatableUi.EAnimationType.Horizontal:
-                    await DoHorizontalTransition(comp.transform);
+                    await DoHorizontalTransition(comp.transform, cancelToken);
                     break;
                 case IAnimatableUi.EAnimationType.Vertical:
-                    await DoVerticalTransition(comp.transform);
+                    await DoVerticalTransition(comp.transform, cancelToken);
                     break;
                 case IAnimatableUi.EAnimationType.Z:
-                    await DoZTransition(comp.transform);
+                    await DoZTransition(comp.transform, cancelToken);
                     break;
             }
         }

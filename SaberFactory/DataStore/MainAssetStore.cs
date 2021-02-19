@@ -51,6 +51,8 @@ namespace SaberFactory.DataStore
 
         public Task<ModelComposition> this[string path] => GetCompositionByPath(path);
 
+        public Task<ModelComposition> this[PreloadMetaData metaData] => GetCompositionByPath(metaData.AssetMetaPath.RelativePath);
+
         public async Task<ModelComposition> GetCompositionByPath(string path)
         {
             if (_modelCompositions.TryGetValue(path, out var result)) return result;

@@ -1,6 +1,9 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using BeatSaberMarkupLanguage.Parser;
+using JetBrains.Annotations;
 using SaberFactory.Helpers;
 using SiraUtil.Tools;
 using UnityEngine;
@@ -8,7 +11,7 @@ using Zenject;
 
 namespace SaberFactory.UI.Lib
 {
-    internal class SubView : MonoBehaviour
+    internal class SubView : MonoBehaviour, INotifyPropertyChanged
     {
         public virtual bool IsActive => gameObject.activeSelf;
 
@@ -72,6 +75,14 @@ namespace SaberFactory.UI.Lib
         {
             public string Name;
             public Transform Parent;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

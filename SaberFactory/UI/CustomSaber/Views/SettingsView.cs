@@ -13,7 +13,7 @@ using Zenject;
 
 namespace SaberFactory.UI.CustomSaber.Views
 {
-    internal class SettingsView : SubView, INotifyPropertyChanged, INavigationCategoryView
+    internal class SettingsView : SubView, INavigationCategoryView
     {
         private static readonly string PROFILE_URL = "https://ko-fi.com/tonimacaroni";
         private static readonly string DISCORD_URL = "https://discord.gg/PjD7WcChH3";
@@ -32,7 +32,7 @@ namespace SaberFactory.UI.CustomSaber.Views
         }
 
         [UIValue("mod-enabled")]
-        private bool _modEnabled
+        private bool ModEnabled
         {
             get => _pluginConfig.Enabled;
             set
@@ -43,7 +43,7 @@ namespace SaberFactory.UI.CustomSaber.Views
         }
 
         [UIValue("events-enabled")]
-        private bool _eventsEnabled
+        private bool EventsEnabled
         {
             get => _pluginConfig.EnableEvents;
             set
@@ -54,12 +54,23 @@ namespace SaberFactory.UI.CustomSaber.Views
         }
 
         [UIValue("random-sabers")]
-        private bool _randomSabers
+        private bool RandomSabers
         {
             get => _pluginConfig.RandomSaber;
             set
             {
                 _pluginConfig.RandomSaber = value;
+                OnPropertyChanged();
+            }
+        }
+
+        [UIValue("animate-saber-selection")]
+        private bool AnimateSaberSelection
+        {
+            get => _pluginConfig.AnimateSaberSelection;
+            set
+            {
+                _pluginConfig.AnimateSaberSelection = value;
                 OnPropertyChanged();
             }
         }
@@ -92,15 +103,6 @@ namespace SaberFactory.UI.CustomSaber.Views
             var release = await _pluginManager.GetNewestReleaseAsync(CancellationToken.None);
             if (release == null) return;
             _changelogPopup.Show(release);
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
