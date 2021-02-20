@@ -1,5 +1,6 @@
 ﻿using System;
 using IPA.Utilities;
+using SaberFactory.Configuration;
 using SaberFactory.Helpers;
 using SaberFactory.Models;
 using UnityEngine;
@@ -28,7 +29,7 @@ namespace SaberFactory.Instances.Trail
             _backupTrail = backupTrail;
         }
 
-        public void CreateTrail(TrailSettings trailSettings)
+        public void CreateTrail(TrailConfig trailConfig)
         {
             if (_trailRenderer is null)
             {
@@ -46,50 +47,49 @@ namespace SaberFactory.Instances.Trail
 
                 var material = _trailRenderer.GetField<MeshRenderer, SaberTrailRenderer>("_meshRenderer").material;
 
-                var trailInitData = new SFTrail.TrailInitData
+                var trailInitDataVanilla = new SFTrail.TrailInitData
                 {
                     TrailColor = Color.white,
                     TrailLength = 15,
                     TrailPrefab = _trailRenderer,
                     Whitestep = 0.02f,
-                    Granularity = trailSettings.Granularity,
-                    SamplingFrequency = trailSettings.SamplingFrequency
+                    Granularity = trailConfig.Granularity,
+                    SamplingFrequency = trailConfig.SamplingFrequency
                 };
 
                 TrailInstance.Setup(
-                    trailInitData,
+                    trailInitDataVanilla,
                     material,
                     trailStart.transform,
                     trailEnd.transform
                 );
+                return;
             }
-            else
+
+            var trailInitData = new SFTrail.TrailInitData
             {
-                var trailInitData = new SFTrail.TrailInitData
-                {
-                    TrailColor = Color.white,
-                    TrailLength = _instanceTrailData.Length,
-                    TrailPrefab = _trailRenderer,
-                    Whitestep = _instanceTrailData.WhiteStep,
-                    Granularity = trailSettings.Granularity,
-                    SamplingFrequency = trailSettings.SamplingFrequency
-                };
+                TrailColor = Color.white,
+                TrailLength = _instanceTrailData.Length,
+                TrailPrefab = _trailRenderer,
+                Whitestep = _instanceTrailData.WhiteStep,
+                Granularity = trailConfig.Granularity,
+                SamplingFrequency = trailConfig.SamplingFrequency
+            };
 
-                Transform pointStart = _instanceTrailData.IsTrailReversed
-                    ? _instanceTrailData.PointEnd
-                    : _instanceTrailData.PointStart;
+            Transform pointStart = _instanceTrailData.IsTrailReversed
+                ? _instanceTrailData.PointEnd
+                : _instanceTrailData.PointStart;
 
-                Transform pointEnd = _instanceTrailData.IsTrailReversed
-                    ? _instanceTrailData.PointStart
-                    : _instanceTrailData.PointEnd;
+            Transform pointEnd = _instanceTrailData.IsTrailReversed
+                ? _instanceTrailData.PointStart
+                : _instanceTrailData.PointEnd;
 
-                TrailInstance.Setup(
-                    trailInitData,
-                    _instanceTrailData.Material.Material,
-                    pointStart,
-                    pointEnd
-                );
-            }
+            TrailInstance.Setup(
+                trailInitData,
+                _instanceTrailData.Material.Material,
+                pointStart,
+                pointEnd
+            );
         }
 
         public void DestroyTrail()

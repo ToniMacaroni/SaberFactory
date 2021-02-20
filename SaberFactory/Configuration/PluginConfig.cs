@@ -36,6 +36,8 @@ namespace SaberFactory.Configuration
         // How far does the global saber width slider go
         public float GlobalSaberWidthMax { get; set; } = 3;
 
+        public bool ShowAdvancedTrailSettings { get; set; } = false;
+
         // How many threads to spawn when loading all sabers
         // ! Not used as of right now !
         [Ignore]

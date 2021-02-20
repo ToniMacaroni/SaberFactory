@@ -18,7 +18,14 @@ namespace SaberFactory.Models
         public bool ClampTexture;
         public TextureWrapMode? OriginalTextureWrapMode;
 
-        public TrailModel(Vector3 trailPosOffset, float width, int length, MaterialDescriptor material, float whitestep, TextureWrapMode? originalTextureWrapMode, string trailOrigin = "")
+        public TrailModel(
+            Vector3 trailPosOffset,
+            float width,
+            int length,
+            MaterialDescriptor material,
+            float whitestep,
+            TextureWrapMode? originalTextureWrapMode,
+            string trailOrigin = "")
         {
             TrailPosOffset = trailPosOffset;
             Width = width;

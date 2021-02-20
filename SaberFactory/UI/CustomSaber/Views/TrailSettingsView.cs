@@ -27,11 +27,13 @@ namespace SaberFactory.UI.CustomSaber.Views
         [Inject] private readonly PlayerDataModel _playerDataModel = null;
         [Inject] private readonly MainAssetStore _mainAssetStore = null;
         [Inject] private readonly PluginConfig _pluginConfig = null;
+        [Inject] private readonly TrailConfig _trailConfig = null;
 
         private InstanceTrailData _instanceTrailData;
 
         [UIObject("main-container")] private readonly GameObject _mainContainer = null;
         [UIObject("no-trail-container")] private readonly GameObject _noTrailContainer = null;
+        [UIObject("advanced-container")] private readonly GameObject _advancedContainer = null;
 
         [UIComponent("length-slider")] private readonly SliderSetting _lengthSliderSetting = null;
         [UIComponent("width-slider")] private readonly SliderSetting _widthSliderSetting = null;
@@ -42,6 +44,20 @@ namespace SaberFactory.UI.CustomSaber.Views
         [UIComponent("choose-trail-popup")] private readonly ChooseTrailPopup _chooseTrailPopup = null;
 
         [UIValue("trail-width-max")] private float _trailWidthMax => _pluginConfig.TrailWidthMax;
+
+        [UIValue("granularity-value")]
+        private int GranularityValue
+        {
+            get => _trailConfig.Granularity;
+            set => _trailConfig.Granularity = value;
+        }
+
+        [UIValue("sampling-frequency-value")]
+        private int SamplingFrequencyValue
+        {
+            get => _trailConfig.SamplingFrequency;
+            set => _trailConfig.SamplingFrequency = value;
+        }
 
         private SliderController _lengthSlider;
         private SliderController _widthSlider;
@@ -56,6 +72,18 @@ namespace SaberFactory.UI.CustomSaber.Views
             _widthSlider = new SliderController(_widthSliderSetting);
             _whitestepSlider = new SliderController(_whitestepSliderSetting);
             _clampToggle = new ToggleController(_clampToggleSetting);
+
+            if (_pluginConfig.ShowAdvancedTrailSettings)
+            {
+                var rect = _mainContainer.GetComponent<RectTransform>();
+                var size = rect.sizeDelta;
+                size.y = -55;
+                rect.sizeDelta = size;
+            }
+            else
+            {
+                _advancedContainer.SetActive(false);
+            }
         }
 
         public override void DidOpen()
@@ -142,7 +170,7 @@ namespace SaberFactory.UI.CustomSaber.Views
                 return;
             }
 
-            // Show main container in case it wans't active
+            // Show main container in case it wasn't active
             if (_noTrailContainer.activeSelf) _noTrailContainer.SetActive(false);
             if (!_mainContainer.activeSelf) _mainContainer.SetActive(true);
 
@@ -198,6 +226,13 @@ namespace SaberFactory.UI.CustomSaber.Views
         private void ClickChooseTrail()
         {
             _chooseTrailPopup.Show(_mainAssetStore.GetAllMetaData(AssetTypeDefinition.CustomSaber), TrailPopupSelectionChanged);
+        }
+
+        [UIAction("revert-advanced")]
+        private void RevertAdvanced()
+        {
+            _trailConfig.Revert();
+            ParserParams.EmitEvent("get-advanced");
         }
     }
 }

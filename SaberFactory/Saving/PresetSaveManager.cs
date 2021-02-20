@@ -33,12 +33,6 @@ namespace SaberFactory.Saving
             serializableSaberSet.SaberRight = GetSerializableSaber(saberSet.RightSaber);
             var file = _presetDir.GetFile(fileName);
             File.WriteAllText(file.FullName, JsonConvert.SerializeObject(serializableSaberSet, Formatting.Indented));
-
-            var trailSettingsPath = Path.Combine(
-                                        file.Directory.FullName,
-                                        Path.GetFileNameWithoutExtension(file.Name)) + 
-                                    ".trailsettings";
-            File.WriteAllText(trailSettingsPath, JsonConvert.SerializeObject(saberSet.TrailSettings, Formatting.Indented));
         }
 
         private SerializableSaber GetSerializableSaber(SaberModel saberModel)
@@ -79,17 +73,6 @@ namespace SaberFactory.Saving
             var serializableSaberSet = JsonConvert.DeserializeObject<SerializableSaberSet>(data);
             await LoadSaberModel(saberSet.LeftSaber, serializableSaberSet.SaberLeft);
             await LoadSaberModel(saberSet.RightSaber, serializableSaberSet.SaberRight);
-
-            var trailSettingsPath = Path.Combine(
-                                        file.Directory.FullName,
-                                        Path.GetFileNameWithoutExtension(file.Name)) +
-                                    ".trailsettings";
-
-            if (File.Exists(trailSettingsPath))
-            {
-                var trailSettings = JsonConvert.DeserializeObject<TrailSettings>(File.ReadAllText(trailSettingsPath));
-                saberSet.TrailSettings = trailSettings;
-            }
 
             OnSaberLoaded?.Invoke();
         }

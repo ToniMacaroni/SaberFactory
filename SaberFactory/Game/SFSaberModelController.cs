@@ -37,7 +37,7 @@ namespace SaberFactory.Game
 
             _saberInstance = _saberInstanceFactory.Create(saberModel);
             _saberInstance.SetParent(transform);
-            _saberInstance.CreateTrail(_saberTrail.GetField<SaberTrailRenderer, SaberTrail>("_trailRendererPrefab"), _saberSet.TrailSettings, _saberTrail);
+            _saberInstance.CreateTrail(_saberTrail.GetField<SaberTrailRenderer, SaberTrail>("_trailRendererPrefab"), _saberTrail);
             SetColor(_saberColor ?? _colorManager.ColorForSaberType(_saberInstance.Model.SaberSlot.ToSaberType()));
 
             _eventPlayer?.SetPartEventList(_saberInstance.Events, saber.saberType);
