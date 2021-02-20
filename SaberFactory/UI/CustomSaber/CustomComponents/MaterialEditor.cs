@@ -19,23 +19,27 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
         [UIValue("materials")] private List<object> _materials = new List<object>();
         [UIValue("shaders")] private List<object> _shaders = new List<object>();
 
-        public void Show(MaterialDescriptor materialDescriptor)
+        public async void Show(MaterialDescriptor materialDescriptor)
         {
-            Show();
+            Create();
             _materialDropDown.transform.parent.gameObject.SetActive(false);
             SetMaterial(materialDescriptor.Material);
+
+            await AnimateIn();
         }
 
-        public void Show(IEnumerable<MaterialDescriptor> materialDescriptors)
+        public async void Show(IEnumerable<MaterialDescriptor> materialDescriptors)
         {
-            Show();
+            Create();
             _materialDropDown.transform.parent.gameObject.SetActive(true);
             SetMaterial(materialDescriptors.First().Material);
+
+            await AnimateIn();
         }
 
-        public void Close()
+        public async void Close()
         {
-            Hide();
+            await Hide(true);
         }
 
         private void SetMaterial(Material material)

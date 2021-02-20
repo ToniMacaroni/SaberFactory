@@ -322,7 +322,7 @@
     <Compile Include="UI\ICustomListItem.cs" />
     <Compile Include="UI\Lib\BSML\CustomBackgroundable.cs" />
     <Compile Include="UI\Lib\BSML\CustomComponentHandler.cs" />
-    <Compile Include="UI\Lib\BSML\CustomIconButton.cs" />
+    <Compile Include="UI\Lib\BSML\Tags\ButtonWithIconTag.cs" />
     <Compile Include="UI\Lib\CustomUiComponent.cs" />
     <Compile Include="UI\Lib\BSML\Tags\CustomUiComponentTag.cs" />
     <Compile Include="UI\Lib\CustomViewController.cs" />

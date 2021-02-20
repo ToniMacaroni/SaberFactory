@@ -20,8 +20,6 @@ namespace SaberFactory.DataStore
     /// </summary>
     internal class MainAssetStore : IDisposable
     {
-        private static readonly int MAX_LOADING_THREADS = 15;
-
         public bool IsLoading { get; private set; }
         public Task CurrentTask;
 
@@ -65,33 +63,9 @@ namespace SaberFactory.DataStore
             UnloadAll();
         }
 
-        public async Task LoadAllAsync(EAssetTypeConfiguration assetType)
-        {
-            await LoadAllCustomSabersAsync();
-            //if (assetType == EAssetType.SaberFactory)
-            //{
-            //    await LoadAllCustomSabersAsync();
-            //}else if (assetType == EAssetType.CustomSaber)
-            //{
-            //    // Part Loading
-            //}
-        }
-
         public async Task LoadAllMetaAsync(EAssetTypeConfiguration assetType)
         {
             await LoadAllCustomSaberMetaDataAsync();
-        }
-
-        public async Task LoadAllCustomSabersAsync()
-        {
-            if (!IsLoading)
-            {
-                IsLoading = true;
-                CurrentTask = LoadAllCustomSabersAsyncInternal(_config.LoadingThreads);
-            }
-
-            await CurrentTask;
-            IsLoading = false;
         }
 
         public async Task LoadAllCustomSaberMetaDataAsync()
@@ -104,16 +78,6 @@ namespace SaberFactory.DataStore
 
             await CurrentTask;
             IsLoading = false;
-        }
-
-        public IEnumerable<ModelComposition> GetAllModelCompositions()
-        {
-            return _modelCompositions.Values;
-        }
-
-        public IEnumerable<ModelComposition> GetAllModelCompositions(AssetTypeDefinition assetType)
-        {
-            return _modelCompositions.Values.Where(x => x.AssetTypeDefinition.Equals(assetType));
         }
 
         public IEnumerable<PreloadMetaData> GetAllMetaData()
@@ -174,45 +138,6 @@ namespace SaberFactory.DataStore
             Unload(path);
             var filePath = PathTools.ToFullPath(path);
             File.Delete(filePath);
-        }
-
-        private async Task LoadAllCustomSabersAsyncInternal(int threads)
-        {
-            threads = Math.Min(threads, MAX_LOADING_THREADS);
-
-            var tasks = new List<Task>();
-            var files = new ConcurrentQueue<string>();
-
-            foreach (var assetMetaPath in await _customSaberAssetLoader.CollectFiles())
-            {
-                files.Enqueue(assetMetaPath.Path);
-            }
-
-            _logger.Info($"{files.Count} custom sabers found");
-            if (files.Count == 0) return;
-
-            var sw = Stopwatch.StartNew();
-
-            async Task LoadingThread()
-            {
-                while (files.TryDequeue(out string file))
-                {
-                    var relativePath = PathTools.ToRelativePath(file);
-                    if (_modelCompositions.ContainsKey(relativePath)) continue;
-
-                    await LoadComposition(relativePath);
-                }
-            }
-
-            for (int i = 0; i < threads; i++)
-            {
-                tasks.Add(LoadingThread());
-            }
-
-            await Task.WhenAll(tasks);
-
-            sw.Stop();
-            _logger.Info($"Loaded in {sw.Elapsed.Seconds}.{sw.Elapsed.Milliseconds}s");
         }
 
         private async Task LoadAllCustomSaberMetaDataAsyncInternal()

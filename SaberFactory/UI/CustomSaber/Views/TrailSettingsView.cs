@@ -63,9 +63,6 @@ namespace SaberFactory.UI.CustomSaber.Views
             CreateTrail(_editorInstanceManager.CurrentSaber);
 
             _editorInstanceManager.OnSaberInstanceCreated += CreateTrail;
-
-            _chooseTrailPopup.OnSelected += TrailPopupSelectionChanged;
-            _chooseTrailPopup.OnSelectionChanged += TrailPopupSelectionChanged;
         }
 
         public override void DidClose()
@@ -74,9 +71,6 @@ namespace SaberFactory.UI.CustomSaber.Views
             _instanceTrailData = null;
             _trailPreviewer.Destroy();
             _editorInstanceManager.OnSaberInstanceCreated -= CreateTrail;
-
-            _chooseTrailPopup.OnSelected -= TrailPopupSelectionChanged;
-            _chooseTrailPopup.OnSelectionChanged -= TrailPopupSelectionChanged;
         }
 
         private void LoadFromModel(InstanceTrailData trailData)
@@ -131,6 +125,8 @@ namespace SaberFactory.UI.CustomSaber.Views
 
         private void CreateTrail(SaberInstance saberInstance)
         {
+            _trailPreviewer.Destroy();
+
             _lengthSlider.RemoveEvent(SetLength);
             _widthSlider.RemoveEvent(SetWidth);
             _whitestepSlider.RemoveEvent(SetWhitestep);
@@ -166,14 +162,17 @@ namespace SaberFactory.UI.CustomSaber.Views
         {
             if (trailModel is null)
             {
-                _trailPreviewer.Destroy();
-                SetTrailModel(_editorInstanceManager.CurrentModelComposition.GetLeft().Cast<CustomSaberModel>().GrabTrail(false));
-                _editorInstanceManager.Refresh();
-                return;
+                var tm = _editorInstanceManager.CurrentModelComposition?.GetLeft().CastChecked<CustomSaberModel>()?.GrabTrail(false);
+                if (tm is { })
+                {
+                    SetTrailModel(tm);
+                }
+            }
+            else
+            {
+                SetTrailModel(trailModel);
             }
 
-            _trailPreviewer.Destroy();
-            SetTrailModel(trailModel);
             _editorInstanceManager.Refresh();
         }
 
@@ -191,7 +190,6 @@ namespace SaberFactory.UI.CustomSaber.Views
         [UIAction("revert-trail")]
         private void ClickRevertTrail()
         {
-            _trailPreviewer.Destroy();
             ResetTrail();
             _editorInstanceManager.Refresh();
         }
@@ -199,7 +197,7 @@ namespace SaberFactory.UI.CustomSaber.Views
         [UIAction("choose-trail")]
         private void ClickChooseTrail()
         {
-            _chooseTrailPopup.Show(_mainAssetStore.GetAllMetaData(AssetTypeDefinition.CustomSaber));
+            _chooseTrailPopup.Show(_mainAssetStore.GetAllMetaData(AssetTypeDefinition.CustomSaber), TrailPopupSelectionChanged);
         }
     }
 }

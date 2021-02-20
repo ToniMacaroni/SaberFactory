@@ -13,28 +13,22 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
 {
     internal class ChooseTrailPopup : Popup
     {
-        /// <summary>
-        /// Called when the selection is final and the
-        /// popup is being closed
-        /// </summary>
-        public Action<TrailModel> OnSelected;
-
-        /// <summary>
-        /// Called when the selected item in the list changes
-        /// </summary>
-        public Action<TrailModel> OnSelectionChanged;
-
         [Inject] private readonly MainAssetStore _mainAssetStore = null;
 
         [UIComponent("saber-list")] private readonly CustomList _saberList = null;
 
         private TrailModel _selectedTrailModel;
+        private Action<TrailModel> _onSelectionChanged;
 
-        public void Show(IEnumerable<PreloadMetaData> comps)
+        public async void Show(IEnumerable<PreloadMetaData> comps, Action<TrailModel> onSelectionChanged)
         {
-            Show();
+            _onSelectionChanged = onSelectionChanged;
+
+            Create();
             _saberList.OnItemSelected += SaberSelected;
             _saberList.SetItems(comps);
+
+            await AnimateIn();
         }
 
         private async Task<TrailModel> GetTrail(PreloadMetaData metaData)
@@ -56,26 +50,29 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
             if (item is PreloadMetaData metaData)
             {
                 _selectedTrailModel = await GetTrail(metaData);
-                OnSelectionChanged?.Invoke(_selectedTrailModel);
+                _onSelectionChanged?.Invoke(_selectedTrailModel);
             }
+        }
+
+        private async void Exit()
+        {
+            _onSelectionChanged = null;
+
+            _saberList.OnItemSelected -= SaberSelected;
+            await Hide(true);
         }
 
         [UIAction("click-select")]
         private void ClickSelect()
         {
-            _saberList.OnItemSelected -= SaberSelected;
-            Hide();
-
-            OnSelected?.Invoke(_selectedTrailModel);
+            Exit();
         }
 
         [UIAction("click-original")]
         private void ClickOriginal()
         {
-            _saberList.OnItemSelected -= SaberSelected;
-            Hide();
-
-            OnSelected?.Invoke(null);
+            _onSelectionChanged?.Invoke(null);
+            Exit();
         }
     }
 }

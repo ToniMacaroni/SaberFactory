@@ -1,11 +1,11 @@
-﻿<bg size-delta-x="0" bg="round-rect-panel" bg-color="#333" xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
+﻿<bg size-delta-x="0" bg="round-rect-panel" bg-color="#555" xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
 	<vertical pad-top='2'>
-		<vertical bg='round-rect-panel' bg-color='#555' pref-height='85' pref-width='90'>
+		<vertical bg='round-rect-panel' bg-color='#FFFFFF05' pref-height='85' pref-width='90'>
 			<text-page text='~text' font-size='4' rich-text='true'/>
 		</vertical>
 		<horizontal>
-			<this.button text='Close' on-click='clicked-close' />
-			<this.button text='Open on Github' on-click='clicked-open' />
+			<this.button text='Close' normal-color='#00000080' pref-width='30' on-click='clicked-close' />
+			<this.button text='Open on Github' normal-color='#00000080' pref-width='30' on-click='clicked-open' />
 		</horizontal>
 	</vertical>
 </bg>

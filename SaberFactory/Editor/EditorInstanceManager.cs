@@ -73,17 +73,29 @@ namespace SaberFactory.Editor
 
             if (raiseSaberEvent)
             {
-                OnSaberInstanceCreated?.Invoke(CurrentSaber);
+                RaiseSaberCreatedEvent();
             }
 
             CurrentPiece = GetPiece(SelectedDefinition);
 
-            if (raisePieceEvent && CurrentPiece != null)
+            if (raisePieceEvent)
             {
-                OnPieceInstanceCreated?.Invoke(CurrentPiece);
+                RaisePieceCreatedEvent();
             }
 
             return CurrentSaber;
+        }
+
+        private void RaiseSaberCreatedEvent()
+        {
+            if (CurrentSaber is null) return;
+            OnSaberInstanceCreated?.Invoke(CurrentSaber);
+        }
+
+        private void RaisePieceCreatedEvent()
+        {
+            if (CurrentPiece is null) return;
+            OnPieceInstanceCreated?.Invoke(CurrentPiece);
         }
 
         public void DestroySaber()

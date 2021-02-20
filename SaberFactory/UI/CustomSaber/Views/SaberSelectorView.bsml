@@ -2,7 +2,7 @@
      xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
 	<horizontal spacing='5' child-expand-width='false' child-control-width='false' child-align='MiddleCenter' pref-height='100'>
 		<vertical spacing='0.5'>
-			<this.custom-list id='saber-list' title='Saber-Os' width='80' />
+			<this.custom-list id='saber-list' title='Saber-Os' width='80' bg-color='#00000065' />
 			<vertical pref-width='80' bg='round-rect-panel' bg-color='#00000055' pad-left='2' pad-right='2' pad-top='1' pad-bottom='1'>
 				<slider-setting text='Global Saber Width' value='saber-width' get-event='update-width' apply-on-change='true' max='~global-saber-width-max' increment='0.05' />
 				<horizontal>
@@ -12,7 +12,22 @@
 				</horizontal>
 			</vertical>
 		</vertical>
-		<vertical preferred-width='15' child-control-height='false'>
+		<vertical preferred-width='15' child-control-height='false' child-expand-height='false'>
+			<horizontal pref-height='16' pref-width='12' horizontal-fit='PreferredSize'>
+				<custom-icon-btn
+					id='toggle-favorite'
+					on-click='open-modelsaber'
+					icon='#AddIcon'
+					show-line='false'
+					hover-hint='ModelSaber'
+					hovered-color='#3486ebff'
+					skew='0'
+					use-gradient='false'>
+					<horizontal active='~download-sabers-popup' pad='2' size-delta-x='42' anchor-pos-x='35' bg='round-rect-panel' bg-color='#00000070' ignore-layout='true'>
+						<text align='Center' text='&lt;- Click here to download more sabers'/>
+					</horizontal>
+				</custom-icon-btn>
+			</horizontal>
 			<this.icon-toggle-button
 				id='toggle-favorite'
 				icon='SaberFactory.Resources.Icons.heart.png'
@@ -25,4 +40,6 @@
 	</horizontal>
 
 	<this.loading-popup id='loading-popup' />
+
+	
 </div>

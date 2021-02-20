@@ -21,7 +21,16 @@ namespace SaberFactory.UI.Lib.BSML
             ForegroundImage.SetImage(path);
         }
 
-        public void SetBackground(string path)
+        public void SetIconColor(string colorString)
+        {
+            if (ForegroundImage is null) return;
+            if (ColorUtility.TryParseHtmlString(colorString, out var color))
+            {
+                ForegroundImage.color = color;
+            }
+        }
+
+        public void SetBackgroundIcon(string path)
         {
             if (BackgroundImage == null)
                 return;
@@ -42,6 +51,7 @@ namespace SaberFactory.UI.Lib.BSML
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
         {
             { "icon", new[]{"icon"} },
+            { "iconColor", new []{"icon-color"} },
             { "bgIcon", new []{"bg-icon"} },
             { "showLine", new []{"show-line"} },
             { "useGradient", new[]{ "use-gradient" } },
@@ -54,7 +64,8 @@ namespace SaberFactory.UI.Lib.BSML
         public override Dictionary<string, Action<ButtonImageController, string>> Setters => new Dictionary<string, Action<ButtonImageController, string>>()
         {
             {"icon", (images, iconPath) => images.SetIcon(iconPath)},
-            {"bgIcon", (images, iconPath) => images.SetBackground(iconPath)},
+            {"iconColor", (images, color) => images.SetIconColor(color) },
+            {"bgIcon", (images, iconPath) => images.SetBackgroundIcon(iconPath)},
             {"showLine", (images, stringBool) => images.ShowLine(bool.Parse(stringBool))},
             {"useGradient", SetGradient },
             {"showFill", SetFill },

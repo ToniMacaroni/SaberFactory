@@ -42,7 +42,7 @@
 				on-click='github-clicked'
 				icon='SaberFactory.Resources.Icons.update.png'
 				hover-hint='New version available on Github (click to see changelogs)'
-				skew='0' show-line='false' normal-color='#00000000' hovered-color='#ffffff20' use-gradient='false'/>
+				skew='0' show-line='false' icon-color='#5dc968' normal-color='#00000000' hovered-color='#ffffff20' use-gradient='false'/>
 		</horizontal>
 	</vertical>
 

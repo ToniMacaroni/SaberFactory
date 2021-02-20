@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.Threading.Tasks;
 using SaberFactory.Configuration;
 using SaberFactory.Helpers;
 using SaberFactory.Instances;
@@ -126,6 +127,8 @@ namespace SaberFactory.Editor
 
             _spawnedSaber.SetColor(_playerDataModel.playerData.colorSchemesSettings.GetSelectedColorScheme().saberAColor);
 
+            await Task.Yield();
+
             if (_pluginConfig.AnimateSaberSelection)
             {
                 await AnimationHelper.AsyncAnimation(0.3f, CancellationToken.None, t =>
@@ -133,7 +136,7 @@ namespace SaberFactory.Editor
                     _pedestal.SaberContainerTransform.localScale = new Vector3(t, t, t);
                 });
             }
-            
+
         }
     }
 }

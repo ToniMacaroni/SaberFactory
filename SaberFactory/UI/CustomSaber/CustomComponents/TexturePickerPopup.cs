@@ -32,8 +32,10 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
 
             await _textureStore.LoadAllTexturesAsync();
 
-            Show();
+            Create();
             RefreshList(_textureStore.GetAllTextures().ToList());
+
+            await AnimateIn();
         }
 
         public void RefreshList(List<TextureAsset> items)
@@ -61,16 +63,16 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
         }
 
         [UIAction("click-cancel")]
-        private void ClickCancel()
+        private async void ClickCancel()
         {
-            Hide();
+            await Hide(false);
             _onCancelCallback?.Invoke();
         }
 
         [UIAction("click-select")]
-        private void ClickSelect()
+        private async void ClickSelect()
         {
-            Hide();
+            await Hide(false);
             _onSelectedCallback?.Invoke(_selectedTextureAsset?.Texture);
         }
 

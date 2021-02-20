@@ -16,7 +16,7 @@
 		on-selected='clicked-settings'
 		on-color='#fff'
 		off-color='#ffffff60'>
-		<text id='settings-notify-text' active='false' text='Update' font-size='3' align='TopGeoAligned' color='lime'/>
+		<text id='settings-notify-text' active='false' text='Update' font-size='3' align='TopGeoAligned' color='#5dc968'/>
 	</this.nav-button>
 
 	<custom-icon-btn
