@@ -15,5 +15,15 @@ namespace SaberFactory.Helpers
         {
             return new FileInfo(Path.Combine(dir.FullName, fileName));
         }
+
+        public static void WriteText(this FileInfo file, string text)
+        {
+            File.WriteAllText(file.FullName, text);
+        }
+
+        public static string ReadText(this FileInfo file)
+        {
+            return File.ReadAllText(file.FullName);
+        }
     }
 }

@@ -102,42 +102,5 @@ namespace SaberFactory.Instances.Trail
         {
             TrailModel.Material.Revert();
         }
-
-        public static InstanceTrailData FromCustomSaber(GameObject saberObject, TrailModel trailModel)
-        {
-            var saberTrail = saberObject.GetComponent<CustomTrail>();
-
-            if (!saberTrail || trailModel == null)
-            {
-                return null;
-            }
-
-            // if trail comes from the preset save system
-            // the model comes without the material assigned
-            if (trailModel.Material == null)
-            {
-                trailModel.Material = new MaterialDescriptor(saberTrail.TrailMaterial);
-                if (trailModel.Material.Material.TryGetMainTexture(out var tex))
-                {
-                    trailModel.OriginalTextureWrapMode = tex.wrapMode;
-                }
-            }
-
-            Transform pointStart = saberTrail.PointStart;
-            Transform pointEnd = saberTrail.PointEnd;
-
-            // Correction for sabers that have the transforms set up the other way around
-            bool isTrailReversed = false;
-            if (pointStart.localPosition.z > pointEnd.localPosition.z)
-            {
-                pointStart = saberTrail.PointEnd;
-                pointEnd = saberTrail.PointStart;
-                isTrailReversed = true;
-            }
-
-            var data = new InstanceTrailData(trailModel, pointStart, pointEnd, isTrailReversed);
-
-            return data;
-        }
     }
 }

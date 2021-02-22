@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using SaberFactory.Configuration;
 using SaberFactory.Helpers;
 using SaberFactory.Instances.CustomSaber;
 using SaberFactory.Instances.Trail;
@@ -26,12 +27,14 @@ namespace SaberFactory.Instances
 
         private readonly SectionInstantiator _sectionInstantiator;
         private readonly SiraLog _logger;
+        private readonly TrailConfig _trailConfig;
 
         private InstanceTrailData _instanceTrailData;
 
-        private SaberInstance(SaberModel model, BasePieceInstance.Factory pieceFactory, SiraLog logger)
+        private SaberInstance(SaberModel model, BasePieceInstance.Factory pieceFactory, SiraLog logger, TrailConfig trailConfig)
         {
             _logger = logger;
+            _trailConfig = trailConfig;
 
             Model = model;
             GameObject = new GameObject("SF Saber");
@@ -84,7 +87,7 @@ namespace SaberFactory.Instances
             _instanceTrailData = default;
         }
 
-        public void CreateTrail(SaberTrailRenderer rendererPrefab, TrailSettings trailSettings, SaberTrail backupTrail = null)
+        public void CreateTrail(SaberTrail backupTrail = null)
         {
             var trailData = GetTrailData();
 
@@ -93,17 +96,15 @@ namespace SaberFactory.Instances
                 if (backupTrail is {})
                 {
                     TrailHandler = new TrailHandler(GameObject, backupTrail);
-                    TrailHandler.SetPrefab(rendererPrefab);
-                    TrailHandler.CreateTrail(trailSettings);
+                    TrailHandler.CreateTrail(_trailConfig);
                 }
 
                 return;
             }
 
             TrailHandler = new TrailHandler(GameObject);
-            TrailHandler.SetPrefab(rendererPrefab);
             TrailHandler.SetTrailData(GetTrailData());
-            TrailHandler.CreateTrail(trailSettings);
+            TrailHandler.CreateTrail(_trailConfig);
         }
 
         public void DestroyTrail()

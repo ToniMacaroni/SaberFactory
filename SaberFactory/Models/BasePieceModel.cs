@@ -17,18 +17,15 @@ namespace SaberFactory.Models
 
         public GameObject Prefab => StoreAsset.Prefab;
 
-        protected CommonResources _commonResources;
-
         public ESaberSlot SaberSlot;
 
         public AdditionalInstanceHandler AdditionalInstanceHandler;
 
         public PiecePropertyBlock PropertyBlock;
 
-        protected BasePieceModel(StoreAsset storeAsset, CommonResources commonResources)
+        protected BasePieceModel(StoreAsset storeAsset)
         {
             StoreAsset = storeAsset;
-            _commonResources = commonResources;
         }
 
         public virtual void Init()

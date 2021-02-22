@@ -56,6 +56,11 @@ namespace SaberFactory.Instances
             }
         }
 
+        /// <summary>
+        /// Override this to populate the list with all materials
+        /// that should be colored with the current colorscheme
+        /// </summary>
+        /// <param name="materials"></param>
         protected virtual void GetColorableMaterials(List<Material> materials) { }
 
         internal class Factory : PlaceholderFactory<BasePieceModel, BasePieceInstance> {}

@@ -33,12 +33,6 @@ namespace SaberFactory.Saving
             serializableSaberSet.SaberRight = GetSerializableSaber(saberSet.RightSaber);
             var file = _presetDir.GetFile(fileName);
             File.WriteAllText(file.FullName, JsonConvert.SerializeObject(serializableSaberSet, Formatting.Indented));
-
-            var trailSettingsPath = Path.Combine(
-                                        file.Directory.FullName,
-                                        Path.GetFileNameWithoutExtension(file.Name)) + 
-                                    ".trailsettings";
-            File.WriteAllText(trailSettingsPath, JsonConvert.SerializeObject(saberSet.TrailSettings, Formatting.Indented));
         }
 
         private SerializableSaber GetSerializableSaber(SaberModel saberModel)
@@ -80,17 +74,6 @@ namespace SaberFactory.Saving
             await LoadSaberModel(saberSet.LeftSaber, serializableSaberSet.SaberLeft);
             await LoadSaberModel(saberSet.RightSaber, serializableSaberSet.SaberRight);
 
-            var trailSettingsPath = Path.Combine(
-                                        file.Directory.FullName,
-                                        Path.GetFileNameWithoutExtension(file.Name)) +
-                                    ".trailsettings";
-
-            if (File.Exists(trailSettingsPath))
-            {
-                var trailSettings = JsonConvert.DeserializeObject<TrailSettings>(File.ReadAllText(trailSettingsPath));
-                saberSet.TrailSettings = trailSettings;
-            }
-
             OnSaberLoaded?.Invoke();
         }
 
@@ -106,10 +89,24 @@ namespace SaberFactory.Saving
                 saberModel.PieceCollection.AddPiece(comp.AssetTypeDefinition, comp.GetPiece(saberModel.SaberSlot));
             }
 
+            TrailModel trailModel = null;
+
+            if (saberModel.GetCustomSaber(out var customsaber))
+            {
+                trailModel = customsaber.TrailModel;
+            }
+            else
+            {
+                trailModel = new TrailModel();
+            }
+
             var trail = serializableSaber.Trail;
             if (trail != null)
             {
-                var trailModel = new TrailModel(Vector3.zero, trail.Width, trail.Length, null, trail.Whitestep, null, trail.TrailOrigin);
+                trailModel.TrailPosOffset = Vector3.zero;
+                trailModel.Width = trail.Width;
+                trailModel.Length = trail.Length;
+                trailModel.Whitestep = trail.Whitestep;
                 trailModel.ClampTexture = trail.ClampTexture;
 
                 // if trail comes from another saber
@@ -120,23 +117,13 @@ namespace SaberFactory.Saving
 
                 // assign trailmodel to custom saber or saber factory saber
                 // depending on which trail type is being used
-                if (saberModel.GetCustomSaber(out var customsaber))
-                {
-                    if (trailModel.Material == null)
-                    {
-                        var csTrail = customsaber.GrabTrail(true);
-                        trailModel.Material = csTrail.Material;
-                        trailModel.OriginalTextureWrapMode = csTrail.OriginalTextureWrapMode;
-                    }
-
-                    trail.Material?.ApplyToMaterial(trailModel.Material.Material, ResolveTexture);
-
-                    customsaber.TrailModel = trailModel;
-                }
-                else
+                if (customsaber is null)
                 {
                     saberModel.TrailModel = trailModel;
                 }
+
+                trail.Material?.ApplyToMaterial(trailModel.Material.Material, ResolveTexture);
+
             }
         }
 
@@ -157,8 +144,7 @@ namespace SaberFactory.Saving
             var comp = await _mainAssetStore[trailOrigin];
             var originTrailModel = (comp?.GetLeft() as CustomSaberModel)?.GrabTrail(true);
             if (originTrailModel == null) return;
-            trailModel.Material = originTrailModel.Material;
-            trailModel.OriginalTextureWrapMode = originTrailModel.OriginalTextureWrapMode;
+            trailModel.Material.Material = originTrailModel.Material.Material;
         }
     }
 }

@@ -23,14 +23,12 @@ namespace SaberFactory.Editor
         
         private readonly SiraLog _logger;
         private readonly SaberSet _saberSet;
-        private readonly PresetSaveManager _presetSaveManager;
         private readonly SaberInstance.Factory _saberFactory;
 
         public EditorInstanceManager(SiraLog logger, SaberSet saberSet, PresetSaveManager presetSaveManager, SaberInstance.Factory saberFactory)
         {
             _logger = logger;
             _saberSet = saberSet;
-            _presetSaveManager = presetSaveManager;
             _saberFactory = saberFactory;
 
             SelectedDefinition = AssetTypeDefinition.CustomSaber;
@@ -71,21 +69,33 @@ namespace SaberFactory.Editor
         public SaberInstance CreateSaber(SaberModel model, Transform parent, bool raiseSaberEvent = false, bool raisePieceEvent = false)
         {
             CurrentSaber = _saberFactory.Create(model);
-            CurrentSaber.SetParent(parent);
+            if(parent is {}) CurrentSaber.SetParent(parent);
 
             if (raiseSaberEvent)
             {
-                OnSaberInstanceCreated?.Invoke(CurrentSaber);
+                RaiseSaberCreatedEvent();
             }
 
             CurrentPiece = GetPiece(SelectedDefinition);
 
-            if (raisePieceEvent && CurrentPiece != null)
+            if (raisePieceEvent)
             {
-                OnPieceInstanceCreated?.Invoke(CurrentPiece);
+                RaisePieceCreatedEvent();
             }
 
             return CurrentSaber;
+        }
+
+        public void RaiseSaberCreatedEvent()
+        {
+            if (CurrentSaber is null) return;
+            OnSaberInstanceCreated?.Invoke(CurrentSaber);
+        }
+
+        public void RaisePieceCreatedEvent()
+        {
+            if (CurrentPiece is null) return;
+            OnPieceInstanceCreated?.Invoke(CurrentPiece);
         }
 
         public void DestroySaber()

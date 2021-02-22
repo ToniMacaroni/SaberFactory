@@ -21,7 +21,7 @@ namespace SaberFactory.Instances
         public void InstantiateSection(AssetTypeDefinition definition)
         {
             var modelPiece = _saberInstance.Model.PieceCollection[definition];
-            if (modelPiece != null)
+            if (modelPiece is {})
             {
                 var instance = _pieceInstanceFactory.Create(modelPiece);
                 instance.SetParent(_saberInstance.CachedTransform);

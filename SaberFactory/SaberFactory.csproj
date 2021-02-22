@@ -51,6 +51,11 @@
       <Private>False</Private>
       <SpecificVersion>False</SpecificVersion>
     </Reference>
+    <Reference Include="Colors">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Colors.dll</HintPath>
+      <Private>False</Private>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
     <Reference Include="CustomSaberComponents, Version=4.4.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Resources\CustomSaberComponents.dll</HintPath>
@@ -193,18 +198,23 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CommonResources.cs" />
+    <Compile Include="Configuration\TrailConfig.cs" />
     <Compile Include="DataStore\EAssetOrigin.cs" />
     <Compile Include="DataStore\MainAssetStore.cs" />
     <Compile Include="DataStore\TextureAsset.cs" />
     <Compile Include="DataStore\TextureStore.cs" />
     <Compile Include="EAssetTypeConfiguration.cs" />
     <Compile Include="Editor\Editor.cs" />
+    <Compile Include="Editor\SaberGrabController.cs" />
     <Compile Include="Editor\SFLogoAnim.cs" />
     <Compile Include="EmbeddedAssetLoader.cs" />
     <Compile Include="Editor\Pedestal.cs" />
     <Compile Include="Game\GameSaberSetup.cs" />
+    <Compile Include="Game\SaberMovementTester.cs" />
+    <Compile Include="Helpers\AnimationHelper.cs" />
+    <Compile Include="Helpers\AnimationManager.cs" />
     <Compile Include="Helpers\MaterialHelpers.cs" />
+    <Compile Include="Instances\Trail\SFTrailRenderer.cs" />
     <Compile Include="Loaders\AssetMetaPath.cs" />
     <Compile Include="Models\PreloadMetaData.cs" />
     <Compile Include="Models\ESaberSlot.cs" />
@@ -254,7 +264,6 @@
     <Compile Include="Models\SaberSet.cs" />
     <Compile Include="Instances\Trail\SFTrail.cs" />
     <Compile Include="Models\TrailModel.cs" />
-    <Compile Include="Models\TrailSettings.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Configuration\PluginConfig.cs" />
     <Compile Include="PluginManager.cs" />
@@ -296,6 +305,7 @@
     <Compile Include="UI\Lib\ComponentPlaceholderFactory.cs" />
     <Compile Include="UI\Lib\CustomParsable.cs" />
     <Compile Include="UI\Lib\DynamicTypeFactory.cs" />
+    <Compile Include="UI\Lib\EPropertyType.cs" />
     <Compile Include="UI\Lib\IAnimatableUi.cs" />
     <Compile Include="UI\Lib\ICustomParsable.cs" />
     <Compile Include="UI\Lib\PropCell.cs" />
@@ -305,9 +315,6 @@
     <Compile Include="UI\Lib\PropCells\FloatPropCell.cs" />
     <Compile Include="UI\Lib\PropCells\TexturePropCell.cs" />
     <Compile Include="UI\Lib\PropertyDescriptor.cs" />
-    <Compile Include="UI\Lib\PropListTableData.cs" />
-    <Compile Include="UI\Lib\PropListTableDataHandler.cs" />
-    <Compile Include="UI\Lib\BSML\Tags\PropListTag.cs" />
     <Compile Include="UI\Lib\Popup.cs" />
     <Compile Include="UI\Lib\BSML\Tags\PopupTag.cs" />
     <Compile Include="UI\Lib\SliderController.cs" />
@@ -318,7 +325,7 @@
     <Compile Include="UI\ICustomListItem.cs" />
     <Compile Include="UI\Lib\BSML\CustomBackgroundable.cs" />
     <Compile Include="UI\Lib\BSML\CustomComponentHandler.cs" />
-    <Compile Include="UI\Lib\BSML\CustomIconButton.cs" />
+    <Compile Include="UI\Lib\BSML\Tags\ButtonWithIconTag.cs" />
     <Compile Include="UI\Lib\CustomUiComponent.cs" />
     <Compile Include="UI\Lib\BSML\Tags\CustomUiComponentTag.cs" />
     <Compile Include="UI\Lib\CustomViewController.cs" />

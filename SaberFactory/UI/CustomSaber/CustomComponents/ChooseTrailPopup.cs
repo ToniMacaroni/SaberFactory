@@ -1,6 +1,7 @@
 ﻿using BeatSaberMarkupLanguage.Attributes;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using SaberFactory.DataStore;
 using SaberFactory.Models;
 using SaberFactory.Models.CustomSaber;
@@ -16,44 +17,62 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
 
         [UIComponent("saber-list")] private readonly CustomList _saberList = null;
 
-        private Action<TrailModel> _callback;
-        private PreloadMetaData _selectedComposition;
+        private TrailModel _selectedTrailModel;
+        private Action<TrailModel> _onSelectionChanged;
 
-        public void Show(IEnumerable<PreloadMetaData> comps, Action<TrailModel> callback)
+        public async void Show(IEnumerable<PreloadMetaData> comps, Action<TrailModel> onSelectionChanged)
         {
-            Show();
+            _onSelectionChanged = onSelectionChanged;
+
+            Create();
             _saberList.OnItemSelected += SaberSelected;
             _saberList.SetItems(comps);
-            _callback = callback;
+
+            await AnimateIn();
         }
 
-        private void SaberSelected(ICustomListItem item)
+        private async Task<TrailModel> GetTrail(PreloadMetaData metaData)
         {
-            _selectedComposition = (PreloadMetaData) item;
+            if (metaData is null) return null;
+
+            var comp = await _mainAssetStore[metaData];
+
+            if (comp?.GetLeft() is CustomSaberModel cs)
+            {
+                return cs.GrabTrail(true);
+            }
+
+            return null;
+        }
+
+        private async void SaberSelected(ICustomListItem item)
+        {
+            if (item is PreloadMetaData metaData)
+            {
+                _selectedTrailModel = await GetTrail(metaData);
+                _onSelectionChanged?.Invoke(_selectedTrailModel);
+            }
+        }
+
+        private async void Exit()
+        {
+            _onSelectionChanged = null;
+
+            _saberList.OnItemSelected -= SaberSelected;
+            await Hide(true);
         }
 
         [UIAction("click-select")]
-        private async void ClickSelect()
+        private void ClickSelect()
         {
-            _saberList.OnItemSelected -= SaberSelected;
-            Hide();
+            Exit();
+        }
 
-            if (_selectedComposition == null)
-            {
-                _callback?.Invoke(null);
-                return;
-            }
-
-            var comp = await _mainAssetStore[_selectedComposition.AssetMetaPath.RelativePath];
-
-            if (comp == null)
-            {
-                _callback?.Invoke(null);
-                return;
-            }
-
-            var model = (CustomSaberModel) comp.GetLeft();
-            _callback?.Invoke(model.GrabTrail(true));
+        [UIAction("click-original")]
+        private void ClickOriginal()
+        {
+            _onSelectionChanged?.Invoke(null);
+            Exit();
         }
     }
 }

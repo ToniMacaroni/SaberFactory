@@ -2,6 +2,7 @@
 using BeatSaberMarkupLanguage.Attributes;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using BeatSaberMarkupLanguage.Components.Settings;
 using SaberFactory.Instances;
 using SaberFactory.UI.Lib;
@@ -19,23 +20,33 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
         [UIValue("materials")] private List<object> _materials = new List<object>();
         [UIValue("shaders")] private List<object> _shaders = new List<object>();
 
-        public void Show(MaterialDescriptor materialDescriptor)
+        public async void Show(MaterialDescriptor materialDescriptor)
         {
-            Show();
+            Create();
+            _cachedTransform.localScale = Vector3.zero;
+
             _materialDropDown.transform.parent.gameObject.SetActive(false);
             SetMaterial(materialDescriptor.Material);
+
+            await Task.Delay(100);
+            await AnimateIn();
         }
 
-        public void Show(IEnumerable<MaterialDescriptor> materialDescriptors)
+        public async void Show(IEnumerable<MaterialDescriptor> materialDescriptors)
         {
-            Show();
+            Create();
+            _cachedTransform.localScale = Vector3.zero;
+            
             _materialDropDown.transform.parent.gameObject.SetActive(true);
             SetMaterial(materialDescriptors.First().Material);
+
+            await Task.Delay(100);
+            await AnimateIn();
         }
 
-        public void Close()
+        public async void Close()
         {
-            Hide();
+            await Hide(true);
         }
 
         private void SetMaterial(Material material)

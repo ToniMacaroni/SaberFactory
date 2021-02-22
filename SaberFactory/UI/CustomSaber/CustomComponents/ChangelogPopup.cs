@@ -11,16 +11,17 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
 
         private PluginManager.Release _release;
 
-        public void Show(PluginManager.Release release)
+        public async void Show(PluginManager.Release release)
         {
             _release = release;
             _text = release.Body;
-            Show();
+            Create();
+            await AnimateIn();
         }
 
-        public new void Hide()
+        public async void Hide()
         {
-            base.Hide();
+            await Hide(true);
         }
 
         [UIAction("clicked-close")]

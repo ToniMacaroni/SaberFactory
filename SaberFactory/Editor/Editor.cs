@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using SaberFactory.Configuration;
+using SaberFactory.Helpers;
 using SaberFactory.Instances;
 using SaberFactory.Models;
 using SaberFactory.UI;
@@ -16,16 +19,29 @@ namespace SaberFactory.Editor
     {
         public bool IsActive { get; private set; }
 
+        public bool IsSaberInHand
+        {
+            get => _isSaberInHand;
+            set
+            {
+                _isSaberInHand = value;
+                _editorInstanceManager.Refresh();
+            }
+        }
+
         private readonly SiraLog _logger;
         private readonly PluginConfig _pluginConfig;
         private readonly SaberFactoryUI _saberFactoryUi;
         private readonly EditorInstanceManager _editorInstanceManager;
         private readonly SaberSet _saberSet;
+        private readonly PlayerDataModel _playerDataModel;
+        private readonly SaberGrabController _saberGrabController;
 
         private readonly Pedestal _pedestal;
         private readonly SFLogoAnim _sfLogoAnim;
         private SaberInstance _spawnedSaber;
         private bool _isFirstActivation = true;
+        private bool _isSaberInHand;
 
         private Editor(
             SiraLog logger,
@@ -33,13 +49,17 @@ namespace SaberFactory.Editor
             SaberFactoryUI saberFactoryUi,
             EditorInstanceManager editorInstanceManager,
             EmbeddedAssetLoader embeddedAssetLoader,
-            SaberSet saberSet)
+            SaberSet saberSet,
+            PlayerDataModel playerDataModel,
+            SaberGrabController saberGrabController)
         {
             _logger = logger;
             _pluginConfig = pluginConfig;
             _saberFactoryUi = saberFactoryUi;
             _editorInstanceManager = editorInstanceManager;
             _saberSet = saberSet;
+            _playerDataModel = playerDataModel;
+            _saberGrabController = saberGrabController;
 
             _pedestal = new Pedestal(embeddedAssetLoader);
             _sfLogoAnim = new SFLogoAnim(embeddedAssetLoader);
@@ -110,14 +130,45 @@ namespace SaberFactory.Editor
 
             _saberFactoryUi.Close();
             _saberFactoryUi.OnClosePressed -= Close;
+
+            _saberGrabController.ShowHandle();
             
             IsActive = false;
         }
 
-        private void OnModelCompositionSet(ModelComposition composition)
+        private async void OnModelCompositionSet(ModelComposition composition)
         {
             _spawnedSaber?.Destroy();
-            _spawnedSaber = _editorInstanceManager.CreateSaber(_saberSet.LeftSaber, _pedestal.SaberContainerTransform, true, true);
+
+            var parent = IsSaberInHand ? _saberGrabController.GrabContainer : _pedestal.SaberContainerTransform;
+
+            _spawnedSaber = _editorInstanceManager.CreateSaber(_saberSet.LeftSaber, parent);
+
+            if (IsSaberInHand)
+            {
+                _spawnedSaber.CreateTrail();
+                _saberGrabController.HideHandle();
+            }
+            else
+            {
+                _saberGrabController.ShowHandle();
+            }
+
+            _spawnedSaber.SetColor(_playerDataModel.playerData.colorSchemesSettings.GetSelectedColorScheme().saberAColor);
+
+            _editorInstanceManager.RaiseSaberCreatedEvent();
+            _editorInstanceManager.RaisePieceCreatedEvent();
+
+            await Task.Yield();
+
+            if (_pluginConfig.AnimateSaberSelection)
+            {
+                await AnimationHelper.AsyncAnimation(0.3f, CancellationToken.None, t =>
+                {
+                    parent.localScale = new Vector3(t, t, t);
+                });
+            }
+
         }
     }
 }

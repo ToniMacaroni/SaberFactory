@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using BeatSaberMarkupLanguage.Attributes;
 using SaberFactory.Configuration;
@@ -15,12 +16,15 @@ namespace SaberFactory.UI.CustomSaber.Views
 {
     internal class SaberSelectorView : SubView, INavigationCategoryView
     {
+        private static readonly string MODELSABER_LINK = "https://modelsaber.com/Sabers/?pc";
+
         public ENavigationCategory Category => ENavigationCategory.Saber;
 
         [Inject] private readonly MainAssetStore _mainAssetStore = null;
         [Inject] private readonly SaberSet _saberSet = null;
         [Inject] private readonly EditorInstanceManager _editorInstanceManager = null;
         [Inject] private readonly PluginConfig _pluginConfig = null;
+        [Inject] private readonly Editor.Editor _editor = null;
 
         [UIComponent("saber-list")] private readonly CustomList _saberList = null;
         [UIComponent("toggle-favorite")] private readonly IconToggleButton _toggleButtonFavorite = null;
@@ -28,6 +32,17 @@ namespace SaberFactory.UI.CustomSaber.Views
 
         [UIValue("global-saber-width-max")]
         private float _globalSaberWidthMax => _pluginConfig.GlobalSaberWidthMax;
+
+        [UIValue("download-sabers-popup")]
+        private bool ShowDownloadSabersPopup
+        {
+            get => _showDownloadSabersPopup;
+            set
+            {
+                _showDownloadSabersPopup = value;
+                OnPropertyChanged();
+            }
+        }
 
         [UIValue("saber-width")]
         private float _saberWidth
@@ -38,6 +53,8 @@ namespace SaberFactory.UI.CustomSaber.Views
 
         private ModelComposition _currentComposition;
         private PreloadMetaData _currentPreloadMetaData;
+
+        private bool _showDownloadSabersPopup;
 
         public override void DidOpen()
         {
@@ -68,11 +85,13 @@ namespace SaberFactory.UI.CustomSaber.Views
 
         private async Task ShowSabers(int delay = 0)
         {
-            var metas = from meta in _mainAssetStore.GetAllMetaData()
+            var metas = (from meta in _mainAssetStore.GetAllMetaData()
                 orderby meta.IsFavorite descending
-                select meta;
+                select meta).ToList();
 
             if(delay>0) await Task.Delay(delay);
+
+            ShowDownloadSabersPopup = metas.Count() < 2;
 
             _saberList.SetItems(metas);
 
@@ -144,6 +163,12 @@ namespace SaberFactory.UI.CustomSaber.Views
             await ShowSabers();
         }
 
+        [UIAction("toggled-grab-saber")]
+        private void ToggledGrabSaber(bool isOn)
+        {
+            _editor.IsSaberInHand = isOn;
+        }
+
         [UIAction("clicked-reload")]
         private async void ClickedReload()
         {
@@ -176,6 +201,12 @@ namespace SaberFactory.UI.CustomSaber.Views
             _editorInstanceManager.DestroySaber();
             _mainAssetStore.Delete(_currentComposition.GetLeft().StoreAsset.Path);
             await ShowSabers();
+        }
+
+        [UIAction("open-modelsaber")]
+        private void OpenModelsaber()
+        {
+            Process.Start(MODELSABER_LINK);
         }
     }
 }

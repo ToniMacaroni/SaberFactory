@@ -1,4 +1,5 @@
-﻿using HMUI;
+﻿using System.Threading;
+using HMUI;
 using SaberFactory.Helpers;
 using SiraUtil.Tools;
 using UnityEngine;
@@ -61,7 +62,7 @@ namespace SaberFactory.UI.Lib
         public virtual async void Open()
         {
             SetRootViewController(CurrentViewController, ViewController.AnimationType.In);
-            await CurrentViewController.Cast<CustomViewController>().Animate();
+            await CurrentViewController.Cast<CustomViewController>().AnimateIn(CancellationToken.None);
         }
 
         public virtual void Close()

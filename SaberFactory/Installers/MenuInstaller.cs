@@ -30,18 +30,12 @@ namespace SaberFactory.Installers
                 .FromFactory<ScreenFactory>();
 
             Container.Bind<SaberFactoryUI>().To<CustomSaberUI>().AsSingle();
+            Container.Bind<SaberGrabController>().AsSingle();
             Container.BindInterfacesAndSelfTo<Editor.Editor>().AsSingle();
 
             Container.BindInterfacesAndSelfTo<SaberFactoryMenuButton>().AsSingle();
 
             Container.Bind<TrailPreviewer>().AsSingle();
-
-            foreach (var type in Assembly.GetExecutingAssembly().GetTypes())
-            {
-                var attr = Attribute.GetCustomAttribute(type, typeof(UIFactoryAttribute)) as UIFactoryAttribute;
-                if (attr == null) continue;
-                Console.WriteLine($"Found UI Factory {type.Name} {type.Namespace}");
-            }
         }
 
         private void BindUiStuff()
@@ -51,14 +45,14 @@ namespace SaberFactory.Installers
             BindUiFactory<Popup, Popup.Factory>();
         }
 
-        private FactoryToChoiceIdBinder<GameObject, Type, T1> BindUiFactory<T1, TFactory>()
+        private FactoryToChoiceIdBinder<GameObject, Type, T> BindUiFactory<T, TFactory>()
         {
             BindStatement bindStatement = Container.StartBinding();
             BindInfo bindInfo = bindStatement.SpawnBindInfo();
             bindInfo.ContractTypes.Add(typeof(TFactory));
             FactoryBindInfo factoryBindInfo = new FactoryBindInfo(typeof(TFactory));
-            bindStatement.SetFinalizer((IBindingFinalizer)new PlaceholderFactoryBindingFinalizer<T1>(bindInfo, factoryBindInfo));
-            return new FactoryToChoiceIdBinder<GameObject, Type, T1>(Container, bindInfo, factoryBindInfo);
+            bindStatement.SetFinalizer(new PlaceholderFactoryBindingFinalizer<T>(bindInfo, factoryBindInfo));
+            return new FactoryToChoiceIdBinder<GameObject, Type, T>(Container, bindInfo, factoryBindInfo);
         }
     }
 }

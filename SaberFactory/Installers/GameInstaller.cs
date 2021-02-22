@@ -24,6 +24,9 @@ namespace SaberFactory.Installers
 
             Container.Bind<GameSaberSetup>().AsSingle().NonLazy();
 
+            //var testerInitData = new SaberMovementTester.InitData { CreateTestingSaber = true };
+            //Container.BindInterfacesAndSelfTo<SaberMovementTester>().AsSingle().WithArguments(testerInitData);
+
             Container.Bind<IModelProvider>().To<SFSaberProvider>().AsSingle();
         }
     }

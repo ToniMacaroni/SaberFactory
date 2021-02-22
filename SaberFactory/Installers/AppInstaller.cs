@@ -37,7 +37,7 @@ namespace SaberFactory.Installers
             Container.Bind<PluginManager>().AsSingle();
 
             Container.Bind<PresetSaveManager>().AsSingle().WithArguments(_saberFactoryDir.CreateSubdirectory("Presets"));
-            Container.Bind<CommonResources>().AsSingle();
+            Container.BindInterfacesAndSelfTo<TrailConfig>().AsSingle().WithArguments(_saberFactoryDir);
 
             Container.BindInterfacesAndSelfTo<EmbeddedAssetLoader>().AsSingle();
 

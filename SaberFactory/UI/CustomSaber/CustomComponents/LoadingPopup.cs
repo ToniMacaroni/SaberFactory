@@ -5,14 +5,14 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
 {
     internal class LoadingPopup : Popup
     {
-        public new void Show()
+        public void Show()
         {
-            base.Show();
+            Create();
         }
 
-        public new void Hide()
+        public async void Hide()
         {
-            base.Hide();
+            await Hide(false);
         }
     }
 }

@@ -1,6 +1,9 @@
-﻿<bg bg="round-rect-panel" bg-color="#333" xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
+﻿<bg bg="round-rect-panel" bg-color="#555" xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
 	<vertical>
-		<this.custom-list id='saber-list' title='Saber-Os' width='80' bg-color='#ffffff30' />
-		<this.button text='Select' on-click='click-select' normal-color='#ffffff30' />
+		<this.custom-list id='saber-list' title='Choose trail from saber' width='80' bg-color='#FFFFFF05' />
+		<horizontal>
+			<this.button text='Select' pref-width='20' on-click='click-select' normal-color='#00000080' />
+			<this.button text='Original' pref-width='20' on-click='click-original' normal-color='#00000080' />
+		</horizontal>
 	</vertical>
 </bg>

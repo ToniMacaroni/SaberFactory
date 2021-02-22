@@ -20,13 +20,11 @@ namespace SaberFactory.Models
         public SaberModel RightSaber { get; set; }
         public Task CurrentLoadingTask { get; private set; }
 
-        public TrailSettings TrailSettings;
-
         private readonly PresetSaveManager _presetSaveManager;
         private readonly PluginConfig _config;
         private readonly MainAssetStore _mainAssetStore;
 
-        private List<int> _lastSelectedRandoms = new List<int>{1};
+        private readonly List<int> _lastSelectedRandoms = new List<int>{1};
 
         private SaberSet(
             [Inject(Id = ESaberSlot.Left)] SaberModel leftSaber,
@@ -40,8 +38,6 @@ namespace SaberFactory.Models
             _mainAssetStore = mainAssetStore;
             LeftSaber = leftSaber;
             RightSaber = rightSaber;
-
-            TrailSettings = new TrailSettings();
 
             Load();
         }
@@ -58,26 +54,25 @@ namespace SaberFactory.Models
                 _config.AssetType == EAssetTypeConfiguration.CustomSaber ||
                 _config.AssetType == EAssetTypeConfiguration.None)
             {
-                await RandomizeFrom(_mainAssetStore.GetAllMetaData(AssetTypeDefinition.CustomSaber));
+                await RandomizeFrom(_mainAssetStore.GetAllMetaData(AssetTypeDefinition.CustomSaber).ToList());
             }
         }
 
-        public async Task RandomizeFrom(IEnumerable<PreloadMetaData> meta)
+        public async Task RandomizeFrom(IList<PreloadMetaData> meta)
         {
-            var list = meta.ToList();
-            Console.WriteLine(list.Count);
+            Console.WriteLine(meta.Count);
 
-            if(_lastSelectedRandoms.Count == list.Count) _lastSelectedRandoms.Clear();
+            if(_lastSelectedRandoms.Count == meta.Count) _lastSelectedRandoms.Clear();
 
             var idx = 1;
             while (_lastSelectedRandoms.Contains(idx))
             {
-                idx = (int)(Random.Range(0f, 1f) * list.Count);
+                idx = (int)(Random.Range(0f, 1f) * meta.Count);
             }
 
             _lastSelectedRandoms.Add(idx);
 
-            var comp = list[idx];
+            var comp = meta[idx];
             SetModelComposition(await _mainAssetStore[PathTools.ToRelativePath(comp.AssetMetaPath.Path)]);
         }
 

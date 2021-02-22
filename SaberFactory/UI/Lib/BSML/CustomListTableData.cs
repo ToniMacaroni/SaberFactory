@@ -152,7 +152,15 @@ namespace SaberFactory.UI.Lib.BSML
 
                     (coverImage as ImageView).SetSkew(0);
 
-                    coverImage.sprite = data[idx].Icon == null ? Utilities.LoadSpriteFromTexture(Texture2D.blackTexture) : data[idx].Icon;
+                    if (cellData.Icon is null)
+                    {
+                        coverImage.gameObject.SetActive(false);
+                    }
+                    else
+                    {
+                        coverImage.gameObject.SetActive(true);
+                        coverImage.sprite = cellData.Icon;
+                    }
 
                     if (!string.IsNullOrEmpty(cellData.RightText))
                     {
