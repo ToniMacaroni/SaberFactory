@@ -130,6 +130,8 @@ namespace SaberFactory.Editor
 
             _saberFactoryUi.Close();
             _saberFactoryUi.OnClosePressed -= Close;
+
+            _saberGrabController.ShowHandle();
             
             IsActive = false;
         }

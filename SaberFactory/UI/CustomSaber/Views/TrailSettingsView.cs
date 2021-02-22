@@ -170,12 +170,26 @@ namespace SaberFactory.UI.CustomSaber.Views
             }
         }
 
+        private void CopyFromTrailModel(TrailModel trailModel)
+        {
+            if (_editorInstanceManager.CurrentPiece is CustomSaberInstance customsaber)
+            {
+                var model = (CustomSaberModel)customsaber.Model;
+                model.TrailModel.CopyFrom(trailModel);
+            }
+        }
+
         private void ResetTrail()
         {
             if (_editorInstanceManager.CurrentPiece is CustomSaberInstance cs)
             {
                 _instanceTrailData.RevertMaterialForCustomSaber(cs.Model as CustomSaberModel);
-                SetTrailModel(null);
+                var tm = _editorInstanceManager.CurrentModelComposition?.GetLeft().CastChecked<CustomSaberModel>()?.GrabTrail(false);
+                if (tm is { })
+                {
+                    SetTrailModel(tm);
+                }
+                _instanceTrailData.RevertMaterialForCustomSaber(cs.Model as CustomSaberModel);
             }
         }
 
@@ -242,15 +256,11 @@ namespace SaberFactory.UI.CustomSaber.Views
         {
             if (trailModel is null)
             {
-                var tm = _editorInstanceManager.CurrentModelComposition?.GetLeft().CastChecked<CustomSaberModel>()?.GrabTrail(false);
-                if (tm is { })
-                {
-                    SetTrailModel(tm);
-                }
+                ResetTrail();
             }
             else
             {
-                SetTrailModel(trailModel);
+                CopyFromTrailModel(trailModel);
             }
 
             _editorInstanceManager.Refresh();

@@ -123,7 +123,7 @@ namespace SaberFactory.Instances.Trail
         public void SetMaterial(Material newMaterial)
         {
             _customMaterial = newMaterial;
-            _trailRenderer.GetField<MeshRenderer, SaberTrailRenderer>("_meshRenderer").material = _customMaterial;
+            _trailRenderer?.Cast<SFTrailRenderer>().SetMaterial(_customMaterial);
         }
 
         internal struct TrailInitData

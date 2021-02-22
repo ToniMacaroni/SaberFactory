@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using IPA.Utilities;
+using UnityEngine;
 
 namespace SaberFactory.Instances.Trail
 {
@@ -32,6 +33,11 @@ namespace SaberFactory.Instances.Trail
         {
             _uvMuliplier = uvMultiplier;
             base.Init(trailWidth, trailDuration, granularity, whiteSectionMaxDuration);
+        }
+
+        public void SetMaterial(Material material)
+        {
+            _meshRenderer.material = material;
         }
 
         protected override void UpdateVertices(TrailElementCollection trailElementCollection, Color color)

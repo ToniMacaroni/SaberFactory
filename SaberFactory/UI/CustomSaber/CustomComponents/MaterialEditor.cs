@@ -23,9 +23,12 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
         public async void Show(MaterialDescriptor materialDescriptor)
         {
             Create();
+            _cachedTransform.localScale = Vector3.zero;
+
             _materialDropDown.transform.parent.gameObject.SetActive(false);
             SetMaterial(materialDescriptor.Material);
 
+            await Task.Delay(100);
             await AnimateIn();
         }
 
@@ -37,7 +40,7 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
             _materialDropDown.transform.parent.gameObject.SetActive(true);
             SetMaterial(materialDescriptors.First().Material);
 
-            await Task.Delay(200);
+            await Task.Delay(100);
             await AnimateIn();
         }
 

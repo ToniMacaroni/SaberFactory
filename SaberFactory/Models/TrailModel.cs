@@ -1,4 +1,5 @@
-﻿using SaberFactory.Instances;
+﻿using JetBrains.Annotations;
+using SaberFactory.Instances;
 using UnityEngine;
 
 namespace SaberFactory.Models
@@ -34,6 +35,22 @@ namespace SaberFactory.Models
             Whitestep = whitestep;
             OriginalTextureWrapMode = originalTextureWrapMode;
             TrailOrigin = trailOrigin;
+        }
+
+        public TrailModel()
+        {
+            
+        }
+
+        public void CopyFrom(TrailModel other)
+        {
+            TrailPosOffset = other.TrailPosOffset;
+            Width = other.Width;
+            Length = other.Length;
+            Material.Material = other.Material.Material;
+            Whitestep = other.Whitestep;
+            TrailOrigin = other.TrailOrigin;
+            ClampTexture = other.ClampTexture;
         }
     }
 }
