@@ -205,13 +205,16 @@
     <Compile Include="DataStore\TextureStore.cs" />
     <Compile Include="EAssetTypeConfiguration.cs" />
     <Compile Include="Editor\Editor.cs" />
+    <Compile Include="Editor\SaberGrabController.cs" />
     <Compile Include="Editor\SFLogoAnim.cs" />
     <Compile Include="EmbeddedAssetLoader.cs" />
     <Compile Include="Editor\Pedestal.cs" />
     <Compile Include="Game\GameSaberSetup.cs" />
+    <Compile Include="Game\SaberMovementTester.cs" />
     <Compile Include="Helpers\AnimationHelper.cs" />
     <Compile Include="Helpers\AnimationManager.cs" />
     <Compile Include="Helpers\MaterialHelpers.cs" />
+    <Compile Include="Instances\Trail\SFTrailRenderer.cs" />
     <Compile Include="Loaders\AssetMetaPath.cs" />
     <Compile Include="Models\PreloadMetaData.cs" />
     <Compile Include="Models\ESaberSlot.cs" />

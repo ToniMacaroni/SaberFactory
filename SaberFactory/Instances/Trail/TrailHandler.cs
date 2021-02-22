@@ -2,7 +2,6 @@
 using IPA.Utilities;
 using SaberFactory.Configuration;
 using SaberFactory.Helpers;
-using SaberFactory.Models;
 using UnityEngine;
 
 namespace SaberFactory.Instances.Trail
@@ -14,7 +13,6 @@ namespace SaberFactory.Instances.Trail
     {
         public SFTrail TrailInstance { get; protected set; }
 
-        protected SaberTrailRenderer _trailRenderer;
         protected InstanceTrailData _instanceTrailData;
 
         private readonly SaberTrail _backupTrail;
@@ -31,11 +29,6 @@ namespace SaberFactory.Instances.Trail
 
         public void CreateTrail(TrailConfig trailConfig)
         {
-            if (_trailRenderer is null)
-            {
-                throw new ArgumentNullException(nameof(_trailRenderer), "Trail Renderer is not specified");
-            }
-
             if (_instanceTrailData is null)
             {
 
@@ -45,14 +38,16 @@ namespace SaberFactory.Instances.Trail
                 var trailEnd = TrailInstance.gameObject.CreateGameObject("TrailEnd");
                 trailEnd.transform.localPosition = new Vector3(0, 0, 1);
 
-                var material = _trailRenderer.GetField<MeshRenderer, SaberTrailRenderer>("_meshRenderer").material;
+                var trailRenderer = _backupTrail.GetField<SaberTrailRenderer, SaberTrail>("_trailRendererPrefab");
+
+                var material = trailRenderer.GetField<MeshRenderer, SaberTrailRenderer>("_meshRenderer").material;
 
                 var trailInitDataVanilla = new SFTrail.TrailInitData
                 {
                     TrailColor = Color.white,
                     TrailLength = 15,
-                    TrailPrefab = _trailRenderer,
                     Whitestep = 0.02f,
+                    UVMultiplier = trailConfig.UVMultiplier,
                     Granularity = trailConfig.Granularity,
                     SamplingFrequency = trailConfig.SamplingFrequency
                 };
@@ -70,8 +65,8 @@ namespace SaberFactory.Instances.Trail
             {
                 TrailColor = Color.white,
                 TrailLength = _instanceTrailData.Length,
-                TrailPrefab = _trailRenderer,
                 Whitestep = _instanceTrailData.WhiteStep,
+                UVMultiplier = trailConfig.UVMultiplier,
                 Granularity = trailConfig.Granularity,
                 SamplingFrequency = trailConfig.SamplingFrequency
             };
@@ -94,12 +89,7 @@ namespace SaberFactory.Instances.Trail
 
         public void DestroyTrail()
         {
-            TrailInstance.TryDestroy();
-        }
-
-        public void SetPrefab(SaberTrailRenderer trailRenderer)
-        {
-            _trailRenderer = trailRenderer;
+            TrailInstance.TryDestoryImmediate();
         }
 
         public void SetTrailData(InstanceTrailData instanceTrailData)

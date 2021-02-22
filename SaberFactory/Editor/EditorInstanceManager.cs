@@ -69,7 +69,7 @@ namespace SaberFactory.Editor
         public SaberInstance CreateSaber(SaberModel model, Transform parent, bool raiseSaberEvent = false, bool raisePieceEvent = false)
         {
             CurrentSaber = _saberFactory.Create(model);
-            CurrentSaber.SetParent(parent);
+            if(parent is {}) CurrentSaber.SetParent(parent);
 
             if (raiseSaberEvent)
             {
@@ -86,13 +86,13 @@ namespace SaberFactory.Editor
             return CurrentSaber;
         }
 
-        private void RaiseSaberCreatedEvent()
+        public void RaiseSaberCreatedEvent()
         {
             if (CurrentSaber is null) return;
             OnSaberInstanceCreated?.Invoke(CurrentSaber);
         }
 
-        private void RaisePieceCreatedEvent()
+        public void RaisePieceCreatedEvent()
         {
             if (CurrentPiece is null) return;
             OnPieceInstanceCreated?.Invoke(CurrentPiece);

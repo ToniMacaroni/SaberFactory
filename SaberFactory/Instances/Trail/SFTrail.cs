@@ -1,5 +1,6 @@
 ﻿using System;
 using IPA.Utilities;
+using SaberFactory.Helpers;
 using SaberFactory.Models;
 using UnityEngine;
 
@@ -21,6 +22,9 @@ namespace SaberFactory.Instances.Trail
         [SerializeField]
         private float _trailWidth;
 
+        [SerializeField]
+        private float _uvMultiplier;
+
         [SerializeField] private int _trailLength;
         [SerializeField] private float _whitestep;
 
@@ -30,6 +34,7 @@ namespace SaberFactory.Instances.Trail
             set => _color = value;
         }
 
+        // Don't let the SaberTrail class instantiate from the renderer prefab (since it's null at this point)
         public override void Awake()
         {
         }
@@ -45,14 +50,14 @@ namespace SaberFactory.Instances.Trail
             _trailLength = initData.TrailLength;
             _whitestep = initData.Whitestep;
 
-            _trailDuration = _trailLength * 0.01f;
+            _trailDuration = _trailLength * 0.01f * Mathf.Max(1, initData.UVMultiplier);
             _whiteSectionMaxDuration = _whitestep;
 
             _granularity = initData.Granularity;
             _samplingFrequency = initData.SamplingFrequency;
+            _uvMultiplier = initData.UVMultiplier;
 
-            _trailRendererPrefab = initData.TrailPrefab;
-            _trailRenderer = Instantiate(_trailRendererPrefab, Vector3.zero, Quaternion.identity);
+            _trailRenderer = SFTrailRenderer.Create();
         }
 
         public override void OnEnable()
@@ -77,7 +82,7 @@ namespace SaberFactory.Instances.Trail
             float trailWidth = _trailWidth;
             _whiteSectionMaxDuration = Math.Min(_whiteSectionMaxDuration, _trailDuration);
             _lastZScale = transform.lossyScale.z;
-            _trailRenderer.Init(trailWidth, _trailDuration, _granularity, _whiteSectionMaxDuration);
+            _trailRenderer.Cast<SFTrailRenderer>().Init(trailWidth, _trailDuration, _granularity, _whiteSectionMaxDuration, _uvMultiplier);
             _inited = true;
             SetMaterial(_customMaterial);
         }
@@ -123,11 +128,10 @@ namespace SaberFactory.Instances.Trail
 
         internal struct TrailInitData
         {
-            public SaberTrailRenderer TrailPrefab;
             public int TrailLength;
             public float Whitestep;
             public Color TrailColor;
-
+            public float UVMultiplier;
             public int Granularity;
             public int SamplingFrequency;
         }

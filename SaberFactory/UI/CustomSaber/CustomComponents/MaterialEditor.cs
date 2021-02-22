@@ -2,6 +2,7 @@
 using BeatSaberMarkupLanguage.Attributes;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using BeatSaberMarkupLanguage.Components.Settings;
 using SaberFactory.Instances;
 using SaberFactory.UI.Lib;
@@ -31,9 +32,12 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
         public async void Show(IEnumerable<MaterialDescriptor> materialDescriptors)
         {
             Create();
+            _cachedTransform.localScale = Vector3.zero;
+            
             _materialDropDown.transform.parent.gameObject.SetActive(true);
             SetMaterial(materialDescriptors.First().Material);
 
+            await Task.Delay(200);
             await AnimateIn();
         }
 

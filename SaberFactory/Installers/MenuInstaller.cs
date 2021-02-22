@@ -30,6 +30,7 @@ namespace SaberFactory.Installers
                 .FromFactory<ScreenFactory>();
 
             Container.Bind<SaberFactoryUI>().To<CustomSaberUI>().AsSingle();
+            Container.Bind<SaberGrabController>().AsSingle();
             Container.BindInterfacesAndSelfTo<Editor.Editor>().AsSingle();
 
             Container.BindInterfacesAndSelfTo<SaberFactoryMenuButton>().AsSingle();

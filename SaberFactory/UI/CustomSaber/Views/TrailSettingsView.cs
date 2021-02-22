@@ -1,4 +1,5 @@
-﻿using BeatSaberMarkupLanguage.Attributes;
+﻿using System.Threading.Tasks;
+using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components.Settings;
 using HMUI;
 using SaberFactory.Configuration;
@@ -59,11 +60,29 @@ namespace SaberFactory.UI.CustomSaber.Views
             set => _trailConfig.SamplingFrequency = value;
         }
 
+        [UIValue("uv-multiplier-value")]
+        private float UVMultiplierValue
+        {
+            get => _trailConfig.UVMultiplier;
+            set => _trailConfig.UVMultiplier = value;
+        }
+
+        [UIValue("refresh-button-active")]
+        private bool RefreshButtonActive
+        {
+            get => _refreshButtonActive;
+            set
+            {
+                _refreshButtonActive = value;
+                OnPropertyChanged();
+            }
+        }
+
         private SliderController _lengthSlider;
         private SliderController _widthSlider;
         private SliderController _whitestepSlider;
         private ToggleController _clampToggle;
-
+        private bool _refreshButtonActive;
 
         [UIAction("#post-parse")]
         private void Setup()
@@ -98,6 +117,7 @@ namespace SaberFactory.UI.CustomSaber.Views
             _materialEditor.Close();
             _instanceTrailData = null;
             _trailPreviewer.Destroy();
+
             _editorInstanceManager.OnSaberInstanceCreated -= CreateTrail;
         }
 
@@ -114,12 +134,20 @@ namespace SaberFactory.UI.CustomSaber.Views
         private void SetLength(RangeValuesTextSlider slider, float val)
         {
             _instanceTrailData.Length = (int) val;
+            if (_refreshButtonActive)
+            {
+                return;
+            }
             _trailPreviewer.SetLength(val);
         }
 
         private void SetWidth(RangeValuesTextSlider slider, float val)
         {
             _instanceTrailData.Width = val;
+            if (_refreshButtonActive)
+            {
+                return;
+            }
             _trailPreviewer.UpdateWidth();
         }
 
@@ -155,9 +183,9 @@ namespace SaberFactory.UI.CustomSaber.Views
         {
             _trailPreviewer.Destroy();
 
-            _lengthSlider.RemoveEvent(SetLength);
-            _widthSlider.RemoveEvent(SetWidth);
-            _whitestepSlider.RemoveEvent(SetWhitestep);
+            _lengthSlider.RemoveEvent();
+            _widthSlider.RemoveEvent();
+            _whitestepSlider.RemoveEvent();
             _clampToggle.RemoveEvent();
 
             var trailData = saberInstance?.GetTrailData();
@@ -174,16 +202,40 @@ namespace SaberFactory.UI.CustomSaber.Views
             if (_noTrailContainer.activeSelf) _noTrailContainer.SetActive(false);
             if (!_mainContainer.activeSelf) _mainContainer.SetActive(true);
 
+            if (saberInstance.TrailHandler is {})
+            {
+                CreateTrailHand(saberInstance, trailData);
+                RefreshButtonActive = true;
+            }
+            else
+            {
+                CreateTrailPedestal(saberInstance, trailData);
+                RefreshButtonActive = false;
+            }
+
+            _lengthSlider.AddEvent(SetLength);
+            _widthSlider.AddEvent(SetWidth);
+            _whitestepSlider.AddEvent(SetWhitestep);
+            _clampToggle.SetEvent(SetClampMode);
+        }
+
+        private void CreateTrailPedestal(SaberInstance saberInstance, InstanceTrailData trailData)
+        {
             _trailPreviewer.Create(saberInstance.GameObject.transform.parent, trailData);
 
+            LoadFromModel(trailData);
+
+            _trailPreviewer.SetColor(_playerDataModel.playerData.colorSchemesSettings.GetSelectedColorScheme().saberAColor);
+        }
+
+        private void CreateTrailHand(SaberInstance saberInstance, InstanceTrailData trailData)
+        {
             LoadFromModel(trailData);
 
             _lengthSlider.AddEvent(SetLength);
             _widthSlider.AddEvent(SetWidth);
             _whitestepSlider.AddEvent(SetWhitestep);
             _clampToggle.SetEvent(SetClampMode);
-
-            _trailPreviewer.SetColor(_playerDataModel.playerData.colorSchemesSettings.GetSelectedColorScheme().saberAColor);
         }
 
         private void TrailPopupSelectionChanged(TrailModel trailModel)
@@ -226,6 +278,14 @@ namespace SaberFactory.UI.CustomSaber.Views
         private void ClickChooseTrail()
         {
             _chooseTrailPopup.Show(_mainAssetStore.GetAllMetaData(AssetTypeDefinition.CustomSaber), TrailPopupSelectionChanged);
+        }
+
+        [UIAction("refresh-trail")]
+        private void RefreshTrail()
+        {
+            _editorInstanceManager.CurrentSaber.DestroyTrail();
+            _editorInstanceManager.CurrentSaber.CreateTrail();
+            _editorInstanceManager.CurrentSaber.TrailHandler?.SetColor(_playerDataModel.playerData.colorSchemesSettings.GetSelectedColorScheme().saberAColor);
         }
 
         [UIAction("revert-advanced")]

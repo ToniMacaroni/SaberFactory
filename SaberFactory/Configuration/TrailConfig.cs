@@ -8,9 +8,11 @@ namespace SaberFactory.Configuration
 {
     public class TrailConfig : IInitializable, IDisposable
     {
-        public int Granularity { get; set; } = 60;
+        public int Granularity { get; set; } = 70;
 
-        public int SamplingFrequency { get; set; } = 80;
+        public int SamplingFrequency { get; set; } = 90;
+
+        public float UVMultiplier { get; set; } = 2.5f;
 
         private readonly FileInfo _configFile;
 
@@ -32,8 +34,8 @@ namespace SaberFactory.Configuration
 
         public void Revert()
         {
-            Granularity = 60;
-            SamplingFrequency = 80;
+            Granularity = 70;
+            SamplingFrequency = 90;
         }
 
         public void Initialize()

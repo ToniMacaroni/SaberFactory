@@ -23,6 +23,7 @@ namespace SaberFactory.UI.Lib
         }
 
         private readonly SliderSetting _slider;
+        private Action<RangeValuesTextSlider, float> _currentEvent;
 
         public SliderController(SliderSetting slider)
         {
@@ -31,12 +32,16 @@ namespace SaberFactory.UI.Lib
 
         public void AddEvent(Action<RangeValuesTextSlider, float> action)
         {
-            _slider.slider.valueDidChangeEvent += action;
+            if (_currentEvent is { }) return;
+            _currentEvent = action;
+            _slider.slider.valueDidChangeEvent += _currentEvent;
         }
 
-        public void RemoveEvent(Action<RangeValuesTextSlider, float> action)
+        public void RemoveEvent()
         {
-            _slider.slider.valueDidChangeEvent -= action;
+            if (_currentEvent is null) return;
+            _slider.slider.valueDidChangeEvent -= _currentEvent;
+            _currentEvent = null;
         }
     }
 }

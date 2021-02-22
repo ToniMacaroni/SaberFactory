@@ -24,6 +24,7 @@ namespace SaberFactory.UI.CustomSaber.Views
         [Inject] private readonly SaberSet _saberSet = null;
         [Inject] private readonly EditorInstanceManager _editorInstanceManager = null;
         [Inject] private readonly PluginConfig _pluginConfig = null;
+        [Inject] private readonly Editor.Editor _editor = null;
 
         [UIComponent("saber-list")] private readonly CustomList _saberList = null;
         [UIComponent("toggle-favorite")] private readonly IconToggleButton _toggleButtonFavorite = null;
@@ -160,6 +161,12 @@ namespace SaberFactory.UI.CustomSaber.Views
             }
 
             await ShowSabers();
+        }
+
+        [UIAction("toggled-grab-saber")]
+        private void ToggledGrabSaber(bool isOn)
+        {
+            _editor.IsSaberInHand = isOn;
         }
 
         [UIAction("clicked-reload")]

@@ -17,11 +17,14 @@
 
 		<horizontal pad='2' spacing='4' id='advanced-container' bg='round-rect-panel' bg-color='#FF000050'>
 			<vertical pref-width='70'>
-				<slider-setting id='granularity-slider' get-event='get-advanced' text='Granularity' value='granularity-value' apply-on-change='true' min='0'
+				<slider-setting get-event='get-advanced' text='Granularity' value='granularity-value' apply-on-change='true' min='0'
 				                max='100' integer-only='true' />
 
-				<slider-setting id='sampling-frequency-slider' get-event='get-advanced' text='Sampling Frequency' value='sampling-frequency-value'
+				<slider-setting get-event='get-advanced' text='Sampling Frequency' value='sampling-frequency-value'
 				                apply-on-change='true' min='0' max='100' integer-only='true' />
+
+				<!--<slider-setting get-event='get-advanced' text='UV Multiplier' value='uv-multiplier-value'
+				                apply-on-change='true' min='0' max='10' increment='0.1' />-->
 			</vertical>
 			<button text='Revert' on-click='revert-advanced'/>
 		</horizontal>
@@ -32,6 +35,7 @@
 			<this.button text='Revert' on-click='revert-trail' hover-hint='Revert changes to Trail' />
 			<this.button text='Edit Material' on-click='edit-material' hover-hint='Edit the material of the trail' />
 			<this.button text='Choose Trail' on-click='choose-trail' hover-hint='Use the Trail of another saber' />
+			<this.button text='Refresh Hand' active='~refresh-button-active' on-click='refresh-trail' hover-hint='Refresh the trail in your hand' />
 		</horizontal>
 	</vertical>
 

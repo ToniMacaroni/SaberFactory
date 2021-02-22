@@ -13,6 +13,7 @@
 			</vertical>
 		</vertical>
 		<vertical preferred-width='15' child-control-height='false' child-expand-height='false'>
+
 			<horizontal pref-height='16' pref-width='12' horizontal-fit='PreferredSize'>
 				<custom-icon-btn
 					id='toggle-favorite'
@@ -28,6 +29,7 @@
 					</horizontal>
 				</custom-icon-btn>
 			</horizontal>
+
 			<this.icon-toggle-button
 				id='toggle-favorite'
 				icon='SaberFactory.Resources.Icons.heart.png'
@@ -36,6 +38,15 @@
 				on-toggle='toggled-favorite'
 				hover-hint='Set Favorite'
 				pref-height='16'/>
+
+			<this.icon-toggle-button
+				icon='#AvatarHandsIcon'
+				on-color='#eb5c52'
+				off-color='#ffffff'
+				on-toggle='toggled-grab-saber'
+				hover-hint='Grab Saber'
+				pref-height='16'/>
+
 		</vertical>
 	</horizontal>
 
