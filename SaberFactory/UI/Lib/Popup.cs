@@ -13,7 +13,7 @@ namespace SaberFactory.UI.Lib
         protected Transform _cachedTransform;
         private CanvasGroup _canvasGroup;
 
-        private void Awake()
+        protected virtual void Awake()
         {
             _cachedTransform = transform;
             _canvasGroup = GetComponent<CanvasGroup>();

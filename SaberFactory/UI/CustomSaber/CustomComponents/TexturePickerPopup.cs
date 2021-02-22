@@ -57,8 +57,9 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
             _itemList.tableView.ReloadData();
         }
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             _textureAssets = new List<TextureAsset>();
         }
 
