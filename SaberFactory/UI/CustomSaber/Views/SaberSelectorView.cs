@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using BeatSaberMarkupLanguage.Attributes;
@@ -173,6 +174,7 @@ namespace SaberFactory.UI.CustomSaber.Views
         private async void ClickedReload()
         {
             if (_currentComposition == null) return;
+
             _loadingPopup.Show();
             _saberSet.Save();
             _editorInstanceManager.DestroySaber();

@@ -12,6 +12,7 @@ using SaberFactory.Loaders;
 using SaberFactory.Models;
 using SaberFactory.Models.CustomSaber;
 using SiraUtil.Tools;
+using Debug = UnityEngine.Debug;
 
 namespace SaberFactory.DataStore
 {
@@ -118,7 +119,7 @@ namespace SaberFactory.DataStore
         public async Task Reload(string path)
         {
             Unload(path);
-            LoadMetaData(path);
+            await LoadMetaData(path);
             await LoadComposition(path);
         }
 
@@ -183,16 +184,16 @@ namespace SaberFactory.DataStore
             _logger.Info($"Loaded Metadata in {sw.Elapsed.Seconds}.{sw.Elapsed.Milliseconds}s");
         }
 
-        private PreloadMetaData LoadMetaData(string pieceRelativePath)
+        private async Task LoadMetaData(string pieceRelativePath)
         {
             var assetMetaPath = new AssetMetaPath(PathTools.ToFullPath(pieceRelativePath));
-            if (_metaData.TryGetValue(assetMetaPath.RelativeMetaDataPath, out var preloadMetaData)) return preloadMetaData;
-            if (!File.Exists(assetMetaPath.MetaDataPath)) return null;
+            if (_metaData.TryGetValue(assetMetaPath.RelativeMetaDataPath, out _)) return;
+            if (!File.Exists(assetMetaPath.MetaDataPath)) return;
 
             var metaData = new PreloadMetaData(assetMetaPath);
             metaData.IsFavorite = _config.IsFavorite(assetMetaPath.RelativePath);
+            await metaData.LoadFromFile();
             _metaData.Add(assetMetaPath.RelativeMetaDataPath, metaData);
-            return metaData;
         }
 
         private void AddModelComposition(string key, ModelComposition modelComposition)
