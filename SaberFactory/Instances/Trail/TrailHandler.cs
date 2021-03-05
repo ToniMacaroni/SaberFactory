@@ -1,5 +1,4 @@
-﻿using System;
-using IPA.Utilities;
+﻿using IPA.Utilities;
 using SaberFactory.Configuration;
 using SaberFactory.Helpers;
 using UnityEngine;
@@ -9,9 +8,11 @@ namespace SaberFactory.Instances.Trail
     /// <summary>
     /// Class for interfacing with the direct trail rendering implementation
     /// </summary>
-    internal class TrailHandler
+    internal class TrailHandler : ITrailHandler
     {
         public SFTrail TrailInstance { get; protected set; }
+
+        private const float _samplingStepMultiplier = 1.8f;
 
         protected InstanceTrailData _instanceTrailData;
 
@@ -42,14 +43,14 @@ namespace SaberFactory.Instances.Trail
 
                 var material = trailRenderer.GetField<MeshRenderer, SaberTrailRenderer>("_meshRenderer").material;
 
-                var trailInitDataVanilla = new SFTrail.TrailInitData
+                var trailInitDataVanilla = new TrailInitData
                 {
                     TrailColor = Color.white,
                     TrailLength = 15,
                     Whitestep = 0.02f,
-                    UVMultiplier = trailConfig.UVMultiplier,
                     Granularity = trailConfig.Granularity,
-                    SamplingFrequency = trailConfig.SamplingFrequency
+                    SamplingFrequency = trailConfig.SamplingFrequency,
+                    SamplingStepMultiplier = _samplingStepMultiplier
                 };
 
                 TrailInstance.Setup(
@@ -61,14 +62,14 @@ namespace SaberFactory.Instances.Trail
                 return;
             }
 
-            var trailInitData = new SFTrail.TrailInitData
+            var trailInitData = new TrailInitData
             {
                 TrailColor = Color.white,
                 TrailLength = _instanceTrailData.Length,
                 Whitestep = _instanceTrailData.WhiteStep,
-                UVMultiplier = trailConfig.UVMultiplier,
                 Granularity = trailConfig.Granularity,
-                SamplingFrequency = trailConfig.SamplingFrequency
+                SamplingFrequency = trailConfig.SamplingFrequency,
+                SamplingStepMultiplier = _samplingStepMultiplier,
             };
 
             Transform pointStart = _instanceTrailData.IsTrailReversed

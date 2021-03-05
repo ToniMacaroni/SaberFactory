@@ -173,6 +173,7 @@ namespace SaberFactory.UI.CustomSaber.Views
         private async void ClickedReload()
         {
             if (_currentComposition == null) return;
+
             _loadingPopup.Show();
             _saberSet.Save();
             _editorInstanceManager.DestroySaber();

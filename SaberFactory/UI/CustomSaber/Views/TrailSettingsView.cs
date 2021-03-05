@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using BeatSaberMarkupLanguage.Attributes;
+﻿using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components.Settings;
 using HMUI;
 using SaberFactory.Configuration;
@@ -58,13 +57,6 @@ namespace SaberFactory.UI.CustomSaber.Views
         {
             get => _trailConfig.SamplingFrequency;
             set => _trailConfig.SamplingFrequency = value;
-        }
-
-        [UIValue("uv-multiplier-value")]
-        private float UVMultiplierValue
-        {
-            get => _trailConfig.UVMultiplier;
-            set => _trailConfig.UVMultiplier = value;
         }
 
         [UIValue("refresh-button-active")]
@@ -202,7 +194,7 @@ namespace SaberFactory.UI.CustomSaber.Views
             _whitestepSlider.RemoveEvent();
             _clampToggle.RemoveEvent();
 
-            var trailData = saberInstance?.GetTrailData();
+            var trailData = saberInstance?.GetTrailData(out _);
 
             // Show no trail container and return
             if (trailData is null)

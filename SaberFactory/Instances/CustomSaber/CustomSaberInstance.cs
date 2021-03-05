@@ -15,6 +15,8 @@ namespace SaberFactory.Instances.CustomSaber
         private readonly SiraLog _logger;
         public InstanceTrailData InstanceTrailData { get; private set; }
 
+        public List<CustomTrail> SecondaryTrails;
+
         public CustomSaberInstance(CustomSaberModel model, SiraLog logger) : base(model)
         {
             _logger = logger;
@@ -29,11 +31,21 @@ namespace SaberFactory.Instances.CustomSaber
         /// <param name="trailModel">The <see cref="TrailModel"/> to use</param>
         public void InitializeTrailData(GameObject saberObject, TrailModel trailModel)
         {
-            var saberTrail = saberObject?.GetComponent<CustomTrail>();
+            if (trailModel is null) return;
 
-            if (saberTrail is null || trailModel is null)
+            var trails = saberObject?.GetComponentsInChildren<CustomTrail>();
+
+            if (trails is null || trails.Length < 1) return;
+
+            var saberTrail = trails[0];
+
+            if (trails.Length > 1)
             {
-                return;
+                SecondaryTrails = new List<CustomTrail>();
+                for (int i = 1; i < trails.Length; i++)
+                {
+                    SecondaryTrails.Add(trails[i]);
+                }
             }
 
             // if trail comes from the preset save system

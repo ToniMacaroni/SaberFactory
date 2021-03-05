@@ -12,8 +12,6 @@ namespace SaberFactory.Configuration
 
         public int SamplingFrequency { get; set; } = 90;
 
-        public float UVMultiplier { get; set; } = 2.5f;
-
         private readonly FileInfo _configFile;
 
         public TrailConfig(DirectoryInfo configDir)

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reflection;
 using SaberFactory.Editor;
 using SaberFactory.UI;
 using SaberFactory.UI.CustomSaber;
