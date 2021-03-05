@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
+using CustomSaber;
 using SaberFactory.Configuration;
 using SaberFactory.Helpers;
 using SaberFactory.Instances.CustomSaber;
 using SaberFactory.Instances.Trail;
 using SaberFactory.Models;
-using SiraUtil.Interfaces;
 using SiraUtil.Tools;
 using UnityEngine;
 using Zenject;
@@ -16,7 +16,7 @@ namespace SaberFactory.Instances
     /// </summary>
     internal class SaberInstance
     {
-        public TrailHandler TrailHandler { get; private set; }
+        public ITrailHandler TrailHandler { get; private set; }
 
         public readonly SaberModel Model;
         public readonly GameObject GameObject;
@@ -25,11 +25,11 @@ namespace SaberFactory.Instances
         public readonly PieceCollection<BasePieceInstance> PieceCollection;
         public List<PartEvents> Events { get; private set; }
 
-        private readonly SectionInstantiator _sectionInstantiator;
         private readonly SiraLog _logger;
         private readonly TrailConfig _trailConfig;
 
         private InstanceTrailData _instanceTrailData;
+        private List<CustomSaberTrailHandler> _secondaryTrails;
 
         private SaberInstance(SaberModel model, BasePieceInstance.Factory pieceFactory, SiraLog logger, TrailConfig trailConfig)
         {
@@ -42,8 +42,8 @@ namespace SaberFactory.Instances
 
             PieceCollection = new PieceCollection<BasePieceInstance>();
 
-            _sectionInstantiator = new SectionInstantiator(this, pieceFactory, PieceCollection);
-            _sectionInstantiator.InstantiateSections();
+            var sectionInstantiator = new SectionInstantiator(this, pieceFactory, PieceCollection);
+            sectionInstantiator.InstantiateSections();
 
             GameObject.transform.localScale = new Vector3(model.SaberWidth, model.SaberWidth, 1);
 
@@ -64,6 +64,14 @@ namespace SaberFactory.Instances
             }
 
             TrailHandler?.SetColor(color);
+
+            if (_secondaryTrails is { })
+            {
+                foreach (var trail in _secondaryTrails)
+                {
+                    trail.SetColor(color);
+                }
+            }
         }
 
         private void InitializeEvents()
@@ -89,7 +97,7 @@ namespace SaberFactory.Instances
 
         public void CreateTrail(SaberTrail backupTrail = null)
         {
-            var trailData = GetTrailData();
+            var trailData = GetTrailData(out var secondaryTrails);
 
             if (trailData is null)
             {
@@ -103,13 +111,31 @@ namespace SaberFactory.Instances
             }
 
             TrailHandler = new TrailHandler(GameObject);
-            TrailHandler.SetTrailData(GetTrailData());
+            TrailHandler.SetTrailData(trailData);
             TrailHandler.CreateTrail(_trailConfig);
+
+            if (secondaryTrails is { })
+            {
+                _secondaryTrails = new List<CustomSaberTrailHandler>();
+                foreach (var customTrail in secondaryTrails)
+                {
+                    var handler = new CustomSaberTrailHandler(GameObject, customTrail);
+                    handler.CreateTrail();
+                    _secondaryTrails.Add(handler);
+                }
+            }
         }
 
         public void DestroyTrail()
         {
             TrailHandler?.DestroyTrail();
+            if (_secondaryTrails is { })
+            {
+                foreach (var trail in _secondaryTrails)
+                {
+                    trail.DestroyTrail();
+                }
+            }
         }
 
         public void Destroy()
@@ -129,10 +155,12 @@ namespace SaberFactory.Instances
             return false;
         }
 
-        public InstanceTrailData GetTrailData()
+        public InstanceTrailData GetTrailData(out List<CustomTrail> secondaryTrails)
         {
+            secondaryTrails = null;
             if (GetCustomSaber(out var customsaber))
             {
+                secondaryTrails = customsaber.SecondaryTrails;
                 return customsaber.InstanceTrailData;
             }
 

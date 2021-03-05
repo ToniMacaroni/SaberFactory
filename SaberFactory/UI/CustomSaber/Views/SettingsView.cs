@@ -1,9 +1,6 @@
 ﻿using BeatSaberMarkupLanguage.Attributes;
-using System.ComponentModel;
 using System.Diagnostics;
-using System.Runtime.CompilerServices;
 using System.Threading;
-using JetBrains.Annotations;
 using SaberFactory.Configuration;
 using SaberFactory.UI.CustomSaber.CustomComponents;
 using SaberFactory.UI.Lib;

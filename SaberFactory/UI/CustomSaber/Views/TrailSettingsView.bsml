@@ -18,10 +18,10 @@
 		<horizontal pad='2' spacing='4' id='advanced-container' bg='round-rect-panel' bg-color='#FF000050'>
 			<vertical pref-width='70'>
 				<slider-setting get-event='get-advanced' text='Granularity' value='granularity-value' apply-on-change='true' min='0'
-				                max='100' integer-only='true' />
+				                max='300' integer-only='true' />
 
 				<slider-setting get-event='get-advanced' text='Sampling Frequency' value='sampling-frequency-value'
-				                apply-on-change='true' min='0' max='100' integer-only='true' />
+				                apply-on-change='true' min='0' max='300' integer-only='true' />
 
 				<!--<slider-setting get-event='get-advanced' text='UV Multiplier' value='uv-multiplier-value'
 				                apply-on-change='true' min='0' max='10' increment='0.1' />-->

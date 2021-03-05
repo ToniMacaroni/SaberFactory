@@ -1,4 +1,7 @@
-﻿using SaberFactory.Configuration;
+﻿//#define TEST_TRAIL
+
+
+using SaberFactory.Configuration;
 using SaberFactory.Game;
 using SaberFactory.Helpers;
 using SaberFactory.Models;
@@ -22,12 +25,20 @@ namespace SaberFactory.Installers
                 Container.BindInterfacesAndSelfTo<EventPlayer>().AsTransient();
             }
 
+            
+
             Container.Bind<GameSaberSetup>().AsSingle().NonLazy();
-
-            //var testerInitData = new SaberMovementTester.InitData { CreateTestingSaber = true };
-            //Container.BindInterfacesAndSelfTo<SaberMovementTester>().AsSingle().WithArguments(testerInitData);
-
             Container.Bind<IModelProvider>().To<SFSaberProvider>().AsSingle();
+
+
+#if DEBUG && TEST_TRAIL
+            if (Environment.GetCommandLineArgs().Any(x => x.ToLower() == "fpfc"))
+            {
+                var testerInitData = new SaberMovementTester.InitData { CreateTestingSaber = true };
+                Container.BindInterfacesAndSelfTo<SaberMovementTester>().AsSingle().WithArguments(testerInitData);
+            }
+#endif
+
         }
     }
 }

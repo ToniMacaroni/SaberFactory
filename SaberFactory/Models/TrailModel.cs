@@ -1,5 +1,4 @@
-﻿using JetBrains.Annotations;
-using SaberFactory.Instances;
+﻿using SaberFactory.Instances;
 using UnityEngine;
 
 namespace SaberFactory.Models

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -12,7 +11,6 @@ using SaberFactory.Loaders;
 using SaberFactory.Models;
 using SaberFactory.Models.CustomSaber;
 using SiraUtil.Tools;
-using Debug = UnityEngine.Debug;
 
 namespace SaberFactory.DataStore
 {

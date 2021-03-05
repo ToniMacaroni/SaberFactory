@@ -1,7 +1,5 @@
 ﻿using System;
-using IPA.Utilities;
 using SaberFactory.Helpers;
-using SaberFactory.Models;
 using UnityEngine;
 
 namespace SaberFactory.Instances.Trail
@@ -21,9 +19,6 @@ namespace SaberFactory.Instances.Trail
 
         [SerializeField]
         private float _trailWidth;
-
-        [SerializeField]
-        private float _uvMultiplier;
 
         [SerializeField] private int _trailLength;
         [SerializeField] private float _whitestep;
@@ -50,12 +45,11 @@ namespace SaberFactory.Instances.Trail
             _trailLength = initData.TrailLength;
             _whitestep = initData.Whitestep;
 
-            _trailDuration = _trailLength * 0.01f * Mathf.Max(1, initData.UVMultiplier);
+            _trailDuration = _trailLength * 0.01f;
             _whiteSectionMaxDuration = _whitestep;
 
             _granularity = initData.Granularity;
             _samplingFrequency = initData.SamplingFrequency;
-            _uvMultiplier = initData.UVMultiplier;
 
             _trailRenderer = SFTrailRenderer.Create();
         }
@@ -82,8 +76,9 @@ namespace SaberFactory.Instances.Trail
             float trailWidth = _trailWidth;
             _whiteSectionMaxDuration = Math.Min(_whiteSectionMaxDuration, _trailDuration);
             _lastZScale = transform.lossyScale.z;
-            _trailRenderer.Cast<SFTrailRenderer>().Init(trailWidth, _trailDuration, _granularity, _whiteSectionMaxDuration, _uvMultiplier);
+            _trailRenderer.Cast<SFTrailRenderer>().Init(trailWidth, _trailDuration, _granularity, _whiteSectionMaxDuration);
             _inited = true;
+
             SetMaterial(_customMaterial);
         }
 
@@ -94,6 +89,7 @@ namespace SaberFactory.Instances.Trail
 
         public override void LateUpdate()
         {
+
             if (_framesPassed <= 4)
             {
                 if (_framesPassed == 4)
@@ -125,15 +121,7 @@ namespace SaberFactory.Instances.Trail
             _customMaterial = newMaterial;
             _trailRenderer?.Cast<SFTrailRenderer>().SetMaterial(_customMaterial);
         }
-
-        internal struct TrailInitData
-        {
-            public int TrailLength;
-            public float Whitestep;
-            public Color TrailColor;
-            public float UVMultiplier;
-            public int Granularity;
-            public int SamplingFrequency;
-        }
     }
+
+
 }

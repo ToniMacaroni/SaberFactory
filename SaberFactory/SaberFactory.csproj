@@ -213,8 +213,12 @@
     <Compile Include="Game\SaberMovementTester.cs" />
     <Compile Include="Helpers\AnimationHelper.cs" />
     <Compile Include="Helpers\AnimationManager.cs" />
+    <Compile Include="Helpers\DebugTools.cs" />
     <Compile Include="Helpers\MaterialHelpers.cs" />
+    <Compile Include="Instances\Trail\CustomSaberTrailHandler.cs" />
+    <Compile Include="Instances\Trail\ITrailHandler.cs" />
     <Compile Include="Instances\Trail\SFTrailRenderer.cs" />
+    <Compile Include="Instances\Trail\TrailHandlerEx.cs" />
     <Compile Include="Loaders\AssetMetaPath.cs" />
     <Compile Include="Models\PreloadMetaData.cs" />
     <Compile Include="Models\ESaberSlot.cs" />
@@ -276,6 +280,11 @@
     <Compile Include="Saving\SerializableSaber.cs" />
     <Compile Include="Saving\SerializableSaberSet.cs" />
     <Compile Include="Saving\SerializableTrail.cs" />
+    <Compile Include="Trail\Spline.cs" />
+    <Compile Include="Trail\SplineControlPoint.cs" />
+    <Compile Include="Instances\Trail\TrailInitData.cs" />
+    <Compile Include="Trail\VertexPool.cs" />
+    <Compile Include="Trail\AltTrail.cs" />
     <Compile Include="UI\BaseGameUiHandler.cs" />
     <Compile Include="UI\CustomSaber\CustomComponents\ChangelogPopup.cs" />
     <Compile Include="UI\CustomSaber\CustomComponents\ChooseTrailPopup.cs" />
