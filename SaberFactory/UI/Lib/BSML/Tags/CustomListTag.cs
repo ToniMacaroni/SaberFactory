@@ -36,6 +36,7 @@ namespace SaberFactory.UI.Lib.BSML
             gameObject.AddComponent<VRGraphicRaycaster>().SetField("_physicsRaycaster", BeatSaberUI.PhysicsRaycasterWithCache);
             gameObject.AddComponent<Touchable>();
             gameObject.AddComponent<EventSystemListener>();
+            ScrollView scrollView = gameObject.AddComponent<ScrollView>();
 
             TableView tableView = gameObject.AddComponent<BSMLTableView>();
             CustomListTableData tableData = container.gameObject.AddComponent<CustomListTableData>();
@@ -43,11 +44,18 @@ namespace SaberFactory.UI.Lib.BSML
 
             tableView.SetField("_preallocatedCells", new TableView.CellsGroup[0]);
             tableView.SetField("_isInitialized", false);
+            tableView.SetField("_scrollView", scrollView);
 
             RectTransform viewport = new GameObject("Viewport").AddComponent<RectTransform>();
             viewport.SetParent(gameObject.GetComponent<RectTransform>(), false);
             viewport.gameObject.AddComponent<RectMask2D>();
             gameObject.GetComponent<ScrollRect>().viewport = viewport;
+
+            RectTransform content = new GameObject("Content").AddComponent<RectTransform>();
+            content.SetParent(viewport, false);
+
+            scrollView.SetField("_contentRectTransform", content);
+            scrollView.SetField("_viewport", viewport);
 
             viewport.anchorMin = new Vector2(0f, 0f);
             viewport.anchorMax = new Vector2(1f, 1f);
@@ -139,9 +147,9 @@ namespace SaberFactory.UI.Lib.BSML
 
             if (componentType.data.TryGetValue("id", out string id))
             {
-                TableViewScroller scroller = tableData.tableView.GetField<TableViewScroller, TableView>("scroller");
-                parserParams.AddEvent(id + "#PageUp", scroller.PageScrollUp);
-                parserParams.AddEvent(id + "#PageDown", scroller.PageScrollDown);
+                ScrollView scroller = tableData.tableView.GetField<ScrollView, TableView>("_scrollView");
+                parserParams.AddEvent(id + "#PageUp", scroller.PageUpButtonPressed);
+                parserParams.AddEvent(id + "#PageDown", scroller.PageDownButtonPressed);
             }
         }
     }

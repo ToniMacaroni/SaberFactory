@@ -48,6 +48,7 @@ namespace SaberFactory.Editor
             CurrentModelComposition = composition;
             _saberSet.SetModelComposition(CurrentModelComposition);
             OnModelCompositionSet?.Invoke(CurrentModelComposition);
+            _logger.Info($"Selected Saber: {composition.ListName}");
         }
 
         public void Refresh()
