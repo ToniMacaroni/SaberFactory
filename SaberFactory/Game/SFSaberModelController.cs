@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using SaberFactory.Helpers;
 using SaberFactory.Instances;
 using SaberFactory.Models;
@@ -21,6 +22,7 @@ namespace SaberFactory.Game
         [Inject] private readonly SaberSet _saberSet = null;
         [Inject] private readonly SaberInstance.Factory _saberInstanceFactory = null;
         [Inject] private readonly GameSaberSetup _gameSaberSetup = null;
+        [Inject] private readonly AFHandler _afHandler = null;
         [InjectOptional] private readonly EventPlayer _eventPlayer = null;
 
         private SaberInstance _saberInstance;
@@ -39,7 +41,15 @@ namespace SaberFactory.Game
             _saberInstance.CreateTrail(_saberTrail);
             SetColor(_saberColor ?? _colorManager.ColorForSaberType(_saberInstance.Model.SaberSlot.ToSaberType()));
 
-            _eventPlayer?.SetPartEventList(_saberInstance.Events, saber.saberType);
+            if ((AFHandler.IsValid && AFHandler.ShouldFire))
+            {
+                await Task.Delay(2000);
+                await _afHandler.Shoot(this, saber.saberType);
+            }
+            else
+            {
+                _eventPlayer?.SetPartEventList(_saberInstance.Events, saber.saberType);
+            }
 
             _logger.Info("Instantiated Saber");
         }

@@ -1,10 +1,11 @@
 ﻿using System.Threading.Tasks;
 using SaberFactory.Configuration;
 using SaberFactory.Models;
+using Zenject;
 
 namespace SaberFactory.Game
 {
-    internal class GameSaberSetup
+    internal class GameSaberSetup : IInitializable
     {
         public Task SetupTask { get; private set; }
 
@@ -16,21 +17,25 @@ namespace SaberFactory.Game
             _config = config;
             _saberSet = saberSet;
 
-            Initialize();
+            Setup();
         }
 
-        public async void Initialize()
+        public async void Setup()
         {
-            SetupTask = Setup();
+            SetupTask = SetupInternal();
             await SetupTask;
         }
 
-        public async Task Setup()
+        private async Task SetupInternal()
         {
             if (_config.RandomSaber)
             {
                 await _saberSet.Randomize();
             }
+        }
+
+        public void Initialize()
+        {
         }
     }
 }

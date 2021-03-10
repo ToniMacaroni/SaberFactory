@@ -2,8 +2,8 @@
      xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
 	<horizontal spacing='5' child-expand-width='false' child-control-width='false' child-align='MiddleCenter' pref-height='100'>
 		<vertical spacing='0.5'>
-			<this.custom-list id='saber-list' title='Saber-Os' width='80' bg-color='#00000065' />
-			<vertical pref-width='80' bg='round-rect-panel' bg-color='#00000055' pad-left='2' pad-right='2' pad-top='1' pad-bottom='1'>
+			<this.custom-list id='saber-list' title='Saber-Os' width='80' bg-color='#00000090' />
+			<vertical pref-width='80' bg='round-rect-panel' bg-color='#00000090' pad-left='2' pad-right='2' pad-top='1' pad-bottom='1'>
 				<slider-setting text='Global Saber Width' value='saber-width' get-event='update-width' apply-on-change='true' max='~global-saber-width-max' increment='0.05' />
 				<horizontal>
 					<this.button text='Reload' pref-width='25' on-click='clicked-reload'/>

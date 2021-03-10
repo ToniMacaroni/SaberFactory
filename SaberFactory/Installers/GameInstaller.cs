@@ -25,9 +25,9 @@ namespace SaberFactory.Installers
                 Container.BindInterfacesAndSelfTo<EventPlayer>().AsTransient();
             }
 
-            
 
-            Container.Bind<GameSaberSetup>().AsSingle().NonLazy();
+            Container.BindInterfacesAndSelfTo<AFHandler>().AsSingle();
+            Container.BindInterfacesAndSelfTo<GameSaberSetup>().AsSingle();
             Container.Bind<IModelProvider>().To<SFSaberProvider>().AsSingle();
 
 

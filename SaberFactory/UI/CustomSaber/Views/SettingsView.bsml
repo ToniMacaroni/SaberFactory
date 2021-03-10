@@ -1,8 +1,8 @@
 ﻿<bg xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
 	
-	<vertical bg="round-rect-panel" bg-color="#00000070" size-delta-y="-60" pad="2">
+	<vertical bg="round-rect-panel" bg-color="#00000090" size-delta-y="-60" pad="2">
 
-		<horizontal pad='2' bg='round-rect-panel' bg-color='#67b0f550'>
+		<horizontal pad='2' bg='round-rect-panel' bg-color='#67b0f599'>
 			<checkbox text='Saber Factory Enabled' value='mod-enabled' apply-on-change='true' />
 		</horizontal>
 		<vertical pad='2' bg='round-rect-panel' bg-color='#00000050'>
@@ -16,7 +16,7 @@
 
 
 
-		<horizontal bg='round-rect-panel' bg-color='#67b0f550' pad='2'>
+		<horizontal bg='round-rect-panel' bg-color='#67b0f599' pad='2'>
 			<custom-icon-btn
 				pad='1'
 				pref-width='15'

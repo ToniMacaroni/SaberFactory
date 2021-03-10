@@ -140,6 +140,11 @@
       <Private>False</Private>
       <SpecificVersion>False</SpecificVersion>
     </Reference>
+    <Reference Include="UnityEngine.PhysicsModule">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
+      <Private>False</Private>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
     <Reference Include="UnityEngine.TextRenderingModule">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
       <Private>False</Private>
@@ -209,6 +214,7 @@
     <Compile Include="Editor\SFLogoAnim.cs" />
     <Compile Include="EmbeddedAssetLoader.cs" />
     <Compile Include="Editor\Pedestal.cs" />
+    <Compile Include="Game\AFHandler.cs" />
     <Compile Include="Game\GameSaberSetup.cs" />
     <Compile Include="Game\SaberMovementTester.cs" />
     <Compile Include="Helpers\AnimationHelper.cs" />

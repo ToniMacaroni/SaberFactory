@@ -74,7 +74,7 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
             if (idx == -1 || idx == _currentIdx) return;
             _list.tableView.SelectCellWithIdx(idx);
             _currentIdx = idx;
-            if(scroll) _list.tableView.ScrollToCellWithIdx(idx, TableViewScroller.ScrollPositionType.Beginning, false);
+            if(scroll) _list.tableView.ScrollToCellWithIdx(idx, TableView.ScrollPositionType.Beginning, false);
         }
 
         private void SetWidth(float width)

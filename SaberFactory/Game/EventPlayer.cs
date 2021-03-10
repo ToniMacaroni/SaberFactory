@@ -141,7 +141,7 @@ namespace SaberFactory.Game
 
         #region Events
 
-        private void OnNoteCut(NoteController noteController, NoteCutInfo noteCutInfo)
+        private void OnNoteCut(NoteController noteController, in NoteCutInfo noteCutInfo)
         {
             if (!noteCutInfo.allIsOK)
             {
