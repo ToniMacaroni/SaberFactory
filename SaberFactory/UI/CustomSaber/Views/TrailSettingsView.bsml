@@ -15,7 +15,7 @@
 		<checkbox id='clamp-checkbox' text='Clamp Texture' apply-on-change='true'
 		          hover-hint='Enable this if you see lines on the border of the trail' />
 
-		<horizontal pad='2' spacing='4' id='advanced-container' bg='round-rect-panel' bg-color='#FF000050'>
+		<horizontal pad='2' spacing='4' id='advanced-container' bg='round-rect-panel' bg-color='#FF000090'>
 			<vertical pref-width='70'>
 				<slider-setting get-event='get-advanced' text='Granularity' value='granularity-value' apply-on-change='true' min='0'
 				                max='300' integer-only='true' />
