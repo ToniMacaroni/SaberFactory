@@ -1,4 +1,5 @@
-﻿using BeatSaberMarkupLanguage.Attributes;
+﻿using System.Linq;
+using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components.Settings;
 using HMUI;
 using SaberFactory.Configuration;
@@ -279,7 +280,11 @@ namespace SaberFactory.UI.CustomSaber.Views
         [UIAction("choose-trail")]
         private void ClickChooseTrail()
         {
-            _chooseTrailPopup.Show(_mainAssetStore.GetAllMetaData(AssetTypeDefinition.CustomSaber), TrailPopupSelectionChanged);
+            _chooseTrailPopup.Show(
+                from meta in _mainAssetStore.GetAllMetaData(AssetTypeDefinition.CustomSaber)
+                orderby meta.IsFavorite descending
+                select meta,
+                TrailPopupSelectionChanged);
         }
 
         [UIAction("refresh-trail")]

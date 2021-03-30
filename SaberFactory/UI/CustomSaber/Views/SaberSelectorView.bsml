@@ -16,7 +16,6 @@
 
 			<horizontal pref-height='16' pref-width='12' horizontal-fit='PreferredSize'>
 				<custom-icon-btn
-					id='toggle-favorite'
 					on-click='open-modelsaber'
 					icon='#AddIcon'
 					show-line='false'
@@ -47,10 +46,21 @@
 				hover-hint='Grab Saber'
 				pref-height='16'/>
 
+			<horizontal pref-height='16' pref-width='12' horizontal-fit='PreferredSize'>
+				<custom-icon-btn
+					on-click='select-sort'
+					icon='#FilterIcon'
+					show-line='false'
+					hover-hint='Sort'
+					hovered-color='#3486ebff'
+					skew='0'
+					use-gradient='false'/>
+			</horizontal>
+
 		</vertical>
 	</horizontal>
 
 	<this.loading-popup id='loading-popup' />
-
+	<this.choose-sort id='choose-sort-popup' />
 	
 </div>

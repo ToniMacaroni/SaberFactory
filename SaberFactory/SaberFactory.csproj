@@ -221,10 +221,15 @@
     <Compile Include="Helpers\AnimationManager.cs" />
     <Compile Include="Helpers\DebugTools.cs" />
     <Compile Include="Helpers\MaterialHelpers.cs" />
+    <Compile Include="Instances\Trail\AltTrail.cs" />
     <Compile Include="Instances\Trail\CustomSaberTrailHandler.cs" />
     <Compile Include="Instances\Trail\ITrailHandler.cs" />
     <Compile Include="Instances\Trail\SFTrailRenderer.cs" />
+    <Compile Include="Instances\Trail\TrailHandlerEx.cs" />
     <Compile Include="Loaders\AssetMetaPath.cs" />
+    <Compile Include="Misc\Spline.cs" />
+    <Compile Include="Misc\SplineControlPoint.cs" />
+    <Compile Include="Misc\VertexPool.cs" />
     <Compile Include="Models\PreloadMetaData.cs" />
     <Compile Include="Models\ESaberSlot.cs" />
     <Compile Include="Models\ESaberType.cs" />
@@ -288,6 +293,7 @@
     <Compile Include="Instances\Trail\TrailInitData.cs" />
     <Compile Include="UI\BaseGameUiHandler.cs" />
     <Compile Include="UI\CustomSaber\CustomComponents\ChangelogPopup.cs" />
+    <Compile Include="UI\CustomSaber\CustomComponents\ChooseSort.cs" />
     <Compile Include="UI\CustomSaber\CustomComponents\ChooseTrailPopup.cs" />
     <Compile Include="UI\CustomSaber\CustomComponents\CustomCellList.cs" />
     <Compile Include="UI\CustomSaber\CustomComponents\CustomList.cs" />
@@ -409,6 +415,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\CustomSaber\CustomComponents\NavButton.bsml">
       <DependentUpon>NavButton.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\CustomSaber\CustomComponents\ChooseSort.bsml">
+      <DependentUpon>ChooseSort.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

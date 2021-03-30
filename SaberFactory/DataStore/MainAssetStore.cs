@@ -86,7 +86,7 @@ namespace SaberFactory.DataStore
 
         public PreloadMetaData GetMetaDataForComposition(ModelComposition comp)
         {
-            var path = comp.GetLeft().StoreAsset.Path + ".meta";
+            var path = comp.GetLeft().StoreAsset.RelativePath + ".meta";
             if (_metaData.TryGetValue(path, out var preloadMetaData)) return preloadMetaData;
             return null;
         }
@@ -184,7 +184,7 @@ namespace SaberFactory.DataStore
 
         private async Task LoadMetaData(string pieceRelativePath)
         {
-            var assetMetaPath = new AssetMetaPath(PathTools.ToFullPath(pieceRelativePath));
+            var assetMetaPath = new AssetMetaPath(new FileInfo(PathTools.ToFullPath(pieceRelativePath)));
             if (_metaData.TryGetValue(assetMetaPath.RelativeMetaDataPath, out _)) return;
             if (!File.Exists(assetMetaPath.MetaDataPath)) return;
 

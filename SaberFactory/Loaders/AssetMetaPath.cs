@@ -5,17 +5,18 @@ namespace SaberFactory.Loaders
 {
     internal class AssetMetaPath
     {
-        public string Path;
-        public string MetaDataPath;
+        public readonly FileInfo File;
+        public string Path => File.FullName;
+        public readonly string MetaDataPath;
 
-        public bool HasMetaData => !string.IsNullOrEmpty(MetaDataPath) && File.Exists(MetaDataPath);
+        public bool HasMetaData => !string.IsNullOrEmpty(MetaDataPath) && System.IO.File.Exists(MetaDataPath);
         public string RelativePath => PathTools.ToRelativePath(Path);
         public string RelativeMetaDataPath => PathTools.ToRelativePath(MetaDataPath);
 
-        public AssetMetaPath(string path, string metaDataPath = null)
+        public AssetMetaPath(FileInfo file, string metaDataPath = null)
         {
-            Path = path;
-            MetaDataPath = metaDataPath ?? path+".meta";
+            File = file;
+            MetaDataPath = metaDataPath ?? Path+".meta";
         }
     }
 }

@@ -76,7 +76,7 @@ namespace SaberFactory.UI.Lib.BSML
     [ComponentHandler(typeof(CustomListTableData))]
     public class CustomListTableDataHandler : TypeHandler
     {
-        public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
+        public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>
         {
             { "selectCell", new[]{ "select-cell" } },
             { "visibleCells", new[]{ "visible-cells"} },

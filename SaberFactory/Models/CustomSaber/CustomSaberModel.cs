@@ -85,7 +85,7 @@ namespace SaberFactory.Models.CustomSaber
                 trail.Length,
                 new MaterialDescriptor(trail.TrailMaterial),
                 0, wrapMode,
-                addTrailOrigin ? StoreAsset.Path : null);
+                addTrailOrigin ? StoreAsset.RelativePath : null);
         }
 
         /// <summary>

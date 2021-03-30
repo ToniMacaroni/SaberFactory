@@ -103,14 +103,14 @@ namespace SaberFactory.Instances
             {
                 if (backupTrail is {})
                 {
-                    TrailHandler = new TrailHandler(GameObject, backupTrail);
+                    TrailHandler = new TrailHandlerEx(GameObject, backupTrail);
                     TrailHandler.CreateTrail(_trailConfig);
                 }
 
                 return;
             }
 
-            TrailHandler = new TrailHandler(GameObject);
+            TrailHandler = new TrailHandlerEx(GameObject);
             TrailHandler.SetTrailData(trailData);
             TrailHandler.CreateTrail(_trailConfig);
 

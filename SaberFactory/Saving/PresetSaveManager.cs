@@ -44,7 +44,7 @@ namespace SaberFactory.Saving
             var pieceList = new List<SerializablePiece>();
             foreach (BasePieceModel pieceModel in saberModel.PieceCollection)
             {
-                pieceList.Add(new SerializablePiece{Path = pieceModel.StoreAsset.Path});
+                pieceList.Add(new SerializablePiece{Path = pieceModel.StoreAsset.RelativePath});
             }
 
             serializableSaber.Pieces = pieceList;

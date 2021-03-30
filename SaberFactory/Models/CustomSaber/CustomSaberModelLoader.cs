@@ -19,8 +19,8 @@ namespace SaberFactory.Models.CustomSaber
         {
             var (leftSaber, rightSaber) = GetSabers(storeAsset.Prefab.transform);
 
-            var storeAssetLeft = new StoreAsset(storeAsset.Path, leftSaber, storeAsset.AssetBundle);
-            var storeAssetRight = new StoreAsset(storeAsset.Path, rightSaber, storeAsset.AssetBundle);
+            var storeAssetLeft = new StoreAsset(storeAsset.RelativePath, leftSaber, storeAsset.AssetBundle);
+            var storeAssetRight = new StoreAsset(storeAsset.RelativePath, rightSaber, storeAsset.AssetBundle);
 
             var modelLeft = _factory.Create(storeAssetLeft);
             var modelRight = _factory.Create(storeAssetRight);
@@ -30,7 +30,7 @@ namespace SaberFactory.Models.CustomSaber
             modelRight.SaberSlot = ESaberSlot.Right;
 
             var composition = new ModelComposition(AssetTypeDefinition.CustomSaber, modelLeft, modelRight, storeAsset.Prefab);
-            composition.SetFavorite(_config.IsFavorite(storeAsset.Path));
+            composition.SetFavorite(_config.IsFavorite(storeAsset.RelativePath));
 
             return composition;
         }
