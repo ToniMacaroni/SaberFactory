@@ -43,7 +43,7 @@ namespace SaberFactory.Game
 
             if ((AFHandler.IsValid && AFHandler.ShouldFire))
             {
-                await Task.Delay(2000);
+                await Task.Delay(4000);
                 await _afHandler.Shoot(this, saber.saberType);
             }
             else
