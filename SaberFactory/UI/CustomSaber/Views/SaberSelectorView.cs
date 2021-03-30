@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using BeatSaberMarkupLanguage.Attributes;
@@ -29,6 +31,7 @@ namespace SaberFactory.UI.CustomSaber.Views
         [UIComponent("saber-list")] private readonly CustomList _saberList = null;
         [UIComponent("toggle-favorite")] private readonly IconToggleButton _toggleButtonFavorite = null;
         [UIComponent("loading-popup")] private readonly LoadingPopup _loadingPopup = null;
+        [UIComponent("choose-sort-popup")] private readonly ChooseSort _chooseSortPopup = null;
 
         [UIValue("global-saber-width-max")]
         private float _globalSaberWidthMax => _pluginConfig.GlobalSaberWidthMax;
@@ -51,6 +54,7 @@ namespace SaberFactory.UI.CustomSaber.Views
             get => GetSaberWidth();
         }
 
+        private ChooseSort.ESortMode _sortMode = ChooseSort.ESortMode.Name;
         private ModelComposition _currentComposition;
         private PreloadMetaData _currentPreloadMetaData;
 
@@ -85,9 +89,27 @@ namespace SaberFactory.UI.CustomSaber.Views
 
         private async Task ShowSabers(int delay = 0)
         {
-            var metas = (from meta in _mainAssetStore.GetAllMetaData()
+            var metaEnumerable = (from meta in _mainAssetStore.GetAllMetaData()
                 orderby meta.IsFavorite descending
-                select meta).ToList();
+                select meta);
+
+            switch (_sortMode)
+            {
+                case ChooseSort.ESortMode.Name:
+                    metaEnumerable = metaEnumerable.ThenBy(x => x.ListName);
+                    break;
+                case ChooseSort.ESortMode.Date:
+                    metaEnumerable = metaEnumerable.ThenByDescending(x => x.AssetMetaPath.File.LastWriteTime);
+                    break;
+                case ChooseSort.ESortMode.Size:
+                    metaEnumerable = metaEnumerable.ThenByDescending(x => x.AssetMetaPath.File.Length);
+                    break;
+                case ChooseSort.ESortMode.Author:
+                    metaEnumerable = metaEnumerable.ThenBy(x => x.ListAuthor);
+                    break;
+            }
+
+            var metas = metaEnumerable.ToList();
 
             if(delay>0) await Task.Delay(delay);
 
@@ -153,14 +175,24 @@ namespace SaberFactory.UI.CustomSaber.Views
 
             if (isOn)
             {
-                _pluginConfig.AddFavorite(_currentComposition.GetLeft().StoreAsset.Path);
+                _pluginConfig.AddFavorite(_currentComposition.GetLeft().StoreAsset.RelativePath);
             }
             else
             {
-                _pluginConfig.RemoveFavorite(_currentComposition.GetLeft().StoreAsset.Path);
+                _pluginConfig.RemoveFavorite(_currentComposition.GetLeft().StoreAsset.RelativePath);
             }
 
             await ShowSabers();
+        }
+
+        [UIAction("select-sort")]
+        private void SelectSort()
+        {
+            _chooseSortPopup.Show(async sortMode =>
+            {
+                _sortMode = sortMode;
+                await ShowSabers();
+            });
         }
 
         [UIAction("toggled-grab-saber")]
@@ -177,7 +209,7 @@ namespace SaberFactory.UI.CustomSaber.Views
             _loadingPopup.Show();
             _saberSet.Save();
             _editorInstanceManager.DestroySaber();
-            await _mainAssetStore.Reload(_currentComposition.GetLeft().StoreAsset.Path);
+            await _mainAssetStore.Reload(_currentComposition.GetLeft().StoreAsset.RelativePath);
             await _saberSet.Load("default");
             await ShowSabers();
             _loadingPopup.Hide();
@@ -200,7 +232,7 @@ namespace SaberFactory.UI.CustomSaber.Views
         {
             if (_currentComposition == null) return;
             _editorInstanceManager.DestroySaber();
-            _mainAssetStore.Delete(_currentComposition.GetLeft().StoreAsset.Path);
+            _mainAssetStore.Delete(_currentComposition.GetLeft().StoreAsset.RelativePath);
             await ShowSabers();
         }
 

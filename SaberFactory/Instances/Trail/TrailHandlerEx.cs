@@ -38,9 +38,25 @@ namespace SaberFactory.Instances.Trail
 
                 var material = trailRenderer.GetField<MeshRenderer, SaberTrailRenderer>("_meshRenderer").material;
 
-                TrailInstance.Setup(new TrailInitData(), trailStart.transform, trailEnd.transform, material);
+                var trailInitDataVanilla = new TrailInitData
+                {
+                    TrailColor = Color.white,
+                    TrailLength = 15,
+                    Whitestep = 0.02f,
+                    Granularity = trailConfig.Granularity
+                };
+
+                TrailInstance.Setup(trailInitDataVanilla, trailStart.transform, trailEnd.transform, material);
                 return;
             }
+
+            var trailInitData = new TrailInitData
+            {
+                TrailColor = Color.white,
+                TrailLength = _instanceTrailData.Length,
+                Whitestep = _instanceTrailData.WhiteStep,
+                Granularity = trailConfig.Granularity
+            };
 
             Transform pointStart = _instanceTrailData.IsTrailReversed
                 ? _instanceTrailData.PointEnd
@@ -51,7 +67,7 @@ namespace SaberFactory.Instances.Trail
                 : _instanceTrailData.PointEnd;
 
             TrailInstance.Setup(
-                new TrailInitData(),
+                trailInitData,
                 pointStart,
                 pointEnd,
                 _instanceTrailData.Material.Material

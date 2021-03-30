@@ -25,8 +25,7 @@ namespace SaberFactory.Loaders
                 {
                     foreach (var path in dir1.EnumerateFiles("*.saber", SearchOption.AllDirectories))
                     {
-                        paths.Add(new AssetMetaPath(path.FullName));
-
+                        paths.Add(new AssetMetaPath(path));
                     }
                 }
 
@@ -34,7 +33,7 @@ namespace SaberFactory.Loaders
                 {
                     foreach (var path in dir2.EnumerateFiles("*.saber", SearchOption.AllDirectories))
                     {
-                        paths.Add(new AssetMetaPath(path.FullName));
+                        paths.Add(new AssetMetaPath(path));
                     }
                 }
 

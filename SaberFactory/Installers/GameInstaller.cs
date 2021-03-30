@@ -1,11 +1,15 @@
-﻿//#define TEST_TRAIL
+﻿#define TEST_TRAIL
 
 
+using System;
+using System.Linq;
 using SaberFactory.Configuration;
 using SaberFactory.Game;
 using SaberFactory.Helpers;
 using SaberFactory.Models;
 using SiraUtil.Interfaces;
+using SiraUtil.Tools;
+using UnityEngine;
 using Zenject;
 
 namespace SaberFactory.Installers
@@ -24,7 +28,6 @@ namespace SaberFactory.Installers
                 Container.Bind<float>().WithId("LastNoteId").FromInstance(lastNoteTime);
                 Container.BindInterfacesAndSelfTo<EventPlayer>().AsTransient();
             }
-
 
             Container.BindInterfacesAndSelfTo<AFHandler>().AsSingle();
             Container.BindInterfacesAndSelfTo<GameSaberSetup>().AsSingle();

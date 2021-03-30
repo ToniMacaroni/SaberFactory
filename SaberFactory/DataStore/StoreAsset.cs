@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.IO;
+using UnityEngine;
 
 namespace SaberFactory.DataStore
 {
@@ -7,7 +8,7 @@ namespace SaberFactory.DataStore
     /// </summary>
     internal class StoreAsset
     {
-        public readonly string Path;
+        public readonly string RelativePath;
         public readonly string Name;
         public readonly string NameWithoutExtension;
         public readonly string Extension;
@@ -16,10 +17,10 @@ namespace SaberFactory.DataStore
 
         public readonly AssetBundle AssetBundle;
 
-        public StoreAsset(string path, GameObject prefab, AssetBundle assetBundle)
+        public StoreAsset(string relativePath, GameObject prefab, AssetBundle assetBundle)
         {
-            Path = path;
-            Name = System.IO.Path.GetFileName(Path);
+            RelativePath = relativePath;
+            Name = System.IO.Path.GetFileName(RelativePath);
             NameWithoutExtension = System.IO.Path.GetFileNameWithoutExtension(Name);
             Extension = System.IO.Path.GetExtension(Name);
 

@@ -10,7 +10,7 @@
 		                max='~trail-width-max' />
 
 		<slider-setting id='whitestep-slider' text='Whitestep' get-event='update-props' apply-on-change='true' min='0'
-		                max='0.3' />
+		                max='100' />
 
 		<checkbox id='clamp-checkbox' text='Clamp Texture' apply-on-change='true'
 		          hover-hint='Enable this if you see lines on the border of the trail' />
