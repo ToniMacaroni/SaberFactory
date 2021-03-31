@@ -89,11 +89,6 @@ namespace SaberFactory.Instances.Trail
 
         public Vector3 CurHeadPos => (PointStart.position + PointEnd.position) / 2f;
 
-        public void Deactivate()
-        {
-            _vertexPool.SetMeshObjectActive(false);
-        }
-
         public void Setup(TrailInitData initData, Transform pointStart, Transform pointEnd, Material material)
         {
             PointStart = pointStart;
@@ -116,7 +111,12 @@ namespace SaberFactory.Instances.Trail
 
         private void OnDisable()
         {
-            Deactivate();
+            _vertexPool.SetMeshObjectActive(false);
+        }
+
+        private void OnEnable()
+        {
+            _vertexPool?.SetMeshObjectActive(true);
         }
 
         private void LateUpdate()
