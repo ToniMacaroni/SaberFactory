@@ -21,6 +21,9 @@ namespace SaberFactory.Configuration
         // Enable saber events
         public bool EnableEvents { get; set; } = true;
 
+        // Disable AF Special Events
+        public bool DisableAF { get; set; } = false;
+
         // Randomize saber on each song start
         public bool RandomSaber { get; set; } = false;
 

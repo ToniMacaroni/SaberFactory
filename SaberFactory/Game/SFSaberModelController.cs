@@ -41,7 +41,7 @@ namespace SaberFactory.Game
             _saberInstance.CreateTrail(_saberTrail);
             SetColor(_saberColor ?? _colorManager.ColorForSaberType(_saberInstance.Model.SaberSlot.ToSaberType()));
 
-            if ((AFHandler.IsValid && AFHandler.ShouldFire))
+            if (AFHandler.IsValid && AFHandler.ShouldFire && !(_eventPlayer?.DisableAF ?? true))
             {
                 await Task.Delay(4000);
                 await _afHandler.Shoot(this, saber.saberType);

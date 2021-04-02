@@ -8,6 +8,8 @@
 		<vertical pad='2' bg='round-rect-panel' bg-color='#00000050'>
 			<checkbox text='Enable Events' value='events-enabled' apply-on-change='true'
 			          hover-hint='Enable events on the saber (like fc effects)'/>
+			<checkbox text='Disable April Fools' value='af-disabled' apply-on-change='true'
+			          hover-hint='Disable April Fools jokes'/>
 			<checkbox text='Random Sabers' value='random-sabers' apply-on-change='true'
 			          hover-hint='Choose a random saber on every song start'/>
 			<checkbox text='Animate Saber Selection' value='animate-saber-selection' apply-on-change='true'

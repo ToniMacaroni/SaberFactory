@@ -14,6 +14,12 @@ namespace SaberFactory.Game
         private List<PartEvents> _partEventsList;
         private SaberType _saberType;
         private bool _didInit;
+        public bool DisableAF
+        {
+            get {
+                return _pluginConfig?.DisableAF ?? true;
+            }
+        }
 
         [Inject] private readonly PluginConfig _pluginConfig = null;
 

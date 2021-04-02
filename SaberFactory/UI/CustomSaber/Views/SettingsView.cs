@@ -50,6 +50,17 @@ namespace SaberFactory.UI.CustomSaber.Views
             }
         }
 
+        [UIValue("af-disabled")]
+        private bool AFDisabled
+        {
+            get => _pluginConfig.DisableAF;
+            set
+            {
+                _pluginConfig.DisableAF = value;
+                OnPropertyChanged();
+            }
+        }
+
         [UIValue("random-sabers")]
         private bool RandomSabers
         {
