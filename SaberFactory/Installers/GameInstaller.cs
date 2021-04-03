@@ -24,12 +24,14 @@ namespace SaberFactory.Installers
             if (Container.HasBinding<GameplayCoreSceneSetupData>())
             {
                 var sceneSetupData = Container.Resolve<GameplayCoreSceneSetupData>();
-                var lastNoteTime = sceneSetupData.difficultyBeatmap.beatmapData.GetLastNoteTime();
+                var beatmapData = sceneSetupData.difficultyBeatmap.beatmapData;
+                Container.Bind<BeatmapData>().WithId("beatmapdata").FromInstance(beatmapData);
+                var lastNoteTime = beatmapData.GetLastNoteTime();
                 Container.Bind<float>().WithId("LastNoteId").FromInstance(lastNoteTime);
                 Container.BindInterfacesAndSelfTo<EventPlayer>().AsTransient();
             }
 
-            Container.BindInterfacesAndSelfTo<AFHandler>().AsSingle();
+            //Container.BindInterfacesAndSelfTo<AFHandler>().AsSingle();
             Container.BindInterfacesAndSelfTo<GameSaberSetup>().AsSingle();
             Container.Bind<IModelProvider>().To<SFSaberProvider>().AsSingle();
 

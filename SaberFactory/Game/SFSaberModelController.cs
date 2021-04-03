@@ -22,7 +22,7 @@ namespace SaberFactory.Game
         [Inject] private readonly SaberSet _saberSet = null;
         [Inject] private readonly SaberInstance.Factory _saberInstanceFactory = null;
         [Inject] private readonly GameSaberSetup _gameSaberSetup = null;
-        [Inject] private readonly AFHandler _afHandler = null;
+        [InjectOptional] private readonly AFHandler _afHandler = null;
         [InjectOptional] private readonly EventPlayer _eventPlayer = null;
 
         private SaberInstance _saberInstance;
@@ -41,7 +41,7 @@ namespace SaberFactory.Game
             _saberInstance.CreateTrail(_saberTrail);
             SetColor(_saberColor ?? _colorManager.ColorForSaberType(_saberInstance.Model.SaberSlot.ToSaberType()));
 
-            if ((AFHandler.IsValid && AFHandler.ShouldFire))
+            if (_afHandler != null && AFHandler.IsValid && AFHandler.ShouldFire)
             {
                 await Task.Delay(4000);
                 await _afHandler.Shoot(this, saber.saberType);

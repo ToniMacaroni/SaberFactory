@@ -50,11 +50,16 @@ namespace SaberFactory.DataStore
 
         public Task<ModelComposition> this[PreloadMetaData metaData] => GetCompositionByPath(metaData.AssetMetaPath.RelativePath);
 
-        public async Task<ModelComposition> GetCompositionByPath(string path)
+        public async Task<ModelComposition> GetCompositionByPath(string relativePath)
         {
-            if (_modelCompositions.TryGetValue(path, out var result)) return result;
+            if (_modelCompositions.TryGetValue(relativePath, out var result)) return result;
 
-            return await LoadComposition(path);
+            return await LoadComposition(relativePath);
+        }
+
+        public async Task<ModelComposition> GetCompositionByMeta(PreloadMetaData meta)
+        {
+            return await this[PathTools.ToRelativePath(meta.AssetMetaPath.Path)];
         }
 
         public void Dispose()
@@ -199,24 +204,24 @@ namespace SaberFactory.DataStore
             if(!_modelCompositions.ContainsKey(key)) _modelCompositions.Add(key, modelComposition);
         }
 
-        private async Task<ModelComposition> LoadModelCompositionAsync(string bundlePath)
+        private async Task<ModelComposition> LoadModelCompositionAsync(string relativeBundlePath)
         {
             // TODO: Switch between customsaber and part implementation
 
             AssetBundleLoader loader = _customSaberAssetLoader;
             IStoreAssetParser modelCreator = _customSaberModelLoader;
 
-            var storeAsset = await loader.LoadStoreAssetAsync(bundlePath);
+            var storeAsset = await loader.LoadStoreAssetAsync(relativeBundlePath);
             if (storeAsset == null) return null;
             var model = modelCreator.GetComposition(storeAsset);
 
             return model;
         }
 
-        private async Task<ModelComposition> LoadComposition(string path)
+        private async Task<ModelComposition> LoadComposition(string relativePath)
         {
-            var composition = await LoadModelCompositionAsync(path);
-            if(composition!=null) _modelCompositions.Add(path, composition);
+            var composition = await LoadModelCompositionAsync(relativePath);
+            if(composition!=null) _modelCompositions.Add(relativePath, composition);
             return composition;
         }
     }
