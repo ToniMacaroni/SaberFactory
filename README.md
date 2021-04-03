@@ -22,3 +22,15 @@ Change the shape, shaders, material properties, textures and more of parts and s
 ## How do I install it
 1) Download the first zip from [Here](https://github.com/ToniMacaroni/SaberFactoryV2/releases)
 2) Unpack it in your Beat Saber directory
+
+## I have made a map and want it to use a specific saber
+You can add a "_customSaber" prop to your beatmap data
+that tells Saber Factory to use a specific saber for this map like this:
+```
+"_customData": {
+    "_customSaber": "Plasma Katana"
+}
+```
+Make sure to use the actual name of the saber not the file name.
+Best is to look in-game at the saber to see what the actual name is.
+

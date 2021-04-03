@@ -1,4 +1,5 @@
-﻿using IPA.Logging;
+﻿using System;
+using IPA.Logging;
 using SaberFactory.Configuration;
 using SaberFactory.DataStore;
 using SaberFactory.Instances;
@@ -7,6 +8,8 @@ using SaberFactory.Models.CustomSaber;
 using SaberFactory.Saving;
 using SiraUtil;
 using System.IO;
+using System.Linq;
+using SaberFactory.Instances.Trail;
 using Zenject;
 
 namespace SaberFactory.Installers
@@ -31,6 +34,16 @@ namespace SaberFactory.Installers
                 _config.FirstLaunch = false;
                 _config.RuntimeFirstLaunch = true;
             }
+
+            var rtOptions = new LaunchOptions();
+
+            if (Environment.GetCommandLineArgs().Any(x => x.ToLower() == "fpfc"))
+            {
+                rtOptions.FPFC = true;
+                AltTrail.CapFps = true;
+            }
+
+            Container.BindInstance(rtOptions).AsSingle();
 
             Container.BindLoggerAsSiraLogger(_logger);
             Container.BindInstance(_config).AsSingle();

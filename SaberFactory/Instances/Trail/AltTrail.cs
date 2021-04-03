@@ -75,6 +75,7 @@ namespace SaberFactory.Instances.Trail
         public float Whitestep;
         public Color MyColor = Color.white;
         public Material MyMaterial;
+        public static bool CapFps;
 
         protected float _trailWidth;
         protected List<Element> _snapshotList = new List<Element>();
@@ -86,6 +87,7 @@ namespace SaberFactory.Instances.Trail
 
         private int _skipFirstFrames = 4;
         private int _frameNum;
+        private float _time;
 
         public Vector3 CurHeadPos => (PointStart.position + PointEnd.position) / 2f;
 
@@ -123,6 +125,17 @@ namespace SaberFactory.Instances.Trail
         {
             if (!_inited)
                 return;
+
+            if (CapFps)
+            {
+                _time += Time.deltaTime;
+                if (_time < 1f / 90)
+                {
+                    return;
+                }
+
+                _time = 0;
+            }
 
             _frameNum++;
 

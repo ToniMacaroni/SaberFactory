@@ -73,7 +73,19 @@ namespace SaberFactory.Models
             _lastSelectedRandoms.Add(idx);
 
             var comp = meta[idx];
-            SetModelComposition(await _mainAssetStore[PathTools.ToRelativePath(comp.AssetMetaPath.Path)]);
+            SetModelComposition(await _mainAssetStore.GetCompositionByMeta(comp));
+        }
+
+        public async Task SetSaber(string saberName)
+        {
+            var metaData = _mainAssetStore.GetAllMetaData(AssetTypeDefinition.CustomSaber);
+            var saber = metaData.FirstOrDefault(x => x.ListName == saberName);
+            if (saber == null)
+            {
+                return;
+            }
+
+            SetModelComposition(await _mainAssetStore.GetCompositionByMeta(saber));
         }
 
         public async void Load()

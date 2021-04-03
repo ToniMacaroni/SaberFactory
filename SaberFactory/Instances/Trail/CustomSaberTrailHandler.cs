@@ -6,13 +6,14 @@ namespace SaberFactory.Instances.Trail
 {
     internal class CustomSaberTrailHandler
     {
-        public SFTrail TrailInstance { get; protected set; }
+        public AltTrail TrailInstance { get; protected set; }
 
         private readonly CustomTrail _customTrail;
+        private bool _canColorMaterial;
 
         public CustomSaberTrailHandler(GameObject gameobject, CustomTrail customTrail)
         {
-            TrailInstance = gameobject.AddComponent<SFTrail>();
+            TrailInstance = gameobject.AddComponent<AltTrail>();
             _customTrail = customTrail;
         }
 
@@ -30,10 +31,38 @@ namespace SaberFactory.Instances.Trail
 
             TrailInstance.Setup(
                 trailInitData,
-                _customTrail.TrailMaterial,
                 _customTrail.PointStart,
-                _customTrail.PointEnd
+                _customTrail.PointEnd,
+                _customTrail.TrailMaterial
             );
+
+            _canColorMaterial = IsMaterialColorable(_customTrail.TrailMaterial);
+        }
+
+        private bool IsMaterialColorable(Material material)
+        {
+            if (material is null || !material.HasProperty(MaterialProperties.MainColor))
+            {
+                return false;
+            }
+
+            if (material.TryGetFloat(MaterialProperties.CustomColors, out var val))
+            {
+                if (val > 0)
+                {
+                    return true;
+                }
+            }
+            else if (material.TryGetFloat(MaterialProperties.Glow, out val) && val > 0)
+            {
+                return true;
+            }
+            else if (material.TryGetFloat(MaterialProperties.Bloom, out val) && val > 0)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         public void DestroyTrail()
@@ -45,7 +74,12 @@ namespace SaberFactory.Instances.Trail
         {
             if (TrailInstance is { })
             {
-                TrailInstance.Color = color;
+                TrailInstance.MyColor = color;
+            }
+
+            if (_canColorMaterial)
+            {
+                _customTrail.TrailMaterial.SetMainColor(color);
             }
         }
     }

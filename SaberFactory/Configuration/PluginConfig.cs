@@ -21,6 +21,9 @@ namespace SaberFactory.Configuration
         // Enable saber events
         public bool EnableEvents { get; set; } = true;
 
+        // Use your own saber instead of the one dictated by the song
+        public bool OverrideSongSaber { get; set; } = false;
+
         // Randomize saber on each song start
         public bool RandomSaber { get; set; } = false;
 

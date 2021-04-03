@@ -15,7 +15,7 @@ namespace SaberFactory.Models
 
         public float SaberWidth = 1;
 
-        private SaberModel(ESaberSlot saberSlot)
+        public SaberModel(ESaberSlot saberSlot)
         {
             SaberSlot = saberSlot;
 

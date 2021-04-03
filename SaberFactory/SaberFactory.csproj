@@ -56,6 +56,11 @@
       <Private>False</Private>
       <SpecificVersion>False</SpecificVersion>
     </Reference>
+    <Reference Include="CustomJSONData">
+      <HintPath>$(BeatSaberDir)\Plugins\CustomJSONData.dll</HintPath>
+      <Private>False</Private>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
     <Reference Include="CustomSaberComponents, Version=4.4.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Resources\CustomSaberComponents.dll</HintPath>
@@ -70,6 +75,7 @@
       <Private>False</Private>
       <SpecificVersion>False</SpecificVersion>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(BeatSaberDir)\Libs\Newtonsoft.Json.dll</HintPath>
@@ -221,6 +227,7 @@
     <Compile Include="Helpers\AnimationManager.cs" />
     <Compile Include="Helpers\DebugTools.cs" />
     <Compile Include="Helpers\MaterialHelpers.cs" />
+    <Compile Include="Installers\LaunchOptions.cs" />
     <Compile Include="Instances\Trail\AltTrail.cs" />
     <Compile Include="Instances\Trail\CustomSaberTrailHandler.cs" />
     <Compile Include="Instances\Trail\ITrailHandler.cs" />
@@ -292,17 +299,17 @@
     <Compile Include="Saving\SerializableTrail.cs" />
     <Compile Include="Instances\Trail\TrailInitData.cs" />
     <Compile Include="UI\BaseGameUiHandler.cs" />
-    <Compile Include="UI\CustomSaber\CustomComponents\ChangelogPopup.cs" />
-    <Compile Include="UI\CustomSaber\CustomComponents\ChooseSort.cs" />
-    <Compile Include="UI\CustomSaber\CustomComponents\ChooseTrailPopup.cs" />
+    <Compile Include="UI\CustomSaber\Popups\ChangelogPopup.cs" />
+    <Compile Include="UI\CustomSaber\Popups\ChooseSort.cs" />
+    <Compile Include="UI\CustomSaber\Popups\ChooseTrailPopup.cs" />
     <Compile Include="UI\CustomSaber\CustomComponents\CustomCellList.cs" />
     <Compile Include="UI\CustomSaber\CustomComponents\CustomList.cs" />
     <Compile Include="UI\CustomSaber\CustomComponents\IconToggleButton.cs" />
-    <Compile Include="UI\CustomSaber\CustomComponents\LoadingPopup.cs" />
-    <Compile Include="UI\CustomSaber\CustomComponents\MaterialEditor.cs" />
+    <Compile Include="UI\CustomSaber\Popups\LoadingPopup.cs" />
+    <Compile Include="UI\CustomSaber\Popups\MaterialEditor.cs" />
     <Compile Include="UI\CustomSaber\CustomComponents\NavButton.cs" />
     <Compile Include="UI\CustomSaber\CustomComponents\PropList.cs" />
-    <Compile Include="UI\CustomSaber\CustomComponents\TexturePickerPopup.cs" />
+    <Compile Include="UI\CustomSaber\Popups\TexturePickerPopup.cs" />
     <Compile Include="UI\CustomSaber\CustomSaberUI.cs" />
     <Compile Include="UI\CustomSaber\ENavigationCategory.cs" />
     <Compile Include="UI\CustomSaber\INavigationCategoryView.cs" />
@@ -382,7 +389,7 @@
     <EmbeddedResource Include="UI\CustomSaber\CustomComponents\CustomList.bsml">
       <DependentUpon>CustomList.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\CustomSaber\CustomComponents\MaterialEditor.bsml">
+    <EmbeddedResource Include="UI\CustomSaber\Popups\MaterialEditor.bsml">
       <DependentUpon>MaterialEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\CustomSaber\Views\TransformSettingsView.bsml">
@@ -391,10 +398,10 @@
     <EmbeddedResource Include="UI\CustomSaber\CustomComponents\IconToggleButton.bsml">
       <DependentUpon>IconToggleButton.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\CustomSaber\CustomComponents\LoadingPopup.bsml">
+    <EmbeddedResource Include="UI\CustomSaber\Popups\LoadingPopup.bsml">
       <DependentUpon>LoadingPopup.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\CustomSaber\CustomComponents\ChooseTrailPopup.bsml">
+    <EmbeddedResource Include="UI\CustomSaber\Popups\ChooseTrailPopup.bsml">
       <DependentUpon>ChooseTrailPopup.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\CustomSaber\CustomComponents\PropList.bsml">
@@ -407,16 +414,16 @@
     <EmbeddedResource Include="UI\CustomSaber\Views\SettingsView.bsml">
       <DependentUpon>SettingsView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\CustomSaber\CustomComponents\TexturePickerPopup.bsml">
+    <EmbeddedResource Include="UI\CustomSaber\Popups\TexturePickerPopup.bsml">
       <DependentUpon>TexturePickerPopup.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\CustomSaber\CustomComponents\ChangelogPopup.bsml">
+    <EmbeddedResource Include="UI\CustomSaber\Popups\ChangelogPopup.bsml">
       <DependentUpon>ChangelogPopup.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\CustomSaber\CustomComponents\NavButton.bsml">
       <DependentUpon>NavButton.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\CustomSaber\CustomComponents\ChooseSort.bsml">
+    <EmbeddedResource Include="UI\CustomSaber\Popups\ChooseSort.bsml">
       <DependentUpon>ChooseSort.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
