@@ -17,6 +17,7 @@ namespace SaberFactory.Instances.Trail
         protected InstanceTrailData _instanceTrailData;
 
         private readonly SaberTrail _backupTrail;
+        private bool _canColorMaterial;
 
         public TrailHandler(GameObject gameobject)
         {
@@ -86,6 +87,8 @@ namespace SaberFactory.Instances.Trail
                 pointStart,
                 pointEnd
             );
+
+            _canColorMaterial = IsMaterialColorable(_instanceTrailData.Material.Material);
         }
 
         public void DestroyTrail()
@@ -98,11 +101,42 @@ namespace SaberFactory.Instances.Trail
             _instanceTrailData = instanceTrailData;
         }
 
+        private bool IsMaterialColorable(Material material)
+        {
+            if (material is null || !material.HasProperty(MaterialProperties.MainColor))
+            {
+                return false;
+            }
+
+            if (material.TryGetFloat(MaterialProperties.CustomColors, out var val))
+            {
+                if (val > 0)
+                {
+                    return true;
+                }
+            }
+            else if (material.TryGetFloat(MaterialProperties.Glow, out val) && val > 0)
+            {
+                return true;
+            }
+            else if (material.TryGetFloat(MaterialProperties.Bloom, out val) && val > 0)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         public void SetColor(Color color)
         {
             if (TrailInstance is {})
             {
                 TrailInstance.Color = color;
+            }
+
+            if (_canColorMaterial)
+            {
+                _instanceTrailData.Material.Material.color = color;
             }
         }
     }

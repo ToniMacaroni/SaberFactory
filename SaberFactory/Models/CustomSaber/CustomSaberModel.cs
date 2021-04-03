@@ -62,7 +62,18 @@ namespace SaberFactory.Models.CustomSaber
         {
             base.SyncFrom(otherModel);
             var otherCs = (CustomSaberModel) otherModel;
-            TrailModel = otherCs.TrailModel;
+
+            // backup current material
+            var mat = TrailModel.Material.Material;
+            
+            TrailModel.CopyFrom(otherCs.TrailModel);
+            if (string.IsNullOrWhiteSpace(TrailModel.TrailOrigin) ||
+                mat.shader.name == TrailModel.Material.Material.shader.name)
+            {
+                // just copy props from other material to current
+                mat.CopyPropertiesFromMaterial(TrailModel.Material.Material);
+                TrailModel.Material.Material = mat;
+            }
         }
 
         public TrailModel GrabTrail(bool addTrailOrigin)

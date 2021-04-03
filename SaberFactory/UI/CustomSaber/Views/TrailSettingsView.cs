@@ -186,14 +186,27 @@ namespace SaberFactory.UI.CustomSaber.Views
             }
         }
 
-        private void CreateTrail(SaberInstance saberInstance)
+        private void AddControlEvents()
         {
-            _trailPreviewer.Destroy();
+            _lengthSlider.AddEvent(SetLength);
+            _widthSlider.AddEvent(SetWidth);
+            _whitestepSlider.AddEvent(SetWhitestep);
+            _clampToggle.SetEvent(SetClampMode);
+        }
 
+        private void RemoveControlEvents()
+        {
             _lengthSlider.RemoveEvent();
             _widthSlider.RemoveEvent();
             _whitestepSlider.RemoveEvent();
             _clampToggle.RemoveEvent();
+        }
+
+        private void CreateTrail(SaberInstance saberInstance)
+        {
+            _trailPreviewer.Destroy();
+
+            RemoveControlEvents();
 
             var trailData = saberInstance?.GetTrailData(out _);
 
@@ -220,10 +233,7 @@ namespace SaberFactory.UI.CustomSaber.Views
                 RefreshButtonActive = false;
             }
 
-            _lengthSlider.AddEvent(SetLength);
-            _widthSlider.AddEvent(SetWidth);
-            _whitestepSlider.AddEvent(SetWhitestep);
-            _clampToggle.SetEvent(SetClampMode);
+            AddControlEvents();
         }
 
         private void CreateTrailPedestal(SaberInstance saberInstance, InstanceTrailData trailData)
@@ -239,10 +249,7 @@ namespace SaberFactory.UI.CustomSaber.Views
         {
             LoadFromModel(trailData);
 
-            _lengthSlider.AddEvent(SetLength);
-            _widthSlider.AddEvent(SetWidth);
-            _whitestepSlider.AddEvent(SetWhitestep);
-            _clampToggle.SetEvent(SetClampMode);
+            AddControlEvents();
         }
 
         private void TrailPopupSelectionChanged(TrailModel trailModel)

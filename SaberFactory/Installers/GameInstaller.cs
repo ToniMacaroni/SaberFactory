@@ -8,8 +8,6 @@ using SaberFactory.Game;
 using SaberFactory.Helpers;
 using SaberFactory.Models;
 using SiraUtil.Interfaces;
-using SiraUtil.Tools;
-using UnityEngine;
 using Zenject;
 
 namespace SaberFactory.Installers
@@ -37,7 +35,7 @@ namespace SaberFactory.Installers
 
 
 #if DEBUG && TEST_TRAIL
-            if (Environment.GetCommandLineArgs().Any(x => x.ToLower() == "fpfc"))
+            if (Container.TryResolve<LaunchOptions>()?.FPFC ?? false)
             {
                 var testerInitData = new SaberMovementTester.InitData { CreateTestingSaber = true };
                 Container.BindInterfacesAndSelfTo<SaberMovementTester>().AsSingle().WithArguments(testerInitData);
