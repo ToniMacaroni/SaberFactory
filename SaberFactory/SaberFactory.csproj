@@ -41,6 +41,11 @@
     <DisableZipRelease>True</DisableZipRelease>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="0Harmony">
+      <HintPath>$(BeatSaberDir)\Libs\0Harmony.dll</HintPath>
+      <Private>False</Private>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
     <Reference Include="BeatmapCore">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\BeatmapCore.dll</HintPath>
       <Private>False</Private>
@@ -223,6 +228,8 @@
     <Compile Include="Game\AFHandler.cs" />
     <Compile Include="Game\GameSaberSetup.cs" />
     <Compile Include="Game\SaberMovementTester.cs" />
+    <Compile Include="HarmonyPatches\GameplaySetupViewPatch.cs" />
+    <Compile Include="HarmonyPatches\GameplaySetupViewSelectionPatch.cs" />
     <Compile Include="Helpers\AnimationHelper.cs" />
     <Compile Include="Helpers\AnimationManager.cs" />
     <Compile Include="Helpers\DebugTools.cs" />

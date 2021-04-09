@@ -17,6 +17,8 @@ namespace SaberFactory.Editor
     /// </summary>
     internal class Editor : IInitializable, IDisposable
     {
+        public static Editor Instance;
+
         public bool IsActive { get; private set; }
 
         public bool IsSaberInHand
@@ -63,6 +65,8 @@ namespace SaberFactory.Editor
 
             _pedestal = new Pedestal(embeddedAssetLoader);
             _sfLogoAnim = new SFLogoAnim(embeddedAssetLoader);
+
+            Instance = this;
         }
 
         public async void Initialize()
@@ -76,6 +80,7 @@ namespace SaberFactory.Editor
 
         public void Dispose()
         {
+            Instance = null;
             _saberFactoryUi.OnClosePressed -= Close;
 
             _pedestal.Destroy();
