@@ -15,7 +15,7 @@ namespace SaberFactory.UI
         private readonly HierarchyManager _hierarchyManager;
         private readonly ScreenSystem _screenSystem;
 
-        private readonly List<ViewController> _childViewControllers = new List<ViewController>();
+        private readonly List<GameObject> _deactivatedScreens = new List<GameObject>();
 
         private BaseGameUiHandler(HierarchyManager hierarchyManager)
         {
@@ -25,27 +25,47 @@ namespace SaberFactory.UI
 
         public void DismissGameUI()
         {
-            var main = GetViewController(_screenSystem.mainScreen);
+            _deactivatedScreens.Clear();
+            DeactivateScreen(_screenSystem.leftScreen);
+            DeactivateScreen(_screenSystem.mainScreen);
+            DeactivateScreen(_screenSystem.rightScreen);
+            DeactivateScreen(_screenSystem.bottomScreen);
+            DeactivateScreen(_screenSystem.topScreen);
 
-            _childViewControllers.Clear();
-            _childViewControllers.Add(GetViewController(_screenSystem.leftScreen));
-            _childViewControllers.Add(GetViewController(_screenSystem.rightScreen));
-            _childViewControllers.Add(main);
-            _childViewControllers.Add(GetViewController(_screenSystem.bottomScreen));
-            _childViewControllers.Add(GetViewController(_screenSystem.topScreen));
-            GetChildViewControllers(main, _childViewControllers);
+            //var main = GetViewController(_screenSystem.mainScreen);
 
-            HideViewControllers(_childViewControllers);
+            //_childViewControllers.Clear();
+            //_childViewControllers.Add(GetViewController(_screenSystem.leftScreen));
+            //_childViewControllers.Add(GetViewController(_screenSystem.rightScreen));
+            //_childViewControllers.Add(main);
+            //_childViewControllers.Add(GetViewController(_screenSystem.bottomScreen));
+            //_childViewControllers.Add(GetViewController(_screenSystem.topScreen));
+            //GetChildViewControllers(main, _childViewControllers);
+
+            //HideViewControllers(_childViewControllers);
         }
 
         public void PresentGameUI()
         {
-            ShowViewControllers(_childViewControllers);
+            foreach (var screenObj in _deactivatedScreens)
+            {
+                screenObj.SetActive(true);
+            }
         }
 
         public Transform GetUIParent()
         {
             return _hierarchyManager.transform;
+        }
+
+        private void DeactivateScreen(Screen screen)
+        {
+            var go = screen.gameObject;
+            if (go.activeSelf)
+            {
+                _deactivatedScreens.Add(go);
+                go.SetActive(false);
+            }
         }
 
         private void HideViewControllers(IEnumerable<ViewController> vcs)

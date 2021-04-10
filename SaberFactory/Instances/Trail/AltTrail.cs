@@ -113,7 +113,7 @@ namespace SaberFactory.Instances.Trail
 
         private void OnDisable()
         {
-            _vertexPool.SetMeshObjectActive(false);
+            _vertexPool?.SetMeshObjectActive(false);
         }
 
         private void OnEnable()

@@ -89,6 +89,7 @@ namespace SaberFactory.Editor
         public async void Open()
         {
             if (IsActive) return;
+            IsActive = true;
 
             _editorInstanceManager.OnModelCompositionSet += OnModelCompositionSet;
 
@@ -118,13 +119,18 @@ namespace SaberFactory.Editor
 
             _saberFactoryUi.OnClosePressed += Close;
 
-            IsActive = true;
             _isFirstActivation = false;
         }
 
         public void Close()
         {
+            Close(false);
+        }
+
+        public void Close(bool instant)
+        {
             if (!IsActive) return;
+            IsActive = false;
 
             _editorInstanceManager.SyncSabers();
             _editorInstanceManager.OnModelCompositionSet -= OnModelCompositionSet;
@@ -133,12 +139,10 @@ namespace SaberFactory.Editor
 
             _pedestal.IsVisible = false;
 
-            _saberFactoryUi.Close();
+            _saberFactoryUi.Close(instant);
             _saberFactoryUi.OnClosePressed -= Close;
 
             _saberGrabController.ShowHandle();
-            
-            IsActive = false;
         }
 
         private async void OnModelCompositionSet(ModelComposition composition)

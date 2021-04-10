@@ -228,6 +228,7 @@
     <Compile Include="Game\AFHandler.cs" />
     <Compile Include="Game\GameSaberSetup.cs" />
     <Compile Include="Game\SaberMovementTester.cs" />
+    <Compile Include="HarmonyPatches\DismissFlowCoordinatorPatch.cs" />
     <Compile Include="HarmonyPatches\GameplaySetupViewPatch.cs" />
     <Compile Include="HarmonyPatches\GameplaySetupViewSelectionPatch.cs" />
     <Compile Include="Helpers\AnimationHelper.cs" />
@@ -326,12 +327,16 @@
     <Compile Include="UI\CustomSaber\Views\SaberSelectorView.cs" />
     <Compile Include="UI\CustomSaber\Views\SettingsView.cs" />
     <Compile Include="UI\CustomSaber\Views\TransformSettingsView.cs" />
+    <Compile Include="UI\Lib\BSML\BSMLTools.cs" />
     <Compile Include="UI\Lib\BSML\ButtonImageController.cs" />
     <Compile Include="UI\Lib\BSML\ButtonStateColors.cs" />
+    <Compile Include="UI\Lib\BSML\Components\ButtonCollection.cs" />
+    <Compile Include="UI\Lib\BSML\Tags\ButtonCollectionTag.cs" />
     <Compile Include="UI\Lib\BSML\Tags\CustomButtonTag.cs" />
     <Compile Include="UI\Lib\BSML\CustomListTableData.cs" />
     <Compile Include="UI\Lib\BSML\Tags\CustomListTag.cs" />
     <Compile Include="UI\Lib\BSML\Tags\CustomScrollViewTag.cs" />
+    <Compile Include="UI\Lib\BSML\Tags\ButtonCollection.cs" />
     <Compile Include="UI\Lib\ComponentPlaceholderFactory.cs" />
     <Compile Include="UI\Lib\CustomParsable.cs" />
     <Compile Include="UI\Lib\DynamicTypeFactory.cs" />
