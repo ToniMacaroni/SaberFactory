@@ -89,6 +89,11 @@ namespace SaberFactory.DataStore
             return _metaData.Values;
         }
 
+        public IEnumerable<ModelComposition> GetAllCompositions()
+        {
+            return _modelCompositions.Values;
+        }
+
         public PreloadMetaData GetMetaDataForComposition(ModelComposition comp)
         {
             var path = comp.GetLeft().StoreAsset.RelativePath + ".meta";
@@ -185,6 +190,22 @@ namespace SaberFactory.DataStore
 
             sw.Stop();
             _logger.Info($"Loaded Metadata in {sw.Elapsed.Seconds}.{sw.Elapsed.Milliseconds}s");
+        }
+
+        public async Task<ModelComposition> CreateMetaData(AssetMetaPath assetMetaPath)
+        {
+            var relativePath = PathTools.ToRelativePath(assetMetaPath.MetaDataPath);
+            if (_metaData.TryGetValue(relativePath, out _)) return null;
+
+            var comp = await await UnityMainThreadTaskScheduler.Factory.StartNew(() => this[PathTools.ToRelativePath(assetMetaPath.Path)]);
+
+            if (comp == null) return null;
+
+            var metaData = new PreloadMetaData(assetMetaPath, comp, comp.AssetTypeDefinition);
+            await metaData.SaveToFile();
+            _metaData.Add(relativePath, metaData);
+
+            return comp;
         }
 
         private async Task LoadMetaData(string pieceRelativePath)

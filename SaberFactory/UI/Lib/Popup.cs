@@ -41,18 +41,32 @@ namespace SaberFactory.UI.Lib
             await _animationManager.AnimateOut();
         }
 
-        protected void Create()
+        protected async Task Create(bool animated)
         {
             Parse();
+
+            if (animated)
+            {
+                await AnimateIn();
+            }
+            else
+            {
+                _cachedTransform.localScale = Vector3.one;
+                _canvasGroup.alpha = 1;
+            }
+
         }
 
         protected async Task Hide(bool animated)
         {
-            await AnimateOut();
+            if (animated)
+            {
+                await AnimateOut();
+            }
 
             Unparse();
 
-            if (_originalParent)
+            if (_originalParent != null)
             {
                 transform.SetParent(_originalParent, false);
             }
@@ -64,8 +78,6 @@ namespace SaberFactory.UI.Lib
 
             var parent = _originalParent;
             if (parent.GetComponent<CustomViewController>() != null) return;
-
-
 
             while (parent != null)
             {

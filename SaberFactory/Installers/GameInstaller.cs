@@ -1,8 +1,9 @@
 ﻿#define TEST_TRAIL
 
 
-using System;
 using System.Linq;
+using BeatSaberMarkupLanguage.Components.Settings;
+using HMUI;
 using SaberFactory.Configuration;
 using SaberFactory.Game;
 using SaberFactory.Helpers;

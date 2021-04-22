@@ -1,10 +1,44 @@
-﻿namespace SaberFactory.Helpers
+﻿using UnityEngine;
+
+namespace SaberFactory.Helpers
 {
     internal static class CommonHelpers
     {
         public static SaberType ToSaberType(this ESaberSlot saberSlot)
         {
             return saberSlot == ESaberSlot.Left ? SaberType.SaberA : SaberType.SaberB;
+        }
+
+        public static void SetLayer(this GameObject obj, int layer)
+        {
+            if (obj == null)
+            {
+                return;
+            }
+
+            obj.layer = layer;
+
+            foreach (Transform child in obj.transform)
+            {
+                if (child == null)
+                {
+                    continue;
+                }
+                SetLayer(child.gameObject, layer);
+            }
+        }
+
+        public static void SetLayer<T>(this GameObject obj, int layer) where T : Component
+        {
+            if (obj == null)
+            {
+                return;
+            }
+
+            foreach (var comp in obj.GetComponentsInParent<T>())
+            {
+                comp.gameObject.layer = layer;
+            }
         }
 
         public static T Cast<T>(this object obj)

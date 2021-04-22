@@ -235,7 +235,8 @@
     <Compile Include="Helpers\AnimationManager.cs" />
     <Compile Include="Helpers\DebugTools.cs" />
     <Compile Include="Helpers\MaterialHelpers.cs" />
-    <Compile Include="Installers\LaunchOptions.cs" />
+    <Compile Include="LaunchOptions.cs" />
+    <Compile Include="SFDirectories.cs" />
     <Compile Include="Instances\Trail\AltTrail.cs" />
     <Compile Include="Instances\Trail\CustomSaberTrailHandler.cs" />
     <Compile Include="Instances\Trail\ITrailHandler.cs" />
@@ -289,6 +290,7 @@
     <Compile Include="Models\PropHandler\CustomSaberPropertyBlock.cs" />
     <Compile Include="Models\PropHandler\PiecePropertyBlock.cs" />
     <Compile Include="Models\PropHandler\TransformPropertyBlock.cs" />
+    <Compile Include="Models\RemoteLocationSaber.cs" />
     <Compile Include="Models\SaberModel.cs" />
     <Compile Include="Models\SaberSet.cs" />
     <Compile Include="Instances\Trail\SFTrail.cs" />
@@ -317,6 +319,7 @@
     <Compile Include="UI\CustomSaber\Popups\MaterialEditor.cs" />
     <Compile Include="UI\CustomSaber\CustomComponents\NavButton.cs" />
     <Compile Include="UI\CustomSaber\CustomComponents\PropList.cs" />
+    <Compile Include="UI\CustomSaber\Popups\MessagePopup.cs" />
     <Compile Include="UI\CustomSaber\Popups\TexturePickerPopup.cs" />
     <Compile Include="UI\CustomSaber\CustomSaberUI.cs" />
     <Compile Include="UI\CustomSaber\ENavigationCategory.cs" />
@@ -336,7 +339,6 @@
     <Compile Include="UI\Lib\BSML\CustomListTableData.cs" />
     <Compile Include="UI\Lib\BSML\Tags\CustomListTag.cs" />
     <Compile Include="UI\Lib\BSML\Tags\CustomScrollViewTag.cs" />
-    <Compile Include="UI\Lib\BSML\Tags\ButtonCollection.cs" />
     <Compile Include="UI\Lib\ComponentPlaceholderFactory.cs" />
     <Compile Include="UI\Lib\CustomParsable.cs" />
     <Compile Include="UI\Lib\DynamicTypeFactory.cs" />
@@ -355,6 +357,7 @@
     <Compile Include="UI\Lib\SliderController.cs" />
     <Compile Include="UI\Lib\ToggleController.cs" />
     <Compile Include="UI\Lib\UIFactoryAttribute.cs" />
+    <Compile Include="UI\SFPauseMenuManager.cs" />
     <Compile Include="UI\TrailPreviewer.cs" />
     <Compile Include="UI\CustomSaber\Views\TrailSettingsView.cs" />
     <Compile Include="UI\ICustomListItem.cs" />
@@ -438,6 +441,9 @@
     <EmbeddedResource Include="UI\CustomSaber\Popups\ChooseSort.bsml">
       <DependentUpon>ChooseSort.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UI\CustomSaber\Popups\MessagePopup.bsml">
+      <DependentUpon>MessagePopup.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="BeatSaberModdingTools.Tasks">
@@ -474,6 +480,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\Icons\update.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Icons\SFSaber_Icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

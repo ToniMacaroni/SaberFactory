@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using SaberFactory.DataStore;
 using SaberFactory.Helpers;
+using SaberFactory.Installers;
 using SaberFactory.Models;
 using SaberFactory.Models.CustomSaber;
 using UnityEngine;
@@ -19,11 +20,11 @@ namespace SaberFactory.Saving
         private readonly TextureStore _textureStore;
         private readonly DirectoryInfo _presetDir;
 
-        private PresetSaveManager(MainAssetStore mainAssetStore, TextureStore textureStore, DirectoryInfo presetDir)
+        private PresetSaveManager(MainAssetStore mainAssetStore, TextureStore textureStore, SFDirectories sfDirs)
         {
             _mainAssetStore = mainAssetStore;
             _textureStore = textureStore;
-            _presetDir = presetDir;
+            _presetDir = sfDirs.PresetDir;
         }
 
         public void SaveSaber(SaberSet saberSet, string fileName)
@@ -86,7 +87,10 @@ namespace SaberFactory.Saving
             foreach (var piece in serializableSaber.Pieces)
             {
                 var comp = await _mainAssetStore[piece.Path];
-                saberModel.PieceCollection.AddPiece(comp.AssetTypeDefinition, comp.GetPiece(saberModel.SaberSlot));
+                if (comp != null)
+                {
+                    saberModel.PieceCollection.AddPiece(comp.AssetTypeDefinition, comp.GetPiece(saberModel.SaberSlot));
+                }
             }
 
             TrailModel trailModel = null;
@@ -122,7 +126,7 @@ namespace SaberFactory.Saving
                     saberModel.TrailModel = trailModel;
                 }
 
-                trail.Material?.ApplyToMaterial(trailModel.Material.Material, ResolveTexture);
+                trail.Material?.ApplyToMaterial(trailModel.Material?.Material, ResolveTexture);
 
             }
         }

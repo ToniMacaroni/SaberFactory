@@ -204,6 +204,15 @@ namespace SaberFactory.Instances.Trail
 
                 var color = baseIdx < Whitestep ? Color.white : MyColor;
 
+                if ((double)num1 < (double)Whitestep)
+                {
+                    float num3 = (float)(1.0 - (double)baseIdx / Whitestep);
+                    float num4 = (float)((double)(2.5f / Mathf.Max((trailElementCollection.InterpolateByLen(((float)baseIdx + 1f) / (float)this.Granularity) - pos).magnitude / this._segmentDuration, 2.5f)) * 0.800000011920929 + 1.0 - 0.800000011920929);
+                    color = Color.LerpUnclamped(MyColor, Color.white, num3 * num4);
+                }
+                else
+                    color1 = color;
+
                 // pos0
                 pool.Vertices[baseIdx] = pos0;
                 pool.Colors[baseIdx] = color;

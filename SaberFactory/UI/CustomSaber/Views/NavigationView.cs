@@ -12,17 +12,17 @@ namespace SaberFactory.UI.CustomSaber.Views
 {
     internal class NavigationView : CustomViewController
     {
-        [Inject] private readonly PluginManager _pluginManager = null;
-
         public event Action<ENavigationCategory> OnCategoryChanged;
         public event Action OnExit;
-        
+
         public ENavigationCategory CurrentCategory { get; private set; }
 
-        private NavButton _currentSelectedNavButton;
+        [Inject] private readonly PluginManager _pluginManager = null;
 
         [UIComponent("settings-notify-text")] private readonly TextMeshProUGUI _settingsNotifyText = null;
         [UIValue("nav-buttons")] private List<object> _navButtons;
+
+        private NavButton _currentSelectedNavButton;
 
         [UIAction("#post-parse")]
         private async void Setup()

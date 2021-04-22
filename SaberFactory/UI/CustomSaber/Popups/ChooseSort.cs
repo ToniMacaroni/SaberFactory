@@ -32,7 +32,7 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
                 modes.Add(new SortModeItem(mode));
             }
 
-            Create();
+            _ = Create(true);
             _sortList.OnItemSelected += SortSelected;
             _sortList.SetItems(modes);
 

@@ -30,7 +30,6 @@ namespace SaberFactory
             _harmony = new Harmony("com.tonimacaroni.saberfactory");
 
             var pluginConfig = conf.Generated<PluginConfig>();
-            var saberFactoryDir = new DirectoryInfo(UnityGame.UserDataPath).CreateSubdirectory("Saber Factory");
 
             // Only create the folder if it's enabled
             // since some people don't want to have the folder in the top game directory
@@ -41,7 +40,7 @@ namespace SaberFactory
 
             if(!await LoadCSDescriptors()) return;
 
-            zenjector.OnApp<AppInstaller>().WithParameters(logger, pluginConfig, saberFactoryDir);
+            zenjector.OnApp<AppInstaller>().WithParameters(logger, pluginConfig);
             zenjector.OnMenu<Installers.MenuInstaller>();
             zenjector.OnGame<GameInstaller>(false);
         }

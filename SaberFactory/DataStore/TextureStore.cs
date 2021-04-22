@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using SaberFactory.Helpers;
+using SaberFactory.Installers;
 
 namespace SaberFactory.DataStore
 {
@@ -15,10 +16,10 @@ namespace SaberFactory.DataStore
         private readonly DirectoryInfo _textureDirectory;
         private Task _currentLoadingTask;
 
-        private TextureStore(DirectoryInfo textureDirectory)
+        private TextureStore(SFDirectories sfDirs)
         {
             _textureAssets = new Dictionary<string, TextureAsset>();
-            _textureDirectory = textureDirectory;
+            _textureDirectory = sfDirs.SaberFactoryDir.CreateSubdirectory("Textures");
         }
 
         public Task<TextureAsset> this[string path] => GetTexture(path);

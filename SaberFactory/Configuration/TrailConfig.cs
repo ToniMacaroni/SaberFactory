@@ -2,6 +2,7 @@
 using System.IO;
 using Newtonsoft.Json;
 using SaberFactory.Helpers;
+using SaberFactory.Installers;
 using Zenject;
 
 namespace SaberFactory.Configuration
@@ -14,9 +15,9 @@ namespace SaberFactory.Configuration
 
         private readonly FileInfo _configFile;
 
-        public TrailConfig(DirectoryInfo configDir)
+        public TrailConfig(SFDirectories sfDirs)
         {
-            _configFile = configDir.GetFile("TrailConfig.json");
+            _configFile = sfDirs.SaberFactoryDir.GetFile("TrailConfig.json");
         }
 
         public void Load()

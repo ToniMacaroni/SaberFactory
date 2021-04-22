@@ -15,7 +15,7 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
         {
             _release = release;
             _text = release.Body;
-            Create();
+            _ = Create(true);
             await AnimateIn();
         }
 

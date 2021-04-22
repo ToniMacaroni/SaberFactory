@@ -1,5 +1,6 @@
 ﻿using System;
 using SaberFactory.Editor;
+using SaberFactory.Models;
 using SaberFactory.UI;
 using SaberFactory.UI.CustomSaber;
 using SaberFactory.UI.Lib;
@@ -18,6 +19,8 @@ namespace SaberFactory.Installers
 
             BindUiStuff();
 
+            BindRemoteSabers();
+
             Container
                 .BindFactory<Type, SubView.InitData, SubView, SubView.Factory>()
                 .FromFactory<SubViewFactory>();
@@ -35,6 +38,18 @@ namespace SaberFactory.Installers
             Container.BindInterfacesAndSelfTo<SaberFactoryMenuButton>().AsSingle();
 
             Container.Bind<TrailPreviewer>().AsSingle();
+        }
+
+        private void BindRemoteSabers()
+        {
+            Container.Bind<RemoteLocationPart>().To<RemoteLocationPart>().AsCached().WithArguments(new RemoteLocationPart.InitData
+            {
+                Name = "SF Saber",
+                Author = "Toni Macaroni",
+                RemoteLocation = "https://github.com/ToniMacaroni/SaberFactoryV2/blob/main/Sabers/SFSaber.saber?raw=true",
+                Filename = "SF Saber.saber",
+                CoverPath = "SaberFactory.Resources.Icons.SFSaber_Icon.png"
+            });
         }
 
         private void BindUiStuff()
