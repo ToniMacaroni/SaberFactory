@@ -88,6 +88,7 @@ namespace SaberFactory.Instances.Trail
         private int _skipFirstFrames = 4;
         private int _frameNum;
         private float _time;
+        private float _whiteStepMulti;
 
         public Vector3 CurHeadPos => (PointStart.position + PointEnd.position) / 2f;
 
@@ -99,6 +100,7 @@ namespace SaberFactory.Instances.Trail
             Granularity = initData.Granularity;
             TrailLength = initData.TrailLength;
             Whitestep = initData.Whitestep;
+            _whiteStepMulti = (1 - Whitestep) * 8 * Whitestep;
 
             _elemPool = new ElementPool(TrailLength);
             _trailWidth = (PointStart.position - PointEnd.position).magnitude;
@@ -202,16 +204,11 @@ namespace SaberFactory.Instances.Trail
                 var pos0 = pos + up.normalized * _trailWidth * 0.5f;
                 var pos1 = pos - up.normalized * _trailWidth * 0.5f;
 
-                var color = baseIdx < Whitestep ? Color.white : MyColor;
-
-                if ((double)num1 < (double)Whitestep)
+                Color color = MyColor;
+                if (uvSegment < Whitestep)
                 {
-                    float num3 = (float)(1.0 - (double)baseIdx / Whitestep);
-                    float num4 = (float)((double)(2.5f / Mathf.Max((trailElementCollection.InterpolateByLen(((float)baseIdx + 1f) / (float)this.Granularity) - pos).magnitude / this._segmentDuration, 2.5f)) * 0.800000011920929 + 1.0 - 0.800000011920929);
-                    color = Color.LerpUnclamped(MyColor, Color.white, num3 * num4);
+                    color = Color.Lerp(Color.white, MyColor, uvSegment * _whiteStepMulti);
                 }
-                else
-                    color1 = color;
 
                 // pos0
                 pool.Vertices[baseIdx] = pos0;

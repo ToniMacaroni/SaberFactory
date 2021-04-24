@@ -10,7 +10,7 @@
 		                max='~trail-width-max' />
 
 		<slider-setting id='whitestep-slider' text='Whitestep' get-event='update-props' apply-on-change='true' min='0'
-		                max='100' />
+		                max='1' />
 
 		<checkbox id='clamp-checkbox' text='Clamp Texture' apply-on-change='true'
 		          hover-hint='Enable this if you see lines on the border of the trail' />
@@ -20,8 +20,8 @@
 				<slider-setting get-event='get-advanced' text='Granularity' value='granularity-value' apply-on-change='true' min='0'
 				                max='300' integer-only='true' />
 
-				<slider-setting get-event='get-advanced' text='Sampling Frequency' value='sampling-frequency-value'
-				                apply-on-change='true' min='0' max='300' integer-only='true' />
+				<!--<slider-setting get-event='get-advanced' text='Sampling Frequency' value='sampling-frequency-value'
+				                apply-on-change='true' min='0' max='300' integer-only='true' />-->
 
 				<!--<slider-setting get-event='get-advanced' text='UV Multiplier' value='uv-multiplier-value'
 				                apply-on-change='true' min='0' max='10' increment='0.1' />-->
