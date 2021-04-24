@@ -32,7 +32,7 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
 
             await _textureStore.LoadAllTexturesAsync();
 
-            Create();
+            _ = Create(true);
             RefreshList(_textureStore.GetAllTextures().ToList());
 
             await AnimateIn();

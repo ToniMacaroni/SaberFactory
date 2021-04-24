@@ -14,6 +14,7 @@ using SaberFactory.Models.CustomSaber;
 using SaberFactory.UI.CustomSaber.CustomComponents;
 using SaberFactory.UI.Lib;
 using UnityEngine;
+using UnityEngine.UI;
 using Zenject;
 
 
@@ -85,17 +86,9 @@ namespace SaberFactory.UI.CustomSaber.Views
             _whitestepSlider = new SliderController(_whitestepSliderSetting);
             _clampToggle = new ToggleController(_clampToggleSetting);
 
-            if (_pluginConfig.ShowAdvancedTrailSettings)
-            {
-                var rect = _mainContainer.GetComponent<RectTransform>();
-                var size = rect.sizeDelta;
-                size.y = -55;
-                rect.sizeDelta = size;
-            }
-            else
-            {
-                _advancedContainer.SetActive(false);
-            }
+            _mainContainer.GetComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+
+            _advancedContainer.SetActive(_pluginConfig.ShowAdvancedTrailSettings);
         }
 
         public override void DidOpen()

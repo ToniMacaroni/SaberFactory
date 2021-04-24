@@ -9,6 +9,7 @@ using SiraUtil.Zenject;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
+using HarmonyLib;
 using SaberFactory.Helpers;
 using IPALogger = IPA.Logging.Logger;
 
@@ -19,14 +20,16 @@ namespace SaberFactory
     public class Plugin
     {
         private IPALogger _logger;
+        private Harmony _harmony;
 
         [Init]
         public async void Init(IPALogger logger, Config conf, Zenjector zenjector)
         {
             _logger = logger;
 
+            _harmony = new Harmony("com.tonimacaroni.saberfactory");
+
             var pluginConfig = conf.Generated<PluginConfig>();
-            var saberFactoryDir = new DirectoryInfo(UnityGame.UserDataPath).CreateSubdirectory("Saber Factory");
 
             // Only create the folder if it's enabled
             // since some people don't want to have the folder in the top game directory
@@ -37,7 +40,7 @@ namespace SaberFactory
 
             if(!await LoadCSDescriptors()) return;
 
-            zenjector.OnApp<AppInstaller>().WithParameters(logger, pluginConfig, saberFactoryDir);
+            zenjector.OnApp<AppInstaller>().WithParameters(logger, pluginConfig);
             zenjector.OnMenu<Installers.MenuInstaller>();
             zenjector.OnGame<GameInstaller>(false);
         }
@@ -45,11 +48,13 @@ namespace SaberFactory
         [OnStart]
         public void OnApplicationStart()
         {
+            _harmony.PatchAll(Assembly.GetExecutingAssembly());
         }
 
         [OnExit]
         public void OnApplicationQuit()
         {
+            _harmony.UnpatchAll();
         }
 
         /// <summary>

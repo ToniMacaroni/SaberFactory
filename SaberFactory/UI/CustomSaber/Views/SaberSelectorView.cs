@@ -1,17 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using BeatSaberMarkupLanguage.Attributes;
+using IPA.Config.Data;
+using IPA.Utilities;
 using SaberFactory.Configuration;
 using SaberFactory.DataStore;
 using SaberFactory.Editor;
 using SaberFactory.Helpers;
+using SaberFactory.Loaders;
 using SaberFactory.Models;
 using SaberFactory.UI.CustomSaber.CustomComponents;
+using SaberFactory.UI.CustomSaber.Popups;
 using SaberFactory.UI.Lib;
 using Zenject;
+using Debug = UnityEngine.Debug;
 
 
 namespace SaberFactory.UI.CustomSaber.Views
@@ -27,11 +34,13 @@ namespace SaberFactory.UI.CustomSaber.Views
         [Inject] private readonly EditorInstanceManager _editorInstanceManager = null;
         [Inject] private readonly PluginConfig _pluginConfig = null;
         [Inject] private readonly Editor.Editor _editor = null;
+        [Inject] private readonly List<RemoteLocationPart> _remoteParts = null;
 
         [UIComponent("saber-list")] private readonly CustomList _saberList = null;
         [UIComponent("toggle-favorite")] private readonly IconToggleButton _toggleButtonFavorite = null;
         [UIComponent("loading-popup")] private readonly LoadingPopup _loadingPopup = null;
         [UIComponent("choose-sort-popup")] private readonly ChooseSort _chooseSortPopup = null;
+        [UIComponent("message-popup")] private readonly MessagePopup _messagePopup = null;
 
         [UIValue("global-saber-width-max")]
         private float _globalSaberWidthMax => _pluginConfig.GlobalSaberWidthMax;
@@ -109,13 +118,24 @@ namespace SaberFactory.UI.CustomSaber.Views
                     break;
             }
 
-            var metas = metaEnumerable.ToList();
-
             if(delay>0) await Task.Delay(delay);
 
-            ShowDownloadSabersPopup = metas.Count() < 2;
+            var items = new List<ICustomListItem>(metaEnumerable);
+            var loadedNames = items.Select(x => x.ListName).ToList();
 
-            _saberList.SetItems(metas);
+            var idx = items.Count(x => x.IsFavorite);
+
+            foreach (var remotePart in _remoteParts)
+            {
+                if (!loadedNames.Contains(remotePart.ListName))
+                {
+                    items.Insert(idx, remotePart);
+                }
+            }
+
+            ShowDownloadSabersPopup = items.Count() < 2;
+
+            _saberList.SetItems(items);
 
             _currentComposition = _editorInstanceManager.CurrentModelComposition;
 
@@ -129,19 +149,45 @@ namespace SaberFactory.UI.CustomSaber.Views
 
         private async void SaberSelected(object item)
         {
+            var reloadList = false;
+
             if (item is PreloadMetaData metaData)
             {
                 _currentPreloadMetaData = metaData;
                 var relativePath = PathTools.ToRelativePath(metaData.AssetMetaPath.Path);
                 _currentComposition = await _mainAssetStore[relativePath];
             }
+            else if (item is RemoteLocationPart remotePart)
+            {
+                _loadingPopup.Show($"Downloading {remotePart.ListName}...");
+                var result = await remotePart.Download(CancellationToken.None);
+                if (result == null || !result.Item1)
+                {
+                    _loadingPopup.Hide();
+                    _logger.Error("Couldn't download remote saber: " + remotePart.RemoteLocation);
+                    return;
+                }
+
+                reloadList = true;
+                var relPath = result.Item2;
+                _currentComposition =
+                    await _mainAssetStore.CreateMetaData(
+                        new AssetMetaPath(new FileInfo(Path.Combine(UnityGame.InstallPath, relPath))));
+                _remoteParts.Remove(remotePart);
+                _loadingPopup.Hide();
+            }
+            else if (item is ModelComposition comp)
+            {
+                _currentComposition = comp;
+            }
             else
             {
-                _currentComposition = (ModelComposition) item;
+                return;
             }
 
             _editorInstanceManager.SetModelComposition(_currentComposition);
             UpdateUi();
+            if (reloadList) await ShowSabers();
         }
 
         private void CompositionDidChange(ModelComposition comp)
@@ -231,6 +277,10 @@ namespace SaberFactory.UI.CustomSaber.Views
         private async void ClickedDelete()
         {
             if (_currentComposition == null) return;
+
+            var result = await _messagePopup.Show("Do you really want to delete this saber?", true);
+            if (!result) return;
+
             _editorInstanceManager.DestroySaber();
             _mainAssetStore.Delete(_currentComposition.GetLeft().StoreAsset.RelativePath);
             await ShowSabers();

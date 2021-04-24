@@ -65,9 +65,13 @@ namespace SaberFactory.UI.Lib
             await CurrentViewController.Cast<CustomViewController>().AnimateIn(CancellationToken.None);
         }
 
-        public virtual void Close()
+        public virtual void Close(bool instant = false)
         {
             SetRootViewController(null, ViewController.AnimationType.Out);
+            if (instant)
+            {
+                gameObject.SetActive(false);
+            }
         }
 
         internal class Factory : PlaceholderFactory<InitData, CustomScreen>{}

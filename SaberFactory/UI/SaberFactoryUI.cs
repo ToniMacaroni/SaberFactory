@@ -79,11 +79,11 @@ namespace SaberFactory.UI
             DidOpen();
         }
 
-        public void Close()
+        public void Close(bool instant = false)
         {
             foreach (var screen in _screens)
             {
-                screen.Close();
+                screen.Close(instant);
             }
 
             DidClose();

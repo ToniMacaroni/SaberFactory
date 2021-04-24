@@ -14,6 +14,11 @@ namespace SaberFactory.Saving
 
         public async Task ApplyToMaterial(Material material, Func<string, Task<Texture2D>> textureResolve)
         {
+            if (material == null)
+            {
+                return;
+            }
+
             var shader = material.shader;
             if (ShaderName != shader.name) return;
 

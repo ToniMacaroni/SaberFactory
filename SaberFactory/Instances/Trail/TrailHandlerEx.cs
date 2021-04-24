@@ -67,6 +67,12 @@ namespace SaberFactory.Instances.Trail
                 ? _instanceTrailData.PointStart
                 : _instanceTrailData.PointEnd;
 
+            if (pointStart == null || pointEnd == null)
+            {
+                Debug.LogWarning("Primary trail on saber doesn't seem to have a positional transform");
+                return;
+            }
+
             TrailInstance.Setup(
                 trailInitData,
                 pointStart,

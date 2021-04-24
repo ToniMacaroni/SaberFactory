@@ -24,7 +24,7 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
         {
             _onSelectionChanged = onSelectionChanged;
 
-            Create();
+            _ = Create(true);
             _saberList.OnItemSelected += SaberSelected;
             _saberList.SetItems(comps);
 

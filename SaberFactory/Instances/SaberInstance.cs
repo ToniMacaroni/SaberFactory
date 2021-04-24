@@ -47,6 +47,8 @@ namespace SaberFactory.Instances
 
             GameObject.transform.localScale = new Vector3(model.SaberWidth, model.SaberWidth, 1);
 
+            GameObject.SetLayer<Renderer>(12);
+
             SetupTrailData();
             InitializeEvents();
         }

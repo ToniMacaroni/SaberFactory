@@ -19,6 +19,12 @@ namespace SaberFactory.Instances.Trail
 
         public void CreateTrail()
         {
+            if (_customTrail.PointStart == null || _customTrail.PointEnd == null)
+            {
+                Debug.LogWarning("Secondary trail on saber doesn't seem to have a positional transform");
+                return;
+            }
+
             var trailInitData = new TrailInitData
             {
                 TrailColor = Color.white,

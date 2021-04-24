@@ -24,7 +24,7 @@
 		preferred-height='15'
 		on-click='clicked-exit'
 		icon='#ExitButton'
-		hover-hint='Exit this earths atomosphere'
+		hover-hint='Exit this earths athmosphere'
 		skew='0' show-line='false' normal-color='#00000055' hovered-color='#5ca5ff' show-fill='false'>
 	</custom-icon-btn>
 </vertical>

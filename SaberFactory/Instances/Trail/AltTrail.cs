@@ -113,7 +113,7 @@ namespace SaberFactory.Instances.Trail
 
         private void OnDisable()
         {
-            _vertexPool.SetMeshObjectActive(false);
+            _vertexPool?.SetMeshObjectActive(false);
         }
 
         private void OnEnable()
@@ -187,7 +187,6 @@ namespace SaberFactory.Instances.Trail
         {
             var pool = _vertexSegment.Pool;
 
-
             for (var i = 0; i < Granularity; i++)
             {
                 var baseIdx = _vertexSegment.VertStart + i * 3;
@@ -202,7 +201,13 @@ namespace SaberFactory.Instances.Trail
                 var pos0 = pos + up.normalized * _trailWidth * 0.5f;
                 var pos1 = pos - up.normalized * _trailWidth * 0.5f;
 
-                var color = baseIdx < Whitestep ? Color.white : MyColor;
+                Color color = MyColor;
+
+                if (uvSegment < Whitestep)
+                {
+                    color = Color.LerpUnclamped(Color.white, MyColor, uvSegment/Whitestep );
+                }
+
 
                 // pos0
                 pool.Vertices[baseIdx] = pos0;

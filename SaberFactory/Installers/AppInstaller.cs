@@ -18,13 +18,11 @@ namespace SaberFactory.Installers
     {
         private readonly Logger _logger;
         private readonly PluginConfig _config;
-        private readonly DirectoryInfo _saberFactoryDir;
 
-        private AppInstaller(Logger logger, PluginConfig config, DirectoryInfo saberFactoryDir)
+        private AppInstaller(Logger logger, PluginConfig config)
         {
             _logger = logger;
             _config = config;
-            _saberFactoryDir = saberFactoryDir;
         }
 
         public override void InstallBindings()
@@ -45,18 +43,21 @@ namespace SaberFactory.Installers
 
             Container.BindInstance(rtOptions).AsSingle();
 
+            var dirs = SFDirectories.Create();
+            Container.BindInstance(dirs);
+
             Container.BindLoggerAsSiraLogger(_logger);
             Container.BindInstance(_config).AsSingle();
             Container.Bind<PluginManager>().AsSingle();
 
-            Container.Bind<PresetSaveManager>().AsSingle().WithArguments(_saberFactoryDir.CreateSubdirectory("Presets"));
-            Container.BindInterfacesAndSelfTo<TrailConfig>().AsSingle().WithArguments(_saberFactoryDir);
+            Container.Bind<PresetSaveManager>().AsSingle();
+            Container.BindInterfacesAndSelfTo<TrailConfig>().AsSingle();
 
             Container.BindInterfacesAndSelfTo<EmbeddedAssetLoader>().AsSingle();
 
             Container.Bind<CustomSaberModelLoader>().AsSingle();
 
-            Container.Bind<TextureStore>().AsSingle().WithArguments(_saberFactoryDir.CreateSubdirectory("Textures"));
+            Container.Bind<TextureStore>().AsSingle();
 
             Container.BindInterfacesAndSelfTo<MainAssetStore>().AsSingle()
                 .OnInstantiated<MainAssetStore>(OnMainAssetStoreInstantiated);

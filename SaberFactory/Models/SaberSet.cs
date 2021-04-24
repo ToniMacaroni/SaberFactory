@@ -80,12 +80,17 @@ namespace SaberFactory.Models
         {
             var metaData = _mainAssetStore.GetAllMetaData(AssetTypeDefinition.CustomSaber);
             var saber = metaData.FirstOrDefault(x => x.ListName == saberName);
-            if (saber == null)
+            await SetSaber(saber);
+        }
+
+        public async Task SetSaber(PreloadMetaData preloadData)
+        {
+            if (preloadData == null)
             {
                 return;
             }
 
-            SetModelComposition(await _mainAssetStore.GetCompositionByMeta(saber));
+            SetModelComposition(await _mainAssetStore.GetCompositionByMeta(preloadData));
         }
 
         public async void Load()
