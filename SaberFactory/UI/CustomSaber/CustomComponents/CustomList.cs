@@ -5,10 +5,12 @@ using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.TypeHandlers;
 using HMUI;
+using IPA.Utilities;
 using SaberFactory.UI.Lib;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 using CustomListTableData = SaberFactory.UI.Lib.BSML.CustomListTableData;
 
 
@@ -17,6 +19,8 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
     internal class CustomList : CustomUiComponent
     {
         public event Action<ICustomListItem> OnItemSelected;
+
+        [Inject] private IVRPlatformHelper _platformHelper = null;
 
         [UIComponent("root-vertical")] private readonly LayoutElement _layoutElement = null;
         [UIComponent("item-list")] private readonly CustomListTableData _list = null;
@@ -90,6 +94,13 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
         private void SetBgColor(Color color)
         {
             _layoutElement.gameObject.GetComponent<Backgroundable>().background.color = color;
+        }
+
+        [UIAction("#post-parse")]
+        private void Setup()
+        {
+            Debug.LogError("WHoooo");
+            _list.tableView.GetField<ScrollView, TableView>("_scrollView").SetField("_platformHelper", _platformHelper);
         }
 
         [UIAction("item-selected")]

@@ -20,6 +20,7 @@ namespace SaberFactory.UI.Lib.BSML
         #region Factories
 
         [Inject] private readonly Popup.Factory _popupFactory = null;
+        [Inject] private readonly CustomUiComponent.Factory _customUiComponentFactory = null;
 
         #endregion
 
@@ -61,7 +62,7 @@ namespace SaberFactory.UI.Lib.BSML
         {
             foreach (var type in GetListOfType<CustomUiComponent>())
             {
-                parser.RegisterTag(new CustomUiComponentTag(type));
+                parser.RegisterTag(new CustomUiComponentTag(type, _customUiComponentFactory));
             }
 
             foreach (var type in GetListOfType<Popup>())

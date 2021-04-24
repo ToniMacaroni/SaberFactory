@@ -57,6 +57,7 @@ namespace SaberFactory.Installers
             Container.BindInterfacesAndSelfTo<CustomComponentHandler>().AsSingle();
 
             BindUiFactory<Popup, Popup.Factory>();
+            BindUiFactory<CustomUiComponent, CustomUiComponent.Factory>();
         }
 
         private FactoryToChoiceIdBinder<GameObject, Type, T> BindUiFactory<T, TFactory>()
