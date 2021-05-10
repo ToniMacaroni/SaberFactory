@@ -1,7 +1,7 @@
 ﻿<vertical background='round-rect-panel' pref-width='16' bg-color='#666666bb' pad='2' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
 	
 	<macro.for-each items='nav-buttons'>
-		<this.nav-button
+		<sui.nav-button
 			id='button'
 			on-selected='selected'
 			icon='~icon'
@@ -10,21 +10,21 @@
 			off-color='#ffffff60'/>
 	</macro.for-each>
 
-	<this.nav-button
+	<sui.nav-button
 		icon='SaberFactory.Resources.Icons.cog.png'
 		hover-hint='Set up Saber Factory'
 		on-selected='clicked-settings'
 		on-color='#fff'
 		off-color='#ffffff60'>
 		<text id='settings-notify-text' active='false' text='Update' font-size='3' align='TopGeoAligned' color='#5dc968'/>
-	</this.nav-button>
+	</sui.nav-button>
 
-	<custom-icon-btn
+	<sui.icon-button
 		pref-width='15'
 		preferred-height='15'
 		on-click='clicked-exit'
 		icon='#ExitButton'
 		hover-hint='Exit this earths athmosphere'
 		skew='0' show-line='false' normal-color='#00000055' hovered-color='#5ca5ff' show-fill='false'>
-	</custom-icon-btn>
+	</sui.icon-button>
 </vertical>

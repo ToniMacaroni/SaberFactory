@@ -19,7 +19,7 @@
 
 
 		<horizontal bg='round-rect-panel' bg-color='#67b0f599' pad='2'>
-			<custom-icon-btn
+			<sui.icon-button
 				pad='1'
 				pref-width='15'
 				preferred-height='15'
@@ -27,7 +27,7 @@
 				icon='SaberFactory.Resources.Icons.profile.png'
 				hover-hint='Support me on Ko-Fi'
 				skew='0' show-line='false' normal-color='#00000000' hovered-color='#ffffff20' use-gradient='false'/>
-			<custom-icon-btn
+			<sui.icon-button
 				pad='1'
 				pref-width='15'
 				preferred-height='15'
@@ -35,7 +35,7 @@
 				icon='SaberFactory.Resources.Icons.discord.png'
 				hover-hint='Join our lovely server for help with the mod'
 				skew='0' show-line='false' normal-color='#00000000' hovered-color='#ffffff20' use-gradient='false'/>
-			<custom-icon-btn
+			<sui.icon-button
 				id='github-button'
 				active='false'
 				pad='2'
@@ -48,5 +48,5 @@
 		</horizontal>
 	</vertical>
 
-	<this.changelog-popup id='changelog-popup' />
+	<sui.changelog-popup id='changelog-popup' />
 </bg>

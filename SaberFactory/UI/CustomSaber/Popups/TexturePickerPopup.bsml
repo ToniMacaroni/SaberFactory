@@ -8,8 +8,8 @@
 		</horizontal>
 
 		<horizontal>
-			<this.button text="Cancel" on-click="click-cancel" />
-			<this.button text="Select" on-click="click-select" />
+			<sui.button text="Cancel" on-click="click-cancel" />
+			<sui.button text="Select" on-click="click-select" />
 		</horizontal>
 	</vertical>
 </horizontal>

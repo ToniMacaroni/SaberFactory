@@ -1,4 +1,4 @@
-﻿<custom-icon-btn 
+﻿<sui.icon-button 
 	xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
 	xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'
 	id='icon-button' on-click='clicked' show-line='false' skew='0' hover-hint = '~hover-hint' normal-color='#00000080' hovered-color='#3486ebff' use-gradient='false'/>

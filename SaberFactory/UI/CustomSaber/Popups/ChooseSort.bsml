@@ -1,8 +1,8 @@
 ﻿<bg bg="round-rect-panel" bg-color="#FFF" xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
 	<vertical>
-		<this.custom-list id='sort-list' title='Sort by' width='80' bg-color='#FFF' />
+		<sui.custom-list id='sort-list' title='Sort by' width='80' bg-color='#FFF' />
 		<horizontal>
-			<this.button text='Cancel' pref-width='20' on-click='click-cancel' normal-color='#00000080' />
+			<sui.button text='Cancel' pref-width='20' on-click='click-cancel' normal-color='#00000080' />
 		</horizontal>
 	</vertical>
 </bg>

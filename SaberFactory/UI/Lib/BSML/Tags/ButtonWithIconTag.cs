@@ -12,7 +12,7 @@ namespace SaberFactory.UI.Lib.BSML
 {
     public class ButtonWithIconTag : BSMLTag
     {
-        public override string[] Aliases => new[] { "custom-icon-btn" };
+        public override string[] Aliases => new[] { "sui.icon-button" };
 
         public override GameObject CreateObject(Transform parent)
         {

@@ -15,7 +15,7 @@ namespace SaberFactory.UI.Lib.BSML
         private static readonly Color _defaultNormalColor = new Color(0.086f, 0.090f, 0.101f, 0.8f);
         private static readonly Color _defaultHoveredColor = new Color(0.086f, 0.090f, 0.101f);
 
-        public override string[] Aliases => new[] { "this.button" };
+        public override string[] Aliases => new[] { "sui.button" };
         public virtual string PrefabButton => "PracticeButton";
 
         private Button buttonPrefab;

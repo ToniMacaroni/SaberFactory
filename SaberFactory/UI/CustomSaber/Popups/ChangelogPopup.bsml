@@ -4,8 +4,8 @@
 			<text-page text='~text' font-size='4' rich-text='true'/>
 		</vertical>
 		<horizontal>
-			<this.button text='Close' normal-color='#00000080' pref-width='30' on-click='clicked-close' />
-			<this.button text='Open on Github' normal-color='#00000080' pref-width='30' on-click='clicked-open' />
+			<sui.button text='Close' normal-color='#00000080' pref-width='30' on-click='clicked-close' />
+			<sui.button text='Open on Github' normal-color='#00000080' pref-width='30' on-click='clicked-open' />
 		</horizontal>
 	</vertical>
 </bg>

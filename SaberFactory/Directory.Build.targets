@@ -20,11 +20,16 @@
   <!--Runs a build task to get info about the project used by later targets.-->
   <Target Name="GetProjectInfo" AfterTargets="CheckBSMTInstalled" DependsOnTargets="CheckBSMTInstalled" Condition="'$(BSMTTaskAssembly)' != ''">
     <Message Text="Using AssemblyVersion defined in project instead of 'Properties\AssemblyInfo.cs'" Importance="high" Condition="'$(AssemblyVersion)' != ''" />
-    <GetManifestInfo KnownAssemblyVersion="$(AssemblyVersion)" ErrorOnMismatch="$(ErrorOnMismatchedVersions)">
+    <GetManifestInfo FailOnError="$(ErrorOnMismatchedVersions)">
       <Output TaskParameter="PluginVersion" PropertyName="PluginVersion" />
+      <Output TaskParameter="BasePluginVersion" PropertyName="BasePluginVersion" />
       <Output TaskParameter="GameVersion" PropertyName="GameVersion" />
-      <Output TaskParameter="AssemblyVersion" PropertyName="AssemblyVersion" />
     </GetManifestInfo>
+    <PropertyGroup>
+      <AssemblyVersion>$(BasePluginVersion)</AssemblyVersion>
+      <FileVersion>$(BasePluginVersion)</FileVersion>
+      <InformationalVersion>$(BasePluginVersion)</InformationalVersion>
+    </PropertyGroup>
     <GetCommitInfo ProjectDir="$(ProjectDir)">
       <Output TaskParameter="CommitHash" PropertyName="CommitHash" />
       <Output TaskParameter="Branch" PropertyName="Branch" />
