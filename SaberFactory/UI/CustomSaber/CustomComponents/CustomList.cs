@@ -99,7 +99,6 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
         [UIAction("#post-parse")]
         private void Setup()
         {
-            Debug.LogError("WHoooo");
             _list.tableView.GetField<ScrollView, TableView>("_scrollView").SetField("_platformHelper", _platformHelper);
         }
 

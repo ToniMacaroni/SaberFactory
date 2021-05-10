@@ -35,7 +35,7 @@ namespace SaberFactory.Helpers
                 return;
             }
 
-            foreach (var comp in obj.GetComponentsInParent<T>())
+            foreach (var comp in obj.GetComponentsInChildren<T>())
             {
                 comp.gameObject.layer = layer;
             }

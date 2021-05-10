@@ -6,6 +6,7 @@ using SaberFactory.Configuration;
 using SaberFactory.DataStore;
 using SaberFactory.Models;
 using UnityEngine;
+using UnityEngine.Rendering;
 using Zenject;
 
 namespace SaberFactory.Game
@@ -113,6 +114,7 @@ namespace SaberFactory.Game
 
         public void Initialize()
         {
+
         }
 
         public void Dispose()

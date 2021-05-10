@@ -1,17 +1,8 @@
-﻿using BeatSaberMarkupLanguage;
-using BeatSaberMarkupLanguage.Attributes;
-using BeatSaberMarkupLanguage.Components;
-using BeatSaberMarkupLanguage.ViewControllers;
+﻿using BeatSaberMarkupLanguage.Attributes;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using SaberFactory.DataStore;
-using SaberFactory.Models;
-using SaberFactory.Models.CustomSaber;
 using SaberFactory.UI.Lib;
 using UnityEngine;
-using Zenject;
 
 
 namespace SaberFactory.UI.CustomSaber.CustomComponents

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using BeatSaberMarkupLanguage;
-using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Parser;
 using BeatSaberMarkupLanguage.TypeHandlers;
 using HMUI;

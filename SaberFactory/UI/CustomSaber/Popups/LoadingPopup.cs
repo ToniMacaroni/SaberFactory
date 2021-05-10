@@ -1,6 +1,5 @@
 ﻿using BeatSaberMarkupLanguage.Attributes;
 using SaberFactory.UI.Lib;
-using UnityEngine;
 
 namespace SaberFactory.UI.CustomSaber.Popups
 {

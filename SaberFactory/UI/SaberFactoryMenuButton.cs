@@ -1,10 +1,6 @@
 ﻿using BeatSaberMarkupLanguage.MenuButtons;
 using SiraUtil.Tools;
 using System;
-using System.Linq;
-using System.Threading.Tasks;
-using BeatSaberMarkupLanguage.GameplaySetup;
-using UnityEngine;
 using Zenject;
 
 namespace SaberFactory.UI

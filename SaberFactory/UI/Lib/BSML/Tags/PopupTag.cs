@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text.RegularExpressions;
 using BeatSaberMarkupLanguage.Tags;
 using SaberFactory.Helpers;
 using UnityEngine;

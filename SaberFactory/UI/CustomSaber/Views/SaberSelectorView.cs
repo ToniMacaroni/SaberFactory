@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using BeatSaberMarkupLanguage.Attributes;
-using IPA.Config.Data;
 using IPA.Utilities;
 using SaberFactory.Configuration;
 using SaberFactory.DataStore;
@@ -18,7 +16,6 @@ using SaberFactory.UI.CustomSaber.CustomComponents;
 using SaberFactory.UI.CustomSaber.Popups;
 using SaberFactory.UI.Lib;
 using Zenject;
-using Debug = UnityEngine.Debug;
 
 
 namespace SaberFactory.UI.CustomSaber.Views
@@ -123,13 +120,18 @@ namespace SaberFactory.UI.CustomSaber.Views
             var items = new List<ICustomListItem>(metaEnumerable);
             var loadedNames = items.Select(x => x.ListName).ToList();
 
-            var idx = items.Count(x => x.IsFavorite);
-
-            foreach (var remotePart in _remoteParts)
+            if (_pluginConfig.ShowDownloadableSabers)
             {
-                if (!loadedNames.Contains(remotePart.ListName))
+                var idx = items.Count(x => x.IsFavorite);
+
+                // if the saber isn't aleady present
+                // add the downloadable option
+                foreach (var remotePart in _remoteParts)
                 {
-                    items.Insert(idx, remotePart);
+                    if (!loadedNames.Contains(remotePart.ListName))
+                    {
+                        items.Insert(idx, remotePart);
+                    }
                 }
             }
 

@@ -7,7 +7,6 @@ using SaberFactory.Models;
 using SaberFactory.Models.CustomSaber;
 using SaberFactory.Saving;
 using SiraUtil;
-using System.IO;
 using System.Linq;
 using SaberFactory.Instances.Trail;
 using Zenject;

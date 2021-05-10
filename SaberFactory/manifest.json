@@ -5,7 +5,7 @@
   "author": "Toni Macaroni",
   "version": "2.2.6",
   "description": "A highly customizable saber mod",
-  "gameVersion": "1.14.0",
+  "gameVersion": "1.15.0",
 	"dependsOn": {
 		"BSIPA": "^4.1.4",
 		"SiraUtil": "^2.5.0",
