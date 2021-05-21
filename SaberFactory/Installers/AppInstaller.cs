@@ -9,6 +9,7 @@ using SaberFactory.Saving;
 using SiraUtil;
 using System.Linq;
 using SaberFactory.Instances.Trail;
+using SaberFactory.UI.Lib.BSML;
 using Zenject;
 
 namespace SaberFactory.Installers

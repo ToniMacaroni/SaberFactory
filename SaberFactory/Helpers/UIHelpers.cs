@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Net.Mime;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using BeatSaberMarkupLanguage;
@@ -28,12 +29,12 @@ namespace SaberFactory.Helpers
 
         public static void SetSkew(this ImageView image, float skew)
         {
-            image.SetField("_skew", skew);
+            SkewAcc(ref image) = skew;
         }
 
         public static void SetGradient(this ImageView image, bool gradient)
         {
-            image.SetField("_gradient", gradient);
+            GradientAcc(ref image) = gradient;
             image.SetVerticesDirty();
         }
 
@@ -81,5 +82,21 @@ namespace SaberFactory.Helpers
                     break;
             }
         }
+
+        public static RectTransform GetRect(this Transform transform)
+        {
+            return transform.Cast<RectTransform>();
+        }
+
+        public static RectTransform GetRect(this GameObject go)
+        {
+            return go.transform.Cast<RectTransform>();
+        }
+
+        private static readonly FieldAccessor<ImageView, float>.Accessor SkewAcc =
+            FieldAccessor<ImageView, float>.GetAccessor("_skew");
+
+        private static readonly FieldAccessor<ImageView, bool>.Accessor GradientAcc =
+            FieldAccessor<ImageView, bool>.GetAccessor("_gradient");
     }
 }

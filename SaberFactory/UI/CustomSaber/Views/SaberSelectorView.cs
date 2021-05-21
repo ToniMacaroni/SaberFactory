@@ -40,7 +40,7 @@ namespace SaberFactory.UI.CustomSaber.Views
         [UIComponent("message-popup")] private readonly MessagePopup _messagePopup = null;
 
         [UIValue("global-saber-width-max")]
-        private float _globalSaberWidthMax => _pluginConfig.GlobalSaberWidthMax;
+        private float GlobalSaberWidthMax => _pluginConfig.GlobalSaberWidthMax;
 
         [UIValue("download-sabers-popup")]
         private bool ShowDownloadSabersPopup
@@ -54,7 +54,7 @@ namespace SaberFactory.UI.CustomSaber.Views
         }
 
         [UIValue("saber-width")]
-        private float _saberWidth
+        private float SaberWidth
         {
             set => SetSaberWidth(value);
             get => GetSaberWidth();
@@ -89,11 +89,11 @@ namespace SaberFactory.UI.CustomSaber.Views
         {
             _loadingPopup.Show();
             await _mainAssetStore.LoadAllMetaAsync(_pluginConfig.AssetType);
-            await ShowSabers(500);
+            await ShowSabers(false, 500);
             _loadingPopup.Hide();
         }
 
-        private async Task ShowSabers(int delay = 0)
+        private async Task ShowSabers(bool scrollToTop = false, int delay = 0)
         {
             var metaEnumerable = (from meta in _mainAssetStore.GetAllMetaData()
                 orderby meta.IsFavorite descending
@@ -143,7 +143,12 @@ namespace SaberFactory.UI.CustomSaber.Views
 
             if (_currentComposition != null)
             {
-                _saberList.Select(_mainAssetStore.GetMetaDataForComposition(_currentComposition)?.ListName);
+                _saberList.Select(_mainAssetStore.GetMetaDataForComposition(_currentComposition)?.ListName, !scrollToTop);
+            }
+
+            if (scrollToTop)
+            {
+                _saberList.ScrollTo(0);
             }
 
             UpdateUi();
@@ -239,7 +244,7 @@ namespace SaberFactory.UI.CustomSaber.Views
             _chooseSortPopup.Show(async sortMode =>
             {
                 _sortMode = sortMode;
-                await ShowSabers();
+                await ShowSabers(_chooseSortPopup.ShouldScrollToTop);
             });
         }
 

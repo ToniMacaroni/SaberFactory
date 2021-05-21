@@ -14,6 +14,7 @@ namespace SaberFactory
 
         private readonly SiraLog _logger;
         private AssetBundle _assetBundle;
+        private Task<bool> _loadingTask;
 
         private EmbeddedAssetLoader(SiraLog logger)
         {
@@ -44,6 +45,16 @@ namespace SaberFactory
         private async Task<bool> CheckLoaded()
         {
             if (_assetBundle) return true;
+
+            _loadingTask ??= LoadBundle();
+
+            await _loadingTask;
+
+            return true;
+        }
+
+        private async Task<bool> LoadBundle()
+        {
             var data = await Readers.ReadResourceAsync(BUNDLE_PATH);
 
             if (data == null)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace SaberFactory.UI.Lib.BSML
@@ -7,11 +8,45 @@ namespace SaberFactory.UI.Lib.BSML
     {
         public static string GetKebabCaseName(Type type)
         {
-            return Regex.Replace(
-                type.Name,
-                "(?<!^)([A-Z][a-z]|(?<=[a-z])[A-Z])",
-                "-$1",
-                RegexOptions.Compiled).Trim().ToLower();
+            var name = type.Name;
+
+            StringBuilder builder = new StringBuilder();
+
+            for (var i = 0; i < name.Length; i++)
+            {
+                if (char.IsLower(name[i]))
+                {
+                    builder.Append(name[i]);
+                }
+                else if (i == 0)
+                {
+                    builder.Append(char.ToLowerInvariant(name[i]));
+                }
+                else if (char.IsDigit(name[i]) && !char.IsDigit(name[i - 1]))
+                {
+                    builder.Append('-');
+                    builder.Append(name[i]);
+                }
+                else if (char.IsDigit(name[i]))
+                {
+                    builder.Append(name[i]);
+                }
+                else if (char.IsLower(name[i - 1]))
+                {
+                    builder.Append('-');
+                    builder.Append(char.ToLowerInvariant(name[i]));
+                }
+                else if (i + 1 == name.Length || char.IsUpper(name[i + 1]))
+                {
+                    builder.Append(char.ToLowerInvariant(name[i]));
+                }
+                else
+                {
+                    builder.Append('-');
+                    builder.Append(char.ToLowerInvariant(name[i]));
+                }
+            }
+            return builder.ToString();
         }
     }
 }

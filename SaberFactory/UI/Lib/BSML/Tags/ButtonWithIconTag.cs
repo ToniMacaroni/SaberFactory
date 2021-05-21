@@ -8,7 +8,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
-namespace SaberFactory.UI.Lib.BSML
+namespace SaberFactory.UI.Lib.BSML.Tags
 {
     public class ButtonWithIconTag : BSMLTag
     {

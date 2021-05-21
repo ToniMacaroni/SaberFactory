@@ -8,6 +8,7 @@ using BeatSaberMarkupLanguage.Tags;
 using BeatSaberMarkupLanguage.TypeHandlers;
 using SaberFactory.UI.Lib.BSML.Tags;
 using SiraUtil.Tools;
+using UnityEngine;
 using Zenject;
 
 namespace SaberFactory.UI.Lib.BSML
@@ -16,22 +17,28 @@ namespace SaberFactory.UI.Lib.BSML
     {
         private readonly SiraLog _logger;
         public static bool Registered { get; private set; }
+        public static Material CustomUiMaterial;
 
         #region Factories
 
-        [Inject] private readonly Popup.Factory _popupFactory = null;
-        [Inject] private readonly CustomUiComponent.Factory _customUiComponentFactory = null;
+        private readonly Popup.Factory _popupFactory;
+        private readonly CustomUiComponent.Factory _customUiComponentFactory;
 
         #endregion
 
-        private CustomComponentHandler(SiraLog logger)
+        private CustomComponentHandler(
+            SiraLog logger,
+            Popup.Factory popupFactory,
+            CustomUiComponent.Factory customUiComponentFactory)
         {
             _logger = logger;
+            _popupFactory = popupFactory;
+            _customUiComponentFactory = customUiComponentFactory;
+            RegisterAll(BSMLParser.instance);
         }
 
         public void Initialize()
         {
-            RegisterAll(BSMLParser.instance);
         }
 
         private void RegisterAll(BSMLParser parser)
@@ -55,6 +62,8 @@ namespace SaberFactory.UI.Lib.BSML
 
             RegisterCustomComponents(parser);
 
+            _logger.Info("Registered Custom Components");
+
             Registered = true;
         }
 
@@ -62,7 +71,7 @@ namespace SaberFactory.UI.Lib.BSML
         {
             foreach (var type in GetListOfType<CustomUiComponent>())
             {
-                parser.RegisterTag(new CustomUiComponentTag(type, _customUiComponentFactory));
+                parser.RegisterTag(new CustomUiComponentTag(type, _customUiComponentFactory, _logger));
             }
 
             foreach (var type in GetListOfType<Popup>())

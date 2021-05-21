@@ -1,8 +1,11 @@
-﻿<bg bg="round-rect-panel" bg-color="#FFF" xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
-	<vertical>
-		<sui.custom-list id='sort-list' title='Sort by' width='80' bg-color='#FFF' />
-		<horizontal>
-			<sui.button text='Cancel' pref-width='20' on-click='click-cancel' normal-color='#00000080' />
-		</horizontal>
-	</vertical>
+﻿<bg pad="5" bg="round-rect-panel" bg-color="#FFF" xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
+	<vertical vertical-fit='PreferredSize' spacing='5'>
+		<sui.custom-list id='sort-list' title='Sort by' width='80' height='60' bg-color='#FFF' title-size='6' />
+    <horizontal pad-left='5' pad-right='5'>
+      <checkbox text='Scroll To Top' value='ShouldScrollToTop' apply-on-change='true' />
+    </horizontal>
+    <horizontal pad-left='5' pad-right='5'>
+      <sui.button text='Cancel' pref-width='25' pref-height='12' on-click='click-cancel' normal-color='#00000080' />
+    </horizontal>
+  </vertical>
 </bg>

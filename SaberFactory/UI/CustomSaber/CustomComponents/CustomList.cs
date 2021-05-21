@@ -81,14 +81,30 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
             if(scroll) _list.tableView.ScrollToCellWithIdx(idx, TableView.ScrollPositionType.Beginning, false);
         }
 
+        public void ScrollTo(int idx)
+        {
+            if (idx == -1) return;
+            _list.tableView.ScrollToCellWithIdx(idx, TableView.ScrollPositionType.Beginning, false);
+        }
+
         private void SetWidth(float width)
         {
             _layoutElement.preferredWidth = width;
         }
 
+        private void SetHeight(float height)
+        {
+            _layoutElement.preferredHeight = height;
+        }
+
         private void SetText(string text)
         {
             _textMesh.text = text;
+        }
+
+        private void SetHeaderSize(float size)
+        {
+            _textMesh.fontSize = size;
         }
 
         private void SetBgColor(Color color)
@@ -116,7 +132,9 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
             {
                 {"title", new[] {"title", "header"}},
                 {"width", new[] {"width"}},
-                {"bgColor", new []{"bg-color"} }
+                {"height", new[] {"height"}},
+                {"bgColor", new []{"bg-color"} },
+                {"titleSize", new []{"title-size"}}
             };
 
             public override Dictionary<string, Action<CustomList, string>> Setters =>
@@ -124,7 +142,9 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
                 {
                     {"title", (list, val) => list.SetText(val)},
                     {"width", (list, val) => list.SetWidth(float.Parse(val)) },
-                    {"bgColor", SetBgColor }
+                    {"height", (list, val) => list.SetHeight(float.Parse(val)) },
+                    {"bgColor", SetBgColor },
+                    {"titleSize", (list, val) => list.SetHeaderSize(float.Parse(val))}
                 };
 
             private void SetBgColor(CustomList list, string hex)

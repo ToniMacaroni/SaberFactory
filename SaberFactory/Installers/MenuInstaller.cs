@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using HMUI;
 using SaberFactory.Editor;
 using SaberFactory.Models;
 using SaberFactory.UI;
@@ -12,6 +15,7 @@ using SiraUtil;
 using UnityEngine;
 using UnityEngine.Rendering;
 using Zenject;
+using Object = UnityEngine.Object;
 
 namespace SaberFactory.Installers
 {
@@ -19,6 +23,8 @@ namespace SaberFactory.Installers
     {
         public override void InstallBindings()
         {
+            Container.BindInterfacesAndSelfTo<CustomComponentHandler>().AsSingle();
+
             Container.Bind<BaseGameUiHandler>().AsSingle();
             Container.Bind<EditorInstanceManager>().AsSingle();
 
@@ -47,7 +53,16 @@ namespace SaberFactory.Installers
 
         private void BindRemoteSabers()
         {
-            Container.Bind<RemoteLocationPart>().To<RemoteLocationPart>().AsCached().WithArguments(new RemoteLocationPart.InitData
+            BindSaber(new RemoteLocationPart.InitData
+            {
+                Name = "SF Default",
+                Author = "Toni Macaroni",
+                RemoteLocation = "https://github.com/ToniMacaroni/SaberFactoryV2/blob/main/Sabers/SFDefault.saber?raw=true",
+                Filename = "SF Default.saber",
+                CoverPath = "SaberFactory.Resources.Icons.SFSaber_Icon.png"
+            });
+
+            BindSaber(new RemoteLocationPart.InitData
             {
                 Name = "SF Saber",
                 Author = "Toni Macaroni",
@@ -57,10 +72,13 @@ namespace SaberFactory.Installers
             });
         }
 
+        private void BindSaber(RemoteLocationPart.InitData data)
+        {
+            Container.Bind<RemoteLocationPart>().To<RemoteLocationPart>().AsCached().WithArguments(data);
+        }
+
         private void BindUiStuff()
         {
-            Container.BindInterfacesAndSelfTo<CustomComponentHandler>().AsSingle();
-
             BindUiFactory<Popup, Popup.Factory>();
             BindUiFactory<CustomUiComponent, CustomUiComponent.Factory>();
         }

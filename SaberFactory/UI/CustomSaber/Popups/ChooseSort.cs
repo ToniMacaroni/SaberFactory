@@ -1,17 +1,19 @@
-﻿using BeatSaberMarkupLanguage.Attributes;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using BeatSaberMarkupLanguage.Attributes;
+using SaberFactory.UI.CustomSaber.CustomComponents;
 using SaberFactory.UI.Lib;
 using UnityEngine;
 
-
-namespace SaberFactory.UI.CustomSaber.CustomComponents
+namespace SaberFactory.UI.CustomSaber.Popups
 {
     internal class ChooseSort : Popup
     {
         [UIComponent("sort-list")] private readonly CustomList _sortList = null;
 
         private Action<ESortMode> _onSelectionChanged;
+
+        public bool ShouldScrollToTop { get; set; } = true;
 
         public async void Show(Action<ESortMode> onSelectionChanged)
         {

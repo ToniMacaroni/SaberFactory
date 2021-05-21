@@ -34,7 +34,8 @@ namespace SaberFactory.UI.CustomSaber.Views
             }
 
             var release = await _pluginManager.GetNewestReleaseAsync(CancellationToken.None);
-            if (release!=null && !release.IsLocalNewest)
+
+            if (release is {IsLocalNewest: false})
             {
                 _settingsNotifyText.gameObject.SetActive(true);
             }
