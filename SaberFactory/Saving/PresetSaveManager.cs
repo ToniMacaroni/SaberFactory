@@ -60,6 +60,7 @@ namespace SaberFactory.Saving
                 trail.TrailOrigin = trailModel.TrailOrigin;
                 trail.ClampTexture = trailModel.ClampTexture;
                 trail.Material = SerializableMaterial.FromMaterial(trailModel.Material.Material);
+                trail.Flip = trailModel.Flip;
                 serializableSaber.Trail = trail;
             }
 
@@ -93,7 +94,7 @@ namespace SaberFactory.Saving
                 }
             }
 
-            TrailModel trailModel = null;
+            TrailModel trailModel;
 
             if (saberModel.GetCustomSaber(out var customsaber))
             {
@@ -112,6 +113,7 @@ namespace SaberFactory.Saving
                 trailModel.Length = trail.Length;
                 trailModel.Whitestep = trail.Whitestep;
                 trailModel.ClampTexture = trail.ClampTexture;
+                trailModel.Flip = trail.Flip;
 
                 // if trail comes from another saber
                 if (!string.IsNullOrEmpty(trail.TrailOrigin))

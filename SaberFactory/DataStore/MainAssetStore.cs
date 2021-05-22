@@ -160,7 +160,7 @@ namespace SaberFactory.DataStore
 
             await Task.Run(async () =>
             {
-                foreach (var assetMetaPath in await _customSaberAssetLoader.CollectFiles())
+                foreach (var assetMetaPath in await loader.CollectFiles())
                 {
                     var relativePath = PathTools.ToRelativePath(assetMetaPath.MetaDataPath);
                     if (_metaData.TryGetValue(relativePath, out _)) continue;

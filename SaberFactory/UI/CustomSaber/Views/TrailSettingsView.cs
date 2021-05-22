@@ -41,6 +41,7 @@ namespace SaberFactory.UI.CustomSaber.Views
         [UIComponent("width-slider")] private readonly SliderSetting _widthSliderSetting = null;
         [UIComponent("whitestep-slider")] private readonly SliderSetting _whitestepSliderSetting = null;
         [UIComponent("clamp-checkbox")] private readonly ToggleSetting _clampToggleSetting = null;
+        [UIComponent("flip-checkbox")] private readonly ToggleSetting _flipToggleSetting = null;
 
         [UIComponent("material-editor")] private readonly MaterialEditor _materialEditor = null;
         [UIComponent("choose-trail-popup")] private readonly ChooseTrailPopup _chooseTrailPopup = null;
@@ -76,6 +77,7 @@ namespace SaberFactory.UI.CustomSaber.Views
         private SliderController _widthSlider;
         private SliderController _whitestepSlider;
         private ToggleController _clampToggle;
+        private ToggleController _flipToggle;
         private bool _refreshButtonActive;
 
         [UIAction("#post-parse")]
@@ -85,6 +87,7 @@ namespace SaberFactory.UI.CustomSaber.Views
             _widthSlider = new SliderController(_widthSliderSetting);
             _whitestepSlider = new SliderController(_whitestepSliderSetting);
             _clampToggle = new ToggleController(_clampToggleSetting);
+            _flipToggle = new ToggleController(_flipToggleSetting);
 
             _mainContainer.GetComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
@@ -115,6 +118,7 @@ namespace SaberFactory.UI.CustomSaber.Views
             _widthSlider.Value = _instanceTrailData.Width;
             _whitestepSlider.Value = _instanceTrailData.WhiteStep;
             _clampToggle.Value = _instanceTrailData.ClampTexture;
+            _flipToggle.Value = _instanceTrailData.Flip;
         }
 
         private void SetLength(RangeValuesTextSlider slider, float val)
@@ -145,6 +149,12 @@ namespace SaberFactory.UI.CustomSaber.Views
         private void SetClampMode(bool shouldClamp)
         {
             _instanceTrailData.ClampTexture = shouldClamp;
+        }
+
+        private void SetFlip(bool flip)
+        {
+            _instanceTrailData.Flip = flip;
+            CreateTrail(_editorInstanceManager.CurrentSaber);
         }
 
         private void SetTrailModel(TrailModel trailModel)
@@ -185,6 +195,7 @@ namespace SaberFactory.UI.CustomSaber.Views
             _widthSlider.AddEvent(SetWidth);
             _whitestepSlider.AddEvent(SetWhitestep);
             _clampToggle.SetEvent(SetClampMode);
+            _flipToggle.SetEvent(SetFlip);
         }
 
         private void RemoveControlEvents()
@@ -193,6 +204,7 @@ namespace SaberFactory.UI.CustomSaber.Views
             _widthSlider.RemoveEvent();
             _whitestepSlider.RemoveEvent();
             _clampToggle.RemoveEvent();
+            _flipToggle.RemoveEvent();
         }
 
         private void CreateTrail(SaberInstance saberInstance)

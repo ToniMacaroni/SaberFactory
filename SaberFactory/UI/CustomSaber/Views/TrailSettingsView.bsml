@@ -3,19 +3,26 @@
 	<vertical id='main-container' bg='round-rect-panel' bg-color='#999' child-align='MiddleCenter'
 	          child-expand-height='false' child-control-height='false' spacing='2' pad='3'>
 
-		<slider-setting id='length-slider' text='Length' get-event='update-props' apply-on-change='true' integer-only='true'
-		                min='0' max='30' />
+    <vertical bg='round-rect-panel' bg-color='#ffffffdd' pad='2' vertical-fit='PreferredSize'>
+      <slider-setting id='length-slider' text='Length' get-event='update-props' apply-on-change='true' integer-only='true'
+                          min='0' max='30' />
 
-		<slider-setting id='width-slider' text='Width' get-event='update-props' apply-on-change='true' min='0'
-		                max='~trail-width-max' />
+      <slider-setting id='width-slider' text='Width' get-event='update-props' apply-on-change='true' min='0'
+                      max='~trail-width-max' />
+    </vertical>
 
-		<slider-setting id='whitestep-slider' text='Whitestep' get-event='update-props' apply-on-change='true' min='0'
-		                max='1' />
+    <vertical pad='2' vertical-fit='PreferredSize'>
+      <slider-setting id='whitestep-slider' text='Whitestep' get-event='update-props' apply-on-change='true' min='0'
+                      max='1' />
 
-		<checkbox id='clamp-checkbox' text='Clamp Texture' apply-on-change='true'
-		          hover-hint='Enable this if you see lines on the border of the trail' />
+      <checkbox id='flip-checkbox' text='Flip' apply-on-change='true'
+                hover-hint='Flips the trail vertically if enabled' />
 
-		<horizontal pad='2' spacing='4' id='advanced-container' bg='round-rect-panel' bg-color='#FF000090'>
+      <checkbox id='clamp-checkbox' text='Clamp Texture' apply-on-change='true'
+                hover-hint='Enable this if you see lines on the border of the trail' />
+    </vertical>
+
+    <horizontal pad='2' spacing='4' id='advanced-container' bg='round-rect-panel' bg-color='#ffffffdd'>
 			<vertical pref-width='70'>
 				<slider-setting get-event='get-advanced' text='Granularity' value='granularity-value' apply-on-change='true' min='0'
 				                max='300' integer-only='true' />

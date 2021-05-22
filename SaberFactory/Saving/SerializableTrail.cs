@@ -8,5 +8,6 @@
         public string TrailOrigin;
         public bool ClampTexture;
         public SerializableMaterial Material;
+        public bool Flip;
     }
 }

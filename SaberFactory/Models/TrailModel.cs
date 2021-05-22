@@ -16,6 +16,7 @@ namespace SaberFactory.Models
 
         public string TrailOrigin;
         public bool ClampTexture;
+        public bool Flip;
         public TextureWrapMode? OriginalTextureWrapMode;
 
         public TrailModel(
@@ -50,6 +51,7 @@ namespace SaberFactory.Models
             Whitestep = other.Whitestep;
             TrailOrigin = other.TrailOrigin;
             ClampTexture = other.ClampTexture;
+            Flip = other.Flip;
         }
     }
 }

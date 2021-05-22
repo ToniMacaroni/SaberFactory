@@ -7,7 +7,6 @@ using BeatSaberMarkupLanguage.Parser;
 using BeatSaberMarkupLanguage.TypeHandlers;
 using HMUI;
 using SaberFactory.Helpers;
-using SaberFactory.UI.Components;
 using UnityEngine;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
@@ -30,10 +29,6 @@ namespace SaberFactory.UI.Lib.BSML
             base.HandleTypeAfterParse(componentType, parserParams);
             base.HandleType(componentType, parserParams);
             var backgroundable = (Backgroundable)componentType.component;
-            foreach (var dataValue in componentType.data.Values)
-            {
-                Debug.LogError(dataValue);
-            }
             if (componentType.data.TryGetValue("border", out var borderAttr))
             {
                 if (backgroundable.background?.material != null)

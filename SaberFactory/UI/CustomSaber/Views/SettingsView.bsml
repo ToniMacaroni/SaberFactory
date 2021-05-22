@@ -2,7 +2,7 @@
 	
 	<vertical bg="round-rect-panel" bg-color="#999" pad="2" vertical-fit="PreferredSize">
 
-		<horizontal pad='2' bg='round-rect-panel' bg-color='#67b0f599'>
+		<horizontal pad='2' bg='round-rect-panel' bg-color='#ffffffdd'>
 			<checkbox text='Saber Factory Enabled' value='mod-enabled' apply-on-change='true' />
 		</horizontal>
 		<vertical pad='2' bg='round-rect-panel' bg-color='#00000050'>
@@ -18,7 +18,7 @@
 
 
 
-		<horizontal bg='round-rect-panel' bg-color='#67b0f599' pad='2'>
+		<horizontal bg='round-rect-panel' bg-color='#ffffffdd' pad='2'>
 			<sui.icon-button
 				pad='1'
 				pref-width='15'
