@@ -14,6 +14,7 @@ using SaberFactory.UI.Lib.BSML;
 using SiraUtil;
 using UnityEngine;
 using UnityEngine.Rendering;
+using VRUIControls;
 using Zenject;
 using Object = UnityEngine.Object;
 

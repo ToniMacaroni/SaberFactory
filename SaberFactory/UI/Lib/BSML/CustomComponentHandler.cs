@@ -17,7 +17,6 @@ namespace SaberFactory.UI.Lib.BSML
     {
         private readonly SiraLog _logger;
         public static bool Registered { get; private set; }
-        public static Material CustomUiMaterial;
 
         #region Factories
 
@@ -71,7 +70,7 @@ namespace SaberFactory.UI.Lib.BSML
         {
             foreach (var type in GetListOfType<CustomUiComponent>())
             {
-                parser.RegisterTag(new CustomUiComponentTag(type, _customUiComponentFactory, _logger));
+                parser.RegisterTag(new CustomUiComponentTag(type, _customUiComponentFactory));
             }
 
             foreach (var type in GetListOfType<Popup>())

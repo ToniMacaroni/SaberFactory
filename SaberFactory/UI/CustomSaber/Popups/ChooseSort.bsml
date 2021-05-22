@@ -1,4 +1,4 @@
-﻿<bg pad="5" bg="round-rect-panel" bg-color="#FFF" xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
+﻿<bg pad="5" bg="round-rect-panel" bg-color="#FFF" border="true" raycast="true" xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
 	<vertical vertical-fit='PreferredSize' spacing='5'>
 		<sui.custom-list id='sort-list' title='Sort by' width='80' height='60' bg-color='#FFF' title-size='6' />
     <horizontal pad-left='5' pad-right='5'>

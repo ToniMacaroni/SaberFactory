@@ -19,21 +19,34 @@ namespace SaberFactory.UI.Lib.BSML
     {
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>
         {
-            { "shader", new[]{ "shader" } }
+            { "border", new[]{ "border" } },
+            { "raycast", new[]{ "raycast", "block" } },
         };
 
         public override Dictionary<string, Action<Backgroundable, string>> Setters => new Dictionary<string, Action<Backgroundable, string>>();
 
-        public override void HandleTypeAfterChildren(BSMLParser.ComponentTypeWithData componentType, BSMLParserParams parserParams)
+        public override void HandleType(BSMLParser.ComponentTypeWithData componentType, BSMLParserParams parserParams)
         {
             base.HandleTypeAfterParse(componentType, parserParams);
             base.HandleType(componentType, parserParams);
             var backgroundable = (Backgroundable)componentType.component;
+            foreach (var dataValue in componentType.data.Values)
+            {
+                Debug.LogError(dataValue);
+            }
             if (componentType.data.TryGetValue("border", out var borderAttr))
             {
                 if (backgroundable.background?.material != null)
                 {
                     AddBorder(backgroundable.gameObject);
+                }
+            }
+
+            if (componentType.data.TryGetValue("raycast", out var raycastAttr))
+            {
+                if (backgroundable.background != null)
+                {
+                    backgroundable.background.raycastTarget = bool.Parse(raycastAttr);
                 }
             }
         }
@@ -49,6 +62,13 @@ namespace SaberFactory.UI.Lib.BSML
             }
 
             var borderGo = Object.Instantiate(_borderTemplate, go.transform).GetRect();
+
+            if (go.GetComponent<HorizontalOrVerticalLayoutGroup>() is {})
+            {
+                var layout = borderGo.gameObject.AddComponent<LayoutElement>();
+                layout.ignoreLayout = true;
+            }
+
             borderGo.anchorMin = Vector2.zero;
             borderGo.anchorMax = Vector2.one;
             borderGo.anchoredPosition = Vector2.zero;
