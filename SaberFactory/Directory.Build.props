@@ -11,4 +11,7 @@
     <DisableCopyToPlugins>true</DisableCopyToPlugins>
     <DisableZipRelease>true</DisableZipRelease>
   </PropertyGroup>
+  <ItemGroup>
+    <SourceRoot Include="$(MSBuildThisFileDirectory)/"/>
+  </ItemGroup>
 </Project>
