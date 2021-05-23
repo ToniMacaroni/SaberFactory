@@ -47,7 +47,7 @@ namespace SaberFactory.UI
             GameObject.transform.localScale = new Vector3(0.02f, 0.02f, 0.02f);
 
             _curvedGO = GameObject.CreateGameObject("Curved UI");
-            _curvedGO.AddComponent<Canvas>();
+            _curvedGO.AddComponent<Canvas>().sortingOrder = 3;
 
             var canvasScaler = _curvedGO.AddComponent<CanvasScaler>();
             canvasScaler.referencePixelsPerUnit = 10;

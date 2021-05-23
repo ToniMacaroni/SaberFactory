@@ -5,7 +5,7 @@
 	</horizontal>
 	<image ignore-layout='true' id='texture' size-delta-x='16' size-delta-y='13' anchor-min-x='1' anchor-max-x='1' anchor-pos-x='-9' />
 
-	<this.button text='Select' on-click='click-select' anchor-pos-x='43' />
+	<sui.button text='Select' on-click='click-select' anchor-pos-x='43' />
 
-	<this.texture-picker-popup id='texture-picker' size-delta-y='80' anchor-pos-x='50' anchor-pos-y='-65' />
+	<sui.texture-picker-popup id='texture-picker' size-delta-y='80' anchor-pos-x='50' anchor-pos-y='-65' />
 </stack>

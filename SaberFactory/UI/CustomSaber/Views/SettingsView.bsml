@@ -1,8 +1,8 @@
 ﻿<bg xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
 	
-	<vertical bg="round-rect-panel" bg-color="#00000090" pad="2" vertical-fit="PreferredSize">
+	<vertical bg="round-rect-panel" bg-color="#999" pad="2" vertical-fit="PreferredSize">
 
-		<horizontal pad='2' bg='round-rect-panel' bg-color='#67b0f599'>
+		<horizontal pad='2' bg='round-rect-panel' bg-color='#ffffffdd'>
 			<checkbox text='Saber Factory Enabled' value='mod-enabled' apply-on-change='true' />
 		</horizontal>
 		<vertical pad='2' bg='round-rect-panel' bg-color='#00000050'>
@@ -18,8 +18,8 @@
 
 
 
-		<horizontal bg='round-rect-panel' bg-color='#67b0f599' pad='2'>
-			<custom-icon-btn
+		<horizontal bg='round-rect-panel' bg-color='#ffffffdd' pad='2'>
+			<sui.icon-button
 				pad='1'
 				pref-width='15'
 				preferred-height='15'
@@ -27,7 +27,7 @@
 				icon='SaberFactory.Resources.Icons.profile.png'
 				hover-hint='Support me on Ko-Fi'
 				skew='0' show-line='false' normal-color='#00000000' hovered-color='#ffffff20' use-gradient='false'/>
-			<custom-icon-btn
+			<sui.icon-button
 				pad='1'
 				pref-width='15'
 				preferred-height='15'
@@ -35,7 +35,7 @@
 				icon='SaberFactory.Resources.Icons.discord.png'
 				hover-hint='Join our lovely server for help with the mod'
 				skew='0' show-line='false' normal-color='#00000000' hovered-color='#ffffff20' use-gradient='false'/>
-			<custom-icon-btn
+			<sui.icon-button
 				id='github-button'
 				active='false'
 				pad='2'
@@ -48,5 +48,5 @@
 		</horizontal>
 	</vertical>
 
-	<this.changelog-popup id='changelog-popup' />
+	<sui.changelog-popup id='changelog-popup' />
 </bg>

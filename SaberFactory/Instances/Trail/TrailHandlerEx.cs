@@ -59,13 +59,7 @@ namespace SaberFactory.Instances.Trail
                 Granularity = trailConfig.Granularity
             };
 
-            Transform pointStart = _instanceTrailData.IsTrailReversed
-                ? _instanceTrailData.PointEnd
-                : _instanceTrailData.PointStart;
-
-            Transform pointEnd = _instanceTrailData.IsTrailReversed
-                ? _instanceTrailData.PointStart
-                : _instanceTrailData.PointEnd;
+            var (pointStart, pointEnd) = _instanceTrailData.GetPoints();
 
             if (pointStart == null || pointEnd == null)
             {

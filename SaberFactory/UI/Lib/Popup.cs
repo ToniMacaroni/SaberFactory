@@ -1,6 +1,9 @@
 ﻿using System.Threading.Tasks;
+using IPA.Utilities;
 using SaberFactory.Helpers;
 using UnityEngine;
+using VRUIControls;
+using Zenject;
 
 namespace SaberFactory.UI.Lib
 {
@@ -93,8 +96,6 @@ namespace SaberFactory.UI.Lib
             transform.SetParent(parent, false);
         }
 
-        internal class Factory : ComponentPlaceholderFactory<Popup>
-        {
-        }
+        internal class Factory : ComponentPlaceholderFactory<Popup> {}
     }
 }

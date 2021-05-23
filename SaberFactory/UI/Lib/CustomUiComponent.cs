@@ -1,6 +1,4 @@
-﻿using Zenject;
-
-namespace SaberFactory.UI.Lib
+﻿namespace SaberFactory.UI.Lib
 {
     internal class CustomUiComponent : CustomParsable
     {

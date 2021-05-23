@@ -1,4 +1,5 @@
-﻿using CustomSaber;
+﻿using System;
+using CustomSaber;
 using SaberFactory.Helpers;
 using SaberFactory.Models;
 using SaberFactory.Models.CustomSaber;
@@ -14,8 +15,6 @@ namespace SaberFactory.Instances.Trail
         public TrailModel TrailModel { get; }
         public Transform PointStart { get; }
         public Transform PointEnd { get; }
-
-        public bool IsTrailReversed { get; private set; }
 
         public MaterialDescriptor Material => TrailModel.Material;
         public int Length
@@ -42,12 +41,21 @@ namespace SaberFactory.Instances.Trail
             set => SetClampTexture(value);
         }
 
+        public bool Flip
+        {
+            get => TrailModel.Flip;
+            set => TrailModel.Flip = value;
+        }
+
+        // is used for automatic trail reversal with faulty saber setup
+        private readonly bool _isTrailReversed;
+
         public InstanceTrailData(TrailModel trailModel, Transform pointStart, Transform pointEnd, bool isTrailReversed)
         {
             TrailModel = trailModel;
             PointStart = pointStart;
             PointEnd = pointEnd;
-            IsTrailReversed = isTrailReversed;
+            _isTrailReversed = isTrailReversed;
 
             Init(trailModel);
         }
@@ -101,6 +109,14 @@ namespace SaberFactory.Instances.Trail
         public void RevertMaterial()
         {
             TrailModel.Material.Revert();
+        }
+
+        public (Transform start, Transform end) GetPoints()
+        {
+            var pointStart = _isTrailReversed ? PointEnd : PointStart;
+            var pointEnd = _isTrailReversed ? pointStart : PointEnd;
+
+            return (Flip ? pointEnd : pointStart, Flip ? pointStart : pointEnd);
         }
     }
 }

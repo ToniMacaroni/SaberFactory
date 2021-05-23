@@ -1,4 +1,4 @@
 ﻿<div id="root-object" bg="round-rect-panel" bg-color="#FFFFFF05" xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
           xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
-	<this.scroll-view id='item-container' size-delta-x='-2' child-control-height='true' spacing='10' pad-bottom='10' pad-top='10'/>
+	<sui.scroll-view id='item-container' size-delta-x='-2' child-control-height='true' spacing='10' pad-bottom='10' pad-top='10'/>
 </div>

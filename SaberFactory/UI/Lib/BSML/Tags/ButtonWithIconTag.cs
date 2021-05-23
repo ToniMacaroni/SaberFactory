@@ -8,11 +8,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
-namespace SaberFactory.UI.Lib.BSML
+namespace SaberFactory.UI.Lib.BSML.Tags
 {
     public class ButtonWithIconTag : BSMLTag
     {
-        public override string[] Aliases => new[] { "custom-icon-btn" };
+        public override string[] Aliases => new[] { "sui.icon-button" };
 
         public override GameObject CreateObject(Transform parent)
         {

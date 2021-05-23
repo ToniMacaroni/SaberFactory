@@ -100,6 +100,8 @@ namespace SaberFactory.Instances.Trail
             TrailLength = initData.TrailLength;
             Whitestep = initData.Whitestep;
 
+            gameObject.layer = 12;
+
             _elemPool = new ElementPool(TrailLength);
             _trailWidth = (PointStart.position - PointEnd.position).magnitude;
             _vertexPool = new VertexPool(MyMaterial, this);

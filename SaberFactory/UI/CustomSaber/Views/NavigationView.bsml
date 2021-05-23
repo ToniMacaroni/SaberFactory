@@ -1,30 +1,37 @@
-﻿<vertical background='round-rect-panel' pref-width='16' bg-color='#666666bb' pad='2' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
-	
-	<macro.for-each items='nav-buttons'>
-		<this.nav-button
-			id='button'
-			on-selected='selected'
-			icon='~icon'
-			hover-hint='~hover-hint'
-			on-color='#fff'
-			off-color='#ffffff60'/>
-	</macro.for-each>
+﻿<vertical spacing='2' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+          xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
 
-	<this.nav-button
-		icon='SaberFactory.Resources.Icons.cog.png'
-		hover-hint='Set up Saber Factory'
-		on-selected='clicked-settings'
-		on-color='#fff'
-		off-color='#ffffff60'>
-		<text id='settings-notify-text' active='false' text='Update' font-size='3' align='TopGeoAligned' color='#5dc968'/>
-	</this.nav-button>
+  <vertical pref-width='16' background='round-rect-panel' bg-color='#666666bb' pad='2'>
+    <macro.for-each items='nav-buttons'>
+      <sui.nav-button pref-width='12'
+        id='button'
+        on-selected='selected'
+        icon='~icon'
+        hover-hint='~hover-hint'
+        on-color='#fff'
+        off-color='#ffffff60' />
+    </macro.for-each>
 
-	<custom-icon-btn
-		pref-width='15'
-		preferred-height='15'
-		on-click='clicked-exit'
-		icon='#ExitButton'
-		hover-hint='Exit this earths athmosphere'
-		skew='0' show-line='false' normal-color='#00000055' hovered-color='#5ca5ff' show-fill='false'>
-	</custom-icon-btn>
+    <sui.nav-button
+      icon='SaberFactory.Resources.Icons.cog.png' pref-width='12'
+      hover-hint='Set up Saber Factory'
+      on-selected='clicked-settings'
+      on-color='#fff'
+      off-color='#ffffff60'>
+      <text id='settings-notify-text' active='false' text='Update' font-size='3' align='TopGeoAligned' color='#5dc968' />
+    </sui.nav-button>
+  </vertical>
+
+  <vertical pref-width='16' background='round-rect-panel' bg-color='#666666bb' pad-left='3' pad-right='3' pad-top='2'
+            pad-bottom='2' preferred-height='16'>
+    <sui.icon-button
+      pref-width='15'
+      pref-height='15'
+      on-click='clicked-exit'
+      icon='#HorizontalArrowIcon'
+      hover-hint='Exit this earths athmosphere'
+      skew='0' show-line='false' normal-color='#00000000' hovered-color='#ff424280' icon-color='#ffffff50'>
+    </sui.icon-button>
+  </vertical>
+
 </vertical>

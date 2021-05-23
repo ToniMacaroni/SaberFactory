@@ -1,13 +1,6 @@
-﻿using BeatSaberMarkupLanguage;
-using BeatSaberMarkupLanguage.Attributes;
-using BeatSaberMarkupLanguage.Components;
-using BeatSaberMarkupLanguage.ViewControllers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using BeatSaberMarkupLanguage.Attributes;
 using System.Threading.Tasks;
 using SaberFactory.UI.Lib;
-using VRUIControls;
 
 
 namespace SaberFactory.UI.CustomSaber.Popups

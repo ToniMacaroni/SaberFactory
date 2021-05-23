@@ -8,6 +8,7 @@ using BeatSaberMarkupLanguage.Tags;
 using BeatSaberMarkupLanguage.TypeHandlers;
 using SaberFactory.UI.Lib.BSML.Tags;
 using SiraUtil.Tools;
+using UnityEngine;
 using Zenject;
 
 namespace SaberFactory.UI.Lib.BSML
@@ -19,19 +20,24 @@ namespace SaberFactory.UI.Lib.BSML
 
         #region Factories
 
-        [Inject] private readonly Popup.Factory _popupFactory = null;
-        [Inject] private readonly CustomUiComponent.Factory _customUiComponentFactory = null;
+        private readonly Popup.Factory _popupFactory;
+        private readonly CustomUiComponent.Factory _customUiComponentFactory;
 
         #endregion
 
-        private CustomComponentHandler(SiraLog logger)
+        private CustomComponentHandler(
+            SiraLog logger,
+            Popup.Factory popupFactory,
+            CustomUiComponent.Factory customUiComponentFactory)
         {
             _logger = logger;
+            _popupFactory = popupFactory;
+            _customUiComponentFactory = customUiComponentFactory;
+            RegisterAll(BSMLParser.instance);
         }
 
         public void Initialize()
         {
-            RegisterAll(BSMLParser.instance);
         }
 
         private void RegisterAll(BSMLParser parser)
@@ -54,6 +60,8 @@ namespace SaberFactory.UI.Lib.BSML
             }
 
             RegisterCustomComponents(parser);
+
+            _logger.Info("Registered Custom Components");
 
             Registered = true;
         }

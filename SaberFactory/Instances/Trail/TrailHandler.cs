@@ -73,13 +73,7 @@ namespace SaberFactory.Instances.Trail
                 SamplingStepMultiplier = _samplingStepMultiplier,
             };
 
-            Transform pointStart = _instanceTrailData.IsTrailReversed
-                ? _instanceTrailData.PointEnd
-                : _instanceTrailData.PointStart;
-
-            Transform pointEnd = _instanceTrailData.IsTrailReversed
-                ? _instanceTrailData.PointStart
-                : _instanceTrailData.PointEnd;
+            var (pointStart, pointEnd) = _instanceTrailData.GetPoints();
 
             TrailInstance.Setup(
                 trailInitData,

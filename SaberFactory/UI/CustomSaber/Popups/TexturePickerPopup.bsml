@@ -1,4 +1,4 @@
-﻿<horizontal anchor-pos-x="23" anchor-pos-y="-60" xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
+﻿<horizontal anchor-pos-x="23" anchor-pos-y="-60" border="true" raycast="true" xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
 	<vertical pad='2' bg='round-rect-panel' bg-color='#555'>
 		<text text='UserData/Saber Factory/Textures' align='Center'/>
 		<list id='item-list' select-cell='item-selected'/>
@@ -8,8 +8,8 @@
 		</horizontal>
 
 		<horizontal>
-			<this.button text="Cancel" on-click="click-cancel" />
-			<this.button text="Select" on-click="click-select" />
+			<sui.button text="Cancel" on-click="click-cancel" />
+			<sui.button text="Select" on-click="click-select" />
 		</horizontal>
 	</vertical>
 </horizontal>

@@ -54,16 +54,7 @@ namespace SaberFactory.UI
 
         public void Create(Transform parent, InstanceTrailData trailData)
         {
-            if (trailData.IsTrailReversed)
-            {
-                _pointStart = trailData.PointEnd;
-                _pointEnd = trailData.PointStart;
-            }
-            else
-            {
-                _pointStart = trailData.PointStart;
-                _pointEnd = trailData.PointEnd;
-            }
+            (_pointStart, _pointEnd) = trailData.GetPoints();
 
             _instance = Object.Instantiate(_prefab, trailData.PointEnd.position, Quaternion.Euler(-90, 25, 0), parent);
             _transform = _instance.transform;
