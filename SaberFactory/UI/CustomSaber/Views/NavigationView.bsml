@@ -23,7 +23,7 @@
   </vertical>
 
   <vertical pref-width='16' background='round-rect-panel' bg-color='#666666bb' pad-left='3' pad-right='3' pad-top='2'
-            pad-bottom='2' preferred-height='15'>
+            pad-bottom='2' preferred-height='16'>
     <sui.icon-button
       pref-width='15'
       pref-height='15'
