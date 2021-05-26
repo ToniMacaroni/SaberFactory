@@ -37,18 +37,29 @@ namespace SaberFactory.Editor
             {
                 if (saberSet.LeftSaber.GetCustomSaber(out var customsaber))
                 {
-                    SetModelComposition(customsaber.ModelComposition);
+                    SetModelComposition(customsaber.ModelComposition, false);
                 }
             };
         }
 
-        public void SetModelComposition(ModelComposition composition)
+        public void SetModelComposition(ModelComposition composition, bool lazyInit = true)
         {
-            CurrentModelComposition?.DestroyAdditionalInstances();
+            if (CurrentModelComposition != null)
+            {
+                CurrentModelComposition.SaveAdditionalData();
+                CurrentModelComposition.DestroyAdditionalInstances();
+
+            }
+
+            if (lazyInit && CurrentModelComposition != composition)
+            {
+                composition?.LazyInit();
+            }
+
             CurrentModelComposition = composition;
             _saberSet.SetModelComposition(CurrentModelComposition);
             OnModelCompositionSet?.Invoke(CurrentModelComposition);
-            _logger.Info($"Selected Saber: {composition.ListName}");
+            _logger.Info($"Selected Saber: {composition?.ListName}");
         }
 
         public void Refresh()

@@ -10,7 +10,12 @@ using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 using HarmonyLib;
+using IPA.Config.Data;
+using IPA.Config.Stores.Attributes;
 using SaberFactory.Helpers;
+using SiraUtil.Converters;
+using UnityEngine;
+using UnityEngine.UI;
 using IPALogger = IPA.Logging.Logger;
 
 namespace SaberFactory
@@ -19,6 +24,8 @@ namespace SaberFactory
     [Plugin(RuntimeOptions.DynamicInit)]
     public class Plugin
     {
+        private const string HarmonyId = "com.tonimacaroni.saberfactory";
+
         private IPALogger _logger;
         private Harmony _harmony;
 
@@ -27,7 +34,7 @@ namespace SaberFactory
         {
             _logger = logger;
 
-            _harmony = new Harmony("com.tonimacaroni.saberfactory");
+            _harmony = new Harmony(HarmonyId);
 
             var pluginConfig = conf.Generated<PluginConfig>();
 
@@ -38,30 +45,30 @@ namespace SaberFactory
                 Directory.CreateDirectory(Path.Combine(UnityGame.InstallPath, "CustomSabers"));
             }
 
-            if(!await LoadCSDescriptors()) return;
+            if(!await LoadCsDescriptors()) return;
 
             zenjector.OnApp<AppInstaller>().WithParameters(logger, pluginConfig);
             zenjector.OnMenu<Installers.MenuInstaller>();
             zenjector.OnGame<GameInstaller>(false);
         }
 
-        [OnStart]
-        public void OnApplicationStart()
+        [OnEnable]
+        public void OnEnable()
         {
             _harmony.PatchAll(Assembly.GetExecutingAssembly());
         }
 
-        [OnExit]
-        public void OnApplicationQuit()
+        [OnDisable]
+        public void OnDisable()
         {
-            _harmony.UnpatchAll();
+            _harmony.UnpatchAll(HarmonyId);
         }
 
         /// <summary>
         /// Load the SaberDecriptor / CustomTrail / EventManager classes
         /// from the CustomSaber namespace so they can be accessed in Saber Factory
         /// </summary>
-        private async Task<bool> LoadCSDescriptors()
+        private async Task<bool> LoadCsDescriptors()
         {
             try
             {

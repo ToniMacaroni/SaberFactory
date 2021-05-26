@@ -1,4 +1,6 @@
 ﻿using SaberFactory.Instances;
+using SaberFactory.Saving;
+using SiraUtil.Converters;
 using UnityEngine;
 
 namespace SaberFactory.Models
@@ -8,15 +10,29 @@ namespace SaberFactory.Models
     /// </summary>
     internal class TrailModel
     {
+        [MapSerialize]
         public Vector3 TrailPosOffset;
+
+        [MapSerialize]
         public float Width;
+
+        [MapSerialize]
         public int Length;
+
         public MaterialDescriptor Material;
+
+        [MapSerialize]
         public float Whitestep;
 
+        [MapSerialize]
         public string TrailOrigin;
+
+        [MapSerialize]
         public bool ClampTexture;
+
+        [MapSerialize]
         public bool Flip;
+
         public TextureWrapMode? OriginalTextureWrapMode;
 
         public TrailModel(

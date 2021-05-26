@@ -1,8 +1,10 @@
-﻿using CustomSaber;
+﻿using System.IO;
+using CustomSaber;
 using SaberFactory.DataStore;
 using SaberFactory.Helpers;
 using SaberFactory.Instances;
 using SaberFactory.Models.PropHandler;
+using SaberFactory.Saving;
 using UnityEngine;
 using Zenject;
 
@@ -50,6 +52,32 @@ namespace SaberFactory.Models.CustomSaber
         public CustomSaberModel(StoreAsset storeAsset) : base(storeAsset)
         {
             PropertyBlock = new CustomSaberPropertyBlock();
+        }
+
+        public override void OnLazyInit()
+        {
+            if (!HasTrail) return;
+            var trailModel = TrailModel;
+
+            var path = PathTools.ToFullPath(StoreAsset.RelativePath) + ".trail";
+            var trail = QuickSave.LoadObject<TrailProportions>(path);
+            if (trail == null) return;
+            trailModel.Length = trail.Length;
+            trailModel.Width = trail.Width;
+        }
+
+        public override void SaveAdditionalData()
+        {
+            if (!HasTrail) return;
+            var trailModel = TrailModel;
+
+            var path = PathTools.ToFullPath(StoreAsset.RelativePath) + ".trail";
+            var trail = new TrailProportions
+            {
+                Length = trailModel.Length,
+                Width = trailModel.Width
+            };
+            QuickSave.SaveObject(trail, path);
         }
 
         public override ModelMetaData GetMetaData()
@@ -130,5 +158,11 @@ namespace SaberFactory.Models.CustomSaber
         }
 
         internal class Factory : PlaceholderFactory<StoreAsset, CustomSaberModel> {}
+
+        internal class TrailProportions
+        {
+            public float Width;
+            public int Length;
+        }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using IPA.Utilities;
 
-namespace SaberFactory.Installers
+namespace SaberFactory
 {
     public struct SFDirectories
     {
@@ -13,7 +13,8 @@ namespace SaberFactory.Installers
         {
             var dirs = new SFDirectories();
             var baseDir = new DirectoryInfo(UnityGame.InstallPath);
-            dirs.SaberFactoryDir = baseDir.CreateSubdirectory("Saber Factory");
+            var userDataDir = new DirectoryInfo(UnityGame.UserDataPath);
+            dirs.SaberFactoryDir = userDataDir.CreateSubdirectory("Saber Factory");
             dirs.PresetDir = dirs.SaberFactoryDir.CreateSubdirectory("Presets");
             dirs.CustomSaberDir = baseDir.CreateSubdirectory("CustomSabers");
             return dirs;

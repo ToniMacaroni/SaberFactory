@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using CustomSaber;
 using SaberFactory.Helpers;
 using SaberFactory.Instances.Setters;
@@ -13,6 +14,7 @@ namespace SaberFactory.Instances.CustomSaber
     internal class CustomSaberInstance : BasePieceInstance
     {
         private readonly SiraLog _logger;
+
         public InstanceTrailData InstanceTrailData { get; private set; }
 
         public List<CustomTrail> SecondaryTrails;
