@@ -17,8 +17,6 @@ namespace SaberFactory.Editor
     /// </summary>
     internal class Editor : IInitializable, IDisposable
     {
-        public static Editor Instance;
-
         public bool IsActive { get; private set; }
 
         public bool IsSaberInHand
@@ -30,6 +28,8 @@ namespace SaberFactory.Editor
                 _editorInstanceManager.Refresh();
             }
         }
+
+        public static Editor Instance;
 
         private readonly SiraLog _logger;
         private readonly PluginConfig _pluginConfig;
@@ -95,19 +95,7 @@ namespace SaberFactory.Editor
 
             _pedestal.IsVisible = true;
 
-            if (_editorInstanceManager.CurrentModelComposition == null)
-            {
-                // TODO: Use Part or Custom Saber
-                var piece = _saberSet.LeftSaber.PieceCollection[AssetTypeDefinition.CustomSaber];
-                if (piece != null)
-                {
-                    _editorInstanceManager.SetModelComposition(piece.ModelComposition);
-                }
-            }
-            else
-            {
-                _editorInstanceManager.Refresh();
-            }
+            _editorInstanceManager.Refresh();
 
             _saberFactoryUi.Open();
 
@@ -155,7 +143,7 @@ namespace SaberFactory.Editor
 
             if (IsSaberInHand)
             {
-                _spawnedSaber.CreateTrail();
+                _spawnedSaber.CreateTrail(editor: true);
                 _saberGrabController.HideHandle();
             }
             else

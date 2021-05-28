@@ -1,5 +1,5 @@
-﻿using System;
-using SaberFactory.Helpers;
+﻿using SaberFactory.Helpers;
+using System;
 using UnityEngine;
 
 namespace SaberFactory.Instances.Trail

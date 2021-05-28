@@ -76,8 +76,8 @@ namespace SaberFactory.Instances.Trail
         public Color MyColor = Color.white;
         public Material MyMaterial;
         public static bool CapFps;
+        protected float TrailWidth => (PointStart.position - PointEnd.position).magnitude;
 
-        protected float _trailWidth;
         protected List<Element> _snapshotList = new List<Element>();
         protected ElementPool _elemPool;
         protected Spline _spline = new Spline();
@@ -91,7 +91,7 @@ namespace SaberFactory.Instances.Trail
 
         public Vector3 CurHeadPos => (PointStart.position + PointEnd.position) / 2f;
 
-        public void Setup(TrailInitData initData, Transform pointStart, Transform pointEnd, Material material)
+        public void Setup(TrailInitData initData, Transform pointStart, Transform pointEnd, Material material, bool editor)
         {
             PointStart = pointStart;
             PointEnd = pointEnd;
@@ -101,9 +101,9 @@ namespace SaberFactory.Instances.Trail
             Whitestep = initData.Whitestep;
 
             gameObject.layer = 12;
+            if(editor) SortingOrder = 3;
 
             _elemPool = new ElementPool(TrailLength);
-            _trailWidth = (PointStart.position - PointEnd.position).magnitude;
             _vertexPool = new VertexPool(MyMaterial, this);
             _vertexSegment = _vertexPool.GetVertices(Granularity * 3, (Granularity - 1) * 12);
             UpdateIndices();
@@ -200,8 +200,8 @@ namespace SaberFactory.Instances.Trail
                 var pos = _spline.InterpolateByLen(uvSegment);
 
                 var up = _spline.InterpolateNormalByLen(uvSegment);
-                var pos0 = pos + up.normalized * _trailWidth * 0.5f;
-                var pos1 = pos - up.normalized * _trailWidth * 0.5f;
+                var pos0 = pos + up.normalized * TrailWidth * 0.5f;
+                var pos1 = pos - up.normalized * TrailWidth * 0.5f;
 
                 Color color = MyColor;
 

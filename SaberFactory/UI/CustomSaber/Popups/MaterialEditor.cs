@@ -22,7 +22,7 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
 
         public async void Show(MaterialDescriptor materialDescriptor)
         {
-            _ = Create(true);
+            _ = Create(false);
             _cachedTransform.localScale = Vector3.zero;
 
             _materialDropDown.transform.parent.gameObject.SetActive(false);

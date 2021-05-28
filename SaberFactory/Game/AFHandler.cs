@@ -35,7 +35,7 @@ namespace SaberFactory.Game
             _assetLoader = assetLoader;
         }
 
-        public async Task Shoot(SFSaberModelController smc, SaberType saberType)
+        public async Task Shoot(SfSaberModelController smc, SaberType saberType)
         {
             _hasFired = true;
             await InitPosition(smc.transform, saberType==SaberType.SaberA?-0.1f:0.1f);

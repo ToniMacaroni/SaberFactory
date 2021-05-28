@@ -10,7 +10,7 @@ using Zenject;
 
 namespace SaberFactory.Installers
 {
-    internal class GameInstaller : Installer
+    internal class PluginGameInstaller : Installer
     {
         public override void InstallBindings()
         {

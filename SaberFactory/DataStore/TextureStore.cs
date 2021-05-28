@@ -3,7 +3,6 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using SaberFactory.Helpers;
-using SaberFactory.Installers;
 
 namespace SaberFactory.DataStore
 {

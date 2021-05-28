@@ -1,9 +1,6 @@
 ﻿using System.Threading.Tasks;
-using IPA.Utilities;
 using SaberFactory.Helpers;
 using UnityEngine;
-using VRUIControls;
-using Zenject;
 
 namespace SaberFactory.UI.Lib
 {

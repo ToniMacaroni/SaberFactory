@@ -12,11 +12,11 @@ namespace SaberFactory.Game
 {
     public class SFSaberProvider : IModelProvider
     {
-        public Type Type => typeof(SFSaberModelController);
+        public Type Type => typeof(SfSaberModelController);
         public int Priority => 300;
     }
 
-    internal class SFSaberModelController : SaberModelController, IColorable
+    internal class SfSaberModelController : SaberModelController, IColorable
     {
         [Inject] private readonly SiraLog _logger = null;
         [Inject] private readonly SaberSet _saberSet = null;
@@ -38,7 +38,7 @@ namespace SaberFactory.Game
 
             _saberInstance = _saberInstanceFactory.Create(saberModel);
             _saberInstance.SetParent(transform);
-            _saberInstance.CreateTrail(_saberTrail);
+            _saberInstance.CreateTrail(editor: false, backupTrail: _saberTrail);
             SetColor(_saberColor ?? _colorManager.ColorForSaberType(_saberInstance.Model.SaberSlot.ToSaberType()));
 
             if (_afHandler != null && AFHandler.IsValid && AFHandler.ShouldFire)

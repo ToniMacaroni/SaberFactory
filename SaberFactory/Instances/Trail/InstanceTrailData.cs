@@ -1,5 +1,4 @@
-﻿using System;
-using CustomSaber;
+﻿using CustomSaber;
 using SaberFactory.Helpers;
 using SaberFactory.Models;
 using SaberFactory.Models.CustomSaber;

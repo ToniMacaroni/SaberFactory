@@ -17,7 +17,7 @@ namespace SaberFactory.Instances.Trail
             _customTrail = customTrail;
         }
 
-        public void CreateTrail()
+        public void CreateTrail(bool editor)
         {
             if (_customTrail.PointStart == null || _customTrail.PointEnd == null)
             {
@@ -39,7 +39,8 @@ namespace SaberFactory.Instances.Trail
                 trailInitData,
                 _customTrail.PointStart,
                 _customTrail.PointEnd,
-                _customTrail.TrailMaterial
+                _customTrail.TrailMaterial,
+                editor
             );
 
             _canColorMaterial = IsMaterialColorable(_customTrail.TrailMaterial);

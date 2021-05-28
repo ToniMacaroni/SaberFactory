@@ -13,6 +13,7 @@ namespace SaberFactory.Instances.CustomSaber
     internal class CustomSaberInstance : BasePieceInstance
     {
         private readonly SiraLog _logger;
+
         public InstanceTrailData InstanceTrailData { get; private set; }
 
         public List<CustomTrail> SecondaryTrails;

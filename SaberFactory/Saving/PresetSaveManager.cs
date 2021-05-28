@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using SaberFactory.DataStore;
 using SaberFactory.Helpers;
-using SaberFactory.Installers;
 using SaberFactory.Models;
 using SaberFactory.Models.CustomSaber;
 using UnityEngine;
@@ -25,6 +24,9 @@ namespace SaberFactory.Saving
             _mainAssetStore = mainAssetStore;
             _textureStore = textureStore;
             _presetDir = sfDirs.PresetDir;
+
+            SerMapper.CreateEntry<TrailModel, SerializableTrail>();
+            SerMapper.CreateEntry<SaberModel, SerializableSaber>();
         }
 
         public void SaveSaber(SaberSet saberSet, string fileName)
@@ -33,14 +35,16 @@ namespace SaberFactory.Saving
             serializableSaberSet.SaberLeft = GetSerializableSaber(saberSet.LeftSaber);
             serializableSaberSet.SaberRight = GetSerializableSaber(saberSet.RightSaber);
             var file = _presetDir.GetFile(fileName);
-            File.WriteAllText(file.FullName, JsonConvert.SerializeObject(serializableSaberSet, Formatting.Indented));
+            QuickSave.SaveObject(serializableSaberSet, file.FullName);
         }
 
         private SerializableSaber GetSerializableSaber(SaberModel saberModel)
         {
+            if (saberModel == null) return null;
+
             var serializableSaber = new SerializableSaber();
 
-            serializableSaber.SaberWidth = saberModel.SaberWidth;
+            SerMapper.Map(saberModel, serializableSaber);
 
             var pieceList = new List<SerializablePiece>();
             foreach (BasePieceModel pieceModel in saberModel.PieceCollection)
@@ -54,13 +58,14 @@ namespace SaberFactory.Saving
             if (trailModel != null)
             {
                 var trail = new SerializableTrail();
-                trail.Length = trailModel.Length;
-                trail.Width = trailModel.Width;
-                trail.Whitestep = trailModel.Whitestep;
-                trail.TrailOrigin = trailModel.TrailOrigin;
-                trail.ClampTexture = trailModel.ClampTexture;
-                trail.Material = SerializableMaterial.FromMaterial(trailModel.Material.Material);
-                trail.Flip = trailModel.Flip;
+
+                SerMapper.Map(trailModel, trail);
+
+                if (trailModel.Material?.Material != null)
+                {
+                    trail.Material = SerializableMaterial.FromMaterial(trailModel.Material.Material);
+                }
+
                 serializableSaber.Trail = trail;
             }
 
@@ -81,7 +86,7 @@ namespace SaberFactory.Saving
 
         private async Task LoadSaberModel(SaberModel saberModel, SerializableSaber serializableSaber)
         {
-            saberModel.SaberWidth = serializableSaber.SaberWidth;
+            SerMapper.Map(serializableSaber, saberModel);
 
             if (_mainAssetStore.IsLoading) await _mainAssetStore.CurrentTask;
 
@@ -94,26 +99,16 @@ namespace SaberFactory.Saving
                 }
             }
 
-            TrailModel trailModel;
-
-            if (saberModel.GetCustomSaber(out var customsaber))
-            {
-                trailModel = customsaber.TrailModel;
-            }
-            else
-            {
-                trailModel = new TrailModel();
-            }
+            var trailModel
+                =saberModel.GetCustomSaber(out var customsaber)
+                ?customsaber.TrailModel
+                :new TrailModel();
 
             var trail = serializableSaber.Trail;
             if (trail != null)
             {
+                SerMapper.Map(trail, trailModel);
                 trailModel.TrailPosOffset = Vector3.zero;
-                trailModel.Width = trail.Width;
-                trailModel.Length = trail.Length;
-                trailModel.Whitestep = trail.Whitestep;
-                trailModel.ClampTexture = trail.ClampTexture;
-                trailModel.Flip = trail.Flip;
 
                 // if trail comes from another saber
                 if (!string.IsNullOrEmpty(trail.TrailOrigin))

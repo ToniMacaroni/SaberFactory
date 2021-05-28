@@ -80,9 +80,15 @@ namespace SaberFactory.UI.CustomSaber.Views
         private ToggleController _flipToggle;
         private bool _refreshButtonActive;
 
+        private bool _autoUpdateTrail;
+        private bool _dirty;
+        private float _time;
+
         [UIAction("#post-parse")]
         private void Setup()
         {
+            _autoUpdateTrail = _pluginConfig.AutoUpdateTrail;
+
             _lengthSlider = new SliderController(_lengthSliderSetting);
             _widthSlider = new SliderController(_widthSliderSetting);
             _whitestepSlider = new SliderController(_whitestepSliderSetting);
@@ -124,6 +130,7 @@ namespace SaberFactory.UI.CustomSaber.Views
         private void SetLength(RangeValuesTextSlider slider, float val)
         {
             _instanceTrailData.Length = (int) val;
+            _dirty = true;
             if (_refreshButtonActive)
             {
                 return;
@@ -154,7 +161,8 @@ namespace SaberFactory.UI.CustomSaber.Views
         private void SetFlip(bool flip)
         {
             _instanceTrailData.Flip = flip;
-            CreateTrail(_editorInstanceManager.CurrentSaber);
+            if (_refreshButtonActive) RefreshTrail();
+            else CreateTrail(_editorInstanceManager.CurrentSaber);
         }
 
         private void SetTrailModel(TrailModel trailModel)
@@ -209,6 +217,7 @@ namespace SaberFactory.UI.CustomSaber.Views
 
         private void CreateTrail(SaberInstance saberInstance)
         {
+            _dirty = false;
             _trailPreviewer.Destroy();
 
             RemoveControlEvents();
@@ -229,7 +238,7 @@ namespace SaberFactory.UI.CustomSaber.Views
 
             if (saberInstance.TrailHandler is {})
             {
-                CreateTrailHand(saberInstance, trailData);
+                CreateTrailHand(trailData);
                 RefreshButtonActive = true;
             }
             else
@@ -250,7 +259,7 @@ namespace SaberFactory.UI.CustomSaber.Views
             _trailPreviewer.SetColor(_playerDataModel.playerData.colorSchemesSettings.GetSelectedColorScheme().saberAColor);
         }
 
-        private void CreateTrailHand(SaberInstance saberInstance, InstanceTrailData trailData)
+        private void CreateTrailHand(InstanceTrailData trailData)
         {
             LoadFromModel(trailData);
 
@@ -269,6 +278,24 @@ namespace SaberFactory.UI.CustomSaber.Views
             }
 
             _editorInstanceManager.Refresh();
+        }
+
+        private void Update()
+        {
+            if (!_autoUpdateTrail) return;
+
+            if (_time < 0.3)
+            {
+                _time += Time.deltaTime;
+                return;
+            }
+
+            _time = 0;
+
+            if (!_dirty || _instanceTrailData == null || !_refreshButtonActive) return;
+            _dirty = false;
+
+            RefreshTrail();
         }
 
         private void UpdateProps()
@@ -303,7 +330,7 @@ namespace SaberFactory.UI.CustomSaber.Views
         private void RefreshTrail()
         {
             _editorInstanceManager.CurrentSaber.DestroyTrail();
-            _editorInstanceManager.CurrentSaber.CreateTrail();
+            _editorInstanceManager.CurrentSaber.CreateTrail(true);
             _editorInstanceManager.CurrentSaber.TrailHandler?.SetColor(_playerDataModel.playerData.colorSchemesSettings.GetSelectedColorScheme().saberAColor);
         }
 

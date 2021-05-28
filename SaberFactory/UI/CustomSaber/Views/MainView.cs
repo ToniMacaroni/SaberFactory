@@ -51,6 +51,8 @@ namespace SaberFactory.UI.CustomSaber.Views
                 _navViews.Add(navView.Category, navView);
             }
 
+            if(!switchToView) view.gameObject.SetActive(false);
+
             return view;
         }
     }

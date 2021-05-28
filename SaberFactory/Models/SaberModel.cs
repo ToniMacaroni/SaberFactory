@@ -1,4 +1,5 @@
 ﻿using SaberFactory.Models.CustomSaber;
+using SaberFactory.Saving;
 
 namespace SaberFactory.Models
 {
@@ -13,6 +14,7 @@ namespace SaberFactory.Models
 
         public readonly ESaberSlot SaberSlot;
 
+        [MapSerialize]
         public float SaberWidth = 1;
 
         public SaberModel(ESaberSlot saberSlot)

@@ -15,6 +15,8 @@ namespace SaberFactory.Models
         private readonly BasePieceModel _modelLeft;
         private readonly BasePieceModel _modelRight;
 
+        private bool _didLazyInit;
+
         public ModelComposition(AssetTypeDefinition definition, BasePieceModel modelLeft, BasePieceModel modelRight, GameObject additionalData)
         {
             AssetTypeDefinition = definition;
@@ -39,6 +41,19 @@ namespace SaberFactory.Models
                 _modelRight.AdditionalInstanceHandler = AdditionalInstanceHandler;
                 _modelRight.Init();
             }
+        }
+
+        public void LazyInit()
+        {
+            if (_didLazyInit || _modelLeft == null) return;
+            _didLazyInit = true;
+            _modelLeft.OnLazyInit();
+        }
+
+        public void SaveAdditionalData()
+        {
+            if (_modelLeft == null) return;
+            _modelLeft.SaveAdditionalData();
         }
 
         /// <summary>

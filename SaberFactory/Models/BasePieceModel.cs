@@ -23,6 +23,7 @@ namespace SaberFactory.Models
 
         public PiecePropertyBlock PropertyBlock;
 
+
         protected BasePieceModel(StoreAsset storeAsset)
         {
             StoreAsset = storeAsset;
@@ -31,6 +32,10 @@ namespace SaberFactory.Models
         public virtual void Init()
         {
         }
+
+        public virtual void OnLazyInit() {}
+
+        public virtual void SaveAdditionalData() { }
 
         public virtual ModelMetaData GetMetaData()
         {
