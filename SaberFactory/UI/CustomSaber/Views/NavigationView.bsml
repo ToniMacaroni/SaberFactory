@@ -1,4 +1,4 @@
-﻿<vertical spacing='2' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+﻿<vertical spacing='0.5' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
           xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
 
   <vertical pref-width='16' background='round-rect-panel' bg-color='#666666bb' pad='2'>

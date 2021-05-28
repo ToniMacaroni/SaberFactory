@@ -1,26 +1,16 @@
 ﻿using System;
-using System.Collections;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using HMUI;
 using SaberFactory.Editor;
 using SaberFactory.Models;
 using SaberFactory.UI;
 using SaberFactory.UI.CustomSaber;
 using SaberFactory.UI.Lib;
 using SaberFactory.UI.Lib.BSML;
-using SiraUtil;
 using UnityEngine;
-using UnityEngine.Rendering;
-using VRUIControls;
 using Zenject;
-using Object = UnityEngine.Object;
 
 namespace SaberFactory.Installers
 {
-    internal class MenuInstaller : Installer
+    internal class PluginMenuInstaller : Installer
     {
         public override void InstallBindings()
         {

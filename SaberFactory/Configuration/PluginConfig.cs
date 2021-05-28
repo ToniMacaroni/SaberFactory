@@ -3,7 +3,6 @@ using System.Runtime.CompilerServices;
 using IPA.Config.Stores;
 using IPA.Config.Stores.Attributes;
 using IPA.Config.Stores.Converters;
-using SiraUtil.Converters;
 
 [assembly: InternalsVisibleTo(GeneratedStore.AssemblyVisibilityTarget)]
 namespace SaberFactory.Configuration
@@ -30,10 +29,6 @@ namespace SaberFactory.Configuration
 
         public bool AnimateSaberSelection { get; set; } = true;
 
-        // Should the mod create a CustomSaber folder
-        // in the Beat Saber directory
-        public bool CreateCustomSabersFolder { get; set; } = true;
-
         // How far does the trail width slider go
         public float TrailWidthMax { get; set; } = 1;
 
@@ -43,6 +38,8 @@ namespace SaberFactory.Configuration
         public bool ShowAdvancedTrailSettings { get; set; } = false;
 
         public bool ShowDownloadableSabers { get; set; } = true;
+
+        public bool AutoUpdateTrail { get; set; } = true;
 
         // How many threads to spawn when loading all sabers
         // ! Not used as of right now !

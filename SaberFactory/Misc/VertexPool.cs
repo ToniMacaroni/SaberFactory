@@ -71,18 +71,17 @@ namespace SaberFactory.Misc {
             GameObject obj = new GameObject("SaberTrail");
             obj.layer = owner.gameObject.layer;
             obj.AddComponent<MeshFilter>();
-            obj.AddComponent<MeshRenderer>();
+            var meshrenderer = obj.AddComponent<MeshRenderer>();
 
             obj.transform.position = Vector3.zero;
             obj.transform.rotation = Quaternion.identity;
 
             _meshFilter = (MeshFilter)obj.GetComponent(typeof(MeshFilter));
-            var Meshrenderer = (MeshRenderer)obj.GetComponent(typeof(MeshRenderer));
-            Meshrenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-            Meshrenderer.receiveShadows = false;
-            Meshrenderer.GetComponent<Renderer>().sharedMaterial = material;
-            Meshrenderer.sortingLayerName = _owner.SortingLayerName;
-            Meshrenderer.sortingOrder = _owner.SortingOrder;
+            meshrenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+            meshrenderer.receiveShadows = false;
+            meshrenderer.GetComponent<Renderer>().sharedMaterial = material;
+            meshrenderer.sortingLayerName = _owner.SortingLayerName;
+            meshrenderer.sortingOrder = _owner.SortingOrder;
             _meshFilter.sharedMesh = new Mesh();
         }
 

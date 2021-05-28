@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using SaberFactory.DataStore;
 using SaberFactory.Helpers;
-using SaberFactory.Installers;
 using SaberFactory.Models;
 using SaberFactory.Models.CustomSaber;
 using UnityEngine;
-using Debug = UnityEngine.Debug;
 
 namespace SaberFactory.Saving
 {
@@ -43,6 +40,8 @@ namespace SaberFactory.Saving
 
         private SerializableSaber GetSerializableSaber(SaberModel saberModel)
         {
+            if (saberModel == null) return null;
+
             var serializableSaber = new SerializableSaber();
 
             SerMapper.Map(saberModel, serializableSaber);
@@ -61,7 +60,11 @@ namespace SaberFactory.Saving
                 var trail = new SerializableTrail();
 
                 SerMapper.Map(trailModel, trail);
-                trail.Material = SerializableMaterial.FromMaterial(trailModel.Material.Material);
+
+                if (trailModel.Material?.Material != null)
+                {
+                    trail.Material = SerializableMaterial.FromMaterial(trailModel.Material.Material);
+                }
 
                 serializableSaber.Trail = trail;
             }

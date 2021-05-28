@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace SaberFactory.Saving
+namespace SaberFactory.Saving.Converters.SerializableTypes
 {
     internal class SerializableColor
     {

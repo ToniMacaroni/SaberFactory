@@ -9,17 +9,16 @@ using SaberFactory.Saving;
 using SiraUtil;
 using System.Linq;
 using SaberFactory.Instances.Trail;
-using SaberFactory.UI.Lib.BSML;
 using Zenject;
 
 namespace SaberFactory.Installers
 {
-    internal class AppInstaller : Installer
+    internal class PluginAppInstaller : Installer
     {
         private readonly Logger _logger;
         private readonly PluginConfig _config;
 
-        private AppInstaller(Logger logger, PluginConfig config)
+        private PluginAppInstaller(Logger logger, PluginConfig config)
         {
             _logger = logger;
             _config = config;

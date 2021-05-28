@@ -16,7 +16,6 @@ using SaberFactory.UI.CustomSaber.CustomComponents;
 using SaberFactory.UI.CustomSaber.Popups;
 using SaberFactory.UI.Lib;
 using Zenject;
-using Debug = UnityEngine.Debug;
 
 
 namespace SaberFactory.UI.CustomSaber.Views

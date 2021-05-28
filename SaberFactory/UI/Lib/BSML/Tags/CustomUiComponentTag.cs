@@ -2,7 +2,6 @@
 using BeatSaberMarkupLanguage.Tags;
 using HMUI;
 using SaberFactory.Helpers;
-using SiraUtil.Tools;
 using UnityEngine;
 using UnityEngine.UI;
 

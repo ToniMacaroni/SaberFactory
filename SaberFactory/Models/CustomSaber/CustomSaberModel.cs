@@ -1,5 +1,4 @@
-﻿using System.IO;
-using CustomSaber;
+﻿using CustomSaber;
 using SaberFactory.DataStore;
 using SaberFactory.Helpers;
 using SaberFactory.Instances;

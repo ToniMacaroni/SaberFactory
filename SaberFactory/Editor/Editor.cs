@@ -17,8 +17,6 @@ namespace SaberFactory.Editor
     /// </summary>
     internal class Editor : IInitializable, IDisposable
     {
-        public static Editor Instance;
-
         public bool IsActive { get; private set; }
 
         public bool IsSaberInHand
@@ -30,6 +28,8 @@ namespace SaberFactory.Editor
                 _editorInstanceManager.Refresh();
             }
         }
+
+        public static Editor Instance;
 
         private readonly SiraLog _logger;
         private readonly PluginConfig _pluginConfig;
@@ -143,7 +143,7 @@ namespace SaberFactory.Editor
 
             if (IsSaberInHand)
             {
-                _spawnedSaber.CreateTrail();
+                _spawnedSaber.CreateTrail(editor: true);
                 _saberGrabController.HideHandle();
             }
             else

@@ -1,4 +1,4 @@
-﻿<bg size-delta-x="0" bg="round-rect-panel" bg-color="#555" border="true" raycast="true" xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
+﻿<bg size-delta-x="0" bg="round-rect-panel" bg-color="#777" border="true" raycast="true" xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
 	<vertical>
 		<dropdown-list-setting id='material-dropdown' text='Material' options='materials'/>
 		<!--<dropdown-list-setting id='shader-dropdown' text='Shader' options='shaders'/>-->

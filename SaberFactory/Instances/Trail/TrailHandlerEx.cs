@@ -24,7 +24,7 @@ namespace SaberFactory.Instances.Trail
             _backupTrail = backupTrail;
         }
 
-        public void CreateTrail(TrailConfig trailConfig)
+        public void CreateTrail(TrailConfig trailConfig, bool editor)
         {
             if (_instanceTrailData is null)
             {
@@ -47,7 +47,7 @@ namespace SaberFactory.Instances.Trail
                     Granularity = trailConfig.Granularity
                 };
 
-                TrailInstance.Setup(trailInitDataVanilla, trailStart.transform, trailEnd.transform, material);
+                TrailInstance.Setup(trailInitDataVanilla, trailStart.transform, trailEnd.transform, material, editor);
                 return;
             }
 
@@ -71,7 +71,8 @@ namespace SaberFactory.Instances.Trail
                 trailInitData,
                 pointStart,
                 pointEnd,
-                _instanceTrailData.Material.Material
+                _instanceTrailData.Material.Material,
+                editor
             );
 
             _canColorMaterial = IsMaterialColorable(_instanceTrailData.Material.Material);

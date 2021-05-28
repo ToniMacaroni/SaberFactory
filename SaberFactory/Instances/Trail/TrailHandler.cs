@@ -29,7 +29,7 @@ namespace SaberFactory.Instances.Trail
             _backupTrail = backupTrail;
         }
 
-        public void CreateTrail(TrailConfig trailConfig)
+        public void CreateTrail(TrailConfig trailConfig, bool editor)
         {
             if (_instanceTrailData is null)
             {

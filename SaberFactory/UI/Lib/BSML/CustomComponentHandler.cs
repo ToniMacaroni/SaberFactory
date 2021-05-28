@@ -8,7 +8,6 @@ using BeatSaberMarkupLanguage.Tags;
 using BeatSaberMarkupLanguage.TypeHandlers;
 using SaberFactory.UI.Lib.BSML.Tags;
 using SiraUtil.Tools;
-using UnityEngine;
 using Zenject;
 
 namespace SaberFactory.UI.Lib.BSML

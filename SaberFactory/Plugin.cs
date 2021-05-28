@@ -2,20 +2,13 @@
 using IPA;
 using IPA.Config;
 using IPA.Config.Stores;
-using IPA.Utilities;
 using SaberFactory.Configuration;
 using SaberFactory.Installers;
 using SiraUtil.Zenject;
-using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 using HarmonyLib;
-using IPA.Config.Data;
-using IPA.Config.Stores.Attributes;
 using SaberFactory.Helpers;
-using SiraUtil.Converters;
-using UnityEngine;
-using UnityEngine.UI;
 using IPALogger = IPA.Logging.Logger;
 
 namespace SaberFactory
@@ -38,18 +31,11 @@ namespace SaberFactory
 
             var pluginConfig = conf.Generated<PluginConfig>();
 
-            // Only create the folder if it's enabled
-            // since some people don't want to have the folder in the top game directory
-            if (pluginConfig.CreateCustomSabersFolder)
-            {
-                Directory.CreateDirectory(Path.Combine(UnityGame.InstallPath, "CustomSabers"));
-            }
-
             if(!await LoadCsDescriptors()) return;
 
-            zenjector.OnApp<AppInstaller>().WithParameters(logger, pluginConfig);
-            zenjector.OnMenu<Installers.MenuInstaller>();
-            zenjector.OnGame<GameInstaller>(false);
+            zenjector.OnApp<PluginAppInstaller>().WithParameters(logger, pluginConfig);
+            zenjector.OnMenu<PluginMenuInstaller>();
+            zenjector.OnGame<PluginGameInstaller>(false);
         }
 
         [OnEnable]

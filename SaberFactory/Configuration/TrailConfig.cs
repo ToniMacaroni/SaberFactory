@@ -2,7 +2,6 @@
 using System.IO;
 using Newtonsoft.Json;
 using SaberFactory.Helpers;
-using SaberFactory.Installers;
 using Zenject;
 
 namespace SaberFactory.Configuration

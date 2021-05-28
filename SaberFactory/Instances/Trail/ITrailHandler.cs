@@ -5,7 +5,7 @@ namespace SaberFactory.Instances.Trail
 {
     internal interface ITrailHandler
     {
-        public void CreateTrail(TrailConfig config);
+        public void CreateTrail(TrailConfig config, bool editor);
 
         public void DestroyTrail();
 

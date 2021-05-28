@@ -97,7 +97,7 @@ namespace SaberFactory.Instances
             _instanceTrailData = default;
         }
 
-        public void CreateTrail(SaberTrail backupTrail = null)
+        public void CreateTrail(bool editor, SaberTrail backupTrail = null)
         {
             var trailData = GetTrailData(out var secondaryTrails);
 
@@ -106,7 +106,7 @@ namespace SaberFactory.Instances
                 if (backupTrail is {})
                 {
                     TrailHandler = new TrailHandlerEx(GameObject, backupTrail);
-                    TrailHandler.CreateTrail(_trailConfig);
+                    TrailHandler.CreateTrail(_trailConfig, editor);
                 }
 
                 return;
@@ -114,7 +114,7 @@ namespace SaberFactory.Instances
 
             TrailHandler = new TrailHandlerEx(GameObject);
             TrailHandler.SetTrailData(trailData);
-            TrailHandler.CreateTrail(_trailConfig);
+            TrailHandler.CreateTrail(_trailConfig, editor);
 
             if (secondaryTrails is { })
             {
@@ -122,7 +122,7 @@ namespace SaberFactory.Instances
                 foreach (var customTrail in secondaryTrails)
                 {
                     var handler = new CustomSaberTrailHandler(GameObject, customTrail);
-                    handler.CreateTrail();
+                    handler.CreateTrail(editor);
                     _secondaryTrails.Add(handler);
                 }
             }

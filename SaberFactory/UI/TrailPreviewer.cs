@@ -60,6 +60,7 @@ namespace SaberFactory.UI
             _transform = _instance.transform;
             _renderer = _instance.GetComponentInChildren<Renderer>();
             _mesh = _instance.GetComponentInChildren<MeshFilter>().sharedMesh;
+            _renderer.sortingOrder = 3;
 
             Material = trailData.Material.Material;
             Length = trailData.Length;
