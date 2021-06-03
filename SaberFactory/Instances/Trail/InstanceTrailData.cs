@@ -113,7 +113,7 @@ namespace SaberFactory.Instances.Trail
         public (Transform start, Transform end) GetPoints()
         {
             var pointStart = _isTrailReversed ? PointEnd : PointStart;
-            var pointEnd = _isTrailReversed ? pointStart : PointEnd;
+            var pointEnd = _isTrailReversed ? PointStart : PointEnd;
 
             return (Flip ? pointEnd : pointStart, Flip ? pointStart : pointEnd);
         }
