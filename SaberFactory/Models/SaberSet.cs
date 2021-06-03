@@ -111,6 +111,7 @@ namespace SaberFactory.Models
         {
             CurrentLoadingTask = _presetSaveManager.LoadSaber(this, fileName);
             await CurrentLoadingTask;
+            CurrentLoadingTask = null;
         }
 
         public void Sync(SaberModel fromModel)

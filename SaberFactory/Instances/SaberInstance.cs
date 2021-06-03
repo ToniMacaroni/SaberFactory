@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using CustomSaber;
 using SaberFactory.Configuration;
 using SaberFactory.Helpers;
@@ -14,16 +15,19 @@ namespace SaberFactory.Instances
     /// <summary>
     /// Class for managing an instance of a saber <seealso cref="SaberModel"/>
     /// </summary>
-    internal class SaberInstance
+    public class SaberInstance
     {
-        public ITrailHandler TrailHandler { get; private set; }
+        internal event Action OnDestroyed;
 
-        public readonly SaberModel Model;
+        internal ITrailHandler TrailHandler { get; private set; }
+
+        internal readonly SaberModel Model;
         public readonly GameObject GameObject;
         public readonly Transform CachedTransform;
 
-        public readonly PieceCollection<BasePieceInstance> PieceCollection;
-        public List<PartEvents> Events { get; private set; }
+        internal readonly PieceCollection<BasePieceInstance> PieceCollection;
+
+        internal List<PartEvents> Events { get; private set; }
 
         private readonly SiraLog _logger;
         private readonly TrailConfig _trailConfig;
@@ -37,7 +41,10 @@ namespace SaberFactory.Instances
             _trailConfig = trailConfig;
 
             Model = model;
+
             GameObject = new GameObject("SF Saber");
+            GameObject.AddComponent<SaberMonoBehaviour>().Init(OnSaberGameObjectDestroyed);
+
             CachedTransform = GameObject.transform;
 
             PieceCollection = new PieceCollection<BasePieceInstance>();
@@ -89,7 +96,7 @@ namespace SaberFactory.Instances
             }
         }
 
-        public void SetupTrailData()
+        private void SetupTrailData()
         {
             if (GetCustomSaber(out var customsaber)) return;
 
@@ -143,6 +150,12 @@ namespace SaberFactory.Instances
         public void Destroy()
         {
             GameObject.TryDestroy();
+            OnDestroyed?.Invoke();
+        }
+
+        private void OnSaberGameObjectDestroyed()
+        {
+            DestroyTrail();
         }
 
         private bool GetCustomSaber(out CustomSaberInstance customSaberInstance)
@@ -157,7 +170,7 @@ namespace SaberFactory.Instances
             return false;
         }
 
-        public InstanceTrailData GetTrailData(out List<CustomTrail> secondaryTrails)
+        internal InstanceTrailData GetTrailData(out List<CustomTrail> secondaryTrails)
         {
             secondaryTrails = null;
             if (GetCustomSaber(out var customsaber))
@@ -176,5 +189,20 @@ namespace SaberFactory.Instances
         }
 
         internal class Factory : PlaceholderFactory<SaberModel, SaberInstance> {}
+
+        internal class SaberMonoBehaviour : MonoBehaviour
+        {
+            private Action _onDestroyed;
+
+            public void Init(Action onDestroyedCallback)
+            {
+                _onDestroyed = onDestroyedCallback;
+            }
+
+            private void OnDestroy()
+            {
+                _onDestroyed?.Invoke();
+            }
+        }
     }
 }
