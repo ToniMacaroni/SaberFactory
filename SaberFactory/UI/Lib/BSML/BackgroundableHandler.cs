@@ -6,6 +6,7 @@ using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Parser;
 using BeatSaberMarkupLanguage.TypeHandlers;
 using HMUI;
+using IPA.Utilities;
 using SaberFactory.Helpers;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,6 +21,7 @@ namespace SaberFactory.UI.Lib.BSML
         {
             { "border", new[]{ "border" } },
             { "raycast", new[]{ "raycast", "block" } },
+            { "skew", new[]{"skew"}}
         };
 
         public override Dictionary<string, Action<Backgroundable, string>> Setters => new Dictionary<string, Action<Backgroundable, string>>();
@@ -42,6 +44,14 @@ namespace SaberFactory.UI.Lib.BSML
                 if (backgroundable.background != null)
                 {
                     backgroundable.background.raycastTarget = bool.Parse(raycastAttr);
+                }
+            }
+
+            if (componentType.data.TryGetValue("skew", out var skew))
+            {
+                if (backgroundable.background is ImageView imageView)
+                {
+                    imageView.SetSkew(float.Parse(skew));
                 }
             }
         }

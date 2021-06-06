@@ -2,10 +2,10 @@
 	
 	<vertical bg="round-rect-panel" bg-color="#999" pad="2" vertical-fit="PreferredSize">
 
-		<horizontal pad='2' bg='round-rect-panel' bg-color='#ffffffdd'>
+		<horizontal pad='2' bg='panel-top' skew='0' bg-color='#00b6ff40'>
 			<checkbox text='Saber Factory Enabled' value='mod-enabled' apply-on-change='true' />
 		</horizontal>
-		<vertical pad='2' bg='round-rect-panel' bg-color='#00000050'>
+		<vertical pad='2' bg='round-rect-panel' bg-color='#00000050' spacing='1'>
 			<checkbox text='Enable Events' value='events-enabled' apply-on-change='true'
 			          hover-hint='Enable events on the saber (like fc effects)'/>
 			<checkbox text='Random Sabers' value='random-sabers' apply-on-change='true'
@@ -14,11 +14,12 @@
 			          hover-hint='Use your own saber instead of the one dictated by the song'/>
 			<checkbox text='Animate Saber Selection' value='animate-saber-selection' apply-on-change='true'
 			          hover-hint='Animate the saber appearing on the pedestal'/>
+      <text text='More settings in "Beat Saber\UserData\Saber Factory.json"' align='Center' font-color='#ffffff60'></text>
 		</vertical>
 
 
 
-		<horizontal bg='round-rect-panel' bg-color='#ffffffdd' pad='2'>
+		<horizontal bg='panel-top' skew='0' bg-color='#00b6ff20' pad='2'>
 			<sui.icon-button
 				pad='1'
 				pref-width='15'

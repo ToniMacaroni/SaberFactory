@@ -94,11 +94,14 @@ namespace SaberFactory.Instances.CustomSaber
 
                 foreach (Material renderMaterial in renderer.materials)
                 {
-                    if (renderMaterial is null || !renderMaterial.HasProperty(MaterialProperties.MainColor))
+                    if (renderMaterial is null ||
+                        !renderMaterial.HasProperty(MaterialProperties.MainColor))
                     {
                         continue;
                     }
 
+                    // always color materials if "_CustomColors" is 1
+                    // if "_CustomColors" is present but != 1 don't color the material at all
                     if (renderMaterial.TryGetFloat(MaterialProperties.CustomColors, out var val))
                     {
                         if (val > 0)
@@ -106,6 +109,7 @@ namespace SaberFactory.Instances.CustomSaber
                             materials.Add(renderMaterial);
                         }
                     }
+                    //if "_CustomColors" isn't present check for glow > 1 and bloom > 1
                     else if (renderMaterial.TryGetFloat(MaterialProperties.Glow, out val) && val > 0)
                     {
                         materials.Add(renderMaterial);

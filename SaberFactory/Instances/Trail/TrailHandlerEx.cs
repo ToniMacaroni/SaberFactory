@@ -77,7 +77,10 @@ namespace SaberFactory.Instances.Trail
                 editor
             );
 
-            _canColorMaterial = IsMaterialColorable(_instanceTrailData.Material.Material);
+            if (!trailConfig.OnlyUseVertexColor)
+            {
+                _canColorMaterial = IsMaterialColorable(_instanceTrailData.Material.Material);
+            }
         }
 
         public void DestroyTrail()
