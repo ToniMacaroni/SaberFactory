@@ -1,13 +1,17 @@
 ﻿using System;
 using BeatSaberMarkupLanguage.Attributes;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using BeatSaberMarkupLanguage.Components.Settings;
+using SaberFactory.Helpers;
 using SaberFactory.Instances;
 using SaberFactory.UI.Lib;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.Windows.WebCam;
+using Debug = UnityEngine.Debug;
 
 
 namespace SaberFactory.UI.CustomSaber.CustomComponents
@@ -16,9 +20,6 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
     {
         [UIComponent("material-dropdown")] private readonly DropDownListSetting _materialDropDown = null;
         [UIComponent("prop-list")] private readonly PropList _propList = null;
-
-        [UIValue("materials")] private List<object> _materials = new List<object>();
-        [UIValue("shaders")] private List<object> _shaders = new List<object>();
 
         public async void Show(MaterialDescriptor materialDescriptor)
         {
@@ -53,22 +54,34 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
         {
             var props = new List<PropertyDescriptor>();
 
-            var shader = material.shader;
-            var propCount = shader.GetPropertyCount();
+            var spi = new ShaderPropertyInfo(material.shader);
 
-            for (int i = 0; i < propCount; i++)
+            foreach (var prop in spi.GetAll())
             {
-                var propName = shader.GetPropertyDescription(i);
-                var propId = shader.GetPropertyNameId(i);
-                var propType = shader.GetPropertyType(i);
-                var type = GetTypeFromShaderType(propType);
-                if (type == EPropertyType.Unhandled) continue;
+                EPropertyType type;
 
-                var propObject = GetPropObject(propType, propId, material);
-                var callback = ConstructCallback(propType, propId, material);
+                if (prop.Attributes.Contains("MaterialToggle") || prop.Name == "_CustomColors")
+                {
+                    var floatProp = (ShaderPropertyInfo.ShaderFloat)prop;
+                    type = EPropertyType.Bool;
+                    var propObject = floatProp.GetValue(material) > 0;
 
-                var cell = new PropertyDescriptor(propName, type, propObject, callback);
-                props.Add(cell);
+                    void Callback(object obj)
+                    {
+                        material.SetFloat(prop.PropId, obj.Cast<bool>()?1:0);
+                    }
+
+                    props.Add(new PropertyDescriptor(prop.Description, type, propObject, Callback));
+                }
+                else
+                {
+                    type = GetTypeFromShaderType(prop.Type);
+                    if (type == EPropertyType.Unhandled) continue;
+                    var propObject = GetPropObject(prop.Type, prop.PropId, material);
+                    var callback = ConstructCallback(prop.Type, prop.PropId, material);
+
+                    props.Add(new PropertyDescriptor(prop.Description, type, propObject, callback));
+                }
             }
 
             _propList.SetItems(props);

@@ -40,6 +40,8 @@ namespace SaberFactory.Installers
             Container.BindInterfacesAndSelfTo<SaberFactoryMenuButton>().AsSingle();
 
             Container.Bind<TrailPreviewer>().AsSingle();
+
+            Container.Bind<MenuSaberProvider>().AsSingle();
         }
 
         private void BindRemoteSabers()

@@ -12,6 +12,8 @@ namespace SaberFactory.Configuration
 
         public int SamplingFrequency { get; set; } = 90;
 
+        public bool OnlyUseVertexColor { get; set; } = true;
+
         private readonly FileInfo _configFile;
 
         public TrailConfig(SFDirectories sfDirs)
@@ -27,7 +29,7 @@ namespace SaberFactory.Configuration
 
         public void Save()
         {
-            _configFile.WriteText(JsonConvert.SerializeObject(this));
+            _configFile.WriteText(JsonConvert.SerializeObject(this, Formatting.Indented));
         }
 
         public void Revert()

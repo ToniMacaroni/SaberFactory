@@ -51,6 +51,8 @@ namespace SaberFactory.Instances.Trail
                 return;
             }
 
+            if (_instanceTrailData.Length < 1) return;
+
             var trailInitData = new TrailInitData
             {
                 TrailColor = Color.white,
@@ -75,7 +77,10 @@ namespace SaberFactory.Instances.Trail
                 editor
             );
 
-            _canColorMaterial = IsMaterialColorable(_instanceTrailData.Material.Material);
+            if (!trailConfig.OnlyUseVertexColor)
+            {
+                _canColorMaterial = IsMaterialColorable(_instanceTrailData.Material.Material);
+            }
         }
 
         public void DestroyTrail()

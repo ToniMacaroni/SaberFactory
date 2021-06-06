@@ -3,7 +3,7 @@
 	<vertical id='main-container' bg='round-rect-panel' bg-color='#999' child-align='MiddleCenter'
 	          child-expand-height='false' child-control-height='false' spacing='2' pad='3'>
 
-    <vertical bg='round-rect-panel' bg-color='#ffffffdd' pad='2' vertical-fit='PreferredSize'>
+    <vertical bg='panel-top' skew='0' bg-color='#00b6ff40' pad='2' vertical-fit='PreferredSize'>
       <slider-setting id='length-slider' text='Length' get-event='update-props' apply-on-change='true' integer-only='true'
                           min='0' max='30' />
 
@@ -22,7 +22,7 @@
                 hover-hint='Enable this if you see lines on the border of the trail' />
     </vertical>
 
-    <horizontal pad='2' spacing='4' id='advanced-container' bg='round-rect-panel' bg-color='#ffffffdd'>
+    <horizontal pad='2' spacing='4' id='advanced-container' bg='panel-top' skew='0' bg-color='#00b6ff20'>
 			<vertical pref-width='70'>
 				<slider-setting get-event='get-advanced' text='Granularity' value='granularity-value' apply-on-change='true' min='0'
 				                max='300' integer-only='true' />

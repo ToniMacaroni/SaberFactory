@@ -70,7 +70,6 @@ namespace SaberFactory.UI.Lib.BSML.Components
 
             public override void HandleType(BSMLParser.ComponentTypeWithData componentType, BSMLParserParams parserParams)
             {
-                Debug.LogError("Handler handling stuff");
                 base.HandleType(componentType, parserParams);
                 ButtonCollection buttonCollection = (componentType.component as ButtonCollection);
                 buttonCollection.SetTexts(new []{"t1", "t2", "t3"});

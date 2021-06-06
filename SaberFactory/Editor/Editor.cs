@@ -38,6 +38,7 @@ namespace SaberFactory.Editor
         private readonly SaberSet _saberSet;
         private readonly PlayerDataModel _playerDataModel;
         private readonly SaberGrabController _saberGrabController;
+        private readonly MenuSaberProvider _menuSaberProvider;
 
         private readonly Pedestal _pedestal;
         private readonly SFLogoAnim _sfLogoAnim;
@@ -53,7 +54,8 @@ namespace SaberFactory.Editor
             EmbeddedAssetLoader embeddedAssetLoader,
             SaberSet saberSet,
             PlayerDataModel playerDataModel,
-            SaberGrabController saberGrabController)
+            SaberGrabController saberGrabController,
+            MenuSaberProvider menuSaberProvider)
         {
             _logger = logger;
             _pluginConfig = pluginConfig;
@@ -62,6 +64,7 @@ namespace SaberFactory.Editor
             _saberSet = saberSet;
             _playerDataModel = playerDataModel;
             _saberGrabController = saberGrabController;
+            _menuSaberProvider = menuSaberProvider;
 
             _pedestal = new Pedestal(embeddedAssetLoader);
             _sfLogoAnim = new SFLogoAnim(embeddedAssetLoader);
@@ -107,6 +110,8 @@ namespace SaberFactory.Editor
 
             _saberFactoryUi.OnClosePressed += Close;
 
+            _menuSaberProvider.RequestSaberVisiblity(false);
+
             _isFirstActivation = false;
         }
 
@@ -131,6 +136,8 @@ namespace SaberFactory.Editor
             _saberFactoryUi.OnClosePressed -= Close;
 
             _saberGrabController.ShowHandle();
+
+            _menuSaberProvider.RequestSaberVisiblity(true);
         }
 
         private async void OnModelCompositionSet(ModelComposition composition)
