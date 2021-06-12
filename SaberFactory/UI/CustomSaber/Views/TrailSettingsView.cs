@@ -73,6 +73,12 @@ namespace SaberFactory.UI.CustomSaber.Views
             }
         }
 
+        private bool UseVertexColorOnly
+        {
+            get => _trailConfig.OnlyUseVertexColor;
+            set => _trailConfig.OnlyUseVertexColor = value;
+        }
+
         private SliderController _lengthSlider;
         private SliderController _widthSlider;
         private SliderController _whitestepSlider;

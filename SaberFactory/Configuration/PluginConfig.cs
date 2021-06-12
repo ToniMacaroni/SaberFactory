@@ -41,6 +41,8 @@ namespace SaberFactory.Configuration
 
         public bool AutoUpdateTrail { get; set; } = true;
 
+        public bool ShowGameplaySettingsButton { get; set; } = true;
+
         // How many threads to spawn when loading all sabers
         // ! Not used as of right now !
         [Ignore]

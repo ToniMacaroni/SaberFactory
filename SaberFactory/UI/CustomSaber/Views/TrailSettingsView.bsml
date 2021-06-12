@@ -20,6 +20,9 @@
 
       <checkbox id='clamp-checkbox' text='Clamp Texture' apply-on-change='true'
                 hover-hint='Enable this if you see lines on the border of the trail' />
+
+      <checkbox text='Use Vertex Color Only' value='UseVertexColorOnly' apply-on-change='true'
+                hover-hint='if disabled sets both _Color of the material and vertex color' />
     </vertical>
 
     <horizontal pad='2' spacing='4' id='advanced-container' bg='panel-top' skew='0' bg-color='#00b6ff20'>
