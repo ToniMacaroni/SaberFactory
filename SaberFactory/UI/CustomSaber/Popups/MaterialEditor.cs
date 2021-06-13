@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 using BeatSaberMarkupLanguage.Components.Settings;
 using SaberFactory.Helpers;
 using SaberFactory.Instances;
+using SaberFactory.UI.CustomSaber.CustomComponents;
 using SaberFactory.UI.Lib;
 using UnityEngine;
 using UnityEngine.Rendering;
-using UnityEngine.Windows.WebCam;
 using Debug = UnityEngine.Debug;
 
 
-namespace SaberFactory.UI.CustomSaber.CustomComponents
+namespace SaberFactory.UI.CustomSaber.Popups
 {
     internal class MaterialEditor : Popup
     {
@@ -23,6 +23,12 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
 
         public async void Show(MaterialDescriptor materialDescriptor)
         {
+            if (materialDescriptor == null || materialDescriptor.Material == null)
+            {
+                Debug.LogError("Material was null in MaterialEditor");
+                return;
+            }
+
             _ = Create(false);
             _cachedTransform.localScale = Vector3.zero;
 

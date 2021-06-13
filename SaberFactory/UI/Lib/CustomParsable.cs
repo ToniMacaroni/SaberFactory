@@ -11,11 +11,11 @@ namespace SaberFactory.UI.Lib
     {
         public BSMLParserParams ParserParams { get; private set; }
 
-        protected string _resourceName => string.Join(".", GetType().Namespace, GetType().Name);
+        protected string ResourceName => string.Join(".", GetType().Namespace, GetType().Name);
 
         public virtual void Parse()
         {
-            ParserParams = UIHelpers.ParseFromResource(_resourceName, gameObject, this);
+            ParserParams = UIHelpers.ParseFromResource(ResourceName, gameObject, this);
         }
 
         public void Unparse()

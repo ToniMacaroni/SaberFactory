@@ -85,6 +85,13 @@ namespace SaberFactory.Instances.CustomSaber
 
         protected override void GetColorableMaterials(List<Material> materials)
         {
+            void AddMaterial(Renderer renderer, Material[] rendererMaterials, int index)
+            {
+                rendererMaterials[index] = new Material(rendererMaterials[index]);
+                renderer.sharedMaterials = rendererMaterials;
+                materials.Add(rendererMaterials[index]);
+            }
+
             foreach (Renderer renderer in GameObject.GetComponentsInChildren<Renderer>())
             {
                 if (renderer is null)
@@ -92,31 +99,36 @@ namespace SaberFactory.Instances.CustomSaber
                     continue;
                 }
 
-                foreach (Material renderMaterial in renderer.materials)
+                var rendererMaterials = renderer.sharedMaterials;
+                var materialCount = rendererMaterials.Length;
+
+                for (int i = 0; i < materialCount; i++)
                 {
-                    if (renderMaterial is null ||
-                        !renderMaterial.HasProperty(MaterialProperties.MainColor))
+                    var material = rendererMaterials[i];
+
+                    if (material is null ||
+                        !material.HasProperty(MaterialProperties.MainColor))
                     {
                         continue;
                     }
 
                     // always color materials if "_CustomColors" is 1
                     // if "_CustomColors" is present but != 1 don't color the material at all
-                    if (renderMaterial.TryGetFloat(MaterialProperties.CustomColors, out var val))
+                    if (material.TryGetFloat(MaterialProperties.CustomColors, out var val))
                     {
                         if (val > 0)
                         {
-                            materials.Add(renderMaterial);
+                            AddMaterial(renderer, rendererMaterials, i);
                         }
                     }
                     //if "_CustomColors" isn't present check for glow > 1 and bloom > 1
-                    else if (renderMaterial.TryGetFloat(MaterialProperties.Glow, out val) && val > 0)
+                    else if (material.TryGetFloat(MaterialProperties.Glow, out val) && val > 0)
                     {
-                        materials.Add(renderMaterial);
+                        AddMaterial(renderer, rendererMaterials, i);
                     }
-                    else if (renderMaterial.TryGetFloat(MaterialProperties.Bloom, out val) && val > 0)
+                    else if (material.TryGetFloat(MaterialProperties.Bloom, out val) && val > 0)
                     {
-                        materials.Add(renderMaterial);
+                        AddMaterial(renderer, rendererMaterials, i);
                     }
                 }
             }

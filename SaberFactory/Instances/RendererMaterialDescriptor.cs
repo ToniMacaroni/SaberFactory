@@ -1,4 +1,5 @@
-﻿using SaberFactory.Helpers;
+﻿using System;
+using SaberFactory.Helpers;
 using UnityEngine;
 
 namespace SaberFactory.Instances
@@ -6,7 +7,7 @@ namespace SaberFactory.Instances
     /// <summary>
     /// Implementation of a <see cref="MaterialDescriptor"/> that is closely tied to a renderer
     /// </summary>
-    internal class RendererMaterialDescriptor : MaterialDescriptor
+    internal class RendererMaterialDescriptor : MaterialDescriptor, IDisposable
     {
         private readonly Renderer _renderer;
         private readonly int _materialIndex;
@@ -21,6 +22,11 @@ namespace SaberFactory.Instances
         {
             base.Revert();
             _renderer.SetMaterial(_materialIndex, Material);
+        }
+
+        public void Dispose()
+        {
+            DestroyMaterials();
         }
     }
 }

@@ -153,9 +153,16 @@ namespace SaberFactory.Instances
             OnDestroyed?.Invoke();
         }
 
+        // Called when Saber GameObject gets destroyed
         private void OnSaberGameObjectDestroyed()
         {
+            
             DestroyTrail();
+
+            foreach (BasePieceInstance piece in PieceCollection)
+            {
+                piece.Dispose();
+            }
         }
 
         private bool GetCustomSaber(out CustomSaberInstance customSaberInstance)

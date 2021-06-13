@@ -1,4 +1,5 @@
-﻿using SaberFactory.Instances.Trail;
+﻿using SaberFactory.Helpers;
+using SaberFactory.Instances.Trail;
 using UnityEngine;
 
 namespace SaberFactory.Misc {
@@ -51,6 +52,8 @@ namespace SaberFactory.Misc {
         protected MeshFilter _meshFilter;
         protected Material _material;
 
+        protected GameObject _gameObject;
+
         public Mesh MyMesh => _meshFilter?.sharedMesh;
 
         public void RecalculateBounds()
@@ -68,15 +71,14 @@ namespace SaberFactory.Misc {
         }
 
         void CreateMeshObj(AltTrail owner, Material material) {
-            GameObject obj = new GameObject("SaberTrail");
-            obj.layer = owner.gameObject.layer;
-            obj.AddComponent<MeshFilter>();
-            var meshrenderer = obj.AddComponent<MeshRenderer>();
+            _gameObject = new GameObject("SaberTrail");
+            _gameObject.layer = owner.gameObject.layer;
+            _meshFilter = _gameObject.AddComponent<MeshFilter>();
+            var meshrenderer = _gameObject.AddComponent<MeshRenderer>();
 
-            obj.transform.position = Vector3.zero;
-            obj.transform.rotation = Quaternion.identity;
+            _gameObject.transform.position = Vector3.zero;
+            _gameObject.transform.rotation = Quaternion.identity;
 
-            _meshFilter = (MeshFilter)obj.GetComponent(typeof(MeshFilter));
             meshrenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
             meshrenderer.receiveShadows = false;
             meshrenderer.GetComponent<Renderer>().sharedMaterial = material;
@@ -86,10 +88,7 @@ namespace SaberFactory.Misc {
         }
 
         public void Destroy() {
-            if (_meshFilter != null)
-            {
-                Object.Destroy(_meshFilter.gameObject);
-            }
+            _gameObject.TryDestroy();
         }
 
         public VertexPool(Material material, AltTrail owner)

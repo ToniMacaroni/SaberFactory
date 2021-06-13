@@ -7,7 +7,7 @@ namespace SaberFactory.Instances.Trail
     {
         public void CreateTrail(TrailConfig config, bool editor);
 
-        public void DestroyTrail();
+        public void DestroyTrail(bool immediate = false);
 
         public void SetTrailData(InstanceTrailData instanceTrailData);
 

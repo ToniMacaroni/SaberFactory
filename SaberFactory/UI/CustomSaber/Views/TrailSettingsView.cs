@@ -12,6 +12,7 @@ using SaberFactory.Instances.Trail;
 using SaberFactory.Models;
 using SaberFactory.Models.CustomSaber;
 using SaberFactory.UI.CustomSaber.CustomComponents;
+using SaberFactory.UI.CustomSaber.Popups;
 using SaberFactory.UI.Lib;
 using UnityEngine;
 using UnityEngine.UI;
