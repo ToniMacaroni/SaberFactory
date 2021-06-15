@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using SaberFactory.Helpers;
+using UnityEngine;
 
 namespace SaberFactory.Instances
 {
@@ -24,7 +26,24 @@ namespace SaberFactory.Instances
 
         public virtual void Revert()
         {
+            DestroyUsedMaterial();
             Material = new Material(_originalMaterial);
+        }
+
+        public void DestroyUsedMaterial()
+        {
+            Material.TryDestoryImmediate();
+        }
+
+        public void DestroyBackupMaterial()
+        {
+            _originalMaterial.TryDestoryImmediate();
+        }
+
+        public void DestroyMaterials()
+        {
+            DestroyUsedMaterial();
+            DestroyBackupMaterial();
         }
     }
 }

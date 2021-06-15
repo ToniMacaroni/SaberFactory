@@ -135,9 +135,9 @@ namespace SaberFactory.Instances
             }
         }
 
-        public void DestroyTrail()
+        public void DestroyTrail(bool immediate = false)
         {
-            TrailHandler?.DestroyTrail();
+            TrailHandler?.DestroyTrail(immediate);
             if (_secondaryTrails is { })
             {
                 foreach (var trail in _secondaryTrails)
@@ -153,9 +153,16 @@ namespace SaberFactory.Instances
             OnDestroyed?.Invoke();
         }
 
+        // Called when Saber GameObject gets destroyed
         private void OnSaberGameObjectDestroyed()
         {
+            
             DestroyTrail();
+
+            foreach (BasePieceInstance piece in PieceCollection)
+            {
+                piece.Dispose();
+            }
         }
 
         private bool GetCustomSaber(out CustomSaberInstance customSaberInstance)

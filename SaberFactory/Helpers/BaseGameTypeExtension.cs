@@ -62,7 +62,7 @@ namespace SaberFactory.Helpers
 
         public static void SetMaterial(this Renderer renderer, int index, Material material)
         {
-            var mats = renderer.materials;
+            var mats = renderer.sharedMaterials;
             mats[index] = material;
             renderer.materials = mats;
         }

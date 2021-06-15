@@ -12,6 +12,7 @@ using SaberFactory.Instances.Trail;
 using SaberFactory.Models;
 using SaberFactory.Models.CustomSaber;
 using SaberFactory.UI.CustomSaber.CustomComponents;
+using SaberFactory.UI.CustomSaber.Popups;
 using SaberFactory.UI.Lib;
 using UnityEngine;
 using UnityEngine.UI;
@@ -71,6 +72,12 @@ namespace SaberFactory.UI.CustomSaber.Views
                 _refreshButtonActive = value;
                 OnPropertyChanged();
             }
+        }
+
+        private bool UseVertexColorOnly
+        {
+            get => _trailConfig.OnlyUseVertexColor;
+            set => _trailConfig.OnlyUseVertexColor = value;
         }
 
         private SliderController _lengthSlider;
@@ -193,7 +200,6 @@ namespace SaberFactory.UI.CustomSaber.Views
                 {
                     SetTrailModel(tm);
                 }
-                _instanceTrailData.RevertMaterialForCustomSaber(cs.Model as CustomSaberModel);
             }
         }
 
@@ -329,7 +335,7 @@ namespace SaberFactory.UI.CustomSaber.Views
         [UIAction("refresh-trail")]
         private void RefreshTrail()
         {
-            _editorInstanceManager.CurrentSaber.DestroyTrail();
+            _editorInstanceManager.CurrentSaber.DestroyTrail(true);
             _editorInstanceManager.CurrentSaber.CreateTrail(true);
             _editorInstanceManager.CurrentSaber.TrailHandler?.SetColor(_playerDataModel.playerData.colorSchemesSettings.GetSelectedColorScheme().saberAColor);
         }

@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using SaberFactory.Configuration;
+using SaberFactory.HarmonyPatches;
 using SaberFactory.Helpers;
 using SaberFactory.Instances;
 using SaberFactory.Models;
@@ -70,6 +71,7 @@ namespace SaberFactory.Editor
             _sfLogoAnim = new SFLogoAnim(embeddedAssetLoader);
 
             Instance = this;
+            GameplaySetupViewPatch.EntryEnabled = _pluginConfig.ShowGameplaySettingsButton;
         }
 
         public async void Initialize()

@@ -85,9 +85,10 @@ namespace SaberFactory.Instances.Trail
             _canColorMaterial = IsMaterialColorable(_instanceTrailData.Material.Material);
         }
 
-        public void DestroyTrail()
+        public void DestroyTrail(bool immediate = false)
         {
-            TrailInstance.TryDestoryImmediate();
+            if(immediate) TrailInstance.TryDestoryImmediate();
+            else TrailInstance.TryDestroy();
         }
 
         public void SetTrailData(InstanceTrailData instanceTrailData)

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using SaberFactory.Helpers;
 using SaberFactory.Instances.Setters;
 using SaberFactory.Models;
@@ -10,7 +11,7 @@ namespace SaberFactory.Instances
     /// <summary>
     /// Class for managing an instance of a piece <seealso cref="BasePieceModel"/>
     /// </summary>
-    internal class BasePieceInstance
+    internal class BasePieceInstance : IDisposable
     {
         public PropertyBlockSetterHandler PropertyBlockSetterHandler { get; protected set; }
 
@@ -64,5 +65,13 @@ namespace SaberFactory.Instances
         protected virtual void GetColorableMaterials(List<Material> materials) { }
 
         internal class Factory : PlaceholderFactory<BasePieceModel, BasePieceInstance> {}
+
+        public virtual void Dispose()
+        {
+            foreach (var material in _colorableMaterials)
+            {
+                material.TryDestroy();
+            }
+        }
     }
 }

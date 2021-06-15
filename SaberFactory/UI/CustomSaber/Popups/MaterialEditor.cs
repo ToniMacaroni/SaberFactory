@@ -7,22 +7,30 @@ using System.Threading.Tasks;
 using BeatSaberMarkupLanguage.Components.Settings;
 using SaberFactory.Helpers;
 using SaberFactory.Instances;
+using SaberFactory.UI.CustomSaber.CustomComponents;
 using SaberFactory.UI.Lib;
 using UnityEngine;
 using UnityEngine.Rendering;
-using UnityEngine.Windows.WebCam;
 using Debug = UnityEngine.Debug;
 
 
-namespace SaberFactory.UI.CustomSaber.CustomComponents
+namespace SaberFactory.UI.CustomSaber.Popups
 {
     internal class MaterialEditor : Popup
     {
         [UIComponent("material-dropdown")] private readonly DropDownListSetting _materialDropDown = null;
         [UIComponent("prop-list")] private readonly PropList _propList = null;
 
+        [UIValue("materials")] private List<object> _materials = new List<object>();
+
         public async void Show(MaterialDescriptor materialDescriptor)
         {
+            if (materialDescriptor == null || materialDescriptor.Material == null)
+            {
+                Debug.LogError("Material was null in MaterialEditor");
+                return;
+            }
+
             _ = Create(false);
             _cachedTransform.localScale = Vector3.zero;
 
@@ -37,9 +45,14 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
         {
             _ = Create(true);
             _cachedTransform.localScale = Vector3.zero;
+
+            var descriptorArray = materialDescriptors.ToArray();
+
+            _materials.Clear();
+            _materials.Add(descriptorArray.Where(x=>x.Material!=null).Select(x=>x.Material.name));
             
             _materialDropDown.transform.parent.gameObject.SetActive(true);
-            SetMaterial(materialDescriptors.First().Material);
+            SetMaterial(descriptorArray.First().Material);
 
             await Task.Delay(100);
             await AnimateIn();
