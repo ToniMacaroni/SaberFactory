@@ -26,17 +26,18 @@ namespace SaberFactory.Instances
 
         public virtual void Revert()
         {
+            DestroyUsedMaterial();
             Material = new Material(_originalMaterial);
         }
 
         public void DestroyUsedMaterial()
         {
-            Material.TryDestroy();
+            Material.TryDestoryImmediate();
         }
 
         public void DestroyBackupMaterial()
         {
-            _originalMaterial.TryDestroy();
+            _originalMaterial.TryDestoryImmediate();
         }
 
         public void DestroyMaterials()

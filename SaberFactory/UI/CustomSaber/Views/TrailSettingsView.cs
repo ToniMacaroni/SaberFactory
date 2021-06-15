@@ -200,7 +200,6 @@ namespace SaberFactory.UI.CustomSaber.Views
                 {
                     SetTrailModel(tm);
                 }
-                _instanceTrailData.RevertMaterialForCustomSaber(cs.Model as CustomSaberModel);
             }
         }
 
