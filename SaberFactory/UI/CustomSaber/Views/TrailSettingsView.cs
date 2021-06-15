@@ -336,7 +336,7 @@ namespace SaberFactory.UI.CustomSaber.Views
         [UIAction("refresh-trail")]
         private void RefreshTrail()
         {
-            _editorInstanceManager.CurrentSaber.DestroyTrail();
+            _editorInstanceManager.CurrentSaber.DestroyTrail(true);
             _editorInstanceManager.CurrentSaber.CreateTrail(true);
             _editorInstanceManager.CurrentSaber.TrailHandler?.SetColor(_playerDataModel.playerData.colorSchemesSettings.GetSelectedColorScheme().saberAColor);
         }

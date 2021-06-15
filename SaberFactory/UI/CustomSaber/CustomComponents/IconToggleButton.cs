@@ -2,6 +2,7 @@
 using BeatSaberMarkupLanguage.Attributes;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using BeatSaberMarkupLanguage.Parser;
 using BeatSaberMarkupLanguage.TypeHandlers;
 using SaberFactory.UI.Lib;

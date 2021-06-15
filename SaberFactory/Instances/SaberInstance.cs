@@ -135,9 +135,9 @@ namespace SaberFactory.Instances
             }
         }
 
-        public void DestroyTrail()
+        public void DestroyTrail(bool immediate = false)
         {
-            TrailHandler?.DestroyTrail();
+            TrailHandler?.DestroyTrail(immediate);
             if (_secondaryTrails is { })
             {
                 foreach (var trail in _secondaryTrails)

@@ -10,6 +10,7 @@ namespace SaberFactory.HarmonyPatches
     {
         public static bool Prefix(int panelIdx, int ____activePanelIdx, TextSegmentedControl ____selectionSegmentedControl)
         {
+            if (!GameplaySetupViewPatch.EntryEnabled) return true;
             if (panelIdx == GameplaySetupViewPatch.SaberPanelIdx)
             {
                 var cell =
