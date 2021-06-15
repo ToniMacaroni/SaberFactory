@@ -21,7 +21,9 @@ namespace SaberFactory.Editor
 
             bool needsFixing = false;
 
+#pragma warning disable 618
             if (!PlayerSettings.virtualRealitySupported)
+#pragma warning restore 618
             {
                 AddFixButton("Fix virtual reality support", FixVrSupport);
                 needsFixing = true;
