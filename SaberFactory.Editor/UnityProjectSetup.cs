@@ -57,7 +57,9 @@ namespace SaberFactory.Editor
 
         private void FixVrSupport()
         {
+#pragma warning disable 618
             PlayerSettings.virtualRealitySupported = true;
+#pragma warning restore 618
         }
 
         private void FixStereoRenderingPath()
