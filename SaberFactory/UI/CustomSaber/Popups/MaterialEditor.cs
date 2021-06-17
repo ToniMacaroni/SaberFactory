@@ -73,6 +73,8 @@ namespace SaberFactory.UI.CustomSaber.Popups
             {
                 EPropertyType type;
 
+                if(prop.HasAttribute("HideInSF")) continue;
+
                 if (prop.Attributes.Contains("MaterialToggle") || prop.Name == "_CustomColors")
                 {
                     var floatProp = (ShaderPropertyInfo.ShaderFloat)prop;
@@ -89,11 +91,24 @@ namespace SaberFactory.UI.CustomSaber.Popups
                 else
                 {
                     type = GetTypeFromShaderType(prop.Type);
+
                     if (type == EPropertyType.Unhandled) continue;
+
                     var propObject = GetPropObject(prop.Type, prop.PropId, material);
                     var callback = ConstructCallback(prop.Type, prop.PropId, material);
 
-                    props.Add(new PropertyDescriptor(prop.Description, type, propObject, callback));
+                    var propertyDescriptor = new PropertyDescriptor(prop.Description, type, propObject, callback);
+
+                    if (prop is ShaderPropertyInfo.ShaderRange range)
+                    {
+                        propertyDescriptor.AddtionalData = new Vector2(range.Min, range.Max);
+                    }
+                    else if (prop is ShaderPropertyInfo.ShaderTexture texProp)
+                    {
+                        propertyDescriptor.AddtionalData = !prop.HasAttribute("SFNoPreview");
+                    }
+
+                    props.Add(propertyDescriptor);
                 }
             }
 
@@ -105,6 +120,7 @@ namespace SaberFactory.UI.CustomSaber.Popups
             return type switch
             {
                 ShaderPropertyType.Float => EPropertyType.Float,
+                ShaderPropertyType.Range => EPropertyType.Float,
                 ShaderPropertyType.Color => EPropertyType.Color,
                 ShaderPropertyType.Texture => EPropertyType.Texture,
                 _ => EPropertyType.Unhandled
@@ -116,6 +132,7 @@ namespace SaberFactory.UI.CustomSaber.Popups
             return type switch
             {
                 ShaderPropertyType.Float => material.GetFloat(propId),
+                ShaderPropertyType.Range => material.GetFloat(propId),
                 ShaderPropertyType.Color => material.GetColor(propId),
                 ShaderPropertyType.Texture => material.GetTexture(propId),
                 _ => null
@@ -127,6 +144,8 @@ namespace SaberFactory.UI.CustomSaber.Popups
             return type switch
             {
                 ShaderPropertyType.Float => (obj) => { material.SetFloat(propId, (float)obj); }
+                ,
+                ShaderPropertyType.Range => (obj) => { material.SetFloat(propId, (float)obj); }
                 ,
                 ShaderPropertyType.Color => (obj) => { material.SetColor(propId, (Color)obj); }
                 ,

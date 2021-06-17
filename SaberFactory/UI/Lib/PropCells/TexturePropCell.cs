@@ -20,7 +20,11 @@ namespace SaberFactory.UI.Lib.PropCells
 
             OnChangeCallback = data.ChangedCallback;
             _propName.text = ShortenText(data.Text, 14);
-            _propTexture.sprite = Utilities.LoadSpriteFromTexture(tex);
+
+            if (data.AddtionalData is bool showPreview && showPreview)
+            {
+                _propTexture.sprite = Utilities.LoadSpriteFromTexture(tex);
+            }
 
             _backgroundImage.type = Image.Type.Sliced;
             _backgroundImage.color = new Color(1, 0, 0, 0.5f);

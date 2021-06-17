@@ -191,6 +191,11 @@ namespace SaberFactory.Helpers
                 Attributes = shader.GetPropertyAttributes(idx).ToList();
                 Type = shader.GetPropertyType(idx);
             }
+
+            public bool HasAttribute(string name)
+            {
+                return Attributes.Contains(name);
+            }
         }
     }
 }

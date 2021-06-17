@@ -1,4 +1,5 @@
-﻿using BeatSaberMarkupLanguage.Attributes;
+﻿using System;
+using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components.Settings;
 using TMPro;
 using UnityEngine;
@@ -17,6 +18,13 @@ namespace SaberFactory.UI.Lib.PropCells
             if (!(data.PropObject is float val)) return;
 
             OnChangeCallback = data.ChangedCallback;
+
+            if (data.AddtionalData is Vector2 minMax)
+            {
+                _sliderSetting.slider.minValue = minMax.x;
+                _sliderSetting.slider.maxValue = minMax.y;
+            }
+
             _sliderSetting.slider.value = val;
             _sliderSetting.ReceiveValue();
             _sliderSettingText.text = data.Text;
