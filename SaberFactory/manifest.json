@@ -3,7 +3,7 @@
   "id": "SaberFactory",
   "name": "Saber Factory",
   "author": "Toni Macaroni",
-  "version": "2.3.1",
+  "version": "2.3.2",
   "description": "A highly customizable saber mod",
   "gameVersion": "1.16.1",
   "dependsOn": {

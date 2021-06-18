@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Threading;
 using BeatSaberMarkupLanguage.Attributes;
+using HMUI;
 using SaberFactory.UI.CustomSaber.CustomComponents;
 using SaberFactory.UI.Lib;
 using TMPro;
+using UnityEngine;
 using Zenject;
 
 
@@ -21,12 +23,16 @@ namespace SaberFactory.UI.CustomSaber.Views
 
         [UIComponent("settings-notify-text")] private readonly TextMeshProUGUI _settingsNotifyText = null;
         [UIValue("nav-buttons")] private List<object> _navButtons;
+        [UIObject("exit_btn")] private readonly GameObject _exitBtn = null;
 
         private NavButton _currentSelectedNavButton;
 
         [UIAction("#post-parse")]
         private async void Setup()
         {
+            // why is this icon so fucking big
+            _exitBtn.transform.Find("Content").GetComponent<StackLayoutGroup>().padding = new RectOffset(3, 3, 3, 3);
+
             if (_navButtons is {} && _navButtons.Count > 0)
             {
                 _currentSelectedNavButton = ((NavButtonWrapper) _navButtons[0]).NavButton;

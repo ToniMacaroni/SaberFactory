@@ -9,6 +9,8 @@ namespace SaberFactory.UI.Lib
         public object PropObject;
         public Action<object> ChangedCallback;
 
+        public object AddtionalData;
+
         public PropertyDescriptor(string text, EPropertyType type, object propObject, Action<object> changedCallback)
         {
             Text = text;
