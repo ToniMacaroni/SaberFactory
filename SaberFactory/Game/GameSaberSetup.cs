@@ -22,10 +22,6 @@ namespace SaberFactory.Game
         private readonly SaberModel _oldLeftSaberModel;
         private readonly SaberModel _oldRightSaberModel;
 
-        private bool _gotCJDTypes;
-        private MethodInfo _cjdAtMethod;
-        private PropertyInfo _cjdLevelCustomDataType;
-
         private GameSaberSetup(PluginConfig config, SaberSet saberSet, MainAssetStore mainAssetStore, [Inject(Id = "beatmapdata")] BeatmapData beatmapData)
         {
             _config = config;
@@ -60,38 +56,11 @@ namespace SaberFactory.Game
             }
         }
 
-        private void GetTypes()
-        {
-            if (_gotCJDTypes) return;
-            _gotCJDTypes = true;
-
-            var customBeatmapDataType =
-                Type.GetType(
-                    "CustomJSONData.CustomBeatmap.CustomBeatmapData, CustomJSONData, Version=1.1.4.0, Culture=neutral, PublicKeyToken=null");
-
-            var treesType =
-                Type.GetType(
-                    "CustomJSONData.Trees, CustomJSONData, Version=1.1.4.0, Culture=neutral, PublicKeyToken=null");
-
-            _cjdAtMethod = treesType?.GetMethod("at", BindingFlags.Static | BindingFlags.Public);
-            _cjdLevelCustomDataType = customBeatmapDataType?.GetProperty("levelCustomData", BindingFlags.Public | BindingFlags.Instance);
-        }
-
         private async Task SetupSongSaber()
         {
             try
             {
-                GetTypes();
-                if (_cjdAtMethod == null || _cjdLevelCustomDataType == null)
-                {
-                    return;
-                }
-
-                var songSaber = _cjdAtMethod?.Invoke(null, new[] { _cjdLevelCustomDataType?.GetValue(_beatmapData), "_customSaber"});
-                if (songSaber == null)
-                {
-                    return;
-                }
+                if (!_beatmapData.GetField("_customSaber", out var songSaber)) return;
 
                 var metaData = _mainAssetStore.GetAllMetaData(AssetTypeDefinition.CustomSaber);
                 var saber = metaData.FirstOrDefault(x => x.ListName == songSaber.ToString());
