@@ -73,7 +73,7 @@ namespace SaberFactory.UI.CustomSaber.Popups
             {
                 EPropertyType type;
 
-                if(prop.HasAttribute("HideInSF")) continue;
+                if(prop.HasAttribute(MaterialAttributes.HideInSf)) continue;
 
                 if (prop.Attributes.Contains("MaterialToggle") || prop.Name == "_CustomColors")
                 {
@@ -105,7 +105,7 @@ namespace SaberFactory.UI.CustomSaber.Popups
                     }
                     else if (prop is ShaderPropertyInfo.ShaderTexture texProp)
                     {
-                        propertyDescriptor.AddtionalData = !prop.HasAttribute("SFNoPreview");
+                        propertyDescriptor.AddtionalData = !prop.HasAttribute(MaterialAttributes.SfNoPreview);
                     }
 
                     props.Add(propertyDescriptor);

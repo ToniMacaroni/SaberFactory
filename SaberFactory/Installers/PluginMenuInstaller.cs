@@ -57,6 +57,15 @@ namespace SaberFactory.Installers
 
             BindSaber(new RemoteLocationPart.InitData
             {
+                Name = "SF Default 2018",
+                Author = "Toni Macaroni",
+                RemoteLocation = "https://github.com/ToniMacaroni/SaberFactoryV2/blob/main/Sabers/SFDefault2018.saber?raw=true",
+                Filename = "SF Default 2018.saber",
+                CoverPath = "SaberFactory.Resources.Icons.SFSaber_Icon.png"
+            });
+
+            BindSaber(new RemoteLocationPart.InitData
+            {
                 Name = "SF Saber",
                 Author = "Toni Macaroni",
                 RemoteLocation = "https://github.com/ToniMacaroni/SaberFactoryV2/blob/main/Sabers/SFSaber.saber?raw=true",
