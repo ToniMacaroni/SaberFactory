@@ -130,7 +130,6 @@ namespace SaberFactory.UI.Lib.BSML
         private void InitSprite()
         {
             if (_bgSprite != null) return;
-            Debug.LogError("Finding bg sprite");
             var image = Resources.FindObjectsOfTypeAll<GameObject>()
                 .FirstOrDefault(x => x.name == "MiddleHorizontalTextSegmentedControlCell")?
                 .transform.Find("BG")?
