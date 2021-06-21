@@ -1,4 +1,4 @@
-﻿<bg bg="round-rect-panel" bg-color="#777" border="true" raycast="true" xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
+﻿<bg bg="round-rect-panel" border="" raycast="true" xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
 	<vertical>
 		<sui.custom-list id='saber-list' title='Choose trail from saber' width='80' bg-color='#FFFFFF05' />
 		<horizontal>

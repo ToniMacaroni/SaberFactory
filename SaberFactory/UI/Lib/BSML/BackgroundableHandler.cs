@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
 using BeatSaberMarkupLanguage;
 using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Parser;
 using BeatSaberMarkupLanguage.TypeHandlers;
+using HarmonyLib;
 using HMUI;
 using IPA.Utilities;
 using SaberFactory.Helpers;
@@ -21,22 +24,47 @@ namespace SaberFactory.UI.Lib.BSML
         {
             { "border", new[]{ "border" } },
             { "raycast", new[]{ "raycast", "block" } },
-            { "skew", new[]{"skew"}}
+            { "skew", new[]{"skew"}},
+            { "custom_color", new[]{"custom_color"}},
+            { "custom_bg", new[]{"custom_bg"}}
         };
 
         public override Dictionary<string, Action<Backgroundable, string>> Setters => new Dictionary<string, Action<Backgroundable, string>>();
 
+        public BackgroundableHandler()
+        {
+            var tex = new Texture2D(2, 2, TextureFormat.RGBA32, false);
+            tex.LoadImage(Utilities.GetResource(Assembly.GetExecutingAssembly(),
+                "SaberFactory.Resources.UI.border.png"));
+            tex.wrapMode = TextureWrapMode.Clamp;
+            tex.filterMode = FilterMode.Point;
+            _borderSprite = Sprite.Create(tex, new Rect(0.0f, 0.0f, tex.width, tex.height), new Vector2(0f,32f), 100, 1, SpriteMeshType.FullRect, new Vector4(0,7,7,0));
+        }
+
         public override void HandleType(BSMLParser.ComponentTypeWithData componentType, BSMLParserParams parserParams)
         {
-            base.HandleTypeAfterParse(componentType, parserParams);
             base.HandleType(componentType, parserParams);
             var backgroundable = (Backgroundable)componentType.component;
+
+            if (componentType.data.TryGetValue("custom_bg", out var customBg))
+            {
+                InitSprite();
+                var imageview = GetOrAddImageView(backgroundable);
+                if (imageview != null)
+                {
+                    imageview.overrideSprite = _bgSprite;
+                    backgroundable.background = imageview;
+                }
+            }
+
+            if (componentType.data.TryGetValue("custom_color", out var customColor))
+            {
+                TrySetBackgroundColor(backgroundable, customColor);
+            }
+
             if (componentType.data.TryGetValue("border", out var borderAttr))
             {
-                if (backgroundable.background?.material != null)
-                {
-                    AddBorder(backgroundable.gameObject);
-                }
+                AddBorder(backgroundable.gameObject, borderAttr=="square");
             }
 
             if (componentType.data.TryGetValue("raycast", out var raycastAttr))
@@ -56,9 +84,9 @@ namespace SaberFactory.UI.Lib.BSML
             }
         }
 
-        private void AddBorder(GameObject go)
+        private void AddBorder(GameObject go, bool squareSprite = false)
         {
-            if (_borderTemplate is null)
+            if (_borderTemplate == null)
             {
                 var button = Resources.FindObjectsOfTypeAll<Button>().FirstOrDefault(x => x.name == "ActionButton");
                 var borderTransform = button?.transform.Find("Border");
@@ -67,6 +95,8 @@ namespace SaberFactory.UI.Lib.BSML
             }
 
             var borderGo = Object.Instantiate(_borderTemplate, go.transform).GetRect();
+
+            borderGo.transform.SetParent(go.transform, false);
 
             if (go.GetComponent<HorizontalOrVerticalLayoutGroup>() is {})
             {
@@ -79,9 +109,67 @@ namespace SaberFactory.UI.Lib.BSML
             borderGo.anchoredPosition = Vector2.zero;
             borderGo.sizeDelta = Vector2.zero;
 
-            borderGo.GetComponent<ImageView>().SetSkew(0);
+            var image = borderGo.GetComponent<ImageView>();
+            image.SetSkew(0);
+
+            if (squareSprite)
+            {
+                borderGo.anchorMin = new Vector2(0.015f, -0.01f);
+                borderGo.anchorMax = new Vector2(1.006f, 0.97f);
+
+                InitSprite();
+                image.sprite = _borderSprite;
+                image.overrideSprite = _borderSprite;
+                image.material = _bgMaterial;
+                var color = image.color;
+                color.a = 0.8f;
+                image.color = color;
+            }
         }
 
+        private void InitSprite()
+        {
+            if (_bgSprite != null) return;
+            Debug.LogError("Finding bg sprite");
+            var image = Resources.FindObjectsOfTypeAll<GameObject>()
+                .FirstOrDefault(x => x.name == "MiddleHorizontalTextSegmentedControlCell")?
+                .transform.Find("BG")?
+                .GetComponent<ImageView>();
+            if (image == null)
+            {
+                Debug.LogError("Couldn't find background image prefab");
+                return;
+            }
+
+            _bgSprite = image.sprite;
+            _bgMaterial = image.material;
+        }
+
+        private ImageView GetOrAddImageView(Backgroundable backgroundable)
+        {
+            var imageView = backgroundable.GetComponent<ImageView>();
+            if (imageView != null) return imageView;
+            if (_imageViewPrefab == null)
+            {
+                _imageViewPrefab = Resources.FindObjectsOfTypeAll<ImageView>().First(x =>
+                    x.gameObject?.name == "KeyboardWrapper" && x.sprite?.name == "RoundRect10" &&
+                    x.transform.parent?.name == "Wrapper");
+                if (_imageViewPrefab == null) return null;
+            }
+
+            return backgroundable.gameObject.AddComponent(_imageViewPrefab);
+        }
+
+        public static void TrySetBackgroundColor(Backgroundable background, string colorStr)
+        {
+            if(!ThemeManager.GetColor(colorStr, out var color)) return;
+            background.background.color = color;
+        }
+
+        private ImageView _imageViewPrefab;
+        private Sprite _bgSprite;
+        private Material _bgMaterial;
+        private readonly Sprite _borderSprite;
         private GameObject _borderTemplate;
     }
 }

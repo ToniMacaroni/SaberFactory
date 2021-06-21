@@ -63,8 +63,15 @@ namespace SaberFactory.UI.CustomSaber.Views
                 ClickedCategory,
                 "Edit the trail");
 
+            var transformButton = new NavButtonWrapper(
+                ENavigationCategory.Transform,
+                "SaberFactory.Resources.Icons.transform-icon.png",
+                ClickedCategory,
+                "Transform settings");
+
             _navButtons.Add(saberButton);
             _navButtons.Add(trailButton);
+            _navButtons.Add(transformButton);
         }
 
         private void ClickedCategory(NavButton button, ENavigationCategory category)

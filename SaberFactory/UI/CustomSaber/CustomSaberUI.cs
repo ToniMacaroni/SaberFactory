@@ -32,7 +32,7 @@ namespace SaberFactory.UI.CustomSaber
             var mainScreenInitData = new CustomScreen.InitData
             (
                 "Main Screen",
-                new Vector3(-25, -10, 0),
+                new Vector3(-25, -7, 0),
                 Quaternion.identity, 
                 new Vector2(105, 140),
                 isCurved: true

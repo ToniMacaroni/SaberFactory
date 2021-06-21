@@ -41,6 +41,7 @@ namespace SaberFactory.UI.CustomSaber.Views
         [UIComponent("length-slider")] private readonly SliderSetting _lengthSliderSetting = null;
         [UIComponent("width-slider")] private readonly SliderSetting _widthSliderSetting = null;
         [UIComponent("whitestep-slider")] private readonly SliderSetting _whitestepSliderSetting = null;
+        [UIComponent("offset-slider")] private readonly SliderSetting _offsetSliderSetting = null;
         [UIComponent("clamp-checkbox")] private readonly ToggleSetting _clampToggleSetting = null;
         [UIComponent("flip-checkbox")] private readonly ToggleSetting _flipToggleSetting = null;
 
@@ -83,6 +84,7 @@ namespace SaberFactory.UI.CustomSaber.Views
         private SliderController _lengthSlider;
         private SliderController _widthSlider;
         private SliderController _whitestepSlider;
+        private SliderController _offsetSlider;
         private ToggleController _clampToggle;
         private ToggleController _flipToggle;
         private bool _refreshButtonActive;
@@ -99,6 +101,7 @@ namespace SaberFactory.UI.CustomSaber.Views
             _lengthSlider = new SliderController(_lengthSliderSetting);
             _widthSlider = new SliderController(_widthSliderSetting);
             _whitestepSlider = new SliderController(_whitestepSliderSetting);
+            _offsetSlider = new SliderController(_offsetSliderSetting);
             _clampToggle = new ToggleController(_clampToggleSetting);
             _flipToggle = new ToggleController(_flipToggleSetting);
 
@@ -130,6 +133,7 @@ namespace SaberFactory.UI.CustomSaber.Views
             _lengthSlider.Value = _instanceTrailData.Length;
             _widthSlider.Value = _instanceTrailData.Width;
             _whitestepSlider.Value = _instanceTrailData.WhiteStep;
+            _offsetSlider.Value = _instanceTrailData.Offset;
             _clampToggle.Value = _instanceTrailData.ClampTexture;
             _flipToggle.Value = _instanceTrailData.Flip;
         }
@@ -152,6 +156,13 @@ namespace SaberFactory.UI.CustomSaber.Views
             {
                 return;
             }
+            _trailPreviewer.UpdateWidth();
+        }
+
+        private void SetOffset(RangeValuesTextSlider slider, float val)
+        {
+            _instanceTrailData.Offset = val;
+            if (_refreshButtonActive) return;
             _trailPreviewer.UpdateWidth();
         }
 
@@ -208,6 +219,7 @@ namespace SaberFactory.UI.CustomSaber.Views
             _lengthSlider.AddEvent(SetLength);
             _widthSlider.AddEvent(SetWidth);
             _whitestepSlider.AddEvent(SetWhitestep);
+            _offsetSlider.AddEvent(SetOffset);
             _clampToggle.SetEvent(SetClampMode);
             _flipToggle.SetEvent(SetFlip);
         }
@@ -217,6 +229,7 @@ namespace SaberFactory.UI.CustomSaber.Views
             _lengthSlider.RemoveEvent();
             _widthSlider.RemoveEvent();
             _whitestepSlider.RemoveEvent();
+            _offsetSlider.RemoveEvent();
             _clampToggle.RemoveEvent();
             _flipToggle.RemoveEvent();
         }

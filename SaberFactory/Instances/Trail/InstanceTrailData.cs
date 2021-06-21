@@ -28,9 +28,22 @@ namespace SaberFactory.Instances.Trail
             set => SetWhitestep(value);
         }
 
+        public float Offset
+        {
+            get => TrailModel.TrailPosOffset.z;
+            set
+            {
+                var pos = TrailModel.TrailPosOffset;
+                pos.z = value;
+                TrailModel.TrailPosOffset = pos;
+                PointEnd.localPosition = pos;
+                Width = Width;
+            }
+        }
+
         public float Width
         {
-            get => Mathf.Abs(PointEnd.localPosition.z - PointStart.localPosition.z);
+            get => Mathf.Abs(PointEnd.parent.localPosition.z - PointStart.localPosition.z);
             set => SetWidth(value);
         }
 
@@ -53,7 +66,9 @@ namespace SaberFactory.Instances.Trail
         {
             TrailModel = trailModel;
             PointStart = pointStart;
-            PointEnd = pointEnd;
+            var newEnd = new GameObject("PointEnd").transform;
+            newEnd.SetParent(pointEnd, false);
+            PointEnd = newEnd;
             _isTrailReversed = isTrailReversed;
 
             Init(trailModel);
@@ -63,13 +78,14 @@ namespace SaberFactory.Instances.Trail
         {
             SetClampTexture(trailModel.ClampTexture);
             SetWidth(trailModel.Width);
+            Offset = Offset;
         }
 
         public void SetWidth(float width)
         {
             TrailModel.Width = width;
             var pos = PointStart.localPosition;
-            pos.z = PointEnd.localPosition.z - width;
+            pos.z = PointEnd.parent.localPosition.z - width;
             PointStart.localPosition = pos;
         }
 

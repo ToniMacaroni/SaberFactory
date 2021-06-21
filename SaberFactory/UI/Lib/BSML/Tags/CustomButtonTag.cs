@@ -8,7 +8,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
-namespace SaberFactory.UI.Lib.BSML
+namespace SaberFactory.UI.Lib.BSML.Tags
 {
     public class CustomButtonTag : BSMLTag
     {
@@ -54,6 +54,7 @@ namespace SaberFactory.UI.Lib.BSML
             buttonImageController.BackgroundImage = bgImage;
             buttonImageController.LineImage = button.transform.Find("Underline").gameObject.GetComponent<ImageView>();
             buttonImageController.ShowLine(false);
+            bgImage.Cast<ImageView>().SetSkew(0);
 
             ContentSizeFitter buttonSizeFitter = button.gameObject.AddComponent<ContentSizeFitter>();
             buttonSizeFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;

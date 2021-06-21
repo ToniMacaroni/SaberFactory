@@ -97,6 +97,7 @@ namespace SaberFactory.UI.Lib.BSML
                 tableCell.SetField("_highlightBackgroundColor", new Color(0.360f, 0.647f, 1, 0.7f));
                 tableCell.SetField("_selectedBackgroundColor", new Color(0.360f, 0.647f, 1, 0.9f));
                 tableCell.SetField("_selectedAndHighlightedBackgroundColor", new Color(0.360f, 0.647f, 1, 0.9f));
+                _backgroundImageAccessor(ref tableCell).Cast<ImageView>().SetSkew(0);
                 _songAuthorTextAccessor(ref tableCell).richText = true;
             }
 

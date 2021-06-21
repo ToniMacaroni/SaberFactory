@@ -39,6 +39,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\Icons\transform-icon.png" />
+    <None Remove="Resources\UI\border.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="0Harmony">
       <HintPath>$(BeatSaberDir)\Libs\0Harmony.dll</HintPath>
       <Private>False</Private>
@@ -203,6 +208,8 @@
     <EmbeddedResource Include="manifest.json" />
     <EmbeddedResource Include="Resources\CustomSaberComponents.dll" />
     <EmbeddedResource Include="Resources\assets" />
+    <EmbeddedResource Include="Resources\Icons\transform-icon.png" />
+    <EmbeddedResource Include="Resources\UI\border.png" />
   </ItemGroup>
 
   <ItemGroup>

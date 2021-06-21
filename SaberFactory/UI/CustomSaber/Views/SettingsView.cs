@@ -72,17 +72,6 @@ namespace SaberFactory.UI.CustomSaber.Views
             }
         }
 
-        [UIValue("animate-saber-selection")]
-        private bool AnimateSaberSelection
-        {
-            get => _pluginConfig.AnimateSaberSelection;
-            set
-            {
-                _pluginConfig.AnimateSaberSelection = value;
-                OnPropertyChanged();
-            }
-        }
-
         [UIAction("#post-parse")]
         private async void Setup()
         {

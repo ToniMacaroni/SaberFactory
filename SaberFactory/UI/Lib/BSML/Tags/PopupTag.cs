@@ -23,7 +23,7 @@ namespace SaberFactory.UI.Lib.BSML.Tags
             var go = parent.CreateGameObject(_type.Name);
 
             go.AddComponent<RectTransform>();
-            go.AddComponent<CanvasGroup>();
+            go.AddComponent<CanvasGroup>().ignoreParentGroups = true;
 
             var comp = _factory.Create(go, _type);
 
