@@ -5,6 +5,13 @@
     /// </summary>
     internal abstract class PiecePropertyBlock
     {
+        public TransformPropertyBlock TransformProperty;
+
+        protected PiecePropertyBlock()
+        {
+            TransformProperty = new TransformPropertyBlock();
+        }
+
         public abstract void SyncFrom(PiecePropertyBlock otherBlock);
     }
 }

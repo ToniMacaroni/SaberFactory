@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using SaberFactory.Helpers;
 using UnityEngine;
 
@@ -11,6 +12,7 @@ namespace SaberFactory.UI.Lib
 
         protected Transform _cachedTransform;
         private CanvasGroup _canvasGroup;
+        private CanvasGroup _parentCanvasGroup;
 
         protected virtual void Awake()
         {
@@ -55,10 +57,14 @@ namespace SaberFactory.UI.Lib
                 _canvasGroup.alpha = 1;
             }
 
+            FadeParentCanvases();
+
         }
 
         protected async Task Hide(bool animated)
         {
+            ShowParentCanvases();
+
             if (animated)
             {
                 await AnimateOut();
@@ -91,6 +97,31 @@ namespace SaberFactory.UI.Lib
             }
 
             transform.SetParent(parent, false);
+        }
+
+        protected void FadeParentCanvases()
+        {
+            var parent = transform.parent;
+
+            while (parent != null)
+            {
+                var vc = parent.GetComponent<CanvasGroup>();
+                if (vc != null)
+                {
+                    _parentCanvasGroup = vc;
+                    vc.alpha = 0f;
+                    break;
+                }
+
+                parent = parent.parent;
+            }
+        }
+
+        protected void ShowParentCanvases()
+        {
+            if (_parentCanvasGroup == null) return;
+            _parentCanvasGroup.alpha = 1;
+            _parentCanvasGroup = null;
         }
 
         internal class Factory : ComponentPlaceholderFactory<Popup> {}

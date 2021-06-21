@@ -1,6 +1,6 @@
 ﻿<bg xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
     xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
-	<vertical id='main-container' bg='round-rect-panel' bg-color='#999' child-align='MiddleCenter'
+	<vertical id='main-container' custom_bg='' custom_color='$default-panel' border='square' child-align='MiddleCenter'
 	          child-expand-height='false' child-control-height='false' spacing='2' pad='3'>
 
     <vertical bg='panel-top' skew='0' bg-color='#00b6ff40' pad='2' vertical-fit='PreferredSize'>
@@ -11,9 +11,12 @@
                       max='~trail-width-max' />
     </vertical>
 
-    <vertical pad='2' vertical-fit='PreferredSize'>
+    <vertical pad='2' spacing='0.5' vertical-fit='PreferredSize'>
       <slider-setting id='whitestep-slider' text='Whitestep' get-event='update-props' apply-on-change='true' min='0'
                       max='1' />
+
+      <slider-setting id='offset-slider' text='Offset' get-event='update-props' apply-on-change='true' min='-0.5'
+                      max='0.5' increment='0.01' />
 
       <checkbox id='flip-checkbox' text='Flip' apply-on-change='true'
                 hover-hint='Flips the trail vertically if enabled' />

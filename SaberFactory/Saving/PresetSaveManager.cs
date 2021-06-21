@@ -8,6 +8,7 @@ using SaberFactory.Helpers;
 using SaberFactory.Models;
 using SaberFactory.Models.CustomSaber;
 using UnityEngine;
+using Zenject;
 
 namespace SaberFactory.Saving
 {
@@ -49,7 +50,19 @@ namespace SaberFactory.Saving
             var pieceList = new List<SerializablePiece>();
             foreach (BasePieceModel pieceModel in saberModel.PieceCollection)
             {
-                pieceList.Add(new SerializablePiece{Path = pieceModel.StoreAsset.RelativePath});
+                var piece = new SerializablePiece {Path = pieceModel.StoreAsset.RelativePath};
+
+                var tProp = pieceModel.PropertyBlock.TransformProperty;
+                var transform = new SerializableTransform
+                {
+                    Offset = tProp.Offset,
+                    Rotation = tProp.Rotation,
+                    Width = tProp.Width
+                };
+
+                piece.Transform = transform;
+
+                pieceList.Add(piece);
             }
 
             serializableSaber.Pieces = pieceList;
@@ -96,6 +109,14 @@ namespace SaberFactory.Saving
                 if (comp != null)
                 {
                     saberModel.PieceCollection.AddPiece(comp.AssetTypeDefinition, comp.GetPiece(saberModel.SaberSlot));
+
+                    var prop = comp.GetLeft()?.PropertyBlock?.TransformProperty;
+                    if (piece.Transform != null && prop != null)
+                    {
+                        prop.Offset = piece.Transform.Offset;
+                        prop.Rotation = piece.Transform.Rotation;
+                        prop.Width = piece.Transform.Width;
+                    }
                 }
             }
 
@@ -108,7 +129,6 @@ namespace SaberFactory.Saving
             if (trail != null)
             {
                 SerMapper.Map(trail, trailModel);
-                trailModel.TrailPosOffset = Vector3.zero;
 
                 // if trail comes from another saber
                 if (!string.IsNullOrEmpty(trail.TrailOrigin))

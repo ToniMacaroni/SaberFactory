@@ -1,8 +1,8 @@
-﻿<vertical spacing="2" id="root-vertical" bg="round-rect-panel" bg-color="#666666bb" pad="2" xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+﻿<vertical spacing="2" id="root-vertical" custom_bg="" pad="2" xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
           xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
 	<text align='Center' id='header-text'/>
 	<sui.list id='item-list' select-cell='item-selected'/>
-	<horizontal bg='round-rect-panel' background-color='#00000033' preferred-height='8'>
+	<horizontal custom_bg='' custom_color='#00000033' preferred-height='8'>
 		<page-button event-click='item-list#PageDown' direction='Down' pref-width='8'/>
 		<page-button event-click='item-list#PageUp' direction='Up' pref-width='8'/>
 	</horizontal>

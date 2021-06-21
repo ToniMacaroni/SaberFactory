@@ -7,6 +7,7 @@ using BeatSaberMarkupLanguage.TypeHandlers;
 using HMUI;
 using IPA.Utilities;
 using SaberFactory.UI.Lib;
+using SaberFactory.UI.Lib.BSML;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,7 +21,7 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
     {
         public event Action<ICustomListItem> OnItemSelected;
 
-        [Inject] private IVRPlatformHelper _platformHelper = null;
+        [Inject] private readonly IVRPlatformHelper _platformHelper = null;
 
         [UIComponent("root-vertical")] private readonly LayoutElement _layoutElement = null;
         [UIComponent("item-list")] private readonly CustomListTableData _list = null;
@@ -149,7 +150,7 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
 
             private void SetBgColor(CustomList list, string hex)
             {
-                ColorUtility.TryParseHtmlString(hex, out var color);
+                if (!ThemeManager.GetColor(hex, out var color)) return;
                 list.SetBgColor(color);
             }
         }
