@@ -38,7 +38,7 @@ Best is to look in-game at the saber to see what the actual name is.
 If you want to create sabers in a song see https://github.com/Auros/SiraUtil#sabers
 
 ## I made a mod that needs to create some sabers in the menu (or other place after the menu)
-If you want to create saber in the menu (like [Custom Menu Pointers]() does)  
+If you want to create sabers in the menu (like [Custom Menu Pointers](https://github.com/dawnvt/CustomMenuPointers/) does)  
 you can request the `MenuSaberProvider` and create sabers with it like this:
 
 ```csharp
