@@ -34,3 +34,26 @@ that tells Saber Factory to use a specific saber for this map like this:
 Make sure to use the actual name of the saber not the file name.
 Best is to look in-game at the saber to see what the actual name is.
 
+## I made a mod that needs to create some sabers in a song
+If you want to create sabers in a song see https://github.com/Auros/SiraUtil#sabers
+
+## I made a mod that needs to create some sabers in the menu (or other place after the menu)
+If you want to create saber in the menu (like [Custom Menu Pointers]() does)  
+you can request the `MenuSaberProvider` and create sabers with it like this:
+
+```csharp
+public class MyMenuManager : IInitializable
+{
+    private readonly MenuSaberProvider _menuSaberProvider;
+
+    public MyMenuManager(MenuSaberProvider menuSaberProvider)
+    {
+        _menuSaberProvider = menuSaberProvider;
+    }
+
+    public async void Initialize()
+    {
+        var myLeftSaber = await _menuSaberProvider.CreateSaber(parent:null, saberType:SaberType.SaberA, color:Color.red, createTrail:true);
+    }
+}
+```
