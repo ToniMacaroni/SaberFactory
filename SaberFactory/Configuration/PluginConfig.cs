@@ -43,6 +43,8 @@ namespace SaberFactory.Configuration
 
         public bool ShowGameplaySettingsButton { get; set; } = true;
 
+        public bool ControlTrailWithThumbstick { get; set; } = true;
+
         // How many threads to spawn when loading all sabers
         // ! Not used as of right now !
         [Ignore]
