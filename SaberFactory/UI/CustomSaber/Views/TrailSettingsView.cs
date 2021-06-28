@@ -125,21 +125,15 @@ namespace SaberFactory.UI.CustomSaber.Views
 
         private void OnjoystickWasNotCenteredThisFrameEvent(Vector2 deltaPos)
         {
-            var width = _instanceTrailData.Width;
+            var newWidth = Mathf.Clamp(_instanceTrailData.Width + deltaPos.y * -0.005f,
+                _widthSliderSetting.slider.minValue, _widthSliderSetting.slider.maxValue);
+            SetWidth(null, newWidth);
+            _widthSlider.Value = newWidth;
 
-            if (width > _widthSliderSetting.slider.minValue &&
-                width < _widthSliderSetting.slider.maxValue)
-            {
-                SetWidth(_widthSliderSetting.slider, width + deltaPos.y*-0.005f);
-                _widthSlider.Value = _instanceTrailData.Width;
-            }
-
-            if (_instanceTrailData.Length > _lengthSliderSetting.slider.minValue && 
-                _instanceTrailData.Length < _lengthSliderSetting.slider.maxValue)
-            {
-                SetLength(_lengthSliderSetting.slider, _trailFloatLength+deltaPos.x*0.1f);
-                _lengthSlider.Value = _instanceTrailData.Length;
-            }
+            var newLength = Mathf.Clamp(_trailFloatLength + deltaPos.x * 0.1f,
+                _lengthSliderSetting.slider.minValue, _lengthSliderSetting.slider.maxValue);
+            SetLength(null, newLength);
+            _lengthSlider.Value = newLength;
         }
 
         public override void DidClose()
