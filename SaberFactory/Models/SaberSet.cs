@@ -125,7 +125,6 @@ namespace SaberFactory.Models
         public bool IsEmpty => LeftSaber.IsEmpty && RightSaber.IsEmpty;
 
         private static readonly System.Random RNG = new System.Random();
-        //private static readonly object RNGLock = new object();
 
         private int RandomNumber(int count)
         {
