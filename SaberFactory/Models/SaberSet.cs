@@ -63,11 +63,12 @@ namespace SaberFactory.Models
 
             if(_lastSelectedRandoms.Count == meta.Count) _lastSelectedRandoms.Clear();
 
-            var idx = 1;
-            while (_lastSelectedRandoms.Contains(idx))
+            int idx;
+            do
             {
-                idx = (int)(Random.Range(0f, 1f) * meta.Count);
+                idx = RandomNumber(meta.Count);
             }
+            while (_lastSelectedRandoms.Contains(idx));
 
             _lastSelectedRandoms.Add(idx);
 
@@ -122,5 +123,16 @@ namespace SaberFactory.Models
         }
 
         public bool IsEmpty => LeftSaber.IsEmpty && RightSaber.IsEmpty;
+
+        private static readonly System.Random RNG = new System.Random();
+        //private static readonly object RNGLock = new object();
+
+        private int RandomNumber(int count)
+        {
+            lock(RNG)
+            {
+                return RNG.Next(count);
+            }
+        }
     }
 }
