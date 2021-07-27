@@ -31,6 +31,7 @@ namespace SaberFactory.UI.CustomSaber.Views
         [Inject] private readonly MainAssetStore _mainAssetStore = null;
         [Inject] private readonly PluginConfig _pluginConfig = null;
         [Inject] private readonly TrailConfig _trailConfig = null;
+        [Inject] private readonly IVRPlatformHelper _vrPlatformHelper = null;
 
         private InstanceTrailData _instanceTrailData;
 
@@ -92,6 +93,7 @@ namespace SaberFactory.UI.CustomSaber.Views
         private bool _autoUpdateTrail;
         private bool _dirty;
         private float _time;
+        private float _trailFloatLength;
 
         [UIAction("#post-parse")]
         private void Setup()
@@ -114,16 +116,36 @@ namespace SaberFactory.UI.CustomSaber.Views
         {
             CreateTrail(_editorInstanceManager.CurrentSaber);
 
-            _editorInstanceManager.OnSaberInstanceCreated += CreateTrail;
+            if (_instanceTrailData != null && _pluginConfig.ControlTrailWithThumbstick)
+            {
+                _trailFloatLength = _instanceTrailData.Length;
+                _vrPlatformHelper.joystickWasNotCenteredThisFrameEvent += OnjoystickWasNotCenteredThisFrameEvent;
+            }
+        }
+
+        private void OnjoystickWasNotCenteredThisFrameEvent(Vector2 deltaPos)
+        {
+            var newWidth = Mathf.Clamp(_instanceTrailData.Width + deltaPos.y * -0.005f,
+                _widthSliderSetting.slider.minValue, _widthSliderSetting.slider.maxValue);
+            SetWidth(null, newWidth);
+            _widthSlider.Value = newWidth;
+
+            var newLength = Mathf.Clamp(_trailFloatLength + deltaPos.x * 0.1f,
+                _lengthSliderSetting.slider.minValue, _lengthSliderSetting.slider.maxValue);
+            SetLength(null, newLength);
+            _lengthSlider.Value = newLength;
         }
 
         public override void DidClose()
         {
+            if (_instanceTrailData != null && _pluginConfig.ControlTrailWithThumbstick)
+            {
+                _vrPlatformHelper.joystickWasNotCenteredThisFrameEvent -= OnjoystickWasNotCenteredThisFrameEvent;
+            }
+
             _materialEditor.Close();
             _instanceTrailData = null;
             _trailPreviewer.Destroy();
-
-            _editorInstanceManager.OnSaberInstanceCreated -= CreateTrail;
         }
 
         private void LoadFromModel(InstanceTrailData trailData)
@@ -141,6 +163,7 @@ namespace SaberFactory.UI.CustomSaber.Views
         private void SetLength(RangeValuesTextSlider slider, float val)
         {
             _instanceTrailData.Length = (int) val;
+            _trailFloatLength = val;
             _dirty = true;
             if (_refreshButtonActive)
             {
@@ -243,7 +266,7 @@ namespace SaberFactory.UI.CustomSaber.Views
 
             var trailData = saberInstance?.GetTrailData(out _);
 
-            // Show no trail container and return
+            // Show "no trail" container and return
             if (trailData is null)
             {
                 if(_mainContainer.activeSelf) _mainContainer.SetActive(false);
