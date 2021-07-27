@@ -2,9 +2,11 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using SemVer;
+//using SemVer;
 using SiraUtil;
-using Version = SemVer.Version;
+using Hive.Versioning;
+using Version = Hive.Versioning.Version;
+//using Version = SemVer.Version;
 
 namespace SaberFactory
 {
@@ -22,7 +24,7 @@ namespace SaberFactory
         }
 
         public Version LocalVersion =>
-            _localVersion ??= IPA.Loader.PluginManager.GetPluginFromId("SaberFactory").Version;
+            _localVersion ??= IPA.Loader.PluginManager.GetPluginFromId("SaberFactory").HVersion;
 
         public async Task<Release> GetNewestReleaseAsync(CancellationToken cancellationToken)
         {
@@ -71,7 +73,7 @@ namespace SaberFactory
             {
                 get
                 {
-                    _isLocalNewest ??= new Range($"<={LocalVersion}").IsSatisfied(RemoteVersion);
+                    _isLocalNewest ??= new VersionRange($"<={LocalVersion}").Matches(RemoteVersion);
                     return _isLocalNewest.Value;
                 }
             }

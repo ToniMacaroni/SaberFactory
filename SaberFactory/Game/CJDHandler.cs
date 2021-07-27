@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Reflection;
-using System.Runtime.CompilerServices;
-using SaberFactory.Helpers;
 
 namespace SaberFactory.Game
 {
@@ -35,7 +32,7 @@ namespace SaberFactory.Game
             var pluginMetadata = IPA.Loader.PluginManager.GetPluginFromId("CustomJSONData");
             if (pluginMetadata == null) return;
 
-            if (pluginMetadata.Version.Major > 1)
+            if (pluginMetadata.HVersion.Major > 1)
             {
                 _cjdHandler = new CJD2Handler();
             }
