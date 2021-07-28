@@ -82,6 +82,8 @@ namespace SaberFactory.UI.CustomSaber.Views
             set => _trailConfig.OnlyUseVertexColor = value;
         }
 
+        private bool ShowThumbstickMessage => _pluginConfig.ControlTrailWithThumbstick;
+
         private SliderController _lengthSlider;
         private SliderController _widthSlider;
         private SliderController _whitestepSlider;

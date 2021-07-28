@@ -4,8 +4,9 @@
 	          child-expand-height='false' child-control-height='false' spacing='2' pad='3'>
 
     <vertical bg='panel-top' skew='0' bg-color='#00b6ff40' pad='2' vertical-fit='PreferredSize'>
+      <text text='You can modify the lenght and width using the thumbstick!' color='#ffffff80' font-size='3.5' align='Center' active='~ShowThumbstickMessage'/>
       <slider-setting id='length-slider' text='Length' get-event='update-props' apply-on-change='true' integer-only='true'
-                          min='0' max='30' />
+                      min='0' max='30' />
 
       <slider-setting id='width-slider' text='Width' get-event='update-props' apply-on-change='true' min='0'
                       max='~trail-width-max' />
