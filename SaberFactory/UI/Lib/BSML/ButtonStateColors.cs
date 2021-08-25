@@ -9,6 +9,7 @@ namespace SaberFactory.UI.Lib.BSML
     public class ButtonStateColors : MonoBehaviour
     {
         public ImageView Image;
+        public ImageView UnderlineImage;
 
         public Color NormalColor = new Color(0, 0, 0, 0.5f);
         public Color HoveredColor = new Color(0, 0, 0, 0.8f);
@@ -41,9 +42,11 @@ namespace SaberFactory.UI.Lib.BSML
             {
                 case NoTransitionsButton.SelectionState.Normal:
                     Image.color = NormalColor;
+                    if (UnderlineImage is { }) UnderlineImage.enabled = false;
                     break;
                 case NoTransitionsButton.SelectionState.Highlighted:
                     Image.color = HoveredColor;
+                    if(UnderlineImage is {}) UnderlineImage.enabled = true;
                     break;
                 case NoTransitionsButton.SelectionState.Pressed:
                     Image.color = SelectedColor;

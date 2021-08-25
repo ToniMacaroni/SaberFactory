@@ -1,12 +1,10 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using Newtonsoft.Json;
 using SaberFactory.Helpers;
-using Zenject;
 
 namespace SaberFactory.Configuration
 {
-    public class TrailConfig : IInitializable, IDisposable
+    public class TrailConfig : ConfigBase
     {
         public int Granularity { get; set; } = 70;
 
@@ -14,38 +12,7 @@ namespace SaberFactory.Configuration
 
         public bool OnlyUseVertexColor { get; set; } = true;
 
-        private readonly FileInfo _configFile;
-
-        public TrailConfig(SFDirectories sfDirs)
-        {
-            _configFile = sfDirs.SaberFactoryDir.GetFile("TrailConfig.json");
-        }
-
-        public void Load()
-        {
-            if (!_configFile.Exists) return;
-            JsonConvert.PopulateObject(_configFile.ReadText(), this);
-        }
-
-        public void Save()
-        {
-            _configFile.WriteText(JsonConvert.SerializeObject(this, Formatting.Indented));
-        }
-
-        public void Revert()
-        {
-            Granularity = 70;
-            SamplingFrequency = 90;
-        }
-
-        public void Initialize()
-        {
-            Load();
-        }
-
-        public void Dispose()
-        {
-            Save();
-        }
+        public TrailConfig(SFDirectories sfDirs) : base(sfDirs, "TrailConfig.json")
+        { }
     }
 }

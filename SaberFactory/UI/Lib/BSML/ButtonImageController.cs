@@ -43,6 +43,13 @@ namespace SaberFactory.UI.Lib.BSML
 
             LineImage.gameObject.SetActive(show);
         }
+
+        public void SetLineColor(string colorString)
+        {
+            if (LineImage is null) return;
+            if (!ColorUtility.TryParseHtmlString(colorString, out var color)) return;
+            LineImage.color = color;
+        }
     }
 
     [ComponentHandler(typeof(ButtonImageController))]
@@ -54,6 +61,7 @@ namespace SaberFactory.UI.Lib.BSML
             { "iconColor", new []{"icon-color"} },
             { "bgIcon", new []{"bg-icon"} },
             { "showLine", new []{"show-line"} },
+            { "lineColor", new []{"line-color"}},
             { "useGradient", new[]{ "use-gradient" } },
             { "showFill", new[]{ "show-fill" } },
             { "skew", new[]{ "skew" } },
@@ -67,6 +75,7 @@ namespace SaberFactory.UI.Lib.BSML
             {"iconColor", (images, color) => images.SetIconColor(color) },
             {"bgIcon", (images, iconPath) => images.SetBackgroundIcon(iconPath)},
             {"showLine", (images, stringBool) => images.ShowLine(bool.Parse(stringBool))},
+            {"lineColor", (images, color) => images.SetLineColor(color)},
             {"useGradient", SetGradient },
             {"showFill", SetFill },
             {"skew", SetSkew },

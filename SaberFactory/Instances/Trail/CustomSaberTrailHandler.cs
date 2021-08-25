@@ -25,6 +25,8 @@ namespace SaberFactory.Instances.Trail
                 return;
             }
 
+            if (_customTrail.Length < 1) return;
+
             var trailInitData = new TrailInitData
             {
                 TrailColor = Color.white,
@@ -81,7 +83,7 @@ namespace SaberFactory.Instances.Trail
         {
             if (TrailInstance is { })
             {
-                TrailInstance.MyColor = color;
+                TrailInstance.Color = color;
             }
 
             if (_canColorMaterial)

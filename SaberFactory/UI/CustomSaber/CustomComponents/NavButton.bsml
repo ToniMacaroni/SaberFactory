@@ -5,4 +5,4 @@
                  preferred-height='15'
                  on-click='clicked'
                  hover-hint='~hover-hint'
-                 skew='0' show-line='false' normal-color='#00000055' hovered-color='#5ca5ff80'/>
+                 skew='0' line-color='#00C0FF' normal-color='#00000055' hovered-color='#5ca5ff80'/>

@@ -124,7 +124,7 @@ namespace SaberFactory.Instances.Trail
         {
             if (TrailInstance is { })
             {
-                TrailInstance.MyColor = color;
+                TrailInstance.Color = color;
             }
 
             if (_canColorMaterial)

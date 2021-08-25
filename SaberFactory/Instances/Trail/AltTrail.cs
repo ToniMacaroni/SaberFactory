@@ -73,8 +73,8 @@ namespace SaberFactory.Instances.Trail
         public int TrailLength = 30;
         public int Granularity = 60;
         public float Whitestep;
-        public Color MyColor = Color.white;
-        public Material MyMaterial;
+        public Color Color = Color.white;
+        public Material Material;
         public static bool CapFps;
         protected float TrailWidth => (PointStart.position - PointEnd.position).magnitude;
 
@@ -95,7 +95,7 @@ namespace SaberFactory.Instances.Trail
         {
             PointStart = pointStart;
             PointEnd = pointEnd;
-            MyMaterial = material;
+            Material = material;
             Granularity = initData.Granularity;
             TrailLength = initData.TrailLength;
             Whitestep = initData.Whitestep;
@@ -104,7 +104,7 @@ namespace SaberFactory.Instances.Trail
             if(editor) SortingOrder = 3;
 
             _elemPool = new ElementPool(TrailLength);
-            _vertexPool = new VertexPool(MyMaterial, this);
+            _vertexPool = new VertexPool(Material, this);
             _vertexSegment = _vertexPool.GetVertices(Granularity * 3, (Granularity - 1) * 12);
             UpdateIndices();
 
@@ -203,11 +203,11 @@ namespace SaberFactory.Instances.Trail
                 var pos0 = pos + up.normalized * TrailWidth * 0.5f;
                 var pos1 = pos - up.normalized * TrailWidth * 0.5f;
 
-                Color color = MyColor;
+                Color color = Color;
 
                 if (uvSegment < Whitestep)
                 {
-                    color = Color.LerpUnclamped(Color.white, MyColor, uvSegment/Whitestep );
+                    color = Color.LerpUnclamped(Color.white, Color, uvSegment/Whitestep );
                 }
 
 
