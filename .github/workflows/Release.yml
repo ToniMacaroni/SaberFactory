@@ -33,12 +33,12 @@ jobs:
     - name: Archive Release
       uses: thedoctor0/zip-release@master
       with:
-        type: zip
-        filename: ${{ steps.Build.outputs.filename }}.zip
+        type: 'zip'
+        filename: '${{ steps.Build.outputs.filename }}.zip'
         path: SaberFactory/bin/Release/Final
     - name: Set tag output
-        id: vars
-        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+      id: vars
+      run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
     - name: Create Release
       uses: ncipollo/release-action@v1
       with:
