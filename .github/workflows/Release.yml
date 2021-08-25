@@ -35,7 +35,7 @@ jobs:
       with:
         type: 'zip'
         filename: '${{ steps.Build.outputs.filename }}.zip'
-        path: SaberFactory/bin/Release/Final
+        directory: SaberFactory/bin/Release/Final
     - name: Set tag output
       id: vars
       run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
