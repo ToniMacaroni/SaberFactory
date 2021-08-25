@@ -97,13 +97,19 @@ namespace SaberFactory.Models.CustomSaber
 
                 TrailModel.CopyFrom(otherCs.TrailModel);
 
+                var otherMat = TrailModel.Material.Material;
+
                 // if trail isn't from other saber just copy props
                 // if trail IS from other saber but shares the same shader just copy props
                 // otherwise (trail is from other saber and shaders are different) copy the whole material
                 if (mat!=null && (string.IsNullOrWhiteSpace(TrailModel.TrailOrigin) ||
-                    mat.shader.name == TrailModel.Material.Material.shader.name))
+                    mat.shader.name == otherMat.shader.name))
                 {
-                    mat.CopyPropertiesFromMaterial(TrailModel.Material.Material);
+                    foreach (var prop in otherMat.GetProperties(MaterialAttributes.HideInSf))
+                    {
+                        mat.SetProperty(prop.Item2, prop.Item1, prop.Item3);
+                    }
+
                     TrailModel.Material.Material = mat;
                 }
                 else

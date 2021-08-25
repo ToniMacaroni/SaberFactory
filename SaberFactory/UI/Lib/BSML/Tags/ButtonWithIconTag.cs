@@ -49,6 +49,7 @@ namespace SaberFactory.UI.Lib.BSML.Tags
             var noTransitionsButton = button.gameObject.GetComponent<NoTransitionsButton>();
             var buttonStateColors = button.gameObject.AddComponent<ButtonStateColors>();
             buttonStateColors.Image = btnImageController.BackgroundImage;
+            buttonStateColors.UnderlineImage = btnImageController.LineImage;
             noTransitionsButton.selectionStateDidChangeEvent += buttonStateColors.SelectionDidChange;
 
             if (!button.gameObject.activeSelf)

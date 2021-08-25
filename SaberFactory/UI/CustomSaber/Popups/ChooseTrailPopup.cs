@@ -74,5 +74,11 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
             _onSelectionChanged?.Invoke(null);
             Exit();
         }
+
+        [UIAction("click-cancel")]
+        private void ClickCancel()
+        {
+            Exit();
+        }
     }
 }

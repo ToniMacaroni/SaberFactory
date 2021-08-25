@@ -32,11 +32,19 @@ namespace SaberFactory.Instances.CustomSaber
         /// <param name="trailModel">The <see cref="TrailModel"/> to use</param>
         public void InitializeTrailData(GameObject saberObject, TrailModel trailModel)
         {
-            if (trailModel is null) return;
+            if (saberObject is null || trailModel is null) return;
 
             var trails = saberObject?.GetComponentsInChildren<CustomTrail>();
 
-            if (trails is null || trails.Length < 1) return;
+            if (trails is null || trails.Length < 1)
+            {
+                var newTrail = saberObject.AddComponent<CustomTrail>();
+                newTrail.Length = 12;
+                newTrail.PointStart = saberObject.CreateGameObject("PointStart").transform;
+                newTrail.PointEnd = saberObject.CreateGameObject("PointEnd").transform;
+                newTrail.PointEnd.localPosition = new Vector3(0, 0, 1);
+                trails = new[] {newTrail};
+            }
 
             var saberTrail = trails[0];
 
@@ -57,7 +65,7 @@ namespace SaberFactory.Instances.CustomSaber
                 trailModel.Material = new MaterialDescriptor(saberTrail.TrailMaterial);
 
                 // set texture wrap mode
-                if (trailModel.Material.Material.TryGetMainTexture(out var tex))
+                if (trailModel.Material != null && trailModel.Material.Material.TryGetMainTexture(out var tex))
                 {
                     trailModel.OriginalTextureWrapMode = tex.wrapMode;
                 }

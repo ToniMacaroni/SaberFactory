@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using SaberFactory.DataStore;
 using SaberFactory.Helpers;
+using SaberFactory.Instances;
 using SaberFactory.Models;
 using SaberFactory.Models.CustomSaber;
 using UnityEngine;
@@ -128,6 +129,12 @@ namespace SaberFactory.Saving
             var trail = serializableSaber.Trail;
             if (trail != null)
             {
+                if (trailModel is null)
+                {
+                    trailModel = new TrailModel();
+                    customsaber.TrailModel = trailModel;
+                }
+
                 SerMapper.Map(trail, trailModel);
 
                 // if trail comes from another saber
@@ -165,6 +172,7 @@ namespace SaberFactory.Saving
             var comp = await _mainAssetStore[trailOrigin];
             var originTrailModel = (comp?.GetLeft() as CustomSaberModel)?.GrabTrail(true);
             if (originTrailModel == null) return;
+            trailModel.Material ??= new MaterialDescriptor(null);
             trailModel.Material.Material = originTrailModel.Material.Material;
         }
     }

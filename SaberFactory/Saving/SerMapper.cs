@@ -10,6 +10,16 @@ namespace SaberFactory.Saving
 
         public static void Map(object from, object to)
         {
+            if (from == null)
+            {
+                throw new ArgumentNullException(nameof(from), "Mapper needs a valid from object");
+            }
+
+            if (to == null)
+            {
+                throw new ArgumentNullException(nameof(to), "Mapper needs a valid to object");
+            }
+
             var fromMap = GetFieldMap(from.GetType());
             var toMap = GetFieldMap(to.GetType());
 

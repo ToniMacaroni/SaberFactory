@@ -53,9 +53,17 @@
 		</horizontal>
 	</vertical>
 
-	<sui.material-editor id='material-editor' />
-	<sui.choose-trail-popup id='choose-trail-popup' />
-	<div id='no-trail-container' active='false'>
-		<text align='Center' font-size='7' text='This saber has no trail' />
-	</div>
+  <div id='no-trail-container' active='false'>
+    <vertical vertical-fit='PreferredSize' background='round-rect-panel' background-color='#000000E0' pad='4'>
+      <text align='Center' font-size='7' text='This saber has no trail' />
+      <horizontal spacing='3'>
+        <text align='Center' font-size='5' text='But you can ' />
+        <sui.button text='choose a trail from another saber' on-click='choose-trail' hover-hint='Use the Trail of another saber' />
+      </horizontal>
+    </vertical>
+  </div>
+
+  <sui.material-editor id='material-editor' />
+  <sui.choose-trail-popup id='choose-trail-popup' />
+
 </bg>

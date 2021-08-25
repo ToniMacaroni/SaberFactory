@@ -1,9 +1,11 @@
 using System.Collections.Generic;
+using SaberFactory.Configuration;
 using UnityEngine;
+using Zenject;
 
 namespace SaberFactory.UI.Lib.BSML
 {
-    internal static class ThemeManager
+    internal class ThemeManager
     {
         public static readonly Dictionary<string, Color> ColorTheme = new Dictionary<string, Color>
         {

@@ -118,6 +118,8 @@ namespace SaberFactory.UI.CustomSaber.Views
         {
             CreateTrail(_editorInstanceManager.CurrentSaber);
 
+            _editorInstanceManager.OnSaberInstanceCreated += CreateTrail;
+
             if (_instanceTrailData != null && _pluginConfig.ControlTrailWithThumbstick)
             {
                 _trailFloatLength = _instanceTrailData.Length;
@@ -144,6 +146,8 @@ namespace SaberFactory.UI.CustomSaber.Views
             {
                 _vrPlatformHelper.joystickWasNotCenteredThisFrameEvent -= OnjoystickWasNotCenteredThisFrameEvent;
             }
+
+            _editorInstanceManager.OnSaberInstanceCreated -= CreateTrail;
 
             _materialEditor.Close();
             _instanceTrailData = null;
@@ -217,13 +221,29 @@ namespace SaberFactory.UI.CustomSaber.Views
             }
         }
 
-        private void CopyFromTrailModel(TrailModel trailModel)
+        private bool CopyFromTrailModel(TrailModel trailModel)
         {
             if (_editorInstanceManager.CurrentPiece is CustomSaberInstance customsaber)
             {
                 var model = (CustomSaberModel)customsaber.Model;
+
+                if (model.TrailModel == null)
+                {
+                    model.TrailModel = new TrailModel(
+                        Vector3.zero,
+                        0.5f,
+                        12,
+                        new MaterialDescriptor(null),
+                        0f,
+                        TextureWrapMode.Clamp);
+                    model.TrailModel.CopyFrom(trailModel);
+                    return true;
+                }
+
                 model.TrailModel.CopyFrom(trailModel);
             }
+
+            return false;
         }
 
         private void ResetTrail()
@@ -312,16 +332,20 @@ namespace SaberFactory.UI.CustomSaber.Views
 
         private void TrailPopupSelectionChanged(TrailModel trailModel)
         {
+            var needUiRefresh = false;
+
             if (trailModel is null)
             {
                 ResetTrail();
             }
             else
             {
-                CopyFromTrailModel(trailModel);
+                needUiRefresh = CopyFromTrailModel(trailModel);
             }
 
             _editorInstanceManager.Refresh();
+
+            //if(needUiRefresh) CreateTrail(_editorInstanceManager.CurrentSaber);
         }
 
         private void Update()

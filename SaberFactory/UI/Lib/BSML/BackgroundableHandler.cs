@@ -121,6 +121,7 @@ namespace SaberFactory.UI.Lib.BSML
                 image.sprite = _borderSprite;
                 image.overrideSprite = _borderSprite;
                 image.material = _bgMaterial;
+                //var color = ThemeManager.GetDefinedColor("primary", Color.black);
                 var color = image.color;
                 color.a = 0.8f;
                 image.color = color;

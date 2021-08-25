@@ -81,7 +81,7 @@ namespace SaberFactory.Misc {
 
             meshrenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
             meshrenderer.receiveShadows = false;
-            meshrenderer.GetComponent<Renderer>().sharedMaterial = material;
+            meshrenderer.sharedMaterial = material;
             meshrenderer.sortingLayerName = _owner.SortingLayerName;
             meshrenderer.sortingOrder = _owner.SortingOrder;
             _meshFilter.sharedMesh = new Mesh();
