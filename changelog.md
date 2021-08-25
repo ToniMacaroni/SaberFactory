@@ -1,6 +1,3 @@
-- fixed material editor not opening
-- added `SFNoPreview` and `HideInSF` shader attributes
-- material editor now takes the range of shader properties into consideration
-- added option in config to hide the gameplay setup "sabers" button
-- bunch of optimizations with material usage
-- added 2018 default sabers
+- if the saber doesn't have a trail you can select one from another saber now
+- if trails have 2 different materials you can tell sf to not copy specific properties
+  by using the `[HideInSF]` argument in the shader
