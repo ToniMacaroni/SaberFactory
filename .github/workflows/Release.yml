@@ -37,7 +37,9 @@ jobs:
         path: ./SaberFactory/bin/Release/Final
     - uses: ncipollo/release-action@v1
       with:
-        artifacts: ${{ steps.Build.outputs.filename }}
+        name: Saber Factory ${{ github.ref }}
+        artifacts: "SaberFactory/bin/Release/Final,changelog.md"
         bodyFile: "changelog.md"
         token: ${{ secrets.GITHUB_TOKEN }}
         allowUpdates: true
+        prerelease: true
