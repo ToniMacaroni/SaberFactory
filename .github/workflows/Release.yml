@@ -43,7 +43,7 @@ jobs:
       uses: ncipollo/release-action@v1
       with:
         name: Saber Factory ${{ steps.vars.outputs.tag }}
-        artifacts: ${{ steps.Build.outputs.filename }}.zip
+        artifacts: SaberFactory/bin/Release/Final/${{ steps.Build.outputs.filename }}.zip
         bodyFile: changelog.md
         token: ${{ secrets.GITHUB_TOKEN }}
         allowUpdates: true
