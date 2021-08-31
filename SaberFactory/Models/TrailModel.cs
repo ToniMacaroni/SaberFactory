@@ -62,6 +62,7 @@ namespace SaberFactory.Models
             TrailPosOffset = other.TrailPosOffset;
             Width = other.Width;
             Length = other.Length;
+            Material ??= new MaterialDescriptor(null);
             Material.Material = other.Material.Material;
             Whitestep = other.Whitestep;
             TrailOrigin = other.TrailOrigin;
