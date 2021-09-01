@@ -39,56 +39,48 @@ namespace SaberFactory.Models
             _coverSprite = customListItem.ListCover;
         }
 
-        public async Task SaveToFile()
+        public void SaveToFile()
         {
-            await UnityMainThreadTaskScheduler.Factory.StartNew(() =>
+            if (AssetMetaPath.HasMetaData)
             {
-                if (AssetMetaPath.HasMetaData)
-                {
-                    File.Delete(AssetMetaPath.MetaDataPath);
-                }
+                File.Delete(AssetMetaPath.MetaDataPath);
+            }
 
-                var ser = new SerializableMeta();
-                ser.Name = _name;
-                ser.Author = _author;
-                ser.AssetTypeDefinition = AssetTypeDefinition;
+            var ser = new SerializableMeta();
+            ser.Name = _name;
+            ser.Author = _author;
+            ser.AssetTypeDefinition = AssetTypeDefinition;
 
-                if (_coverSprite != null)
-                {
-                    var tex = _coverSprite.texture;
-                    ser.CoverData = GetTextureData(tex);
-                }
+            if (_coverSprite != null)
+            {
+                var tex = _coverSprite.texture;
+                ser.CoverData = GetTextureData(tex);
+            }
 
-                var fs = new FileStream(AssetMetaPath.MetaDataPath, FileMode.Create, FileAccess.Write, FileShare.Write);
-                var formatter = new BinaryFormatter();
-                formatter.Serialize(fs, ser);
-                fs.Close();
-
-            });
-
+            var fs = new FileStream(AssetMetaPath.MetaDataPath, FileMode.Create, FileAccess.Write, FileShare.Write);
+            var formatter = new BinaryFormatter();
+            formatter.Serialize(fs, ser);
+            fs.Close();
         }
 
-        public async Task LoadFromFile()
+        public void LoadFromFile()
         {
-            await LoadFromFile(AssetMetaPath.MetaDataPath);
+            LoadFromFile(AssetMetaPath.MetaDataPath);
         }
 
-        public async Task LoadFromFile(string path)
+        public void LoadFromFile(string path)
         {
             var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
             var formatter = new BinaryFormatter();
             var ser = (SerializableMeta)formatter.Deserialize(fs);
             fs.Close();
 
-            await UnityMainThreadTaskScheduler.Factory.StartNew(() =>
-            {
-                _name = ser.Name;
-                _author = ser.Author;
-                _coverData = ser.CoverData;
-                AssetTypeDefinition = ser.AssetTypeDefinition;
+            _name = ser.Name;
+            _author = ser.Author;
+            _coverData = ser.CoverData;
+            AssetTypeDefinition = ser.AssetTypeDefinition;
 
-                LoadSprite();
-            });
+            LoadSprite();
         }
 
         public void SetFavorite(bool isFavorite)

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using BeatSaberMarkupLanguage;
 using HMUI;
 using IPA.Utilities;
@@ -17,22 +18,22 @@ namespace SaberFactory.UI.Lib.BSML
             List, Box, Simple
         }
 
-        private ListStyle listStyle = ListStyle.List;
+        private ListStyle _listStyle = ListStyle.List;
 
-        private LevelListTableCell songListTableCellInstance;
-        private AnnotatedBeatmapLevelCollectionTableCell levelPackTableCellInstance;
-        private SimpleTextTableCell simpleTextTableCellInstance;
+        private LevelListTableCell _songListTableCellInstance;
+        private AnnotatedBeatmapLevelCollectionTableCell _levelPackTableCellInstance;
+        private SimpleTextTableCell _simpleTextTableCellInstance;
 
-        public List<CustomCellInfo> data = new List<CustomCellInfo>();
+        public List<CustomCellInfo> Data = new List<CustomCellInfo>();
         public float cellSize = 8.5f;
-        public string reuseIdentifier = "BSMLListTableCell";
-        public TableView tableView;
+        public string ReuseIdentifier = "BSMLListTableCell";
+        public TableView TableView;
 
-        public bool expandCell = false;
+        public bool ExpandCell = false;
 
         public ListStyle Style
         {
-            get => listStyle;
+            get => _listStyle;
             set
             {
                 //Sets the default cell size for certain styles
@@ -42,18 +43,21 @@ namespace SaberFactory.UI.Lib.BSML
                         cellSize = 8.5f;
                         break;
                     case ListStyle.Box:
-                        cellSize = tableView.tableType == TableView.TableType.Horizontal ? 30f : 35f;
+                        cellSize = TableView.tableType == TableView.TableType.Horizontal ? 30f : 35f;
                         break;
                     case ListStyle.Simple:
                         cellSize = 8f;
                         break;
                 }
 
-                listStyle = value;
+                _listStyle = value;
             }
         }
 
-        private static readonly Color _heartColor = new Color(0.921f, 0.360f, 0.321f);
+        private static readonly Color HeartColor = new Color(0.921f, 0.360f, 0.321f);
+
+        private static readonly Sprite FolderSprite =
+            Utilities.FindSpriteInAssembly("SaberFactory.Resources.Icons.folder.png");
 
         #region Accessors
 
@@ -82,13 +86,13 @@ namespace SaberFactory.UI.Lib.BSML
 
         public LevelListTableCell GetTableCell()
         {
-            LevelListTableCell tableCell = (LevelListTableCell)tableView.DequeueReusableCellForIdentifier(reuseIdentifier);
+            LevelListTableCell tableCell = (LevelListTableCell)TableView.DequeueReusableCellForIdentifier(ReuseIdentifier);
             if (!tableCell)
             {
-                if (songListTableCellInstance == null)
-                    songListTableCellInstance = Resources.FindObjectsOfTypeAll<LevelListTableCell>().First(x => (x.name == "LevelListTableCell"));
+                if (_songListTableCellInstance == null)
+                    _songListTableCellInstance = Resources.FindObjectsOfTypeAll<LevelListTableCell>().First(x => (x.name == "LevelListTableCell"));
 
-                tableCell = Instantiate(songListTableCellInstance);
+                tableCell = Instantiate(_songListTableCellInstance);
 
                 var t = _favoriteImageAccessor(ref tableCell).gameObject.transform.AsRectTransform();
                 t.sizeDelta = new Vector2(5, 5);
@@ -105,47 +109,47 @@ namespace SaberFactory.UI.Lib.BSML
 
             tableCell.SetField("_notOwned", false);
 
-            tableCell.reuseIdentifier = reuseIdentifier;
+            tableCell.reuseIdentifier = ReuseIdentifier;
             return tableCell;
         }
 
         public AnnotatedBeatmapLevelCollectionTableCell GetLevelPackTableCell()
         {
-            AnnotatedBeatmapLevelCollectionTableCell tableCell = (AnnotatedBeatmapLevelCollectionTableCell)tableView.DequeueReusableCellForIdentifier(reuseIdentifier);
+            AnnotatedBeatmapLevelCollectionTableCell tableCell = (AnnotatedBeatmapLevelCollectionTableCell)TableView.DequeueReusableCellForIdentifier(ReuseIdentifier);
             if (!tableCell)
             {
-                if (levelPackTableCellInstance == null)
-                    levelPackTableCellInstance = Resources.FindObjectsOfTypeAll<AnnotatedBeatmapLevelCollectionTableCell>().First(x => x.name == "AnnotatedBeatmapLevelCollectionTableCell");
+                if (_levelPackTableCellInstance == null)
+                    _levelPackTableCellInstance = Resources.FindObjectsOfTypeAll<AnnotatedBeatmapLevelCollectionTableCell>().First(x => x.name == "AnnotatedBeatmapLevelCollectionTableCell");
 
-                tableCell = Instantiate(levelPackTableCellInstance);
+                tableCell = Instantiate(_levelPackTableCellInstance);
             }
 
-            tableCell.reuseIdentifier = reuseIdentifier;
+            tableCell.reuseIdentifier = ReuseIdentifier;
             return tableCell;
         }
 
         public SimpleTextTableCell GetSimpleTextTableCell()
         {
-            SimpleTextTableCell tableCell = (SimpleTextTableCell)tableView.DequeueReusableCellForIdentifier(reuseIdentifier);
+            SimpleTextTableCell tableCell = (SimpleTextTableCell)TableView.DequeueReusableCellForIdentifier(ReuseIdentifier);
             if (!tableCell)
             {
-                if (simpleTextTableCellInstance == null)
-                    simpleTextTableCellInstance = Resources.FindObjectsOfTypeAll<SimpleTextTableCell>().First(x => x.name == "SimpleTextTableCell");
+                if (_simpleTextTableCellInstance == null)
+                    _simpleTextTableCellInstance = Resources.FindObjectsOfTypeAll<SimpleTextTableCell>().First(x => x.name == "SimpleTextTableCell");
 
-                tableCell = Instantiate(simpleTextTableCellInstance);
+                tableCell = Instantiate(_simpleTextTableCellInstance);
             }
 
-            tableCell.reuseIdentifier = reuseIdentifier;
+            tableCell.reuseIdentifier = ReuseIdentifier;
             return tableCell;
         }
 
         public virtual TableCell CellForIdx(TableView tableView, int idx)
         {
-            switch (listStyle)
+            switch (_listStyle)
             {
                 case ListStyle.List:
                     LevelListTableCell tableCell = GetTableCell();
-                    var cellData = data[idx];
+                    var cellData = Data[idx];
 
                     var nameText = _songNameTextAccessor(ref tableCell);
                     var authorText = _songAuthorTextAccessor(ref tableCell);
@@ -153,12 +157,34 @@ namespace SaberFactory.UI.Lib.BSML
                     var songBpmText = _songBpmTextAccessor(ref tableCell);
                     var coverImage = _coverImageAccessor(ref tableCell);
                     var favoriteImage = _favoriteImageAccessor(ref tableCell);
+                    var bg = _backgroundImageAccessor(ref tableCell).Cast<ImageView>();
 
                     (coverImage as ImageView).SetSkew(0);
 
+                    nameText.color = cellData.IsCategory ? Color.red : Color.white;
+
+                    if (cellData.IsCategory)
+                    {
+                        nameText.color = HeartColor;
+                        nameText.rectTransform.anchoredPosition = nameText.rectTransform.anchoredPosition.With(null, 0);
+                    }
+                    else
+                    {
+                        nameText.color = Color.white;
+                        nameText.rectTransform.anchoredPosition = nameText.rectTransform.anchoredPosition.With(null, 1.14f);
+                    }
+
                     if (cellData.Icon is null)
                     {
-                        coverImage.gameObject.SetActive(false);
+                        if (cellData.IsCategory)
+                        {
+                            coverImage.gameObject.SetActive(true);
+                            coverImage.sprite = FolderSprite;
+                        }
+                        else
+                        {
+                            coverImage.gameObject.SetActive(false);
+                        }
                     }
                     else
                     {
@@ -188,35 +214,35 @@ namespace SaberFactory.UI.Lib.BSML
 
                     if (cellData.IsFavorite)
                     {
-                        favoriteImage.color = _heartColor;
+                        favoriteImage.color = HeartColor;
                     }
 
                     tableCell.transform.Find("BpmIcon").gameObject.SetActive(false);
 
-                    if (expandCell)
+                    if (ExpandCell)
                     {
                         nameText.rectTransform.anchorMax = new Vector3(2, 0.5f, 0);
                         authorText.rectTransform.anchorMax = new Vector3(2, 0.5f, 0);
                     }
 
-                    nameText.text = data[idx].Text;
-                    authorText.text = data[idx].Subtext;
+                    nameText.text = Data[idx].Text;
+                    authorText.text = Data[idx].Subtext;
 
                     return tableCell;
                 case ListStyle.Box:
                     AnnotatedBeatmapLevelCollectionTableCell cell = GetLevelPackTableCell();
                     cell.showNewRibbon = false;
-                    cell.GetField<TextMeshProUGUI, AnnotatedBeatmapLevelCollectionTableCell>("_infoText").text = $"{data[idx].Text}\n{data[idx].Subtext}";
+                    cell.GetField<TextMeshProUGUI, AnnotatedBeatmapLevelCollectionTableCell>("_infoText").text = $"{Data[idx].Text}\n{Data[idx].Subtext}";
                     Image packCoverImage = cell.GetField<Image, AnnotatedBeatmapLevelCollectionTableCell>("_coverImage");
 
-                    packCoverImage.sprite = data[idx].Icon == null ? Utilities.LoadSpriteFromTexture(Texture2D.blackTexture) : data[idx].Icon;
+                    packCoverImage.sprite = Data[idx].Icon == null ? Utilities.LoadSpriteFromTexture(Texture2D.blackTexture) : Data[idx].Icon;
 
                     return cell;
                 case ListStyle.Simple:
                     SimpleTextTableCell simpleCell = GetSimpleTextTableCell();
                     simpleCell.GetField<TextMeshProUGUI, SimpleTextTableCell>("_text").richText = true;
                     simpleCell.GetField<TextMeshProUGUI, SimpleTextTableCell>("_text").enableWordWrapping = true;
-                    simpleCell.text = data[idx].Text;
+                    simpleCell.text = Data[idx].Text;
 
                     return simpleCell;
             }
@@ -231,7 +257,7 @@ namespace SaberFactory.UI.Lib.BSML
 
         public int NumberOfCells()
         {
-            return data.Count();
+            return Data.Count();
         }
 
         public class CustomCellInfo
@@ -242,6 +268,7 @@ namespace SaberFactory.UI.Lib.BSML
             public bool IsFavorite;
             public string RightText;
             public string RightBottomText;
+            public bool IsCategory;
         };
     }
 }

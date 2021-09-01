@@ -12,33 +12,16 @@ namespace SaberFactory.Loaders
     {
         public override string HandledExtension => ".saber";
 
-        public override async Task<ISet<AssetMetaPath>> CollectFiles()
+        public override ISet<AssetMetaPath> CollectFiles(PluginDirectories dirs)
         {
-            return await Task.Run(() =>
+            var paths = new HashSet<AssetMetaPath>();
+
+            foreach (var path in dirs.CustomSaberDir.EnumerateFiles("*.saber", SearchOption.AllDirectories))
             {
-                var dir1 = new DirectoryInfo(Path.Combine(UnityGame.InstallPath, "CustomSabers"));
-                var dir2 = new DirectoryInfo(Path.Combine(PathTools.SaberFactoryUserPath, "CustomSabers"));
+                paths.Add(new AssetMetaPath(path));
+            }
 
-                var paths = new HashSet<AssetMetaPath>();
-
-                if (dir1.Exists)
-                {
-                    foreach (var path in dir1.EnumerateFiles("*.saber", SearchOption.AllDirectories))
-                    {
-                        paths.Add(new AssetMetaPath(path));
-                    }
-                }
-
-                if (dir2.Exists)
-                {
-                    foreach (var path in dir2.EnumerateFiles("*.saber", SearchOption.AllDirectories))
-                    {
-                        paths.Add(new AssetMetaPath(path));
-                    }
-                }
-
-                return paths;
-            });
+            return paths;
         }
 
         public override async Task<StoreAsset> LoadStoreAssetAsync(string relativePath)

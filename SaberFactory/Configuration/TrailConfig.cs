@@ -12,7 +12,7 @@ namespace SaberFactory.Configuration
 
         public bool OnlyUseVertexColor { get; set; } = true;
 
-        public TrailConfig(SFDirectories sfDirs) : base(sfDirs, "TrailConfig.json")
+        public TrailConfig(PluginDirectories pluginDirs) : base(pluginDirs, "TrailConfig.json")
         { }
     }
 }

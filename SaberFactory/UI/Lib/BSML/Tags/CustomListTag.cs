@@ -40,7 +40,7 @@ namespace SaberFactory.UI.Lib.BSML
 
             TableView tableView = gameObject.AddComponent<BSMLTableView>();
             CustomListTableData tableData = container.gameObject.AddComponent<CustomListTableData>();
-            tableData.tableView = tableView;
+            tableData.TableView = tableView;
 
             tableView.SetField("_preallocatedCells", new TableView.CellsGroup[0]);
             tableView.SetField("_isInitialized", false);
@@ -96,7 +96,7 @@ namespace SaberFactory.UI.Lib.BSML
             CustomListTableData tableData = componentType.component as CustomListTableData;
             if (componentType.data.TryGetValue("selectCell", out string selectCell))
             {
-                tableData.tableView.didSelectCellWithIdxEvent += delegate (TableView table, int index)
+                tableData.TableView.didSelectCellWithIdxEvent += delegate (TableView table, int index)
                 {
                     if (!parserParams.actions.TryGetValue(selectCell, out BSMLAction action))
                         throw new Exception("select-cell action '" + componentType.data["onClick"] + "' not found");
@@ -106,7 +106,7 @@ namespace SaberFactory.UI.Lib.BSML
             }
 
             if (componentType.data.TryGetValue("listDirection", out string listDirection))
-                tableData.tableView.SetField("_tableType", (TableView.TableType)Enum.Parse(typeof(TableView.TableType), listDirection));
+                tableData.TableView.SetField("_tableType", (TableView.TableType)Enum.Parse(typeof(TableView.TableType), listDirection));
 
             if (componentType.data.TryGetValue("listStyle", out string listStyle))
                 tableData.Style = (CustomListTableData.ListStyle)Enum.Parse(typeof(CustomListTableData.ListStyle), listStyle);
@@ -115,21 +115,21 @@ namespace SaberFactory.UI.Lib.BSML
                 tableData.cellSize = Parse.Float(cellSize);
 
             if (componentType.data.TryGetValue("expandCell", out string expandCell))
-                tableData.expandCell = Parse.Bool(expandCell);
+                tableData.ExpandCell = Parse.Bool(expandCell);
 
             if (componentType.data.TryGetValue("alignCenter", out string alignCenter))
-                tableData.tableView.SetField("_alignToCenter", Parse.Bool(alignCenter));
+                tableData.TableView.SetField("_alignToCenter", Parse.Bool(alignCenter));
 
 
             if (componentType.data.TryGetValue("data", out string value))
             {
                 if (!parserParams.values.TryGetValue(value, out BSMLValue contents))
                     throw new Exception("value '" + value + "' not found");
-                tableData.data = contents.GetValue() as List<CustomListTableData.CustomCellInfo>;
-                tableData.tableView.ReloadData();
+                tableData.Data = contents.GetValue() as List<CustomListTableData.CustomCellInfo>;
+                tableData.TableView.ReloadData();
             }
 
-            switch (tableData.tableView.tableType)
+            switch (tableData.TableView.tableType)
             {
                 case TableView.TableType.Vertical:
                     (componentType.component.gameObject.transform as RectTransform).sizeDelta = new Vector2(componentType.data.TryGetValue("listWidth", out string vListWidth) ? Parse.Float(vListWidth) : 60, tableData.cellSize * (componentType.data.TryGetValue("visibleCells", out string vVisibleCells) ? Parse.Float(vVisibleCells) : 7));
@@ -142,12 +142,12 @@ namespace SaberFactory.UI.Lib.BSML
             componentType.component.gameObject.GetComponent<LayoutElement>().preferredHeight = (componentType.component.gameObject.transform as RectTransform).sizeDelta.y;
             componentType.component.gameObject.GetComponent<LayoutElement>().preferredWidth = (componentType.component.gameObject.transform as RectTransform).sizeDelta.x;
 
-            tableData.tableView.gameObject.SetActive(true);
-            tableData.tableView.LazyInit();
+            tableData.TableView.gameObject.SetActive(true);
+            tableData.TableView.LazyInit();
 
             if (componentType.data.TryGetValue("id", out string id))
             {
-                ScrollView scroller = tableData.tableView.GetField<ScrollView, TableView>("_scrollView");
+                ScrollView scroller = tableData.TableView.GetField<ScrollView, TableView>("_scrollView");
                 parserParams.AddEvent(id + "#PageUp", scroller.PageUpButtonPressed);
                 parserParams.AddEvent(id + "#PageDown", scroller.PageDownButtonPressed);
             }

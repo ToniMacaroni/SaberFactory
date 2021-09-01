@@ -18,10 +18,10 @@ namespace SaberFactory.Models
         private readonly DirectoryInfo _customSaberDir;
         private readonly string _filename;
 
-        private RemoteLocationPart(InitData initData, WebClient webClient, SFDirectories sfDirs)
+        private RemoteLocationPart(InitData initData, WebClient webClient, PluginDirectories pluginDirs)
         {
             _webClient = webClient;
-            _customSaberDir = sfDirs.CustomSaberDir;
+            _customSaberDir = pluginDirs.CustomSaberDir;
 
             RemoteLocation = initData.RemoteLocation;
             ListName = initData.Name;
