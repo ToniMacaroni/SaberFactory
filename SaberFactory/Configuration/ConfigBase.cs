@@ -23,9 +23,9 @@ namespace SaberFactory.Configuration
 
         private readonly Dictionary<PropertyInfo, object> _originalValues = new Dictionary<PropertyInfo, object>();
 
-        protected ConfigBase(SFDirectories sfDirs, string fileName)
+        protected ConfigBase(PluginDirectories pluginDirs, string fileName)
         {
-            ConfigFile = sfDirs.SaberFactoryDir.GetFile(fileName);
+            ConfigFile = pluginDirs.SaberFactoryDir.GetFile(fileName);
         }
 
         public void Revert()

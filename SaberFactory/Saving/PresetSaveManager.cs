@@ -21,11 +21,11 @@ namespace SaberFactory.Saving
         private readonly TextureStore _textureStore;
         private readonly DirectoryInfo _presetDir;
 
-        private PresetSaveManager(MainAssetStore mainAssetStore, TextureStore textureStore, SFDirectories sfDirs)
+        private PresetSaveManager(MainAssetStore mainAssetStore, TextureStore textureStore, PluginDirectories pluginDirs)
         {
             _mainAssetStore = mainAssetStore;
             _textureStore = textureStore;
-            _presetDir = sfDirs.PresetDir;
+            _presetDir = pluginDirs.PresetDir;
 
             SerMapper.CreateEntry<TrailModel, SerializableTrail>();
             SerMapper.CreateEntry<SaberModel, SerializableSaber>();

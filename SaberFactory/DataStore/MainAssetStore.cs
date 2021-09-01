@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,6 +10,7 @@ using SaberFactory.Loaders;
 using SaberFactory.Models;
 using SaberFactory.Models.CustomSaber;
 using SiraUtil.Tools;
+using UnityEngine;
 
 namespace SaberFactory.DataStore
 {
@@ -22,11 +22,14 @@ namespace SaberFactory.DataStore
         public bool IsLoading { get; private set; }
         public Task CurrentTask;
 
+        public List<string> AdditionalCustomSaberFolders { get; } = new List<string>();
+
         private readonly CustomSaberAssetLoader _customSaberAssetLoader;
         private readonly CustomSaberModelLoader _customSaberModelLoader;
 
         private readonly PluginConfig _config;
         private readonly SiraLog _logger;
+        private readonly PluginDirectories _pluginDirs;
 
         private readonly Dictionary<string, ModelComposition> _modelCompositions;
         private readonly Dictionary<string, PreloadMetaData> _metaData;
@@ -34,16 +37,26 @@ namespace SaberFactory.DataStore
         private MainAssetStore(
             PluginConfig config,
             SiraLog logger,
-            CustomSaberModelLoader customSaberModelLoader)
+            CustomSaberModelLoader customSaberModelLoader,
+            PluginDirectories pluginDirs)
         {
             _config = config;
             _logger = logger;
+            _pluginDirs = pluginDirs;
 
             _customSaberAssetLoader = new CustomSaberAssetLoader();
             _customSaberModelLoader = customSaberModelLoader;
 
             _modelCompositions = new Dictionary<string, ModelComposition>();
             _metaData = new Dictionary<string, PreloadMetaData>();
+
+            foreach (var directory in pluginDirs.CustomSaberDir.GetDirectories("*", SearchOption.AllDirectories))
+            {
+                var relPath = PathTools.ToRelativePath(directory.FullName);
+                relPath = PathTools.CorrectRelativePath(relPath);
+                relPath = relPath.Substring(relPath.IndexOf('\\')+1);
+                AdditionalCustomSaberFolders.Add(relPath);
+            }
         }
 
         public Task<ModelComposition> this[string path] => GetCompositionByPath(path);
@@ -77,7 +90,7 @@ namespace SaberFactory.DataStore
             if (!IsLoading)
             {
                 IsLoading = true;
-                CurrentTask = LoadAllCustomSaberMetaDataAsyncInternal();
+                CurrentTask = LoadAllMetaDataForLoader(_customSaberAssetLoader, true);
             }
 
             await CurrentTask;
@@ -127,7 +140,7 @@ namespace SaberFactory.DataStore
         public async Task Reload(string path)
         {
             Unload(path);
-            await LoadMetaData(path);
+            LoadMetaData(path);
             await LoadComposition(path);
         }
 
@@ -149,47 +162,38 @@ namespace SaberFactory.DataStore
             File.Delete(filePath);
         }
 
-        private async Task LoadAllCustomSaberMetaDataAsyncInternal()
-        {
-            await LoadAllMetaDataForLoader(_customSaberAssetLoader, true);
-        }
-
         private async Task LoadAllMetaDataForLoader(AssetBundleLoader loader, bool createIfNotExisting = false)
         {
-            var sw = Stopwatch.StartNew();
+            var sw = DebugTimer.StartNew("Loading Metadata");
 
-            await Task.Run(async () =>
+            foreach (var assetMetaPath in loader.CollectFiles(_pluginDirs))
             {
-                foreach (var assetMetaPath in await loader.CollectFiles())
+                var relativePath = PathTools.ToRelativePath(assetMetaPath.MetaDataPath);
+                if (_metaData.TryGetValue(relativePath, out _)) continue;
+
+                if (!assetMetaPath.HasMetaData)
                 {
-                    var relativePath = PathTools.ToRelativePath(assetMetaPath.MetaDataPath);
-                    if (_metaData.TryGetValue(relativePath, out _)) continue;
-
-                    if (!assetMetaPath.HasMetaData)
+                    if (createIfNotExisting)
                     {
-                        if (createIfNotExisting)
-                        {
-                            var comp = await await UnityMainThreadTaskScheduler.Factory.StartNew(() => this[PathTools.ToRelativePath(assetMetaPath.Path)]);
+                        var comp = await this[PathTools.ToRelativePath(assetMetaPath.Path)];
 
-                            if (comp == null) continue;
+                        if (comp == null) continue;
 
-                            var metaData = new PreloadMetaData(assetMetaPath, comp, comp.AssetTypeDefinition);
-                            await metaData.SaveToFile();
-                            _metaData.Add(relativePath, metaData);
-                        }
-                    }
-                    else
-                    {
-                        var metaData = new PreloadMetaData(assetMetaPath);
-                        await metaData.LoadFromFile();
-                        metaData.IsFavorite = _config.IsFavorite(PathTools.ToRelativePath(assetMetaPath.Path));
+                        var metaData = new PreloadMetaData(assetMetaPath, comp, comp.AssetTypeDefinition);
+                        metaData.SaveToFile();
                         _metaData.Add(relativePath, metaData);
                     }
                 }
-            });
+                else
+                {
+                    var metaData = new PreloadMetaData(assetMetaPath);
+                    metaData.LoadFromFile();
+                    metaData.IsFavorite = _config.IsFavorite(PathTools.ToRelativePath(assetMetaPath.Path));
+                    _metaData.Add(relativePath, metaData);
+                }
+            }
 
-            sw.Stop();
-            _logger.Info($"Loaded Metadata in {sw.Elapsed.Seconds}.{sw.Elapsed.Milliseconds}s");
+            sw.Print(_logger);
         }
 
         public async Task<ModelComposition> CreateMetaData(AssetMetaPath assetMetaPath)
@@ -197,18 +201,18 @@ namespace SaberFactory.DataStore
             var relativePath = PathTools.ToRelativePath(assetMetaPath.MetaDataPath);
             if (_metaData.TryGetValue(relativePath, out _)) return null;
 
-            var comp = await await UnityMainThreadTaskScheduler.Factory.StartNew(() => this[PathTools.ToRelativePath(assetMetaPath.Path)]);
+            var comp = await this[PathTools.ToRelativePath(assetMetaPath.Path)];
 
             if (comp == null) return null;
 
             var metaData = new PreloadMetaData(assetMetaPath, comp, comp.AssetTypeDefinition);
-            await metaData.SaveToFile();
+            metaData.SaveToFile();
             _metaData.Add(relativePath, metaData);
 
             return comp;
         }
 
-        private async Task LoadMetaData(string pieceRelativePath)
+        private void LoadMetaData(string pieceRelativePath)
         {
             var assetMetaPath = new AssetMetaPath(new FileInfo(PathTools.ToFullPath(pieceRelativePath)));
             if (_metaData.TryGetValue(assetMetaPath.RelativeMetaDataPath, out _)) return;
@@ -216,7 +220,7 @@ namespace SaberFactory.DataStore
 
             var metaData = new PreloadMetaData(assetMetaPath);
             metaData.IsFavorite = _config.IsFavorite(assetMetaPath.RelativePath);
-            await metaData.LoadFromFile();
+            metaData.LoadFromFile();
             _metaData.Add(assetMetaPath.RelativeMetaDataPath, metaData);
         }
 

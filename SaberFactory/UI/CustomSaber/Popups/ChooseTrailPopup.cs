@@ -1,10 +1,13 @@
 ﻿using BeatSaberMarkupLanguage.Attributes;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using IPA.Utilities;
 using SaberFactory.DataStore;
 using SaberFactory.Models;
 using SaberFactory.Models.CustomSaber;
+using SaberFactory.UI.CustomSaber.Views;
 using SaberFactory.UI.Lib;
 using Zenject;
 
@@ -20,15 +23,34 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
         private TrailModel _selectedTrailModel;
         private Action<TrailModel> _onSelectionChanged;
 
+        private SaberListDirectoryManager _dirManager;
+
+        private List<PreloadMetaData> _comps;
+
         public async void Show(IEnumerable<PreloadMetaData> comps, Action<TrailModel> onSelectionChanged)
         {
+            _dirManager ??= new SaberListDirectoryManager(_mainAssetStore.AdditionalCustomSaberFolders);
+
             _onSelectionChanged = onSelectionChanged;
 
             _ = Create(true);
             _saberList.OnItemSelected += SaberSelected;
-            _saberList.SetItems(comps);
+            _saberList.OnCategorySelected += OnDirectorySelected;
+
+            _comps = comps.ToList();
+
+            _saberList.SetItems(_dirManager.Process(_comps));
 
             await AnimateIn();
+        }
+
+        private void OnDirectorySelected(string path)
+        {
+            _dirManager.Navigate(path);
+            _saberList.SetText(_dirManager.IsInRoot ? "Saber-Os" : _dirManager.DirectoryString);
+            _saberList.Deselect();
+
+            _saberList.SetItems(_dirManager.Process(_comps));
         }
 
         private async Task<TrailModel> GetTrail(PreloadMetaData metaData)
@@ -59,6 +81,7 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
             _onSelectionChanged = null;
 
             _saberList.OnItemSelected -= SaberSelected;
+            _saberList.OnCategorySelected -= OnDirectorySelected;
             await Hide(true);
         }
 

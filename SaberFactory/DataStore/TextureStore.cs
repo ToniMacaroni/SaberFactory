@@ -15,10 +15,10 @@ namespace SaberFactory.DataStore
         private readonly DirectoryInfo _textureDirectory;
         private Task _currentLoadingTask;
 
-        private TextureStore(SFDirectories sfDirs)
+        private TextureStore(PluginDirectories pluginDirs)
         {
             _textureAssets = new Dictionary<string, TextureAsset>();
-            _textureDirectory = sfDirs.SaberFactoryDir.CreateSubdirectory("Textures");
+            _textureDirectory = pluginDirs.SaberFactoryDir.CreateSubdirectory("Textures");
         }
 
         public Task<TextureAsset> this[string path] => GetTexture(path);

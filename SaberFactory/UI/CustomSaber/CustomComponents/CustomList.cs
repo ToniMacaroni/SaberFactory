@@ -20,6 +20,7 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
     internal class CustomList : CustomUiComponent
     {
         public event Action<ICustomListItem> OnItemSelected;
+        public event Action<string> OnCategorySelected; 
 
         [Inject] private readonly IVRPlatformHelper _platformHelper = null;
 
@@ -41,15 +42,16 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
                     Text = item.ListName,
                     Subtext = item.ListAuthor,
                     Icon = item.ListCover,
-                    IsFavorite = item.IsFavorite
+                    IsFavorite = item.IsFavorite,
+                    IsCategory = item is ListDirectory
                 };
 
                 data.Add(cell);
                 listItems.Add(item);
             }
 
-            _list.data = data;
-            _list.tableView.ReloadData();
+            _list.Data = data;
+            _list.TableView.ReloadData();
 
             _listObjects = listItems;
         }
@@ -77,15 +79,21 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
         public void Select(int idx, bool scroll = true)
         {
             if (idx == -1 || idx == _currentIdx) return;
-            _list.tableView.SelectCellWithIdx(idx);
+            _list.TableView.SelectCellWithIdx(idx);
             _currentIdx = idx;
-            if(scroll) _list.tableView.ScrollToCellWithIdx(idx, TableView.ScrollPositionType.Beginning, false);
+            if(scroll) _list.TableView.ScrollToCellWithIdx(idx, TableView.ScrollPositionType.Beginning, false);
+        }
+
+        public void Deselect()
+        {
+            _currentIdx = -1;
+            _list.TableView.ClearSelection();
         }
 
         public void ScrollTo(int idx)
         {
             if (idx == -1) return;
-            _list.tableView.ScrollToCellWithIdx(idx, TableView.ScrollPositionType.Beginning, false);
+            _list.TableView.ScrollToCellWithIdx(idx, TableView.ScrollPositionType.Beginning, false);
         }
 
         private void SetWidth(float width)
@@ -98,7 +106,7 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
             _layoutElement.preferredHeight = height;
         }
 
-        private void SetText(string text)
+        public void SetText(string text)
         {
             _textMesh.text = text;
         }
@@ -116,14 +124,35 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
         [UIAction("#post-parse")]
         private void Setup()
         {
-            _list.tableView.GetField<ScrollView, TableView>("_scrollView").SetField("_platformHelper", _platformHelper);
+            _list.TableView.GetField<ScrollView, TableView>("_scrollView").SetField("_platformHelper", _platformHelper);
         }
 
         [UIAction("item-selected")]
         private void ItemSelected(TableView _, int row)
         {
+            var obj = _listObjects[row];
+
+            if (obj is ListDirectory dir)
+            {
+                OnCategorySelected?.Invoke(dir.ListName);
+                return;
+            }
+
             _currentIdx = row;
-            OnItemSelected?.Invoke(_listObjects[row]);
+            OnItemSelected?.Invoke(obj);
+        }
+
+        internal class ListDirectory : ICustomListItem
+        {
+            public ListDirectory(string listName)
+            {
+                ListName = listName;
+            }
+
+            public string ListName { get; }
+            public string ListAuthor => "";
+            public Sprite ListCover => null;
+            public bool IsFavorite => false;
         }
 
         [ComponentHandler(typeof(CustomList))]

@@ -13,10 +13,14 @@ namespace SaberFactory.Loaders
         public string RelativePath => PathTools.ToRelativePath(Path);
         public string RelativeMetaDataPath => PathTools.ToRelativePath(MetaDataPath);
 
+        public string SubDirName;
+
         public AssetMetaPath(FileInfo file, string metaDataPath = null)
         {
             File = file;
             MetaDataPath = metaDataPath ?? Path+".meta";
+
+            SubDirName = PathTools.GetSubDir(RelativePath);
         }
     }
 }

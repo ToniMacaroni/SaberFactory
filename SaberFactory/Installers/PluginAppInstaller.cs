@@ -43,8 +43,7 @@ namespace SaberFactory.Installers
 
             Container.BindInstance(rtOptions).AsSingle();
 
-            var dirs = SFDirectories.Create();
-            Container.BindInstance(dirs);
+            Container.Bind<PluginDirectories>().AsSingle();
 
             Container.BindLoggerAsSiraLogger(_logger);
             Container.BindInstance(_config).AsSingle();

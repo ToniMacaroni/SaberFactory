@@ -90,10 +90,12 @@ namespace SaberFactory.Models.CustomSaber
             base.SyncFrom(otherModel);
             var otherCs = (CustomSaberModel) otherModel;
 
-            if (otherCs.HasTrail)
+            if (otherCs.HasTrail || otherCs.TrailModel is {})
             {
+                TrailModel ??= new TrailModel();
+
                 // backup current material
-                var mat = TrailModel.Material.Material;
+                var mat = TrailModel.Material?.Material;
 
                 TrailModel.CopyFrom(otherCs.TrailModel);
 
@@ -117,6 +119,7 @@ namespace SaberFactory.Models.CustomSaber
                     mat.TryDestoryImmediate();
                 }
             }
+
         }
 
         public TrailModel GrabTrail(bool addTrailOrigin)

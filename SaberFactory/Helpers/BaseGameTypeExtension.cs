@@ -66,5 +66,15 @@ namespace SaberFactory.Helpers
             mats[index] = material;
             renderer.materials = mats;
         }
+
+        public static Vector2 With(this Vector2 vec, float? x, float? y)
+        {
+            return new Vector2(x ?? vec.x, y ?? vec.y);
+        }
+
+        public static Vector3 With(this Vector3 vec, float? x, float? y, float? z)
+        {
+            return new Vector3(x ?? vec.x, y ?? vec.y, z ?? vec.z);
+        }
     }
 }

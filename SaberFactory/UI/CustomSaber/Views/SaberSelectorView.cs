@@ -16,6 +16,7 @@ using SaberFactory.UI.CustomSaber.CustomComponents;
 using SaberFactory.UI.CustomSaber.Popups;
 using SaberFactory.UI.Lib;
 using Zenject;
+using Debug = UnityEngine.Debug;
 
 
 namespace SaberFactory.UI.CustomSaber.Views
@@ -63,6 +64,7 @@ namespace SaberFactory.UI.CustomSaber.Views
         private ChooseSort.ESortMode _sortMode = ChooseSort.ESortMode.Name;
         private ModelComposition _currentComposition;
         private PreloadMetaData _currentPreloadMetaData;
+        private SaberListDirectoryManager _dirManager;
 
         private bool _showDownloadSabersPopup;
 
@@ -81,8 +83,19 @@ namespace SaberFactory.UI.CustomSaber.Views
         [UIAction("#post-parse")]
         private async void Setup()
         {
+            _dirManager = new SaberListDirectoryManager(_mainAssetStore.AdditionalCustomSaberFolders);
             _saberList.OnItemSelected += SaberSelected;
+            _saberList.OnCategorySelected += DirectorySelected;
             await LoadSabers();
+        }
+
+        private async void DirectorySelected(string dir)
+        {
+            _dirManager.Navigate(dir);
+            _saberList.SetText(_dirManager.IsInRoot?"Saber-Os":_dirManager.DirectoryString);
+            _saberList.Deselect();
+
+            await ShowSabers(true);
         }
 
         public async Task LoadSabers()
@@ -120,6 +133,8 @@ namespace SaberFactory.UI.CustomSaber.Views
             var items = new List<ICustomListItem>(metaEnumerable);
             var loadedNames = items.Select(x => x.ListName).ToList();
 
+            var addedDownloadables = 0;
+
             if (_pluginConfig.ShowDownloadableSabers)
             {
                 var idx = items.Count(x => x.IsFavorite);
@@ -131,13 +146,14 @@ namespace SaberFactory.UI.CustomSaber.Views
                     if (!loadedNames.Contains(remotePart.ListName))
                     {
                         items.Insert(idx, remotePart);
+                        addedDownloadables++;
                     }
                 }
             }
 
-            ShowDownloadSabersPopup = items.Count() < 2;
+            ShowDownloadSabersPopup = items.Count() <= addedDownloadables;
 
-            _saberList.SetItems(items);
+            _saberList.SetItems(_dirManager.Process(items));
 
             _currentComposition = _editorInstanceManager.CurrentModelComposition;
 

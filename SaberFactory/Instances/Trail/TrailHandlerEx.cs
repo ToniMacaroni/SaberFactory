@@ -31,7 +31,7 @@ namespace SaberFactory.Instances.Trail
 
                 if (_backupTrail is null) return;
 
-                var trailStart = TrailInstance.gameObject.CreateGameObject("Trail Start");
+                var trailStart = TrailInstance.gameObject.CreateGameObject("Trail StartNew");
                 var trailEnd = TrailInstance.gameObject.CreateGameObject("TrailEnd");
                 trailEnd.transform.localPosition = new Vector3(0, 0, 1);
 

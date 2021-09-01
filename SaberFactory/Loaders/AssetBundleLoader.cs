@@ -18,7 +18,7 @@ namespace SaberFactory.Loaders
         /// Get all the loadable file paths
         /// </summary>
         /// <returns></returns>
-        public abstract Task<ISet<AssetMetaPath>> CollectFiles();
+        public abstract ISet<AssetMetaPath> CollectFiles(PluginDirectories dirs);
 
         public abstract Task<StoreAsset> LoadStoreAssetAsync(string relativePath);
     }
