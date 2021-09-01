@@ -1,4 +1,2 @@
-- if the saber doesn't have a trail you can select one from another saber now
-- if trails have 2 different materials you can tell sf to not copy specific properties
-  by using the `[HideInSF]` argument in the shader
-- bugfixes
+- fixed using trail of another saber on trailless sabers
+- added subfolder support and navigation for them in SF
