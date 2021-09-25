@@ -3,8 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CustomSaber;
 using IPA.Utilities;
 using SaberFactory.DataStore;
+using SaberFactory.Helpers;
 using SaberFactory.Models;
 using SaberFactory.Models.CustomSaber;
 using SaberFactory.UI.CustomSaber.Views;
@@ -20,14 +22,14 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
 
         [UIComponent("saber-list")] private readonly CustomList _saberList = null;
 
-        private TrailModel _selectedTrailModel;
-        private Action<TrailModel> _onSelectionChanged;
+        private (TrailModel, List<CustomTrail>) _selectedTrailModel;
+        private Action<TrailModel, List<CustomTrail>> _onSelectionChanged;
 
         private SaberListDirectoryManager _dirManager;
 
         private List<PreloadMetaData> _comps;
 
-        public async void Show(IEnumerable<PreloadMetaData> comps, Action<TrailModel> onSelectionChanged)
+        public async void Show(IEnumerable<PreloadMetaData> comps, Action<TrailModel, List<CustomTrail>> onSelectionChanged)
         {
             _dirManager ??= new SaberListDirectoryManager(_mainAssetStore.AdditionalCustomSaberFolders);
 
@@ -53,18 +55,18 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
             _saberList.SetItems(_dirManager.Process(_comps));
         }
 
-        private async Task<TrailModel> GetTrail(PreloadMetaData metaData)
+        private async Task<(TrailModel, List<CustomTrail>)> GetTrail(PreloadMetaData metaData)
         {
-            if (metaData is null) return null;
+            if (metaData is null) return default;
 
             var comp = await _mainAssetStore[metaData];
 
             if (comp?.GetLeft() is CustomSaberModel cs)
             {
-                return cs.GrabTrail(true);
+                return (cs.GrabTrail(true), SaberHelpers.GetTrails(cs.Prefab));
             }
 
-            return null;
+            return default;
         }
 
         private async void SaberSelected(ICustomListItem item)
@@ -72,7 +74,7 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
             if (item is PreloadMetaData metaData)
             {
                 _selectedTrailModel = await GetTrail(metaData);
-                _onSelectionChanged?.Invoke(_selectedTrailModel);
+                _onSelectionChanged?.Invoke(_selectedTrailModel.Item1, _selectedTrailModel.Item2);
             }
         }
 
@@ -94,7 +96,7 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
         [UIAction("click-original")]
         private void ClickOriginal()
         {
-            _onSelectionChanged?.Invoke(null);
+            _onSelectionChanged?.Invoke(null, null);
             Exit();
         }
 

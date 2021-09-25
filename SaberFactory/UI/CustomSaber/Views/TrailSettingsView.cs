@@ -1,6 +1,8 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components.Settings;
+using CustomSaber;
 using HMUI;
 using SaberFactory.Configuration;
 using SaberFactory.DataStore;
@@ -14,6 +16,7 @@ using SaberFactory.Models.CustomSaber;
 using SaberFactory.UI.CustomSaber.CustomComponents;
 using SaberFactory.UI.CustomSaber.Popups;
 using SaberFactory.UI.Lib;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -127,19 +130,6 @@ namespace SaberFactory.UI.CustomSaber.Views
             }
         }
 
-        private void OnjoystickWasNotCenteredThisFrameEvent(Vector2 deltaPos)
-        {
-            var newWidth = Mathf.Clamp(_instanceTrailData.Width + deltaPos.y * -0.005f,
-                _widthSliderSetting.slider.minValue, _widthSliderSetting.slider.maxValue);
-            SetWidth(null, newWidth);
-            _widthSlider.Value = newWidth;
-
-            var newLength = Mathf.Clamp(_trailFloatLength + deltaPos.x * 0.1f,
-                _lengthSliderSetting.slider.minValue, _lengthSliderSetting.slider.maxValue);
-            SetLength(null, newLength);
-            _lengthSlider.Value = newLength;
-        }
-
         public override void DidClose()
         {
             if (_instanceTrailData != null && _pluginConfig.ControlTrailWithThumbstick)
@@ -152,6 +142,19 @@ namespace SaberFactory.UI.CustomSaber.Views
             _materialEditor.Close();
             _instanceTrailData = null;
             _trailPreviewer.Destroy();
+        }
+
+        private void OnjoystickWasNotCenteredThisFrameEvent(Vector2 deltaPos)
+        {
+            var newWidth = Mathf.Clamp(_instanceTrailData.Width + deltaPos.y * -0.005f,
+                _widthSliderSetting.slider.minValue, _widthSliderSetting.slider.maxValue);
+            SetWidth(null, newWidth);
+            _widthSlider.Value = newWidth;
+
+            var newLength = Mathf.Clamp(_trailFloatLength + deltaPos.x * 0.1f,
+                _lengthSliderSetting.slider.minValue, _lengthSliderSetting.slider.maxValue);
+            SetLength(null, newLength);
+            _lengthSlider.Value = newLength;
         }
 
         private void LoadFromModel(InstanceTrailData trailData)
@@ -221,7 +224,7 @@ namespace SaberFactory.UI.CustomSaber.Views
             }
         }
 
-        private bool CopyFromTrailModel(TrailModel trailModel)
+        private bool CopyFromTrailModel(TrailModel trailModel, List<CustomTrail> trailList)
         {
             if (_editorInstanceManager.CurrentPiece is CustomSaberInstance customsaber)
             {
@@ -235,12 +238,14 @@ namespace SaberFactory.UI.CustomSaber.Views
                         12,
                         new MaterialDescriptor(null),
                         0f,
-                        TextureWrapMode.Clamp);
+                        TextureWrapMode.Clamp) {TrailOriginTrails = trailList};
+
                     model.TrailModel.CopyFrom(trailModel);
                     return true;
                 }
 
                 model.TrailModel.CopyFrom(trailModel);
+                model.TrailModel.TrailOriginTrails = trailList;
             }
 
             return false;
@@ -296,6 +301,8 @@ namespace SaberFactory.UI.CustomSaber.Views
                 return;
             }
 
+            _widthSliderSetting.interactable = !trailData.HasMultipleTrails;
+
             // Show main container in case it wasn't active
             if (_noTrailContainer.activeSelf) _noTrailContainer.SetActive(false);
             if (!_mainContainer.activeSelf) _mainContainer.SetActive(true);
@@ -326,26 +333,20 @@ namespace SaberFactory.UI.CustomSaber.Views
         private void CreateTrailHand(InstanceTrailData trailData)
         {
             LoadFromModel(trailData);
-
-            AddControlEvents();
         }
 
-        private void TrailPopupSelectionChanged(TrailModel trailModel)
+        private void TrailPopupSelectionChanged(TrailModel trailModel, List<CustomTrail> trailList)
         {
-            var needUiRefresh = false;
-
             if (trailModel is null)
             {
                 ResetTrail();
             }
             else
             {
-                needUiRefresh = CopyFromTrailModel(trailModel);
+                CopyFromTrailModel(trailModel, trailList);
             }
 
             _editorInstanceManager.Refresh();
-
-            //if(needUiRefresh) CreateTrail(_editorInstanceManager.CurrentSaber);
         }
 
         private void Update()

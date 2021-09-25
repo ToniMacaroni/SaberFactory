@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using HarmonyLib;
 using SaberFactory.Helpers;
 using SaberFactory.Instances.Trail;
 using SiraUtil.Tools;
@@ -26,13 +28,7 @@ namespace SaberFactory.UI
         private readonly SiraLog _logger;
         private GameObject _prefab;
 
-        private GameObject _instance;
-        private Transform _transform;
-        private Renderer _renderer;
-        private Mesh _mesh;
-
-        private Transform _pointStart;
-        private Transform _pointEnd;
+        private List<TrailPreviewSection> _sections = new List<TrailPreviewSection>();
 
         public TrailPreviewer(SiraLog logger, EmbeddedAssetLoader assetLoader)
         {
@@ -54,13 +50,17 @@ namespace SaberFactory.UI
 
         public void Create(Transform parent, InstanceTrailData trailData)
         {
-            (_pointStart, _pointEnd) = trailData.GetPoints();
+            _sections.Clear();
+            var (pointStart, pointEnd) = trailData.GetPoints();
+            _sections.Add(new TrailPreviewSection(0, parent, pointStart, pointEnd, _prefab));
+            
+            for (int i = 0; i < trailData.SecondaryTrails.Count; i++)
+            {
+                var trail = trailData.SecondaryTrails[i];
+                if(trail.Trail.PointStart is null || trail.Trail.PointEnd is null) continue;
+                _sections.Add(new TrailPreviewSection(i+1, parent, trail.Trail.PointStart, trail.Trail.PointEnd, _prefab, trail));
+            }
 
-            _instance = Object.Instantiate(_prefab, trailData.PointEnd.position, Quaternion.Euler(-90, 25, 0), parent);
-            _transform = _instance.transform;
-            _renderer = _instance.GetComponentInChildren<Renderer>();
-            _mesh = _instance.GetComponentInChildren<MeshFilter>().sharedMesh;
-            _renderer.sortingOrder = 3;
 
             Material = trailData.Material.Material;
             Length = trailData.Length;
@@ -69,50 +69,146 @@ namespace SaberFactory.UI
 
         public void SetMaterial(Material mat)
         {
-            if (!_renderer) return;
-            _renderer.material = mat;
+            if (_sections.Count < 1) return;
+            _sections[0].SetMaterial(mat);
         }
 
         public void SetColor(Color color)
         {
-            var newColors = new Color[4];
-            for (int i = 0; i < newColors.Length; i++)
-            {
-                newColors[i] = color;
-            }
-
-            _mesh.colors = newColors;
+            _sections.Do(x=>x.SetColor(color));
         }
 
         public void UpdateWidth()
         {
-            var locPosStart = _instance.transform.InverseTransformPoint(_pointStart.position);
-            var locPosEnd = _instance.transform.InverseTransformPoint(_pointEnd.position);
-
-            var newVerts = new Vector3[4];
-            newVerts[0] = new Vector3(0, 0, locPosStart.z); // bottom left
-            newVerts[1] = new Vector3(0, 0, locPosEnd.z); // top left
-            newVerts[2] = new Vector3(1f, 0, locPosEnd.z); // top right
-            newVerts[3] = new Vector3(1f, 0, locPosStart.z); // bottom right
-            _mesh.vertices = newVerts;
+            _sections.Do(x=>x.UpdateWidth());
         }
 
         public Material GetMaterial()
         {
-            if (!_renderer) return null;
-            return _renderer.material;
+            if (_sections.Count < 1) return null;
+            return _sections[0].GetMaterial();
         }
 
         public void SetLength(float val)
         {
-            var currentScale = _transform.localScale;
-            currentScale.x = val*0.05f;
-            _transform.localScale = currentScale;
+            _sections.Do(x=>x.SetLength(val));
         }
 
         public void Destroy()
         {
-            _instance.TryDestroy();
+            _sections.Do(x=>x.Destroy());
+            _sections.Clear();
+        }
+
+        private class TrailPreviewSection
+        {
+            public int TrailIdx { get; }
+            public bool IsPrimaryTrail => TrailIdx == 0;
+            
+            private readonly GameObject _instance;
+            private readonly Transform _transform;
+            private readonly Renderer _renderer;
+            private readonly Mesh _mesh;
+
+            private readonly Transform _pointStart;
+            private readonly Transform _pointEnd;
+
+            private readonly InstanceTrailData.SecondaryTrailHandler _trailHandler;
+
+            public TrailPreviewSection(
+                int idx,
+                Transform parent,
+                Transform pointStart,
+                Transform pointEnd,
+                GameObject prefab,
+                InstanceTrailData.SecondaryTrailHandler trailHandler = null)
+            {
+                TrailIdx = idx;
+                
+                _trailHandler = trailHandler;
+                _pointStart = pointStart;
+                _pointEnd = pointEnd;
+                
+                _instance = Object.Instantiate(prefab, _pointEnd.position, Quaternion.Euler(-90, 25, 0), parent);
+                _instance.name = "Trail preview " + idx;
+                _transform = _instance.transform;
+                _renderer = _instance.GetComponentInChildren<Renderer>();
+                _mesh = _instance.GetComponentInChildren<MeshFilter>().mesh;
+                _renderer.sortingOrder = 3;
+
+                if (trailHandler is {})
+                {
+                    SetMaterial(trailHandler.Trail.TrailMaterial);
+                }
+            }
+            
+            public void SetMaterial(Material mat)
+            {
+                if (_renderer is null) return;
+                _renderer.material = mat;
+            }
+            
+            public Material GetMaterial()
+            {
+                if (_renderer is null) return null;
+                return _renderer.material;
+            }
+
+            public void SetColor(Color color)
+            {
+                if (_renderer.material != null)
+                {
+                    var mat = _renderer.material;
+                    if (mat.HasCustomColorsEnabled())
+                    {
+                        mat.SetMainColor(color);
+                    }
+                }
+                
+                var newColors = new Color[4];
+                for (int i = 0; i < newColors.Length; i++)
+                {
+                    newColors[i] = color;
+                }
+
+                _mesh.colors = newColors;
+            }
+
+            public void UpdateWidth()
+            {
+                var locPosStart = _instance.transform.InverseTransformPoint(_pointStart.position);
+
+                var newVerts = new Vector3[4];
+                newVerts[0] = new Vector3(0, 0, locPosStart.z); // bottom left
+                newVerts[1] = new Vector3(0, 0, 0); // top left
+                newVerts[2] = new Vector3(1, 0, 0); // top right
+                newVerts[3] = new Vector3(1, 0, locPosStart.z); // bottom right
+                _mesh.vertices = newVerts;
+            }
+
+            public void SetLength(float val)
+            {
+                if (_trailHandler is null)
+                {
+                    SetLengthInternal(val);
+                    return;
+                }
+                
+                _trailHandler.UpdateLength((int)val);
+                SetLengthInternal(_trailHandler.Trail.Length);
+            }
+
+            private void SetLengthInternal(float val)
+            {
+                var currentScale = _transform.localScale;
+                currentScale.x = val*0.05f;
+                _transform.localScale = currentScale;
+            }
+
+            public void Destroy()
+            {
+                _instance.TryDestroy();
+            }
         }
     }
 }

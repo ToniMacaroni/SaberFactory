@@ -53,6 +53,11 @@ namespace SaberFactory.Helpers
             }
         }
 
+        public static bool HasCustomColorsEnabled(this Material material)
+        {
+            return material.TryGetFloat(MaterialProperties.CustomColors, out var customColors) && customColors > 0.5f;
+        }
+
         public static IEnumerable<(object, int, ShaderPropertyType)> GetProperties(this Material material, string ignoredAttribute = null)
         {
             var shader = material.shader;

@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using CustomSaber;
+using ModestTree;
 using SaberFactory.Helpers;
 using SaberFactory.Instances.Setters;
 using SaberFactory.Instances.Trail;
@@ -15,8 +17,6 @@ namespace SaberFactory.Instances.CustomSaber
         private readonly SiraLog _logger;
 
         public InstanceTrailData InstanceTrailData { get; private set; }
-
-        public List<CustomTrail> SecondaryTrails;
 
         public CustomSaberInstance(CustomSaberModel model, SiraLog logger) : base(model)
         {
@@ -34,26 +34,53 @@ namespace SaberFactory.Instances.CustomSaber
         {
             if (saberObject is null || trailModel is null) return;
 
-            var trails = saberObject?.GetComponentsInChildren<CustomTrail>();
+            var trails = SaberHelpers.GetTrails(saberObject).ToArray();
+
+            CustomTrail SetupTrail(int length, float startPos, float endPos, Material material)
+            {
+                var newTrail = saberObject.AddComponent<CustomTrail>();
+                newTrail.Length = length;
+                newTrail.PointStart = saberObject.CreateGameObject("PointStart").transform;
+                newTrail.PointEnd = saberObject.CreateGameObject("PointEnd").transform;
+                newTrail.PointEnd.localPosition = new Vector3(0, 0, endPos);
+                newTrail.PointStart.localPosition = new Vector3(0, 0, startPos);
+                newTrail.TrailMaterial = material;
+                return newTrail;
+            }
 
             if (trails is null || trails.Length < 1)
             {
-                var newTrail = saberObject.AddComponent<CustomTrail>();
-                newTrail.Length = 12;
-                newTrail.PointStart = saberObject.CreateGameObject("PointStart").transform;
-                newTrail.PointEnd = saberObject.CreateGameObject("PointEnd").transform;
-                newTrail.PointEnd.localPosition = new Vector3(0, 0, 1);
-                trails = new[] {newTrail};
+                trails = new[] {SetupTrail(12, 0, 1, null)};
             }
 
             var saberTrail = trails[0];
 
-            if (trails.Length > 1)
+            List<CustomTrail> secondaryTrails = null;
+
+            if (trailModel.TrailOriginTrails is { } && trailModel.TrailOriginTrails.Count > 1)
             {
-                SecondaryTrails = new List<CustomTrail>();
+                secondaryTrails = new List<CustomTrail>();
                 for (int i = 1; i < trails.Length; i++)
                 {
-                    SecondaryTrails.Add(trails[i]);
+                    Object.DestroyImmediate(trails[i]);
+                }
+
+                for (int i = 1; i < trailModel.TrailOriginTrails.Count; i++)
+                {
+                    var otherTrail = trailModel.TrailOriginTrails[i];
+                    secondaryTrails.Add(SetupTrail(
+                        otherTrail.Length,
+                        otherTrail.PointStart?.localPosition.z ?? 0,
+                        otherTrail.PointEnd?.localPosition.z ?? 0,
+                        otherTrail.TrailMaterial));
+                }
+            }
+            else if (trails.Length > 1)
+            {
+                secondaryTrails = new List<CustomTrail>();
+                for (int i = 1; i < trails.Length; i++)
+                {
+                    secondaryTrails.Add(trails[i]);
                 }
             }
 
@@ -83,7 +110,7 @@ namespace SaberFactory.Instances.CustomSaber
                 pointEnd = saberTrail.PointStart;
             }
 
-            InstanceTrailData = new InstanceTrailData(trailModel, pointStart, pointEnd, isTrailReversed);
+            InstanceTrailData = new InstanceTrailData(trailModel, pointStart, pointEnd, isTrailReversed, secondaryTrails);
         }
 
         public override PartEvents GetEvents()
