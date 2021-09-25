@@ -1,4 +1,6 @@
-﻿using CustomSaber;
+﻿using System.Collections.Generic;
+using System.Linq;
+using CustomSaber;
 using SaberFactory.DataStore;
 using SaberFactory.Helpers;
 using SaberFactory.Instances;
@@ -94,6 +96,8 @@ namespace SaberFactory.Models.CustomSaber
             {
                 TrailModel ??= new TrailModel();
 
+                TrailModel.TrailOriginTrails = otherCs.TrailModel.TrailOriginTrails;
+
                 // backup current material
                 var mat = TrailModel.Material?.Material;
 
@@ -124,7 +128,7 @@ namespace SaberFactory.Models.CustomSaber
 
         public TrailModel GrabTrail(bool addTrailOrigin)
         {
-            var trail = Prefab.GetComponent<CustomTrail>();
+            var trail = SaberHelpers.GetTrails(Prefab).FirstOrDefault();
 
             if (trail == null) return null;
 

@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using SiraUtil.Tools;
+﻿using UnityEngine;
 using Debug = UnityEngine.Debug;
 
 namespace SaberFactory.Helpers
@@ -10,45 +9,26 @@ namespace SaberFactory.Helpers
         {
             Debug.LogError(message);
         }
-    }
 
-    public class DebugTimer
-    {
-        private readonly string _taskName;
-        private readonly Stopwatch _stopwatch;
-
-        public DebugTimer(string taskName = null)
+        public static GameObject CreateBall(BallOptions options)
         {
-            _taskName = taskName ?? "Task";
-            _stopwatch = new Stopwatch();
+            var go = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            go.transform.position = options.Pos;
+            go.transform.SetParent(options.Parent, false);
+            go.transform.localScale = Vector3.one * (options.Size??0.03f);
+            if (options.Color.HasValue)
+            {
+                go.GetComponent<Renderer>().material.color = options.Color.Value.ColorWithAlpha(0);
+            }
+            return go;
         }
 
-        public static DebugTimer StartNew(string taskName = null)
+        public struct BallOptions
         {
-            var sw = new DebugTimer(taskName);
-            sw.Start();
-            return sw;
-        }
-
-        public void Start()
-        {
-            _stopwatch.Start();
-        }
-
-        public void Print()
-        {
-            Debug.LogError(GetString());
-        }
-
-        public void Print(SiraLog logger)
-        {
-            logger.Info(GetString());
-        }
-
-        private string GetString()
-        {
-            _stopwatch.Stop();
-            return $"{_taskName} finished in {_stopwatch.Elapsed.Seconds}.{_stopwatch.Elapsed.Milliseconds}s";
+            public Vector3 Pos;
+            public float? Size;
+            public Transform Parent;
+            public Color? Color;
         }
     }
 }

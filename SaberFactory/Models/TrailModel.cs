@@ -1,4 +1,6 @@
-﻿using SaberFactory.Instances;
+﻿using System.Collections.Generic;
+using CustomSaber;
+using SaberFactory.Instances;
 using SaberFactory.Saving;
 using UnityEngine;
 
@@ -17,6 +19,8 @@ namespace SaberFactory.Models
 
         [MapSerialize]
         public int Length;
+        
+        public int OriginalLength { get; private set; }
 
         public MaterialDescriptor Material;
 
@@ -34,6 +38,9 @@ namespace SaberFactory.Models
 
         public TextureWrapMode? OriginalTextureWrapMode;
 
+        // for custom sabers with multiple trails
+        public List<CustomTrail> TrailOriginTrails;
+
         public TrailModel(
             Vector3 trailPosOffset,
             float width,
@@ -46,6 +53,7 @@ namespace SaberFactory.Models
             TrailPosOffset = trailPosOffset;
             Width = width;
             Length = length;
+            OriginalLength = length;
             Material = material;
             Whitestep = whitestep;
             OriginalTextureWrapMode = originalTextureWrapMode;
@@ -68,6 +76,7 @@ namespace SaberFactory.Models
             TrailOrigin = other.TrailOrigin;
             ClampTexture = other.ClampTexture;
             Flip = other.Flip;
+            OriginalLength = other.OriginalLength;
         }
     }
 }

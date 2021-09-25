@@ -1,4 +1,8 @@
-﻿using CustomSaber;
+﻿using System.Collections.Generic;
+using System.Linq;
+using CustomSaber;
+using HarmonyLib;
+using JetBrains.Annotations;
 using SaberFactory.Helpers;
 using SaberFactory.Models;
 using SaberFactory.Models.CustomSaber;
@@ -59,22 +63,30 @@ namespace SaberFactory.Instances.Trail
             set => TrailModel.Flip = value;
         }
 
+        public bool HasMultipleTrails => SecondaryTrails.Count > 0;
+
         // is used for automatic trail reversal with faulty saber setup
         private readonly bool _isTrailReversed;
+        public List<SecondaryTrailHandler> SecondaryTrails { get; }
 
-        public InstanceTrailData(TrailModel trailModel, Transform pointStart, Transform pointEnd, bool isTrailReversed)
+        public InstanceTrailData(TrailModel trailModel, Transform pointStart, Transform pointEnd, bool isTrailReversed, List<CustomTrail> secondaryTrails = null)
         {
             TrailModel = trailModel;
             PointStart = pointStart;
+            
             var newEnd = new GameObject("PointEnd").transform;
             newEnd.SetParent(pointEnd, false);
             PointEnd = newEnd;
+            
             _isTrailReversed = isTrailReversed;
+            
+            SecondaryTrails = secondaryTrails?.Select(x=>new SecondaryTrailHandler(x, trailModel.OriginalLength)).ToList() ?? new List<SecondaryTrailHandler>();
+            SecondaryTrails.Do(x=>x.UpdateLength(trailModel.Length));
 
             Init(trailModel);
         }
 
-        public void Init(TrailModel trailModel)
+        private void Init(TrailModel trailModel)
         {
             SetClampTexture(trailModel.ClampTexture);
             SetWidth(trailModel.Width);
@@ -92,6 +104,7 @@ namespace SaberFactory.Instances.Trail
         public void SetLength(int length)
         {
             TrailModel.Length = length;
+            SecondaryTrails.Do(x=>x.UpdateLength(length));
         }
 
         public void SetWhitestep(float whitestep)
@@ -132,6 +145,24 @@ namespace SaberFactory.Instances.Trail
             var pointEnd = _isTrailReversed ? PointStart : PointEnd;
 
             return (Flip ? pointEnd : pointStart, Flip ? pointStart : pointEnd);
+        }
+
+        internal class SecondaryTrailHandler
+        {
+            public CustomTrail Trail { get; }
+
+            private readonly int _lengthOffset;
+
+            public SecondaryTrailHandler(CustomTrail trail, int mainTrailLength)
+            {
+                Trail = trail;
+                _lengthOffset = mainTrailLength - trail.Length;
+            }
+
+            public void UpdateLength(int newMainTrailLength)
+            {
+                Trail.Length = Mathf.Max(0, newMainTrailLength - _lengthOffset);
+            }
         }
     }
 }

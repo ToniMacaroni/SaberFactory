@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using IPA.Config.Data;
+using UnityEngine;
 
 namespace SaberFactory.Helpers
 {

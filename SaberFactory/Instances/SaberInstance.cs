@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using CustomSaber;
+using HarmonyLib;
 using SaberFactory.Configuration;
 using SaberFactory.Helpers;
 using SaberFactory.Instances.CustomSaber;
@@ -17,6 +19,8 @@ namespace SaberFactory.Instances
     /// </summary>
     public class SaberInstance
     {
+        public const string SaberName = "SF Saber";
+        
         internal event Action OnDestroyed;
 
         internal ITrailHandler TrailHandler { get; private set; }
@@ -42,7 +46,7 @@ namespace SaberFactory.Instances
 
             Model = model;
 
-            GameObject = new GameObject("SF Saber");
+            GameObject = new GameObject(SaberName);
             GameObject.AddComponent<SaberMonoBehaviour>().Init(OnSaberGameObjectDestroyed);
 
             CachedTransform = GameObject.transform;
@@ -55,6 +59,7 @@ namespace SaberFactory.Instances
             GameObject.transform.localScale = new Vector3(model.SaberWidth, model.SaberWidth, 1);
 
             GameObject.SetLayer<Renderer>(12);
+            GameObject.GetComponentsInChildren<Collider>().Do(x=>x.enabled = false);
 
             SetupTrailData();
             InitializeEvents();
@@ -180,9 +185,10 @@ namespace SaberFactory.Instances
         internal InstanceTrailData GetTrailData(out List<CustomTrail> secondaryTrails)
         {
             secondaryTrails = null;
+
             if (GetCustomSaber(out var customsaber))
             {
-                secondaryTrails = customsaber.SecondaryTrails;
+                secondaryTrails = customsaber.InstanceTrailData?.SecondaryTrails.Select(x=>x.Trail).ToList();
                 return customsaber.InstanceTrailData;
             }
 

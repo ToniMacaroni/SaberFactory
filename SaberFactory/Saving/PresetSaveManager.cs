@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
+using CustomSaber;
 using Newtonsoft.Json;
 using SaberFactory.DataStore;
 using SaberFactory.Helpers;
@@ -170,10 +172,13 @@ namespace SaberFactory.Saving
         private async Task LoadFromTrailOrigin(TrailModel trailModel, string trailOrigin)
         {
             var comp = await _mainAssetStore[trailOrigin];
-            var originTrailModel = (comp?.GetLeft() as CustomSaberModel)?.GrabTrail(true);
+            var cs = (comp?.GetLeft() as CustomSaberModel);
+            if (cs is null) return;
+            var originTrailModel = cs.GrabTrail(true);
             if (originTrailModel == null) return;
             trailModel.Material ??= new MaterialDescriptor(null);
             trailModel.Material.Material = originTrailModel.Material.Material;
+            trailModel.TrailOriginTrails = SaberHelpers.GetTrails(cs.Prefab);
         }
     }
 }

@@ -21,12 +21,12 @@ namespace SaberFactory.UI.Lib.BSML
         private ListStyle _listStyle = ListStyle.List;
 
         private LevelListTableCell _songListTableCellInstance;
-        private AnnotatedBeatmapLevelCollectionTableCell _levelPackTableCellInstance;
+        //private AnnotatedBeatmapLevelCollectionTableCell _levelPackTableCellInstance;
         private SimpleTextTableCell _simpleTextTableCellInstance;
 
         public List<CustomCellInfo> Data = new List<CustomCellInfo>();
         public float cellSize = 8.5f;
-        public string ReuseIdentifier = "BSMLListTableCell";
+        private const string ReuseIdentifier = "BSMLListTableCell";
         public TableView TableView;
 
         public bool ExpandCell = false;
@@ -113,20 +113,20 @@ namespace SaberFactory.UI.Lib.BSML
             return tableCell;
         }
 
-        public AnnotatedBeatmapLevelCollectionTableCell GetLevelPackTableCell()
-        {
-            AnnotatedBeatmapLevelCollectionTableCell tableCell = (AnnotatedBeatmapLevelCollectionTableCell)TableView.DequeueReusableCellForIdentifier(ReuseIdentifier);
-            if (!tableCell)
-            {
-                if (_levelPackTableCellInstance == null)
-                    _levelPackTableCellInstance = Resources.FindObjectsOfTypeAll<AnnotatedBeatmapLevelCollectionTableCell>().First(x => x.name == "AnnotatedBeatmapLevelCollectionTableCell");
-
-                tableCell = Instantiate(_levelPackTableCellInstance);
-            }
-
-            tableCell.reuseIdentifier = ReuseIdentifier;
-            return tableCell;
-        }
+        // public AnnotatedBeatmapLevelCollectionTableCell GetLevelPackTableCell()
+        // {
+        //     var tableCell = (AnnotatedBeatmapLevelCollectionTableCell)TableView.DequeueReusableCellForIdentifier(ReuseIdentifier);
+        //     if (!tableCell)
+        //     {
+        //         if (_levelPackTableCellInstance == null)
+        //             _levelPackTableCellInstance = Resources.FindObjectsOfTypeAll<AnnotatedBeatmapLevelCollectionTableCell>().First(x => x.name == "AnnotatedBeatmapLevelCollectionTableCell");
+        //
+        //         tableCell = Instantiate(_levelPackTableCellInstance);
+        //     }
+        //
+        //     tableCell.reuseIdentifier = ReuseIdentifier;
+        //     return tableCell;
+        // }
 
         public SimpleTextTableCell GetSimpleTextTableCell()
         {
@@ -229,15 +229,15 @@ namespace SaberFactory.UI.Lib.BSML
                     authorText.text = Data[idx].Subtext;
 
                     return tableCell;
-                case ListStyle.Box:
-                    AnnotatedBeatmapLevelCollectionTableCell cell = GetLevelPackTableCell();
-                    cell.showNewRibbon = false;
-                    cell.GetField<TextMeshProUGUI, AnnotatedBeatmapLevelCollectionTableCell>("_infoText").text = $"{Data[idx].Text}\n{Data[idx].Subtext}";
-                    Image packCoverImage = cell.GetField<Image, AnnotatedBeatmapLevelCollectionTableCell>("_coverImage");
-
-                    packCoverImage.sprite = Data[idx].Icon == null ? Utilities.LoadSpriteFromTexture(Texture2D.blackTexture) : Data[idx].Icon;
-
-                    return cell;
+                // case ListStyle.Box:
+                //     AnnotatedBeatmapLevelCollectionTableCell cell = GetLevelPackTableCell();
+                //     cell.showNewRibbon = false;
+                //     cell.GetField<TextMeshProUGUI, AnnotatedBeatmapLevelCollectionTableCell>("_infoText").text = $"{Data[idx].Text}\n{Data[idx].Subtext}";
+                //     Image packCoverImage = cell.GetField<Image, AnnotatedBeatmapLevelCollectionTableCell>("_coverImage");
+                //
+                //     packCoverImage.sprite = Data[idx].Icon == null ? Utilities.LoadSpriteFromTexture(Texture2D.blackTexture) : Data[idx].Icon;
+                //
+                //     return cell;
                 case ListStyle.Simple:
                     SimpleTextTableCell simpleCell = GetSimpleTextTableCell();
                     simpleCell.GetField<TextMeshProUGUI, SimpleTextTableCell>("_text").richText = true;
