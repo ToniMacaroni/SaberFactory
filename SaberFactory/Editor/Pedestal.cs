@@ -1,6 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.IO;
+using System.Threading.Tasks;
 using SaberFactory.Helpers;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace SaberFactory.Editor
 {
@@ -23,12 +26,14 @@ namespace SaberFactory.Editor
         public Transform SaberContainerTransform { get; private set; }
 
         private readonly EmbeddedAssetLoader _embeddedAssetLoader;
+        private readonly FileInfo _customPedestalFile;
 
         private Transform _rootTransform;
 
-        public Pedestal(EmbeddedAssetLoader embeddedAssetLoader)
+        public Pedestal(EmbeddedAssetLoader embeddedAssetLoader, FileInfo customPedestalFile)
         {
             _embeddedAssetLoader = embeddedAssetLoader;
+            _customPedestalFile = customPedestalFile;
         }
 
         public async Task Instantiate(Vector3 pos, Quaternion rot)
@@ -36,7 +41,7 @@ namespace SaberFactory.Editor
             if (_rootTransform) return;
             _rootTransform = new GameObject("Pedestal Container").transform;
 
-            var prefab = await _embeddedAssetLoader.LoadAsset<GameObject>("Pedestal");
+            var prefab = await GetPedestalAsset();
             if (!prefab) return;
             Object.Instantiate(prefab, _rootTransform, false);
 
@@ -48,6 +53,24 @@ namespace SaberFactory.Editor
             _rootTransform.rotation = rot;
 
             IsVisible = false;
+        }
+
+        private async Task<GameObject> GetPedestalAsset()
+        {
+            if (_customPedestalFile.Exists)
+            {
+                try
+                {
+                    var customPedestal = await Readers.LoadAssetFromAssetBundleAsync<GameObject>(_customPedestalFile.FullName, "Pedestal");
+                    customPedestal.Item2.Unload(false);
+                    return customPedestal.Item1;
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError("Couldn't load custom pedestal: \n"+e);
+                }
+            }
+            return await _embeddedAssetLoader.LoadAsset<GameObject>("Pedestal");
         }
 
         public void Destroy()

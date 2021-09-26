@@ -6,6 +6,7 @@ using HarmonyLib;
 using SaberFactory.Configuration;
 using SaberFactory.Helpers;
 using SaberFactory.Instances.CustomSaber;
+using SaberFactory.Instances.Middleware;
 using SaberFactory.Instances.Trail;
 using SaberFactory.Models;
 using SiraUtil.Tools;
@@ -39,7 +40,12 @@ namespace SaberFactory.Instances
         private InstanceTrailData _instanceTrailData;
         private List<CustomSaberTrailHandler> _secondaryTrails;
 
-        private SaberInstance(SaberModel model, BasePieceInstance.Factory pieceFactory, SiraLog logger, TrailConfig trailConfig)
+        private SaberInstance(
+            SaberModel model,
+            BasePieceInstance.Factory pieceFactory,
+            SiraLog logger,
+            TrailConfig trailConfig,
+            List<ISaberMiddleware> saberMiddlewares)
         {
             _logger = logger;
             _trailConfig = trailConfig;
@@ -58,8 +64,7 @@ namespace SaberFactory.Instances
 
             GameObject.transform.localScale = new Vector3(model.SaberWidth, model.SaberWidth, 1);
 
-            GameObject.SetLayer<Renderer>(12);
-            GameObject.GetComponentsInChildren<Collider>().Do(x=>x.enabled = false);
+            saberMiddlewares.Do(x => x.ProcessSaber(GameObject));
 
             SetupTrailData();
             InitializeEvents();

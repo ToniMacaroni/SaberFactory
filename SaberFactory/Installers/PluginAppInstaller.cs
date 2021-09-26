@@ -8,6 +8,7 @@ using SaberFactory.Models.CustomSaber;
 using SaberFactory.Saving;
 using SiraUtil;
 using System.Linq;
+using SaberFactory.Instances.Middleware;
 using SaberFactory.Instances.Trail;
 using SaberFactory.UI.Lib.BSML;
 using Zenject;
@@ -70,11 +71,18 @@ namespace SaberFactory.Installers
             Container.Bind<SaberSet>().AsSingle();
 
             InstallFactories();
+            InstallMiddlewares();
         }
 
         private async void OnMainAssetStoreInstantiated(InjectContext ctx, MainAssetStore mainAssetStore)
         {
             await mainAssetStore.LoadAllMetaAsync(_config.AssetType);
+        }
+
+        private void InstallMiddlewares()
+        {
+            //Container.Bind<ISaberMiddleware>().To(x => x.AllTypes().DerivingFrom<ISaberMiddleware>()).AsSingle();
+            Container.Bind<ISaberMiddleware>().To(typeof(MainSaberMiddleware)).AsSingle();
         }
 
         private void InstallFactories()

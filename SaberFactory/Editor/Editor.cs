@@ -56,7 +56,8 @@ namespace SaberFactory.Editor
             SaberSet saberSet,
             PlayerDataModel playerDataModel,
             SaberGrabController saberGrabController,
-            MenuSaberProvider menuSaberProvider)
+            MenuSaberProvider menuSaberProvider,
+            PluginDirectories pluginDirs)
         {
             _logger = logger;
             _pluginConfig = pluginConfig;
@@ -67,7 +68,7 @@ namespace SaberFactory.Editor
             _saberGrabController = saberGrabController;
             _menuSaberProvider = menuSaberProvider;
 
-            _pedestal = new Pedestal(embeddedAssetLoader);
+            _pedestal = new Pedestal(embeddedAssetLoader, pluginDirs.SaberFactoryDir.GetFile("pedestal"));
             _sfLogoAnim = new SFLogoAnim(embeddedAssetLoader);
 
             Instance = this;

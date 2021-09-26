@@ -1,9 +1,6 @@
 *(for Beat Saber 1.16.4 - 1.18.0)*
 
-- multiple trail support when selecting trails from another saber
-- multiple trails now show up on the pedestal
-- better detection of primary trail
-
-*if you have issues with a trail delete the corresponding `.trail` file in the `CustomSabers` folder*
+- [alpha] ability to add custom pedestals (<https://github.com/ToniMacaroni/SaberFactory/blob/main/assets/CustomPedestal.md>)
+- Set the volume for saber sounds (`SaberAudioVolumeMultiplier` in `Beat Saber\UserData\Saber Factory.json`)
 
 *Needs `BeatSaberMarkupLanguage` and `SiraUtil` (available on ModAssistant)*
