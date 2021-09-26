@@ -45,6 +45,8 @@ namespace SaberFactory.Configuration
 
         public bool ControlTrailWithThumbstick { get; set; } = true;
 
+        public float SaberAudioVolumeMultiplier { get; set; } = 1;
+        
         // How many threads to spawn when loading all sabers
         // ! Not used as of right now !
         [Ignore]
