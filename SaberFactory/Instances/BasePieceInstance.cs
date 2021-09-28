@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using SaberFactory.Helpers;
+using SaberFactory.Instances.PostProcessors;
 using SaberFactory.Instances.Setters;
 using SaberFactory.Models;
 using UnityEngine;

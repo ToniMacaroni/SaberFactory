@@ -24,12 +24,8 @@ namespace SaberFactory.Instances
 
         public BasePieceInstance Create(BasePieceModel model)
         {
-            if (model is CustomSaberModel customSaberModel)
-            {
-                return _container.Instantiate<CustomSaberInstance>(new []{customSaberModel});
-            }
-
-            throw new ArgumentException("Type of parameter not handled", nameof(model));
+            if(model.InstanceType is null) throw new ArgumentException($"InstanceType is null on {model.GetType().Name}", nameof(model));
+            return (BasePieceInstance)_container.Instantiate(model.InstanceType, new[] { model });
         }
     }
 }

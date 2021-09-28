@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using CustomSaber;
 using SaberFactory.DataStore;
 using SaberFactory.Helpers;
 using SaberFactory.Instances;
+using SaberFactory.Instances.CustomSaber;
 using SaberFactory.Models.PropHandler;
 using SaberFactory.Saving;
 using UnityEngine;
@@ -13,6 +15,8 @@ namespace SaberFactory.Models.CustomSaber
 {
     internal class CustomSaberModel : BasePieceModel
     {
+        public override Type InstanceType { get; protected set; } = typeof(CustomSaberInstance);
+
         public TrailModel TrailModel
         {
             get
