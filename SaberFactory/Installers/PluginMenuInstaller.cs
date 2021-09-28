@@ -1,6 +1,5 @@
 ﻿using System;
 using SaberFactory.Editor;
-using SaberFactory.Instances.Middleware;
 using SaberFactory.Models;
 using SaberFactory.UI;
 using SaberFactory.UI.CustomSaber;

@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using CustomSaber;
+using HarmonyLib;
 using ModestTree;
 using SaberFactory.Helpers;
+using SaberFactory.Instances.PostProcessors;
 using SaberFactory.Instances.Setters;
 using SaberFactory.Instances.Trail;
 using SaberFactory.Models;
@@ -15,12 +17,14 @@ namespace SaberFactory.Instances.CustomSaber
     internal class CustomSaberInstance : BasePieceInstance
     {
         private readonly SiraLog _logger;
+        private readonly List<IPartPostProcessor> _postProcessors;
 
         public InstanceTrailData InstanceTrailData { get; private set; }
 
-        public CustomSaberInstance(CustomSaberModel model, SiraLog logger) : base(model)
+        public CustomSaberInstance(CustomSaberModel model, SiraLog logger, List<IPartPostProcessor> postProcessors) : base(model)
         {
             _logger = logger;
+            _postProcessors = postProcessors;
             InitializeTrailData(GameObject, model.TrailModel);
         }
 
@@ -176,6 +180,7 @@ namespace SaberFactory.Instances.CustomSaber
             instance.SetActive(true);
 
             PropertyBlockSetterHandler = new CustomSaberPropertyBlockSetterHandler(instance, Model as CustomSaberModel);
+            _postProcessors.Do(x=>x.ProcessPart(instance));
             return instance;
         }
 

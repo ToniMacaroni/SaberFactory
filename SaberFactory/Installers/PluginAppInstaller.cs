@@ -8,7 +8,7 @@ using SaberFactory.Models.CustomSaber;
 using SaberFactory.Saving;
 using SiraUtil;
 using System.Linq;
-using SaberFactory.Instances.Middleware;
+using SaberFactory.Instances.PostProcessors;
 using SaberFactory.Instances.Trail;
 using SaberFactory.UI.Lib.BSML;
 using Zenject;
@@ -82,7 +82,7 @@ namespace SaberFactory.Installers
         private void InstallMiddlewares()
         {
             //Container.Bind<ISaberMiddleware>().To(x => x.AllTypes().DerivingFrom<ISaberMiddleware>()).AsSingle();
-            Container.Bind<ISaberMiddleware>().To(typeof(MainSaberMiddleware)).AsSingle();
+            Container.Bind<ISaberPostProcessor>().To(typeof(MainSaberPostProcessor)).AsSingle();
         }
 
         private void InstallFactories()

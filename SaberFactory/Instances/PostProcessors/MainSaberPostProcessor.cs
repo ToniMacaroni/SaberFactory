@@ -3,13 +3,13 @@ using SaberFactory.Configuration;
 using UnityEngine;
 using SaberFactory.Helpers;
 
-namespace SaberFactory.Instances.Middleware
+namespace SaberFactory.Instances.PostProcessors
 {
-    internal class MainSaberMiddleware : ISaberMiddleware
+    internal class MainSaberPostProcessor : ISaberPostProcessor
     {
         private readonly PluginConfig _config;
 
-        internal MainSaberMiddleware(PluginConfig config)
+        internal MainSaberPostProcessor(PluginConfig config)
         {
             _config = config;
         }

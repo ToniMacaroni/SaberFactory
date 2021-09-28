@@ -6,7 +6,7 @@ using HarmonyLib;
 using SaberFactory.Configuration;
 using SaberFactory.Helpers;
 using SaberFactory.Instances.CustomSaber;
-using SaberFactory.Instances.Middleware;
+using SaberFactory.Instances.PostProcessors;
 using SaberFactory.Instances.Trail;
 using SaberFactory.Models;
 using SiraUtil.Tools;
@@ -45,7 +45,7 @@ namespace SaberFactory.Instances
             BasePieceInstance.Factory pieceFactory,
             SiraLog logger,
             TrailConfig trailConfig,
-            List<ISaberMiddleware> saberMiddlewares)
+            List<ISaberPostProcessor> saberMiddlewares)
         {
             _logger = logger;
             _trailConfig = trailConfig;

@@ -11,6 +11,8 @@ namespace SaberFactory.Models
     /// </summary>
     internal class BasePieceModel : IDisposable
     {
+        public virtual Type InstanceType { get; protected set; }
+        
         public ModelComposition ModelComposition { get; set; }
 
         public readonly StoreAsset StoreAsset;
