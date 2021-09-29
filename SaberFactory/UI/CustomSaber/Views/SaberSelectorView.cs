@@ -187,7 +187,7 @@ namespace SaberFactory.UI.CustomSaber.Views
                 if (result == null || !result.Item1)
                 {
                     _loadingPopup.Hide();
-                    _logger.Error("Couldn't download remote saber: " + remotePart.RemoteLocation);
+                    Logger.Error("Couldn't download remote saber: " + remotePart.RemoteLocation);
                     return;
                 }
 

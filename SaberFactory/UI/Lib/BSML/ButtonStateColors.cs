@@ -56,6 +56,11 @@ namespace SaberFactory.UI.Lib.BSML
                     break;
             }
         }
+
+        public void UpdateSelectionState()
+        {
+            SelectionDidChange(_currentSelectionState);
+        }
     }
 
     [ComponentHandler(typeof(ButtonStateColors))]

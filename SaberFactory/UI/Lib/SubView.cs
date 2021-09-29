@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using BeatSaberMarkupLanguage.Components;
+using BeatSaberMarkupLanguage.Components.Settings;
 using BeatSaberMarkupLanguage.Parser;
 using JetBrains.Annotations;
 using SaberFactory.Helpers;
@@ -23,12 +26,12 @@ namespace SaberFactory.UI.Lib
 
         protected virtual string _resourceName => string.Join(".", GetType().Namespace, GetType().Name);
 
-        protected SiraLog _logger;
+        protected SiraLog Logger;
 
         [Inject]
         private void Construct(SiraLog logger)
         {
-            _logger = logger;
+            Logger = logger;
         }
 
         public async Task Open(bool notify = true)
@@ -36,6 +39,7 @@ namespace SaberFactory.UI.Lib
             if (_firstActivation)
             {
                 ParserParams = await UIHelpers.ParseFromResourceAsync(_resourceName, gameObject, this);
+
                 gameObject.SetActive(false);
                 _firstActivation = false;
                 Init();
@@ -63,6 +67,11 @@ namespace SaberFactory.UI.Lib
         public void GoBack()
         {
             SubViewSwitcher.GoBack();
+        }
+
+        public void UpdateProps()
+        {
+            ParserParams.EmitEvent("update-props");
         }
 
         protected virtual void Init()

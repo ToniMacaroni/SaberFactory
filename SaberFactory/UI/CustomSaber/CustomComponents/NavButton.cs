@@ -2,11 +2,14 @@
 using BeatSaberMarkupLanguage.Attributes;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using BeatSaberMarkupLanguage.Parser;
 using BeatSaberMarkupLanguage.TypeHandlers;
+using SaberFactory.UI.Components;
 using SaberFactory.UI.Lib;
 using SaberFactory.UI.Lib.BSML;
 using UnityEngine;
+using BackgroundableHandler = SaberFactory.UI.Components.BackgroundableHandler;
 
 
 namespace SaberFactory.UI.CustomSaber.CustomComponents
@@ -41,6 +44,9 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
             }
         }
 
+        private ButtonStateColors _buttonStateColors;
+        private Color _hoverColor;
+
         public bool IsOn { get; private set; }
 
         public string CategoryId { get; private set; }
@@ -68,9 +74,11 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
 
         private void UpdateColor()
         {
-            var image = _iconButton.ForegroundImage;
-            if (!image) return;
-            image.color = IsOn ? OnColor : OffColor;
+            if (_buttonStateColors is null) return;
+            _buttonStateColors.NormalColor = IsOn ? OnColor : Color.clear;
+            _buttonStateColors.HoveredColor = IsOn ? OnColor : _hoverColor;
+            _buttonStateColors.Image.gradient = !IsOn;
+            _buttonStateColors.UpdateSelectionState();
         }
 
         public void SetIcon(string path)
@@ -86,6 +94,13 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
         public void SetCategoryId(string id)
         {
             CategoryId = id;
+        }
+
+        [UIAction("#post-parse")]
+        private void Setup()
+        {
+            _buttonStateColors = GetComponentsInChildren<ButtonStateColors>().First();
+            _hoverColor = _buttonStateColors.HoveredColor;
         }
 
         [ComponentHandler(typeof(NavButton))]

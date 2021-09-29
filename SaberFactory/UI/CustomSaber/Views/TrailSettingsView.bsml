@@ -5,24 +5,24 @@
 
     <vertical bg='panel-top' skew='0' bg-color='#00b6ff40' pad='2' vertical-fit='PreferredSize'>
       <text text='You can modify the lenght and width using the thumbstick!' color='#ffffff80' font-size='3.5' align='Center' active='~ShowThumbstickMessage'/>
-      <slider-setting id='length-slider' text='Length' get-event='update-props' apply-on-change='true' integer-only='true'
+      <slider-setting text='Length' value='LengthValue' get-event='update-props' apply-on-change='true' integer-only='true'
                       min='0' max='30' />
 
-      <slider-setting id='width-slider' text='Width' get-event='update-props' apply-on-change='true' min='0'
+      <slider-setting text='Width' value='WidthValue' get-event='update-props' apply-on-change='true' min='0'
                       max='~trail-width-max' />
     </vertical>
 
     <vertical pad='2' spacing='0.5' vertical-fit='PreferredSize'>
-      <slider-setting id='whitestep-slider' text='Whitestep' get-event='update-props' apply-on-change='true' min='0'
+      <slider-setting text='Whitestep' value='WhitestepValue' get-event='update-props' apply-on-change='true' min='0'
                       max='1' />
 
-      <slider-setting id='offset-slider' text='Offset' get-event='update-props' apply-on-change='true' min='-0.5'
+      <slider-setting text='Offset' value='OffsetValue' get-event='update-props' apply-on-change='true' min='-0.5'
                       max='0.5' increment='0.01' />
 
-      <checkbox id='flip-checkbox' text='Flip' apply-on-change='true'
-                hover-hint='Flips the trail vertically if enabled' />
+      <checkbox text='Flip' value='FlipValue' apply-on-change='true'
+                hover-hint='Flips the trail vertically if enabled' get-event='update-props' />
 
-      <checkbox id='clamp-checkbox' text='Clamp Texture' apply-on-change='true'
+      <checkbox text='Clamp Texture' value='ClampValue' apply-on-change='true'
                 hover-hint='Enable this if you see lines on the border of the trail' />
 
       <checkbox text='Use Vertex Color Only' value='UseVertexColorOnly' apply-on-change='true'
@@ -49,7 +49,7 @@
 			<sui.button text='Revert' on-click='revert-trail' hover-hint='Revert changes to Trail' />
 			<sui.button text='Edit Material' on-click='edit-material' hover-hint='Edit the material of the trail' />
 			<sui.button text='Choose Trail' on-click='choose-trail' hover-hint='Use the Trail of another saber' />
-			<sui.button text='Refresh Hand' active='~refresh-button-active' on-click='refresh-trail' hover-hint='Refresh the trail in your hand' />
+			<!--<sui.button text='Refresh Hand' active='~refresh-button-active' on-click='refresh-trail' hover-hint='Refresh the trail in your hand' />-->
 		</horizontal>
 	</vertical>
 

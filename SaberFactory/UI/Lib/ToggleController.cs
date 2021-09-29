@@ -1,35 +1,53 @@
 ﻿using System;
+using System.Linq;
 using BeatSaberMarkupLanguage.Components.Settings;
+using SaberFactory.Helpers;
+using TMPro;
 using UnityEngine.Events;
 
 namespace SaberFactory.UI.Lib
 {
-    internal class ToggleController
+    internal class ToggleController : ComponentController
     {
         public bool Value
         {
-            get => _toggle.Value;
-            set => _toggle.Value = value;
+            get => Toggle.Value;
+            set => Toggle.Value = value;
         }
 
-        private readonly ToggleSetting _toggle;
+        public readonly ToggleSetting Toggle;
         private UnityAction<bool> _event;
 
         public ToggleController(ToggleSetting toggle)
         {
-            _toggle = toggle;
+            Toggle = toggle;
         }
 
         public void SetEvent(Action<bool> action)
         {
             RemoveEvent();
             _event = new UnityAction<bool>(action);
-            _toggle.toggle.onValueChanged.AddListener(_event);
+            Toggle.toggle.onValueChanged.AddListener(_event);
         }
 
-        public void RemoveEvent()
+        public override void RemoveEvent()
         {
-            if(_event!=null) _toggle.toggle.onValueChanged.RemoveListener(_event);
+            if(_event!=null) Toggle.toggle.onValueChanged.RemoveListener(_event);
+        }
+
+        public override string GetId()
+        {
+            return ExternalComponents.components.First(x => true).Cast<TextMeshProUGUI>().text;
+        }
+
+        public override void SetValue(object val)
+        {
+            Value = (bool)val;
+        }
+
+        public override object GetValue()
+        {
+            return Value;
         }
     }
 }
