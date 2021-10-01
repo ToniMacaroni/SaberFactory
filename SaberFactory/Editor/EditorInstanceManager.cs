@@ -8,22 +8,18 @@ using UnityEngine;
 namespace SaberFactory.Editor
 {
     /// <summary>
-    /// Class used to pass instances between different parts of the editor
+    ///     Class used to pass instances between different parts of the editor
     /// </summary>
     internal class EditorInstanceManager
     {
-        public event Action<SaberInstance> OnSaberInstanceCreated;
-        public event Action<BasePieceInstance> OnPieceInstanceCreated;
-        public event Action<ModelComposition> OnModelCompositionSet; 
-
-        public AssetTypeDefinition SelectedDefinition { get; private set; }
+        public AssetTypeDefinition SelectedDefinition { get; }
         public SaberInstance CurrentSaber { get; private set; }
         public BasePieceInstance CurrentPiece { get; private set; }
         public ModelComposition CurrentModelComposition { get; private set; }
-        
+
         private readonly SiraLog _logger;
-        private readonly SaberSet _saberSet;
         private readonly SaberInstance.Factory _saberFactory;
+        private readonly SaberSet _saberSet;
 
         public EditorInstanceManager(SiraLog logger, SaberSet saberSet, PresetSaveManager presetSaveManager, SaberInstance.Factory saberFactory)
         {
@@ -35,12 +31,13 @@ namespace SaberFactory.Editor
 
             presetSaveManager.OnSaberLoaded += delegate
             {
-                if (saberSet.LeftSaber.GetCustomSaber(out var customsaber))
-                {
-                    SetModelComposition(customsaber.ModelComposition, false);
-                }
+                if (saberSet.LeftSaber.GetCustomSaber(out var customsaber)) SetModelComposition(customsaber.ModelComposition, false);
             };
         }
+
+        public event Action<SaberInstance> OnSaberInstanceCreated;
+        public event Action<BasePieceInstance> OnPieceInstanceCreated;
+        public event Action<ModelComposition> OnModelCompositionSet;
 
         public void SetModelComposition(ModelComposition composition, bool lazyInit = true)
         {
@@ -48,13 +45,9 @@ namespace SaberFactory.Editor
             {
                 CurrentModelComposition.SaveAdditionalData();
                 CurrentModelComposition.DestroyAdditionalInstances();
-
             }
 
-            if (lazyInit && CurrentModelComposition != composition)
-            {
-                composition?.LazyInit();
-            }
+            if (lazyInit && CurrentModelComposition != composition) composition?.LazyInit();
 
             CurrentModelComposition = composition;
             _saberSet.SetModelComposition(CurrentModelComposition);
@@ -69,7 +62,7 @@ namespace SaberFactory.Editor
         }
 
         /// <summary>
-        /// Copies settings from the current saber to the other one (if it exists)
+        ///     Copies settings from the current saber to the other one (if it exists)
         /// </summary>
         public void SyncSabers()
         {
@@ -81,19 +74,13 @@ namespace SaberFactory.Editor
         public SaberInstance CreateSaber(SaberModel model, Transform parent, bool raiseSaberEvent = false, bool raisePieceEvent = false)
         {
             CurrentSaber = _saberFactory.Create(model);
-            if(parent is {}) CurrentSaber.SetParent(parent);
+            if (parent is { }) CurrentSaber.SetParent(parent);
 
-            if (raiseSaberEvent)
-            {
-                RaiseSaberCreatedEvent();
-            }
+            if (raiseSaberEvent) RaiseSaberCreatedEvent();
 
             CurrentPiece = GetPiece(SelectedDefinition);
 
-            if (raisePieceEvent)
-            {
-                RaisePieceCreatedEvent();
-            }
+            if (raisePieceEvent) RaisePieceCreatedEvent();
 
             return CurrentSaber;
         }
@@ -119,8 +106,8 @@ namespace SaberFactory.Editor
         }
 
         /// <summary>
-        /// Creates a saber without setting it to current
-        /// or firing any event
+        ///     Creates a saber without setting it to current
+        ///     or firing any event
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
@@ -130,7 +117,7 @@ namespace SaberFactory.Editor
         }
 
         /// <summary>
-        /// Gets a piece instance out of the current saber instance
+        ///     Gets a piece instance out of the current saber instance
         /// </summary>
         /// <param name="definition"></param>
         /// <returns></returns>

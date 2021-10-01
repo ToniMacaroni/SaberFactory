@@ -6,8 +6,8 @@ namespace SaberFactory.Models.CustomSaber
 {
     internal class CustomSaberModelLoader : IStoreAssetParser
     {
-        private readonly CustomSaberModel.Factory _factory;
         private readonly PluginConfig _config;
+        private readonly CustomSaberModel.Factory _factory;
 
         public CustomSaberModelLoader(CustomSaberModel.Factory factory, PluginConfig config)
         {

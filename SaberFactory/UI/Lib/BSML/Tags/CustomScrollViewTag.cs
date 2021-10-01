@@ -19,21 +19,24 @@ namespace SaberFactory.UI.Lib.BSML.Tags
 
         public override GameObject CreateObject(Transform parent)
         {
-            TextPageScrollView textScrollView = MonoBehaviour.Instantiate(Resources.FindObjectsOfTypeAll<ReleaseInfoViewController>().First().GetField<TextPageScrollView, ReleaseInfoViewController>("_textPageScrollView"), parent);
+            var textScrollView =
+                Object.Instantiate(
+                    Resources.FindObjectsOfTypeAll<ReleaseInfoViewController>().First()
+                        .GetField<TextPageScrollView, ReleaseInfoViewController>("_textPageScrollView"), parent);
             textScrollView.name = "BSMLScrollView";
-            Button pageUpButton = textScrollView.GetField<Button, ScrollView>("_pageUpButton");
-            Button pageDownButton = textScrollView.GetField<Button, ScrollView>("_pageDownButton");
-            VerticalScrollIndicator verticalScrollIndicator = textScrollView.GetField<VerticalScrollIndicator, ScrollView>("_verticalScrollIndicator");
+            var pageUpButton = textScrollView.GetField<Button, ScrollView>("_pageUpButton");
+            var pageDownButton = textScrollView.GetField<Button, ScrollView>("_pageDownButton");
+            var verticalScrollIndicator = textScrollView.GetField<VerticalScrollIndicator, ScrollView>("_verticalScrollIndicator");
 
-            RectTransform viewport = textScrollView.GetField<RectTransform, ScrollView>("_viewport");
+            var viewport = textScrollView.GetField<RectTransform, ScrollView>("_viewport");
             viewport.gameObject.AddComponent<VRGraphicRaycaster>().SetField("_physicsRaycaster", BeatSaberUI.PhysicsRaycasterWithCache);
 
-            GameObject.Destroy(textScrollView.GetField<TextMeshProUGUI, TextPageScrollView>("_text").gameObject);
-            GameObject gameObject = textScrollView.gameObject;
-            MonoBehaviour.Destroy(textScrollView);
+            Object.Destroy(textScrollView.GetField<TextMeshProUGUI, TextPageScrollView>("_text").gameObject);
+            var gameObject = textScrollView.gameObject;
+            Object.Destroy(textScrollView);
             gameObject.SetActive(false);
 
-            BSMLScrollView scrollView = gameObject.AddComponent<BSMLScrollView>();
+            var scrollView = gameObject.AddComponent<BSMLScrollView>();
             scrollView.SetField<ScrollView, Button>("_pageUpButton", pageUpButton);
             scrollView.SetField<ScrollView, Button>("_pageDownButton", pageDownButton);
             scrollView.SetField<ScrollView, VerticalScrollIndicator>("_verticalScrollIndicator", verticalScrollIndicator);
@@ -42,31 +45,31 @@ namespace SaberFactory.UI.Lib.BSML.Tags
             viewport.anchorMin = new Vector2(0, 0);
             viewport.anchorMax = new Vector2(1, 1);
 
-            GameObject parentObj = new GameObject();
+            var parentObj = new GameObject();
             parentObj.name = "BSMLScrollViewContent";
             parentObj.transform.SetParent(viewport, false);
 
-            ContentSizeFitter contentSizeFitter = parentObj.AddComponent<ContentSizeFitter>();
+            var contentSizeFitter = parentObj.AddComponent<ContentSizeFitter>();
             contentSizeFitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
             contentSizeFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
-            VerticalLayoutGroup verticalLayout = parentObj.AddComponent<VerticalLayoutGroup>();
+            var verticalLayout = parentObj.AddComponent<VerticalLayoutGroup>();
             verticalLayout.childForceExpandHeight = false;
             verticalLayout.childForceExpandWidth = false;
             verticalLayout.childControlHeight = true;
             verticalLayout.childControlWidth = true;
             verticalLayout.childAlignment = TextAnchor.UpperCenter;
 
-            RectTransform rectTransform = parentObj.transform.AsRectTransform();
+            var rectTransform = parentObj.transform.AsRectTransform();
 
             parentObj.AddComponent<LayoutElement>();
             parentObj.AddComponent<ScrollViewContent>().scrollView = scrollView;
 
-            GameObject child = new GameObject();
+            var child = new GameObject();
             child.name = "BSMLScrollViewContentContainer";
             child.transform.SetParent(rectTransform, false);
 
-            VerticalLayoutGroup layoutGroup = child.AddComponent<VerticalLayoutGroup>();
+            var layoutGroup = child.AddComponent<VerticalLayoutGroup>();
             layoutGroup.childControlHeight = false;
             layoutGroup.childForceExpandHeight = false;
             layoutGroup.childAlignment = TextAnchor.LowerCenter;
@@ -75,7 +78,7 @@ namespace SaberFactory.UI.Lib.BSML.Tags
             parentObj.AddComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.PreferredSize;
             child.AddComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.PreferredSize;
             child.AddComponent<LayoutElement>();
-            ExternalComponents externalComponents = child.AddComponent<ExternalComponents>();
+            var externalComponents = child.AddComponent<ExternalComponents>();
             externalComponents.components.Add(scrollView);
             externalComponents.components.Add(scrollView.transform);
 

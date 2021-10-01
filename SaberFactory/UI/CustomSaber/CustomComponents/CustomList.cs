@@ -14,22 +14,20 @@ using UnityEngine.UI;
 using Zenject;
 using CustomListTableData = SaberFactory.UI.Lib.BSML.CustomListTableData;
 
-
 namespace SaberFactory.UI.CustomSaber.CustomComponents
 {
     internal class CustomList : CustomUiComponent
     {
-        public event Action<ICustomListItem> OnItemSelected;
-        public event Action<string> OnCategorySelected; 
-
-        [Inject] private readonly IVRPlatformHelper _platformHelper = null;
-
         [UIComponent("root-vertical")] private readonly LayoutElement _layoutElement = null;
         [UIComponent("item-list")] private readonly CustomListTableData _list = null;
         [UIComponent("header-text")] private readonly TextMeshProUGUI _textMesh = null;
 
-        private List<ICustomListItem> _listObjects;
+        [Inject] private readonly IVRPlatformHelper _platformHelper = null;
         private int _currentIdx = -1;
+
+        private List<ICustomListItem> _listObjects;
+        public event Action<ICustomListItem> OnItemSelected;
+        public event Action<string> OnCategorySelected;
 
         public void SetItems(IEnumerable<ICustomListItem> items)
         {
@@ -81,7 +79,7 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
             if (idx == -1 || idx == _currentIdx) return;
             _list.TableView.SelectCellWithIdx(idx);
             _currentIdx = idx;
-            if(scroll) _list.TableView.ScrollToCellWithIdx(idx, TableView.ScrollPositionType.Beginning, false);
+            if (scroll) _list.TableView.ScrollToCellWithIdx(idx, TableView.ScrollPositionType.Beginning, false);
         }
 
         public void Deselect()
@@ -160,21 +158,21 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
         {
             public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>
             {
-                {"title", new[] {"title", "header"}},
-                {"width", new[] {"width"}},
-                {"height", new[] {"height"}},
-                {"bgColor", new []{"bg-color"} },
-                {"titleSize", new []{"title-size"}}
+                { "title", new[] { "title", "header" } },
+                { "width", new[] { "width" } },
+                { "height", new[] { "height" } },
+                { "bgColor", new[] { "bg-color" } },
+                { "titleSize", new[] { "title-size" } }
             };
 
             public override Dictionary<string, Action<CustomList, string>> Setters =>
                 new Dictionary<string, Action<CustomList, string>>
                 {
-                    {"title", (list, val) => list.SetText(val)},
-                    {"width", (list, val) => list.SetWidth(float.Parse(val)) },
-                    {"height", (list, val) => list.SetHeight(float.Parse(val)) },
-                    {"bgColor", SetBgColor },
-                    {"titleSize", (list, val) => list.SetHeaderSize(float.Parse(val))}
+                    { "title", (list, val) => list.SetText(val) },
+                    { "width", (list, val) => list.SetWidth(float.Parse(val)) },
+                    { "height", (list, val) => list.SetHeight(float.Parse(val)) },
+                    { "bgColor", SetBgColor },
+                    { "titleSize", (list, val) => list.SetHeaderSize(float.Parse(val)) }
                 };
 
             private void SetBgColor(CustomList list, string hex)

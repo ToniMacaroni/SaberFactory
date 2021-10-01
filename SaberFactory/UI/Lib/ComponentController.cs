@@ -5,7 +5,7 @@ namespace SaberFactory.UI.Lib
     internal abstract class ComponentController
     {
         public ExternalComponents ExternalComponents;
-        
+
         public abstract void RemoveEvent();
 
         public abstract string GetId();

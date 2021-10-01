@@ -40,11 +40,11 @@ namespace SaberFactory.Instances.Setters
             }
         }
 
+        private readonly Vector3 _baseWidth;
+
         private readonly GameObject _gameObject;
         private readonly Transform _transform;
         private readonly TransformPropertyBlock _transformPropertyBlock;
-
-        private readonly Vector3 _baseWidth;
 
         public TransformDataSetter(GameObject gameObject, TransformPropertyBlock transformPropertyBlock)
         {

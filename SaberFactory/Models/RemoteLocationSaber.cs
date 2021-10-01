@@ -13,10 +13,10 @@ namespace SaberFactory.Models
     internal class RemoteLocationPart : ICustomListItem
     {
         public readonly string RemoteLocation;
-
-        private readonly WebClient _webClient;
         private readonly DirectoryInfo _customSaberDir;
         private readonly string _filename;
+
+        private readonly WebClient _webClient;
 
         private RemoteLocationPart(InitData initData, WebClient webClient, PluginDirectories pluginDirs)
         {
@@ -35,15 +35,20 @@ namespace SaberFactory.Models
             }
         }
 
+        public string ListName { get; }
+
+        public string ListAuthor { get; }
+
+        public Sprite ListCover { get; }
+
+        public bool IsFavorite { get; }
+
         public async Task<Tuple<bool, string>> Download(CancellationToken token)
         {
             try
             {
                 var response = await _webClient.GetAsync(RemoteLocation, token);
-                if (!response.IsSuccessStatusCode)
-                {
-                    return default;
-                }
+                if (!response.IsSuccessStatusCode) return default;
 
                 var filename = GetFilename();
                 File.WriteAllBytes(_customSaberDir.GetFile(filename).FullName, response.ContentToBytes());
@@ -61,14 +66,6 @@ namespace SaberFactory.Models
             //var split = RemoteLocation.Split('/');
             //return split.Last();
         }
-
-        public string ListName { get; }
-
-        public string ListAuthor { get; }
-
-        public Sprite ListCover { get; }
-
-        public bool IsFavorite { get; }
 
         public struct InitData
         {

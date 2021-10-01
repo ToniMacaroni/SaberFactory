@@ -1,6 +1,5 @@
 ﻿using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components.Settings;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 

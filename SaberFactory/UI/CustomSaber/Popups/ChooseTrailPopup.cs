@@ -1,10 +1,9 @@
-﻿using BeatSaberMarkupLanguage.Attributes;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BeatSaberMarkupLanguage.Attributes;
 using CustomSaber;
-using IPA.Utilities;
 using SaberFactory.DataStore;
 using SaberFactory.Helpers;
 using SaberFactory.Models;
@@ -13,21 +12,19 @@ using SaberFactory.UI.CustomSaber.Views;
 using SaberFactory.UI.Lib;
 using Zenject;
 
-
 namespace SaberFactory.UI.CustomSaber.CustomComponents
 {
     internal class ChooseTrailPopup : Popup
     {
+        [UIComponent("saber-list")] private readonly CustomList _saberList = null;
         [Inject] private readonly MainAssetStore _mainAssetStore = null;
 
-        [UIComponent("saber-list")] private readonly CustomList _saberList = null;
-
-        private (TrailModel, List<CustomTrail>) _selectedTrailModel;
-        private Action<TrailModel, List<CustomTrail>> _onSelectionChanged;
+        private List<PreloadMetaData> _comps;
 
         private SaberListDirectoryManager _dirManager;
+        private Action<TrailModel, List<CustomTrail>> _onSelectionChanged;
 
-        private List<PreloadMetaData> _comps;
+        private (TrailModel, List<CustomTrail>) _selectedTrailModel;
 
         public async void Show(IEnumerable<PreloadMetaData> comps, Action<TrailModel, List<CustomTrail>> onSelectionChanged)
         {
@@ -61,10 +58,7 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
 
             var comp = await _mainAssetStore[metaData];
 
-            if (comp?.GetLeft() is CustomSaberModel cs)
-            {
-                return (cs.GrabTrail(true), SaberHelpers.GetTrails(cs.Prefab));
-            }
+            if (comp?.GetLeft() is CustomSaberModel cs) return (cs.GrabTrail(true), SaberHelpers.GetTrails(cs.Prefab));
 
             return default;
         }

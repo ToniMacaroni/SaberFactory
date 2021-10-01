@@ -2,17 +2,18 @@
 using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Tags;
 using HMUI;
+using Polyglot;
 using SaberFactory.Helpers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Object = UnityEngine.Object;
 
 namespace SaberFactory.UI.Lib.BSML.Tags
 {
     public class CustomButtonTag : BSMLTag
     {
         private static readonly Color _defaultNormalColor = new Color(0.086f, 0.090f, 0.101f, 0.8f);
+
         //private static readonly Color _defaultHoveredColor = new Color(0.086f, 0.090f, 0.101f);
         private static readonly Color _defaultHoveredColor = new Color(0.2f, 0.2f, 0.2f, 0.8f);
 
@@ -20,19 +21,20 @@ namespace SaberFactory.UI.Lib.BSML.Tags
         public virtual string PrefabButton => "PracticeButton";
 
         private Button buttonPrefab;
+
         public override GameObject CreateObject(Transform parent)
         {
             if (buttonPrefab == null)
-                buttonPrefab = Resources.FindObjectsOfTypeAll<Button>().Last(x => (x.name == PrefabButton));
+                buttonPrefab = Resources.FindObjectsOfTypeAll<Button>().Last(x => x.name == PrefabButton);
 
-            Button button = Object.Instantiate(buttonPrefab, parent, false);
+            var button = Object.Instantiate(buttonPrefab, parent, false);
             button.name = "BSMLButton";
             button.interactable = true;
-            button.GetComponentInChildren<Polyglot.LocalizedTextMeshProUGUI>(true).TryDestroy();
+            button.GetComponentInChildren<LocalizedTextMeshProUGUI>(true).TryDestroy();
 
-            ExternalComponents externalComponents = button.gameObject.AddComponent<ExternalComponents>();
+            var externalComponents = button.gameObject.AddComponent<ExternalComponents>();
 
-            TextMeshProUGUI textMesh = button.GetComponentInChildren<TextMeshProUGUI>();
+            var textMesh = button.GetComponentInChildren<TextMeshProUGUI>();
             textMesh.richText = true;
             externalComponents.components.Add(textMesh);
 
@@ -56,21 +58,18 @@ namespace SaberFactory.UI.Lib.BSML.Tags
             buttonImageController.ShowLine(false);
             bgImage.Cast<ImageView>().SetSkew(0);
 
-            ContentSizeFitter buttonSizeFitter = button.gameObject.AddComponent<ContentSizeFitter>();
+            var buttonSizeFitter = button.gameObject.AddComponent<ContentSizeFitter>();
             buttonSizeFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
             buttonSizeFitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
 
             // miss me with those small ass buttons
             button.gameObject.GetComponent<LayoutElement>().preferredHeight = 10;
 
-            LayoutGroup stackLayoutGroup = button.GetComponentInChildren<LayoutGroup>();
+            var stackLayoutGroup = button.GetComponentInChildren<LayoutGroup>();
             if (stackLayoutGroup != null)
                 externalComponents.components.Add(stackLayoutGroup);
 
-            if (!button.gameObject.activeSelf)
-            {
-                button.gameObject.SetActive(true);
-            }
+            if (!button.gameObject.activeSelf) button.gameObject.SetActive(true);
 
             return button.gameObject;
         }

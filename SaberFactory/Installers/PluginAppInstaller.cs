@@ -1,24 +1,24 @@
 ﻿using System;
+using System.Linq;
 using IPA.Logging;
 using SaberFactory.Configuration;
 using SaberFactory.DataStore;
 using SaberFactory.Instances;
+using SaberFactory.Instances.PostProcessors;
+using SaberFactory.Instances.Trail;
 using SaberFactory.Models;
 using SaberFactory.Models.CustomSaber;
 using SaberFactory.Saving;
-using SiraUtil;
-using System.Linq;
-using SaberFactory.Instances.PostProcessors;
-using SaberFactory.Instances.Trail;
 using SaberFactory.UI.Lib.BSML;
+using SiraUtil;
 using Zenject;
 
 namespace SaberFactory.Installers
 {
     internal class PluginAppInstaller : Installer
     {
-        private readonly Logger _logger;
         private readonly PluginConfig _config;
+        private readonly Logger _logger;
 
         private PluginAppInstaller(Logger logger, PluginConfig config)
         {

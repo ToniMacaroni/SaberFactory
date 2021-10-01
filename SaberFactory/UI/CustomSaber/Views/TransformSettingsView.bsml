@@ -1,9 +1,9 @@
-﻿<bg xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
-	<vertical custom_bg='' custom_color="$default-panel" border="square" pad="3" vertical-fit="PreferredSize">
+﻿<bg>
+    <vertical custom_bg='' custom_color="$default-panel" border="square" pad="3" vertical-fit="PreferredSize">
 
-		<!--<slider-setting text='Width' get-event='update-props' apply-on-change='true' min='0' max='30' increment='0.1' />-->
-    <slider-setting value="RotationAmount" text='Rotation' get-event='update-props' apply-on-change='true' min='0' max='360' increment='1'/>
-    <slider-setting value='OffsetAmount' text='Z Offset' get-event='update-props' apply-on-change='true' min='-0.2' max='0.2' increment='0.01'/>
+        <!--<slider-setting text='Width' get-event='update-props' apply-on-change='true' min='0' max='30' increment='0.1' />-->
+        <slider-setting value="RotationAmount" text='Rotation' get-event='update-props' apply-on-change='true' min='0' max='360' increment='1'/>
+        <slider-setting value='OffsetAmount' text='Z Offset' get-event='update-props' apply-on-change='true' min='-0.2' max='0.2' increment='0.01'/>
 
-  </vertical>
+    </vertical>
 </bg>

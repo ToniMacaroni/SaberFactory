@@ -10,23 +10,17 @@ namespace SaberFactory.Saving
 {
     internal class SerializableMaterial
     {
-        public string ShaderName;
         public List<SerializableMaterialProperty> Properties;
+        public string ShaderName;
 
         public async Task ApplyToMaterial(Material material, Func<string, Task<Texture2D>> textureResolve)
         {
-            if (material == null)
-            {
-                return;
-            }
+            if (material == null) return;
 
             var shader = material.shader;
             if (ShaderName != shader.name) return;
 
-            foreach (var prop in Properties)
-            {
-                await SetProp(material, prop, textureResolve);
-            }
+            foreach (var prop in Properties) await SetProp(material, prop, textureResolve);
         }
 
         public async Task SetProp(Material material, SerializableMaterialProperty prop, Func<string, Task<Texture2D>> textureResolve)
@@ -34,10 +28,10 @@ namespace SaberFactory.Saving
             switch (prop.Type)
             {
                 case ShaderPropertyType.Float:
-                    material.SetFloat(prop.Name, (float)(double) prop.Value);
+                    material.SetFloat(prop.Name, (float)(double)prop.Value);
                     break;
                 case ShaderPropertyType.Range:
-                    material.SetFloat(prop.Name, (float)(double) prop.Value);
+                    material.SetFloat(prop.Name, (float)(double)prop.Value);
                     break;
                 case ShaderPropertyType.Color:
                     material.SetColor(prop.Name, Cast<SerializableColor>(prop.Value).ToColor());
@@ -49,10 +43,7 @@ namespace SaberFactory.Saving
                     var name = prop.Value as string;
                     if (string.IsNullOrEmpty(name)) break;
                     var tex = await textureResolve(name);
-                    if (tex)
-                    {
-                        material.SetTexture(prop.Name, tex);
-                    }
+                    if (tex) material.SetTexture(prop.Name, tex);
 
                     break;
             }
@@ -60,7 +51,7 @@ namespace SaberFactory.Saving
 
         public T Cast<T>(object obj)
         {
-            return ((JObject) obj).ToObject<T>();
+            return ((JObject)obj).ToObject<T>();
         }
 
         public static SerializableMaterial FromMaterial(Material material)
@@ -69,17 +60,17 @@ namespace SaberFactory.Saving
 
             var shader = material.shader;
 
-            for (int i = 0; i < shader.GetPropertyCount(); i++)
+            for (var i = 0; i < shader.GetPropertyCount(); i++)
             {
                 var propName = shader.GetPropertyName(i);
                 var propType = shader.GetPropertyType(i);
                 var prop = SerializableMaterialProperty.Get(material, propType, propName);
-                if(prop==null) continue;
+                if (prop == null) continue;
 
                 props.Add(prop);
             }
 
-            return new SerializableMaterial {ShaderName = shader.name, Properties = props};
+            return new SerializableMaterial { ShaderName = shader.name, Properties = props };
         }
     }
 }

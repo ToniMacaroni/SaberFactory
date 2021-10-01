@@ -11,14 +11,16 @@ namespace SaberFactory.UI.Lib
 {
     internal class CustomViewController : ViewController, INotifyPropertyChanged, IAnimatableUi
     {
+        protected virtual string _resourceName => string.Join(".", GetType().Namespace, GetType().Name);
         public Action<bool, bool, bool> didActivate;
+        protected SiraLog _logger;
+        protected SubView.Factory _viewFactory;
 
         protected SubViewSwitcher SubViewSwitcher;
 
-        protected virtual string _resourceName => string.Join(".", GetType().Namespace, GetType().Name);
+        public new virtual IAnimatableUi.EAnimationType AnimationType => IAnimatableUi.EAnimationType.Horizontal;
 
-        protected SiraLog _logger;
-        protected SubView.Factory _viewFactory;
+        public event PropertyChangedEventHandler PropertyChanged;
 
         [Inject]
         private void Construct(SiraLog logger, SubView.Factory viewFactory)
@@ -31,11 +33,8 @@ namespace SaberFactory.UI.Lib
 
         protected override async void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
         {
-            if (firstActivation)
-            {
-                await UIHelpers.ParseFromResourceAsync(_resourceName, gameObject, this);
-            }
-            
+            if (firstActivation) await UIHelpers.ParseFromResourceAsync(_resourceName, gameObject, this);
+
             didActivate?.Invoke(firstActivation, addedToHierarchy, screenSystemEnabling);
             SubViewSwitcher.NotifyDidOpen();
         }
@@ -53,14 +52,12 @@ namespace SaberFactory.UI.Lib
                 Parent = parent
             };
 
-            var view = (T) _viewFactory.Create(typeof(T), initData);
+            var view = (T)_viewFactory.Create(typeof(T), initData);
             view.SubViewSwitcher = SubViewSwitcher;
-            if(switchToView) SubViewSwitcher.SwitchView(view, false);
+            if (switchToView) SubViewSwitcher.SwitchView(view, false);
 
             return view;
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
@@ -74,14 +71,14 @@ namespace SaberFactory.UI.Lib
             }
         }
 
-        internal class Factory : PlaceholderFactory<Type, InitData, CustomViewController>{}
+        internal class Factory : PlaceholderFactory<Type, InitData, CustomViewController>
+        {
+        }
 
         internal struct InitData
         {
             public Transform Parent;
             public CustomScreen Screen;
         }
-
-        public new virtual IAnimatableUi.EAnimationType AnimationType => IAnimatableUi.EAnimationType.Horizontal;
     }
 }

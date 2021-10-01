@@ -6,21 +6,20 @@ namespace SaberFactory.Saving
 {
     internal class SerializableTrail
     {
-        public int Length;
-
-        public float Width;
-
-        public float Whitestep;
-
-        public string TrailOrigin;
-
         public bool ClampTexture;
+
+        public bool Flip;
+        public int Length;
 
         public SerializableMaterial Material;
 
-        public bool Flip;
+        public string TrailOrigin;
 
         [JsonConverter(typeof(SerVec3Converter))]
         public Vector3 TrailPosOffset;
+
+        public float Whitestep;
+
+        public float Width;
     }
 }

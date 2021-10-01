@@ -7,14 +7,13 @@ namespace SaberFactory.UI.CustomSaber.Views
 {
     internal class SaberListDirectoryManager
     {
+        private const string UpDirIndicator = "..";
         public string DirectoryString { get; private set; } = "";
 
         public bool IsInRoot => string.IsNullOrEmpty(_currentDirectory);
-
-        private string _currentDirectory = "";
         private readonly List<string> _additionalFolderPool;
 
-        private const string UpDirIndicator = "..";
+        private string _currentDirectory = "";
 
         public SaberListDirectoryManager(List<string> additionalFolderPool)
         {
@@ -24,13 +23,9 @@ namespace SaberFactory.UI.CustomSaber.Views
         public void GoBack()
         {
             if (!_currentDirectory.Contains("\\"))
-            {
                 _currentDirectory = "";
-            }
             else
-            {
                 _currentDirectory = _currentDirectory.Substring(0, _currentDirectory.LastIndexOf('\\'));
-            }
         }
 
         public void Navigate(string path)
@@ -71,7 +66,6 @@ namespace SaberFactory.UI.CustomSaber.Views
         public IEnumerable<ICustomListItem> FilterForDir(IEnumerable<ICustomListItem> items, string dir)
         {
             foreach (var item in items)
-            {
                 if (item is PreloadMetaData preloadMetaData)
                 {
                     if (preloadMetaData.AssetMetaPath.SubDirName == dir) yield return item;
@@ -80,12 +74,14 @@ namespace SaberFactory.UI.CustomSaber.Views
                 {
                     if (comp.GetLeft().StoreAsset.SubDirName == dir) yield return item;
                 }
-                else yield return item;
-            }
+                else
+                {
+                    yield return item;
+                }
         }
 
         private void RefreshDirectoryString()
-        { 
+        {
             DirectoryString = _currentDirectory;
         }
     }

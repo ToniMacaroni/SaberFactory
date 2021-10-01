@@ -1,8 +1,4 @@
-﻿using System.IO;
-using Newtonsoft.Json;
-using SaberFactory.Helpers;
-
-namespace SaberFactory.Configuration
+﻿namespace SaberFactory.Configuration
 {
     public class TrailConfig : ConfigBase
     {
@@ -13,6 +9,7 @@ namespace SaberFactory.Configuration
         public bool OnlyUseVertexColor { get; set; } = true;
 
         public TrailConfig(PluginDirectories pluginDirs) : base(pluginDirs, "TrailConfig.json")
-        { }
+        {
+        }
     }
 }

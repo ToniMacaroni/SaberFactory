@@ -28,7 +28,7 @@ namespace SaberFactory.UI.Lib
 
             _container.InstantiateComponent<VRGraphicRaycaster>(go);
 
-            var vc = (CustomViewController) _container.InstantiateComponent(viewControllerType, go);
+            var vc = (CustomViewController)_container.InstantiateComponent(viewControllerType, go);
 
             var rt = vc.rectTransform;
             rt.localEulerAngles = Vector3.zero;

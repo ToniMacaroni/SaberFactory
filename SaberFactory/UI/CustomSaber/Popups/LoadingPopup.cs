@@ -5,7 +5,7 @@ namespace SaberFactory.UI.CustomSaber.Popups
 {
     internal class LoadingPopup : Popup
     {
-        [UIValue("text")] private string _text = null;
+        [UIValue("text")] private string _text;
         [UIValue("text-active")] private bool _isTextActive => !string.IsNullOrEmpty(_text);
 
         public void Show()
@@ -20,7 +20,7 @@ namespace SaberFactory.UI.CustomSaber.Popups
 
         private void ShowInteral(string text)
         {
-            _text = text; 
+            _text = text;
             _ = Create(false);
         }
 

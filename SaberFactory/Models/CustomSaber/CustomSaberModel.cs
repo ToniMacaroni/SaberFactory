@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using CustomSaber;
 using SaberFactory.DataStore;
@@ -49,10 +48,10 @@ namespace SaberFactory.Models.CustomSaber
         }
 
         public SaberDescriptor SaberDescriptor;
+        private bool _didReparentTrail;
+        private bool? _hasTrail;
 
         private TrailModel _trailModel;
-        private bool? _hasTrail;
-        private bool _didReparentTrail;
 
         public CustomSaberModel(StoreAsset storeAsset) : base(storeAsset)
         {
@@ -94,9 +93,9 @@ namespace SaberFactory.Models.CustomSaber
         public override void SyncFrom(BasePieceModel otherModel)
         {
             base.SyncFrom(otherModel);
-            var otherCs = (CustomSaberModel) otherModel;
+            var otherCs = (CustomSaberModel)otherModel;
 
-            if (otherCs.HasTrail || otherCs.TrailModel is {})
+            if (otherCs.HasTrail || otherCs.TrailModel is { })
             {
                 TrailModel ??= new TrailModel();
 
@@ -112,13 +111,10 @@ namespace SaberFactory.Models.CustomSaber
                 // if trail isn't from other saber just copy props
                 // if trail IS from other saber but shares the same shader just copy props
                 // otherwise (trail is from other saber and shaders are different) copy the whole material
-                if (mat!=null && (string.IsNullOrWhiteSpace(TrailModel.TrailOrigin) ||
-                    mat.shader.name == otherMat.shader.name))
+                if (mat != null && (string.IsNullOrWhiteSpace(TrailModel.TrailOrigin) ||
+                                    mat.shader.name == otherMat.shader.name))
                 {
-                    foreach (var prop in otherMat.GetProperties(MaterialAttributes.HideInSf))
-                    {
-                        mat.SetProperty(prop.Item2, prop.Item1, prop.Item3);
-                    }
+                    foreach (var prop in otherMat.GetProperties(MaterialAttributes.HideInSf)) mat.SetProperty(prop.Item2, prop.Item1, prop.Item3);
 
                     TrailModel.Material.Material = mat;
                 }
@@ -127,7 +123,6 @@ namespace SaberFactory.Models.CustomSaber
                     mat.TryDestoryImmediate();
                 }
             }
-
         }
 
         public TrailModel GrabTrail(bool addTrailOrigin)
@@ -137,10 +132,7 @@ namespace SaberFactory.Models.CustomSaber
             if (trail == null) return null;
 
             TextureWrapMode wrapMode = default;
-            if (trail.TrailMaterial != null && trail.TrailMaterial.TryGetMainTexture(out var tex))
-            {
-                wrapMode = tex.wrapMode;
-            }
+            if (trail.TrailMaterial != null && trail.TrailMaterial.TryGetMainTexture(out var tex)) wrapMode = tex.wrapMode;
 
             FixTrailParents();
 
@@ -154,7 +146,7 @@ namespace SaberFactory.Models.CustomSaber
         }
 
         /// <summary>
-        /// Resets the trail using the original <see cref="CustomTrail"/> component
+        ///     Resets the trail using the original <see cref="CustomTrail" /> component
         /// </summary>
         public void ResetTrail()
         {
@@ -162,8 +154,8 @@ namespace SaberFactory.Models.CustomSaber
         }
 
         /// <summary>
-        /// Reparent trail transforms to specified parent
-        /// so we don't have to care about scaling and rotations afterwards
+        ///     Reparent trail transforms to specified parent
+        ///     so we don't have to care about scaling and rotations afterwards
         /// </summary>
         /// <param name="parent">Transform to parent the trail transforms to</param>
         /// <param name="trail"></param>
@@ -180,12 +172,14 @@ namespace SaberFactory.Models.CustomSaber
             trail.PointEnd.SetParent(Prefab.transform, true);
         }
 
-        internal class Factory : PlaceholderFactory<StoreAsset, CustomSaberModel> {}
+        internal class Factory : PlaceholderFactory<StoreAsset, CustomSaberModel>
+        {
+        }
 
         internal class TrailProportions
         {
-            public float Width;
             public int Length;
+            public float Width;
         }
     }
 }

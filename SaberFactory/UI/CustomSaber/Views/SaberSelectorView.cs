@@ -16,32 +16,20 @@ using SaberFactory.UI.CustomSaber.CustomComponents;
 using SaberFactory.UI.CustomSaber.Popups;
 using SaberFactory.UI.Lib;
 using Zenject;
-using Debug = UnityEngine.Debug;
-
 
 namespace SaberFactory.UI.CustomSaber.Views
 {
     internal class SaberSelectorView : SubView, INavigationCategoryView
     {
         private static readonly string MODELSABER_LINK = "https://modelsaber.com/Sabers/?pc";
-
-        public ENavigationCategory Category => ENavigationCategory.Saber;
-
-        [Inject] private readonly MainAssetStore _mainAssetStore = null;
-        [Inject] private readonly SaberSet _saberSet = null;
-        [Inject] private readonly EditorInstanceManager _editorInstanceManager = null;
-        [Inject] private readonly PluginConfig _pluginConfig = null;
-        [Inject] private readonly Editor.Editor _editor = null;
-        [Inject] private readonly List<RemoteLocationPart> _remoteParts = null;
+        [UIComponent("choose-sort-popup")] private readonly ChooseSort _chooseSortPopup = null;
+        [UIComponent("loading-popup")] private readonly LoadingPopup _loadingPopup = null;
+        [UIComponent("message-popup")] private readonly MessagePopup _messagePopup = null;
 
         [UIComponent("saber-list")] private readonly CustomList _saberList = null;
         [UIComponent("toggle-favorite")] private readonly IconToggleButton _toggleButtonFavorite = null;
-        [UIComponent("loading-popup")] private readonly LoadingPopup _loadingPopup = null;
-        [UIComponent("choose-sort-popup")] private readonly ChooseSort _chooseSortPopup = null;
-        [UIComponent("message-popup")] private readonly MessagePopup _messagePopup = null;
 
-        [UIValue("global-saber-width-max")]
-        private float GlobalSaberWidthMax => _pluginConfig.GlobalSaberWidthMax;
+        [UIValue("global-saber-width-max")] private float GlobalSaberWidthMax => _pluginConfig.GlobalSaberWidthMax;
 
         [UIValue("download-sabers-popup")]
         private bool ShowDownloadSabersPopup
@@ -61,12 +49,22 @@ namespace SaberFactory.UI.CustomSaber.Views
             get => GetSaberWidth();
         }
 
-        private ChooseSort.ESortMode _sortMode = ChooseSort.ESortMode.Name;
+        [Inject] private readonly Editor.Editor _editor = null;
+        [Inject] private readonly EditorInstanceManager _editorInstanceManager = null;
+
+        [Inject] private readonly MainAssetStore _mainAssetStore = null;
+        [Inject] private readonly PluginConfig _pluginConfig = null;
+        [Inject] private readonly List<RemoteLocationPart> _remoteParts = null;
+        [Inject] private readonly SaberSet _saberSet = null;
         private ModelComposition _currentComposition;
         private PreloadMetaData _currentPreloadMetaData;
         private SaberListDirectoryManager _dirManager;
 
         private bool _showDownloadSabersPopup;
+
+        private ChooseSort.ESortMode _sortMode = ChooseSort.ESortMode.Name;
+
+        public ENavigationCategory Category => ENavigationCategory.Saber;
 
         public override void DidOpen()
         {
@@ -92,7 +90,7 @@ namespace SaberFactory.UI.CustomSaber.Views
         private async void DirectorySelected(string dir)
         {
             _dirManager.Navigate(dir);
-            _saberList.SetText(_dirManager.IsInRoot?"Saber-Os":_dirManager.DirectoryString);
+            _saberList.SetText(_dirManager.IsInRoot ? "Saber-Os" : _dirManager.DirectoryString);
             _saberList.Deselect();
 
             await ShowSabers(true);
@@ -108,9 +106,9 @@ namespace SaberFactory.UI.CustomSaber.Views
 
         private async Task ShowSabers(bool scrollToTop = false, int delay = 0)
         {
-            var metaEnumerable = (from meta in _mainAssetStore.GetAllMetaData()
+            var metaEnumerable = from meta in _mainAssetStore.GetAllMetaData()
                 orderby meta.IsFavorite descending
-                select meta);
+                select meta;
 
             switch (_sortMode)
             {
@@ -128,7 +126,7 @@ namespace SaberFactory.UI.CustomSaber.Views
                     break;
             }
 
-            if(delay>0) await Task.Delay(delay);
+            if (delay > 0) await Task.Delay(delay);
 
             var items = new List<ICustomListItem>(metaEnumerable);
             var loadedNames = items.Select(x => x.ListName).ToList();
@@ -142,13 +140,11 @@ namespace SaberFactory.UI.CustomSaber.Views
                 // if the saber isn't aleady present
                 // add the downloadable option
                 foreach (var remotePart in _remoteParts)
-                {
                     if (!loadedNames.Contains(remotePart.ListName))
                     {
                         items.Insert(idx, remotePart);
                         addedDownloadables++;
                     }
-                }
             }
 
             ShowDownloadSabersPopup = items.Count() <= addedDownloadables;
@@ -158,14 +154,9 @@ namespace SaberFactory.UI.CustomSaber.Views
             _currentComposition = _editorInstanceManager.CurrentModelComposition;
 
             if (_currentComposition != null)
-            {
                 _saberList.Select(_mainAssetStore.GetMetaDataForComposition(_currentComposition)?.ListName, !scrollToTop);
-            }
 
-            if (scrollToTop)
-            {
-                _saberList.ScrollTo(0);
-            }
+            if (scrollToTop) _saberList.ScrollTo(0);
 
             UpdateUi();
         }
@@ -243,13 +234,9 @@ namespace SaberFactory.UI.CustomSaber.Views
             _currentPreloadMetaData?.SetFavorite(isOn);
 
             if (isOn)
-            {
                 _pluginConfig.AddFavorite(_currentComposition.GetLeft().StoreAsset.RelativePath);
-            }
             else
-            {
                 _pluginConfig.RemoveFavorite(_currentComposition.GetLeft().StoreAsset.RelativePath);
-            }
 
             await ShowSabers();
         }

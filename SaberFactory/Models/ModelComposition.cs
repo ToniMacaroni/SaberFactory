@@ -5,17 +5,19 @@ using UnityEngine;
 namespace SaberFactory.Models
 {
     /// <summary>
-    /// Stores left and right piece models + additional detached game objects in a composition
+    ///     Stores left and right piece models + additional detached game objects in a composition
     /// </summary>
     internal class ModelComposition : IDisposable, ICustomListItem
     {
-        public readonly AssetTypeDefinition AssetTypeDefinition;
         public readonly AdditionalInstanceHandler AdditionalInstanceHandler;
+        public readonly AssetTypeDefinition AssetTypeDefinition;
 
         private readonly BasePieceModel _modelLeft;
         private readonly BasePieceModel _modelRight;
 
         private bool _didLazyInit;
+
+        private ModelMetaData _metaData;
 
         public ModelComposition(AssetTypeDefinition definition, BasePieceModel modelLeft, BasePieceModel modelRight, GameObject additionalData)
         {
@@ -43,6 +45,22 @@ namespace SaberFactory.Models
             }
         }
 
+        public string ListName => _metaData.Name;
+        public string ListAuthor => _metaData.Author;
+        public Sprite ListCover => _metaData.Cover;
+        public bool IsFavorite => _metaData.IsFavorite;
+
+        public void Dispose()
+        {
+            if (_modelLeft != null)
+            {
+                _modelLeft.StoreAsset.Unload();
+                _modelLeft.Dispose();
+            }
+
+            _modelRight?.Dispose();
+        }
+
         public void LazyInit()
         {
             if (_didLazyInit || _modelLeft == null) return;
@@ -57,7 +75,7 @@ namespace SaberFactory.Models
         }
 
         /// <summary>
-        /// Copy settings from the specified model to the other (if it exists)
+        ///     Copy settings from the specified model to the other (if it exists)
         /// </summary>
         /// <param name="syncModel">Model to copy from</param>
         public void Sync(BasePieceModel syncModel)
@@ -91,23 +109,5 @@ namespace SaberFactory.Models
         {
             _metaData.IsFavorite = isFavorite;
         }
-
-        public void Dispose()
-        {
-            if (_modelLeft != null)
-            {
-                _modelLeft.StoreAsset.Unload();
-                _modelLeft.Dispose();
-            }
-
-            _modelRight?.Dispose();
-        }
-
-        private ModelMetaData _metaData;
-
-        public string ListName => _metaData.Name;
-        public string ListAuthor => _metaData.Author;
-        public Sprite ListCover => _metaData.Cover;
-        public bool IsFavorite => _metaData.IsFavorite;
     }
 }

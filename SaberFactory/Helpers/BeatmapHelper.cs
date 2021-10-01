@@ -9,16 +9,12 @@
             foreach (BeatmapLineData beatMapLineData in beatmapLinesData)
             {
                 var beatmapObjectsData = beatMapLineData.beatmapObjectsData;
-                for (int i = beatmapObjectsData.Count - 1; i >= 0; i--)
+                for (var i = beatmapObjectsData.Count - 1; i >= 0; i--)
                 {
-                    BeatmapObjectData beatmapObjectData = beatmapObjectsData[i];
+                    var beatmapObjectData = beatmapObjectsData[i];
                     if (beatmapObjectData.beatmapObjectType == BeatmapObjectType.Note && ((NoteData)beatmapObjectData).colorType != ColorType.None)
-                    {
                         if (beatmapObjectData.time > lastTime)
-                        {
                             lastTime = beatmapObjectData.time;
-                        }
-                    }
                 }
             }
 

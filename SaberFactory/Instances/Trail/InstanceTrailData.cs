@@ -2,7 +2,6 @@
 using System.Linq;
 using CustomSaber;
 using HarmonyLib;
-using JetBrains.Annotations;
 using SaberFactory.Helpers;
 using SaberFactory.Models;
 using SaberFactory.Models.CustomSaber;
@@ -11,7 +10,7 @@ using UnityEngine;
 namespace SaberFactory.Instances.Trail
 {
     /// <summary>
-    /// Class for managing an instance of a trail and saving / loading from a trail model
+    ///     Class for managing an instance of a trail and saving / loading from a trail model
     /// </summary>
     internal class InstanceTrailData
     {
@@ -20,6 +19,7 @@ namespace SaberFactory.Instances.Trail
         public Transform PointEnd { get; }
 
         public MaterialDescriptor Material => TrailModel.Material;
+
         public int Length
         {
             get => TrailModel.Length;
@@ -64,24 +64,26 @@ namespace SaberFactory.Instances.Trail
         }
 
         public bool HasMultipleTrails => SecondaryTrails.Count > 0;
+        public List<SecondaryTrailHandler> SecondaryTrails { get; }
 
         // is used for automatic trail reversal with faulty saber setup
         private readonly bool _isTrailReversed;
-        public List<SecondaryTrailHandler> SecondaryTrails { get; }
 
-        public InstanceTrailData(TrailModel trailModel, Transform pointStart, Transform pointEnd, bool isTrailReversed, List<CustomTrail> secondaryTrails = null)
+        public InstanceTrailData(TrailModel trailModel, Transform pointStart, Transform pointEnd, bool isTrailReversed,
+            List<CustomTrail> secondaryTrails = null)
         {
             TrailModel = trailModel;
             PointStart = pointStart;
-            
+
             var newEnd = new GameObject("PointEnd").transform;
             newEnd.SetParent(pointEnd, false);
             PointEnd = newEnd;
-            
+
             _isTrailReversed = isTrailReversed;
-            
-            SecondaryTrails = secondaryTrails?.Select(x=>new SecondaryTrailHandler(x, trailModel.OriginalLength)).ToList() ?? new List<SecondaryTrailHandler>();
-            SecondaryTrails.Do(x=>x.UpdateLength(trailModel.Length));
+
+            SecondaryTrails = secondaryTrails?.Select(x => new SecondaryTrailHandler(x, trailModel.OriginalLength)).ToList() ??
+                              new List<SecondaryTrailHandler>();
+            SecondaryTrails.Do(x => x.UpdateLength(trailModel.Length));
 
             Init(trailModel);
         }
@@ -104,7 +106,7 @@ namespace SaberFactory.Instances.Trail
         public void SetLength(int length)
         {
             TrailModel.Length = length;
-            SecondaryTrails.Do(x=>x.UpdateLength(length));
+            SecondaryTrails.Do(x => x.UpdateLength(length));
         }
 
         public void SetWhitestep(float whitestep)
@@ -118,10 +120,7 @@ namespace SaberFactory.Instances.Trail
             if (TrailModel.OriginalTextureWrapMode.HasValue &&
                 TrailModel.Material.IsValid &&
                 TrailModel.Material.Material.TryGetMainTexture(out var tex))
-            {
                 tex.wrapMode = shouldClampTexture ? TextureWrapMode.Clamp : TrailModel.OriginalTextureWrapMode.GetValueOrDefault();
-            }
-                
         }
 
         public void RevertMaterialForCustomSaber(CustomSaberModel saber)

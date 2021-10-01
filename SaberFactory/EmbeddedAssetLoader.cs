@@ -21,6 +21,11 @@ namespace SaberFactory
             _logger = logger;
         }
 
+        public void Dispose()
+        {
+            if (_assetBundle) _assetBundle.Unload(true);
+        }
+
         public async Task<T> LoadAsset<T>(string name) where T : Object
         {
             if (!await CheckLoaded()) return null;
@@ -36,7 +41,7 @@ namespace SaberFactory
             foreach (var name in names)
             {
                 var asset = await _assetBundle.LoadAssetFromAssetBundleAsync<T>(name);
-                if(asset) assets.Add(asset);
+                if (asset) assets.Add(asset);
             }
 
             return assets;
@@ -72,14 +77,6 @@ namespace SaberFactory
             }
 
             return true;
-        }
-
-        public void Dispose()
-        {
-            if (_assetBundle)
-            {
-                _assetBundle.Unload(true);
-            }
         }
     }
 }

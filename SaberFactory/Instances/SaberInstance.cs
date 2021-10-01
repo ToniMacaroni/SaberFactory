@@ -16,23 +16,21 @@ using Zenject;
 namespace SaberFactory.Instances
 {
     /// <summary>
-    /// Class for managing an instance of a saber <seealso cref="SaberModel"/>
+    ///     Class for managing an instance of a saber <seealso cref="SaberModel" />
     /// </summary>
     public class SaberInstance
     {
         public const string SaberName = "SF Saber";
-        
-        internal event Action OnDestroyed;
 
         internal ITrailHandler TrailHandler { get; private set; }
 
-        internal readonly SaberModel Model;
-        public readonly GameObject GameObject;
+        internal List<PartEvents> Events { get; private set; }
         public readonly Transform CachedTransform;
+        public readonly GameObject GameObject;
+
+        internal readonly SaberModel Model;
 
         internal readonly PieceCollection<BasePieceInstance> PieceCollection;
-
-        internal List<PartEvents> Events { get; private set; }
 
         private readonly SiraLog _logger;
         private readonly TrailConfig _trailConfig;
@@ -70,6 +68,8 @@ namespace SaberFactory.Instances
             InitializeEvents();
         }
 
+        internal event Action OnDestroyed;
+
         public void SetParent(Transform parent)
         {
             CachedTransform.SetParent(parent, false);
@@ -77,20 +77,13 @@ namespace SaberFactory.Instances
 
         public void SetColor(Color color)
         {
-            foreach (BasePieceInstance piece in PieceCollection)
-            {
-                piece.SetColor(color);
-            }
+            foreach (BasePieceInstance piece in PieceCollection) piece.SetColor(color);
 
             TrailHandler?.SetColor(color);
 
             if (_secondaryTrails is { })
-            {
                 foreach (var trail in _secondaryTrails)
-                {
                     trail.SetColor(color);
-                }
-            }
         }
 
         private void InitializeEvents()
@@ -99,10 +92,7 @@ namespace SaberFactory.Instances
             foreach (BasePieceInstance piece in PieceCollection)
             {
                 var events = piece.GetEvents();
-                if (events != null)
-                {
-                    Events.Add(events);
-                }
+                if (events != null) Events.Add(events);
             }
         }
 
@@ -120,7 +110,7 @@ namespace SaberFactory.Instances
 
             if (trailData is null)
             {
-                if (backupTrail is {})
+                if (backupTrail is { })
                 {
                     TrailHandler = new TrailHandlerEx(GameObject, backupTrail);
                     TrailHandler.CreateTrail(_trailConfig, editor);
@@ -149,12 +139,8 @@ namespace SaberFactory.Instances
         {
             TrailHandler?.DestroyTrail(immediate);
             if (_secondaryTrails is { })
-            {
                 foreach (var trail in _secondaryTrails)
-                {
                     trail.DestroyTrail();
-                }
-            }
         }
 
         public void Destroy()
@@ -166,13 +152,9 @@ namespace SaberFactory.Instances
         // Called when Saber GameObject gets destroyed
         private void OnSaberGameObjectDestroyed()
         {
-            
             DestroyTrail();
 
-            foreach (BasePieceInstance piece in PieceCollection)
-            {
-                piece.Dispose();
-            }
+            foreach (BasePieceInstance piece in PieceCollection) piece.Dispose();
         }
 
         private bool GetCustomSaber(out CustomSaberInstance customSaberInstance)
@@ -193,7 +175,7 @@ namespace SaberFactory.Instances
 
             if (GetCustomSaber(out var customsaber))
             {
-                secondaryTrails = customsaber.InstanceTrailData?.SecondaryTrails.Select(x=>x.Trail).ToList();
+                secondaryTrails = customsaber.InstanceTrailData?.SecondaryTrails.Select(x => x.Trail).ToList();
                 return customsaber.InstanceTrailData;
             }
 
@@ -206,20 +188,22 @@ namespace SaberFactory.Instances
             GameObject.transform.localScale = new Vector3(width, width, 1);
         }
 
-        internal class Factory : PlaceholderFactory<SaberModel, SaberInstance> {}
+        internal class Factory : PlaceholderFactory<SaberModel, SaberInstance>
+        {
+        }
 
         internal class SaberMonoBehaviour : MonoBehaviour
         {
             private Action _onDestroyed;
 
-            public void Init(Action onDestroyedCallback)
-            {
-                _onDestroyed = onDestroyedCallback;
-            }
-
             private void OnDestroy()
             {
                 _onDestroyed?.Invoke();
+            }
+
+            public void Init(Action onDestroyedCallback)
+            {
+                _onDestroyed = onDestroyedCallback;
             }
         }
     }

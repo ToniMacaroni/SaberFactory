@@ -11,10 +11,7 @@ namespace SaberFactory.Game
 
         public static bool GetField(this BeatmapData beatmap, string field, out object obj)
         {
-            if (!_initialized)
-            {
-                Init();
-            }
+            if (!_initialized) Init();
 
             if (_cjdHandler == null)
             {
@@ -33,13 +30,9 @@ namespace SaberFactory.Game
             if (pluginMetadata == null) return;
 
             if (pluginMetadata.HVersion.Major > 1)
-            {
                 _cjdHandler = new CJD2Handler();
-            }
             else
-            {
                 _cjdHandler = new CJD1Handler();
-            }
 
             _cjdHandler.Setup(pluginMetadata.Assembly);
         }
@@ -53,10 +46,9 @@ namespace SaberFactory.Game
 
         internal class CJD1Handler : ICJDHandler
         {
-            private bool _isValid;
-
             private MethodInfo _cjdAtMethod;
             private PropertyInfo _cjdLevelCustomDataType;
+            private bool _isValid;
 
             bool ICJDHandler.GetField(BeatmapData beatmap, string field, out object obj)
             {
@@ -94,9 +86,8 @@ namespace SaberFactory.Game
 
         internal class CJD2Handler : ICJDHandler
         {
-            private bool _isValid;
-
             private PropertyInfo _cjdLevelCustomDataType;
+            private bool _isValid;
 
             bool ICJDHandler.GetField(BeatmapData beatmap, string field, out object obj)
             {

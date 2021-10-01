@@ -39,7 +39,6 @@ namespace SaberFactory.Installers
                 Container.BindInterfacesAndSelfTo<SaberMovementTester>().AsSingle().WithArguments(testerInitData);
             }
 #endif
-
         }
     }
 }

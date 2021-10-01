@@ -87,10 +87,10 @@ namespace SaberFactory.Installers
 
         private FactoryToChoiceIdBinder<GameObject, Type, T> BindUiFactory<T, TFactory>()
         {
-            BindStatement bindStatement = Container.StartBinding();
-            BindInfo bindInfo = bindStatement.SpawnBindInfo();
+            var bindStatement = Container.StartBinding();
+            var bindInfo = bindStatement.SpawnBindInfo();
             bindInfo.ContractTypes.Add(typeof(TFactory));
-            FactoryBindInfo factoryBindInfo = new FactoryBindInfo(typeof(TFactory));
+            var factoryBindInfo = new FactoryBindInfo(typeof(TFactory));
             bindStatement.SetFinalizer(new PlaceholderFactoryBindingFinalizer<T>(bindInfo, factoryBindInfo));
             return new FactoryToChoiceIdBinder<GameObject, Type, T>(Container, bindInfo, factoryBindInfo);
         }

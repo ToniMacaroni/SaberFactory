@@ -4,12 +4,11 @@ namespace SaberFactory.UI.Lib
 {
     public class PropertyDescriptor
     {
+        public object AddtionalData;
+        public Action<object> ChangedCallback;
+        public object PropObject;
         public string Text;
         public EPropertyType Type;
-        public object PropObject;
-        public Action<object> ChangedCallback;
-
-        public object AddtionalData;
 
         public PropertyDescriptor(string text, EPropertyType type, object propObject, Action<object> changedCallback)
         {
@@ -18,5 +17,5 @@ namespace SaberFactory.UI.Lib
             PropObject = propObject;
             ChangedCallback = changedCallback;
         }
-    };
+    }
 }

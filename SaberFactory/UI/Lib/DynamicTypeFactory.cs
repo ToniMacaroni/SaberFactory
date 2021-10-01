@@ -6,7 +6,7 @@ namespace SaberFactory.UI.Lib
     {
         public T Create<T>(GameObject gameObject) where T : TRet
         {
-            return (T) Create(gameObject, typeof(T));
+            return (T)Create(gameObject, typeof(T));
         }
     }
 }

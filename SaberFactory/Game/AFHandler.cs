@@ -9,8 +9,9 @@ namespace SaberFactory.Game
 {
     internal class AFHandler : IDisposable
     {
-        private readonly EmbeddedAssetLoader _assetLoader;
         public static bool ShouldFire = true;
+
+        private static bool? _isValid;
 
         public static bool IsValid
         {
@@ -19,14 +20,14 @@ namespace SaberFactory.Game
                 if (!_isValid.HasValue)
                 {
                     var time = Utils.CanUseDateTimeNowSafely ? DateTime.Now : DateTime.UtcNow;
-                    _isValid = (time.Month == 4 && time.Day == 1);
+                    _isValid = time.Month == 4 && time.Day == 1;
                 }
 
                 return _isValid.Value;
             }
         }
 
-        private static bool? _isValid;
+        private readonly EmbeddedAssetLoader _assetLoader;
         private bool _hasFired;
         private GameObject _thruster;
 
@@ -35,10 +36,15 @@ namespace SaberFactory.Game
             _assetLoader = assetLoader;
         }
 
+        public void Dispose()
+        {
+            ShouldFire = !_hasFired;
+        }
+
         public async Task Shoot(SfSaberModelController smc, SaberType saberType)
         {
             _hasFired = true;
-            await InitPosition(smc.transform, saberType==SaberType.SaberA?-0.1f:0.1f);
+            await InitPosition(smc.transform, saberType == SaberType.SaberA ? -0.1f : 0.1f);
             await Task.Delay(500);
 
             var thruster = Object.Instantiate(await GetThruster());
@@ -48,22 +54,17 @@ namespace SaberFactory.Game
 
             var rigidBody = smc.gameObject.AddComponent<Rigidbody>();
             rigidBody.useGravity = false;
-            rigidBody.AddForce(Quaternion.Euler(-10, 0, 0)*new Vector3(0, 0, 100));
+            rigidBody.AddForce(Quaternion.Euler(-10, 0, 0) * new Vector3(0, 0, 100));
         }
 
         public async Task InitPosition(Transform transform, float xPos)
         {
             transform.SetParent(null, true);
 
-            var posTween = new Vector3Tween(transform.position, new Vector3(xPos, 1, 1), pos =>
-            {
-                transform.position = pos;
-            }, 1, EaseType.OutCubic);
+            var posTween = new Vector3Tween(transform.position, new Vector3(xPos, 1, 1), pos => { transform.position = pos; }, 1, EaseType.OutCubic);
 
-            var rotTween = new Vector3Tween(transform.eulerAngles, new Vector3(-10, 0, 0), pos =>
-            {
-                transform.eulerAngles = pos;
-            }, 1, EaseType.OutCubic);
+            var rotTween = new Vector3Tween(transform.eulerAngles, new Vector3(-10, 0, 0), pos => { transform.eulerAngles = pos; }, 1,
+                EaseType.OutCubic);
 
             var t = 0f;
             while (t < 1)
@@ -73,11 +74,6 @@ namespace SaberFactory.Game
                 rotTween.Sample(t);
                 await Task.Delay(10);
             }
-        }
-
-        public void Dispose()
-        {
-            ShouldFire = !_hasFired;
         }
 
         private async Task<GameObject> GetThruster()

@@ -1,28 +1,21 @@
-﻿using BeatSaberMarkupLanguage;
-using BeatSaberMarkupLanguage.Attributes;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using BeatSaberMarkupLanguage;
+using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Parser;
 using BeatSaberMarkupLanguage.TypeHandlers;
-using SaberFactory.UI.Components;
 using SaberFactory.UI.Lib;
 using SaberFactory.UI.Lib.BSML;
 using UnityEngine;
-using BackgroundableHandler = SaberFactory.UI.Components.BackgroundableHandler;
-
 
 namespace SaberFactory.UI.CustomSaber.CustomComponents
 {
     internal class NavButton : CustomUiComponent
     {
-        public Action<NavButton, string> OnSelect;
-
         [UIComponent("icon-button")] private readonly ButtonImageController _iconButton = null;
+        [UIValue("hover-hint")] private string _hoverHint;
 
-        [UIValue("hover-hint")] private string _hoverHint = null;
-
-        private Color _onColor;
         public Color OnColor
         {
             get => _onColor;
@@ -33,7 +26,6 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
             }
         }
 
-        private Color _offColor;
         public Color OffColor
         {
             get => _offColor;
@@ -44,21 +36,25 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
             }
         }
 
-        private ButtonStateColors _buttonStateColors;
-        private Color _hoverColor;
-
         public bool IsOn { get; private set; }
 
         public string CategoryId { get; private set; }
+        public Action<NavButton, string> OnSelect;
+
+        private readonly Color _iconShadedColor = new Color(1, 1, 1, 0.6f);
+
+        private ButtonStateColors _buttonStateColors;
+        private Color _hoverColor;
+
+        private Color _offColor;
+
+        private Color _onColor;
 
         public void SetState(bool state, bool fireEvent)
         {
             IsOn = state;
             UpdateColor();
-            if (fireEvent)
-            {
-                OnSelect?.Invoke(this, CategoryId);
-            }
+            if (fireEvent) OnSelect?.Invoke(this, CategoryId);
         }
 
         public void Deselect()
@@ -77,6 +73,7 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
             if (_buttonStateColors is null) return;
             _buttonStateColors.NormalColor = IsOn ? OnColor : Color.clear;
             _buttonStateColors.HoveredColor = IsOn ? OnColor : _hoverColor;
+            _iconButton.ForegroundImage.color = IsOn ? Color.white : _iconShadedColor;
             _buttonStateColors.Image.gradient = !IsOn;
             _buttonStateColors.UpdateSelectionState();
         }
@@ -108,23 +105,23 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
         {
             public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>
             {
-                {"icon", new[] {"icon"}},
-                {"onColor", new[] {"on-color"}},
-                {"offColor", new[] {"off-color"}},
-                {"onSelected", new[] {"on-selected"}},
-                {"hoverhint", new[] {"hover-hint"}},
-                {"catId", new []{"category"} }
+                { "icon", new[] { "icon" } },
+                { "onColor", new[] { "on-color" } },
+                { "offColor", new[] { "off-color" } },
+                { "onSelected", new[] { "on-selected" } },
+                { "hoverhint", new[] { "hover-hint" } },
+                { "catId", new[] { "category" } }
             };
 
             public override Dictionary<string, Action<NavButton, string>> Setters =>
                 new Dictionary<string, Action<NavButton, string>>
                 {
-                    {"icon", (button, val) => button.SetIcon(val)},
-                    {"onColor", SetOnColor},
-                    {"offColor", SetOffColor},
-                    {"hoverhint", (button, val) => button.SetHoverHint(val)},
-                    {"category", (button, val) => button.SetCategoryId(val)}
-        };
+                    { "icon", (button, val) => button.SetIcon(val) },
+                    { "onColor", SetOnColor },
+                    { "offColor", SetOffColor },
+                    { "hoverhint", (button, val) => button.SetHoverHint(val) },
+                    { "category", (button, val) => button.SetCategoryId(val) }
+                };
 
             public override void HandleType(BSMLParser.ComponentTypeWithData componentType,
                 BSMLParserParams parserParams)
@@ -133,13 +130,9 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
                 {
                     var button = componentType.component as NavButton;
 
-                    if (componentType.data.TryGetValue("onSelected", out string onToggle))
-                    {
-                        if (parserParams.actions.TryGetValue(onToggle, out BSMLAction onToggleAction))
-                        {
+                    if (componentType.data.TryGetValue("onSelected", out var onToggle))
+                        if (parserParams.actions.TryGetValue(onToggle, out var onToggleAction))
                             button.OnSelect += (btn, val) => { onToggleAction.Invoke(btn, val); };
-                        }
-                    }
 
                     base.HandleType(componentType, parserParams);
                 }

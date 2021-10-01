@@ -8,9 +8,9 @@ namespace SaberFactory.Game
 {
     internal class SaberMovementTester : IInitializable
     {
+        private readonly AudioTimeSyncController _audioController;
         private readonly InitData _initData;
         private readonly SiraSaber.Factory _saberFactory;
-        private readonly AudioTimeSyncController _audioController;
 
         private Transform _movementContainer;
         private SiraSaber _saber;

@@ -2,8 +2,8 @@
 {
     internal class SerializableTransform
     {
-        public float Width;
-        public float Rotation;
         public float Offset;
+        public float Rotation;
+        public float Width;
     }
 }

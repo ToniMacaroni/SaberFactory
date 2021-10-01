@@ -10,12 +10,18 @@ namespace SaberFactory.UI.Lib.BSML.Components
 {
     public class ButtonCollection : MonoBehaviour
     {
-        public event Action<int> OnButtonClicked;
-
         public TextSegmentedControl textSegmentedControl;
+        private BSMLParserParams parserParams;
 
         private bool shouldRefresh;
-        private BSMLParserParams parserParams;
+
+        private void OnEnable()
+        {
+            if (shouldRefresh)
+                Refresh();
+        }
+
+        public event Action<int> OnButtonClicked;
 
         public void Setup()
         {
@@ -49,12 +55,6 @@ namespace SaberFactory.UI.Lib.BSML.Components
             TabSelected(null, 0);
         }
 
-        void OnEnable()
-        {
-            if (shouldRefresh)
-                Refresh();
-        }
-
         [ComponentHandler(typeof(ButtonCollection))]
         public class ButtonCollectionHandler : TypeHandler<ButtonCollection>
         {
@@ -63,7 +63,7 @@ namespace SaberFactory.UI.Lib.BSML.Components
                 //{ "tabTag", new[]{"tab-tag"} },
             };
 
-            public override Dictionary<string, Action<ButtonCollection, string>> Setters => new Dictionary<string, Action<ButtonCollection, string>>()
+            public override Dictionary<string, Action<ButtonCollection, string>> Setters => new Dictionary<string, Action<ButtonCollection, string>>
             {
                 //{"pageCount", new Action<ButtonCollection,string>((component, value) => component.PageCount = Parse.Int(value)) },
             };
@@ -71,8 +71,8 @@ namespace SaberFactory.UI.Lib.BSML.Components
             public override void HandleType(BSMLParser.ComponentTypeWithData componentType, BSMLParserParams parserParams)
             {
                 base.HandleType(componentType, parserParams);
-                ButtonCollection buttonCollection = (componentType.component as ButtonCollection);
-                buttonCollection.SetTexts(new []{"t1", "t2", "t3"});
+                var buttonCollection = componentType.component as ButtonCollection;
+                buttonCollection.SetTexts(new[] { "t1", "t2", "t3" });
                 buttonCollection.parserParams = parserParams;
                 parserParams.AddEvent("post-parse", buttonCollection.Setup);
             }

@@ -5,8 +5,8 @@ namespace SaberFactory.Editor
 {
     internal class SaberGrabController
     {
-        private readonly MenuPlayerController _menuPlayerController;
         public readonly Transform GrabContainer;
+        private readonly MenuPlayerController _menuPlayerController;
         private SaberInstance _currentSaberInstancce;
 
         private bool _isHandleVisisble = true;

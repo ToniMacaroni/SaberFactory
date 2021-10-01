@@ -10,8 +10,8 @@ namespace SaberFactory.UI.Lib.PropCells
     internal class TexturePropCell : BasePropCell
     {
         [UIComponent("bg")] private readonly Image _backgroundImage = null;
-        [UIComponent("texture")] private readonly Image _propTexture = null;
         [UIComponent("prop-name")] private readonly TextMeshProUGUI _propName = null;
+        [UIComponent("texture")] private readonly Image _propTexture = null;
         [UIComponent("texture-picker")] private readonly TexturePickerPopup _texturePicker = null;
 
         public override void SetData(PropertyDescriptor data)
@@ -21,10 +21,7 @@ namespace SaberFactory.UI.Lib.PropCells
             OnChangeCallback = data.ChangedCallback;
             _propName.text = ShortenText(data.Text, 14);
 
-            if (data.AddtionalData is bool showPreview && showPreview)
-            {
-                _propTexture.sprite = Utilities.LoadSpriteFromTexture(tex);
-            }
+            if (data.AddtionalData is bool showPreview && showPreview) _propTexture.sprite = Utilities.LoadSpriteFromTexture(tex);
 
             _backgroundImage.type = Image.Type.Sliced;
             _backgroundImage.color = new Color(1, 0, 0, 0.5f);

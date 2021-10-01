@@ -11,11 +11,6 @@ namespace SaberFactory.UI.CustomSaber
     {
         private readonly SaberSet _saberSet;
 
-        #region Views
-        private MainView _mainView;
-        private NavigationView _navigationView;
-        #endregion
-
         protected CustomSaberUI(
             SiraLog logger,
             CustomScreen.Factory screenFactory,
@@ -33,9 +28,9 @@ namespace SaberFactory.UI.CustomSaber
             (
                 "Main Screen",
                 new Vector3(-25, -7, 0),
-                Quaternion.identity, 
+                Quaternion.identity,
                 new Vector2(105, 140),
-                isCurved: true
+                true
             );
 
             var navigationInitData = new CustomScreen.InitData(
@@ -43,7 +38,7 @@ namespace SaberFactory.UI.CustomSaber
                 new Vector3(-90, 0, 0),
                 Quaternion.Euler(0, 305, 0),
                 new Vector2(30, 70),
-                isCurved: true
+                true
             );
 
             _mainView = AddScreen(mainScreenInitData).CreateViewController<MainView>();
@@ -65,5 +60,12 @@ namespace SaberFactory.UI.CustomSaber
 
             _saberSet.Save();
         }
+
+        #region Views
+
+        private MainView _mainView;
+        private NavigationView _navigationView;
+
+        #endregion
     }
 }

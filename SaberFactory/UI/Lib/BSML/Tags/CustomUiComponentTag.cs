@@ -9,10 +9,10 @@ namespace SaberFactory.UI.Lib.BSML.Tags
 {
     internal class CustomUiComponentTag : BSMLTag
     {
-        public override string[] Aliases => new[] {"sui." + BSMLTools.GetKebabCaseName(_type)};
+        public override string[] Aliases => new[] { "sui." + BSMLTools.GetKebabCaseName(_type) };
+        private readonly CustomUiComponent.Factory _factory;
 
         private readonly Type _type;
-        private readonly CustomUiComponent.Factory _factory;
 
         public CustomUiComponentTag(Type type, CustomUiComponent.Factory factory)
         {
@@ -34,7 +34,7 @@ namespace SaberFactory.UI.Lib.BSML.Tags
 
             var comp = _factory.Create(go, _type);
             comp.Parse();
-            if(!comp.gameObject.activeSelf) comp.gameObject.SetActive(true);
+            if (!comp.gameObject.activeSelf) comp.gameObject.SetActive(true);
 
             return go;
         }

@@ -1,14 +1,12 @@
-﻿using BeatSaberMarkupLanguage.Attributes;
-using System.Diagnostics;
+﻿using System.Diagnostics;
+using BeatSaberMarkupLanguage.Attributes;
 using SaberFactory.UI.Lib;
-
 
 namespace SaberFactory.UI.CustomSaber.CustomComponents
 {
     internal class ChangelogPopup : Popup
     {
         [UIValue("text")] private string _text { get; set; } = "Nothing here";
-
         private PluginManager.Release _release;
 
         public async void Show(PluginManager.Release release)

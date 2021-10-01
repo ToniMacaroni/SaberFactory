@@ -1,8 +1,8 @@
-﻿<sui.icon-button 
-	id='icon-button'
-  on-click='clicked'
-  skew='0'
-  hover-hint='~hover-hint'
-  normal-color='#00000080'
-  hovered-color='#3486ebff'
-  use-gradient='false'/>
+﻿<sui.icon-button
+        id='icon-button'
+        on-click='clicked'
+        skew='0'
+        hover-hint='~hover-hint'
+        normal-color='#00000080'
+        hovered-color='#3486ebff'
+        use-gradient='false'/>

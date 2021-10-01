@@ -1,6 +1,5 @@
 ﻿using System.IO;
 using IPA.Utilities;
-using UnityEngine;
 
 namespace SaberFactory.Helpers
 {
@@ -10,9 +9,15 @@ namespace SaberFactory.Helpers
 
         public static string SaberFactoryUserPath => Path.Combine(UnityGame.UserDataPath, "Saber Factory");
 
-        public static string ToFullPath(string relativePath) => Path.Combine(UnityGame.InstallPath, relativePath);
+        public static string ToFullPath(string relativePath)
+        {
+            return Path.Combine(UnityGame.InstallPath, relativePath);
+        }
 
-        public static string ToRelativePath(string path) => path.Substring(UnityGame.InstallPath.Length+1);
+        public static string ToRelativePath(string path)
+        {
+            return path.Substring(UnityGame.InstallPath.Length + 1);
+        }
 
         public static string GetSubDir(string relPath)
         {
@@ -20,8 +25,8 @@ namespace SaberFactory.Helpers
 
             var split = relPath.Split(Path.DirectorySeparatorChar);
             if (split.Length < 3) return "";
-            string output = "";
-            for (int i = 1; i < split.Length - 1; i++)
+            var output = "";
+            for (var i = 1; i < split.Length - 1; i++)
             {
                 output += split[i];
                 if (i != split.Length - 2) output += "\\";
@@ -32,10 +37,7 @@ namespace SaberFactory.Helpers
 
         public static string CorrectRelativePath(string path)
         {
-            if (!string.IsNullOrEmpty(RelativeExtension) && path.StartsWith(RelativeExtension))
-            {
-                return path.Substring(RelativeExtension.Length);
-            }
+            if (!string.IsNullOrEmpty(RelativeExtension) && path.StartsWith(RelativeExtension)) return path.Substring(RelativeExtension.Length);
 
             return path;
         }
@@ -47,10 +49,7 @@ namespace SaberFactory.Helpers
 
         public static DirectoryInfo GetDirectory(this DirectoryInfo dir, string dirName, bool create = false)
         {
-            if (create)
-            {
-                return dir.CreateSubdirectory(dirName);
-            }
+            if (create) return dir.CreateSubdirectory(dirName);
 
             return new DirectoryInfo(Path.Combine(dir.FullName, dirName));
         }

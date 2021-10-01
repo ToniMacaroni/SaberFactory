@@ -1,12 +1,11 @@
-﻿using BeatSaberMarkupLanguage.Attributes;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Threading;
+using BeatSaberMarkupLanguage.Attributes;
 using SaberFactory.Configuration;
 using SaberFactory.UI.CustomSaber.CustomComponents;
 using SaberFactory.UI.Lib;
 using UnityEngine;
 using Zenject;
-
 
 namespace SaberFactory.UI.CustomSaber.Views
 {
@@ -15,18 +14,8 @@ namespace SaberFactory.UI.CustomSaber.Views
         private static readonly string PROFILE_URL = "https://ko-fi.com/tonimacaroni";
         private static readonly string DISCORD_URL = "https://discord.gg/PjD7WcChH3";
 
-        public ENavigationCategory Category => ENavigationCategory.Settings;
-
-        [Inject] private readonly PluginConfig _pluginConfig = null;
-        [Inject] private readonly PluginManager _pluginManager = null;
-
         [UIComponent("changelog-popup")] private readonly ChangelogPopup _changelogPopup = null;
         [UIObject("github-button")] private readonly GameObject _githubButton = null;
-
-        public override void DidClose()
-        {
-            _changelogPopup.Hide();
-        }
 
         [UIValue("mod-enabled")]
         private bool ModEnabled
@@ -72,14 +61,21 @@ namespace SaberFactory.UI.CustomSaber.Views
             }
         }
 
+        [Inject] private readonly PluginConfig _pluginConfig = null;
+        [Inject] private readonly PluginManager _pluginManager = null;
+
+        public ENavigationCategory Category => ENavigationCategory.Settings;
+
+        public override void DidClose()
+        {
+            _changelogPopup.Hide();
+        }
+
         [UIAction("#post-parse")]
         private async void Setup()
         {
             var release = await _pluginManager.GetNewestReleaseAsync(CancellationToken.None);
-            if (release != null && !release.IsLocalNewest)
-            {
-                _githubButton.SetActive(true);
-            }
+            if (release != null && !release.IsLocalNewest) _githubButton.SetActive(true);
         }
 
         [UIAction("profile-clicked")]

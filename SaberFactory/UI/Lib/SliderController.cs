@@ -21,7 +21,7 @@ namespace SaberFactory.UI.Lib
 
         public int IntValue
         {
-            get => (int) Value;
+            get => (int)Value;
             set => Value = value;
         }
 

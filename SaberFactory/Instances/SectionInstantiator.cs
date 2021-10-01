@@ -3,15 +3,16 @@
 namespace SaberFactory.Instances
 {
     /// <summary>
-    /// Class used to instantiate all the parts and pieces of a saber and keeping track of them
+    ///     Class used to instantiate all the parts and pieces of a saber and keeping track of them
     /// </summary>
     internal class SectionInstantiator
     {
-        private readonly SaberInstance _saberInstance;
         private readonly PieceCollection<BasePieceInstance> _pieceCollection;
         private readonly BasePieceInstance.Factory _pieceInstanceFactory;
+        private readonly SaberInstance _saberInstance;
 
-        public SectionInstantiator(SaberInstance saberInstance, BasePieceInstance.Factory pieceInstanceFactory, PieceCollection<BasePieceInstance> pieceCollection)
+        public SectionInstantiator(SaberInstance saberInstance, BasePieceInstance.Factory pieceInstanceFactory,
+            PieceCollection<BasePieceInstance> pieceCollection)
         {
             _saberInstance = saberInstance;
             _pieceInstanceFactory = pieceInstanceFactory;
@@ -21,7 +22,7 @@ namespace SaberFactory.Instances
         public void InstantiateSection(AssetTypeDefinition definition)
         {
             var modelPiece = _saberInstance.Model.PieceCollection[definition];
-            if (modelPiece is {})
+            if (modelPiece is { })
             {
                 var instance = _pieceInstanceFactory.Create(modelPiece);
                 instance.SetParent(_saberInstance.CachedTransform);

@@ -1,7 +1,7 @@
 ﻿namespace SaberFactory.Models.PropHandler
 {
     /// <summary>
-    /// Class to store transform data
+    ///     Class to store transform data
     /// </summary>
     internal class TransformPropertyBlock
     {

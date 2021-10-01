@@ -1,14 +1,15 @@
-﻿using BeatSaberMarkupLanguage.MenuButtons;
+﻿using System;
+using BeatSaberMarkupLanguage;
+using BeatSaberMarkupLanguage.MenuButtons;
 using SiraUtil.Tools;
-using System;
 using Zenject;
 
 namespace SaberFactory.UI
 {
     internal class SaberFactoryMenuButton : IInitializable, IDisposable
     {
-        private readonly SiraLog _logger;
         private readonly Editor.Editor _editor;
+        private readonly SiraLog _logger;
 
         private readonly MenuButton _menuButton;
 
@@ -19,9 +20,10 @@ namespace SaberFactory.UI
             _menuButton = new MenuButton("Saber Factory", "Good quality sabers", OnClick);
         }
 
-        private void OnClick()
+        public void Dispose()
         {
-            _editor.Open();
+            if (MenuButtons.IsSingletonAvailable && BSMLParser.IsSingletonAvailable)
+                MenuButtons.instance.UnregisterButton(_menuButton);
         }
 
         public void Initialize()
@@ -29,10 +31,9 @@ namespace SaberFactory.UI
             MenuButtons.instance.RegisterButton(_menuButton);
         }
 
-        public void Dispose()
+        private void OnClick()
         {
-            if (MenuButtons.IsSingletonAvailable && BeatSaberMarkupLanguage.BSMLParser.IsSingletonAvailable)
-                MenuButtons.instance.UnregisterButton(_menuButton);
+            _editor.Open();
         }
     }
 }

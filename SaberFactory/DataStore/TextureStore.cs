@@ -11,6 +11,8 @@ namespace SaberFactory.DataStore
         public Task CurrentLoadingTask => _currentLoadingTask ?? Task.CompletedTask;
         public bool IsLoading { get; private set; }
 
+        public Task<TextureAsset> this[string path] => GetTexture(path);
+
         private readonly Dictionary<string, TextureAsset> _textureAssets;
         private readonly DirectoryInfo _textureDirectory;
         private Task _currentLoadingTask;
@@ -20,8 +22,6 @@ namespace SaberFactory.DataStore
             _textureAssets = new Dictionary<string, TextureAsset>();
             _textureDirectory = pluginDirs.SaberFactoryDir.CreateSubdirectory("Textures");
         }
-
-        public Task<TextureAsset> this[string path] => GetTexture(path);
 
         public async Task<TextureAsset> GetTexture(string path)
         {
@@ -81,9 +81,7 @@ namespace SaberFactory.DataStore
         private async Task LoadAllTexturesAsyncInternal()
         {
             foreach (var texFile in _textureDirectory.EnumerateFiles("*.png", SearchOption.AllDirectories))
-            {
                 await LoadTexture(PathTools.ToRelativePath(texFile.FullName));
-            }
         }
     }
 }

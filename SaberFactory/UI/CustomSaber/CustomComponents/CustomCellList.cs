@@ -8,25 +8,21 @@ using SaberFactory.UI.Lib;
 using TMPro;
 using UnityEngine;
 
-
 namespace SaberFactory.UI.CustomSaber.CustomComponents
 {
     internal class CustomCellList : CustomUiComponent
     {
-        public event Action<ICustomListItem> OnItemSelected;
-
-        public object CurrentSelectedItem { get; private set; }
+        [UIComponent("item-list")] private readonly CustomCellListTableData _customList = null;
 
         [UIComponent("header-text")] private readonly TextMeshProUGUI _headerText = null;
-        [UIComponent("item-list")] private readonly CustomCellListTableData _customList = null;
+
+        public object CurrentSelectedItem { get; private set; }
+        public event Action<ICustomListItem> OnItemSelected;
 
         public void SetItems(IEnumerable<ICustomListItem> listItems)
         {
             var content = new List<object>();
-            foreach (var listItem in listItems)
-            {
-                content.Add(new ListItem(listItem, listItem.ListName, listItem.ListAuthor, listItem.ListCover));
-            }
+            foreach (var listItem in listItems) content.Add(new ListItem(listItem, listItem.ListName, listItem.ListAuthor, listItem.ListCover));
 
             _customList.data = content;
             _customList.tableView.ReloadData();
@@ -52,15 +48,12 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
 
         internal class ListItem
         {
-            public object ContainingObject { get; private set; }
+            [UIValue("name")] public string Name { get; }
 
-            [UIValue("name")]
-            public string Name { get; private set; }
-
-            [UIValue("author")]
-            public string Author { get; private set; }
+            [UIValue("author")] public string Author { get; }
 
             [UIComponent("cover")] private readonly ImageView _cover = null;
+            public object ContainingObject { get; }
 
             private readonly Sprite _coverSprite;
 
@@ -75,7 +68,7 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
             [UIAction("#post-parse")]
             private void Setup()
             {
-                if(_cover) _cover.sprite = _coverSprite;
+                if (_cover) _cover.sprite = _coverSprite;
             }
         }
 
@@ -84,13 +77,13 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
         {
             public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>
             {
-                {"title", new []{"title", "header"} }
+                { "title", new[] { "title", "header" } }
             };
 
             public override Dictionary<string, Action<CustomCellList, string>> Setters =>
                 new Dictionary<string, Action<CustomCellList, string>>
                 {
-                    {"title", (list, val) => list.SetHeader(val) }
+                    { "title", (list, val) => list.SetHeader(val) }
                 };
         }
     }

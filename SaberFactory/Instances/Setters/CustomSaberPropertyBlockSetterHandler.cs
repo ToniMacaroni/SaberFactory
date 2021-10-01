@@ -10,7 +10,7 @@ namespace SaberFactory.Instances.Setters
 
         public CustomSaberPropertyBlockSetterHandler(GameObject gameObject, CustomSaberModel model)
         {
-            var propBlock = (CustomSaberPropertyBlock) model.PropertyBlock;
+            var propBlock = (CustomSaberPropertyBlock)model.PropertyBlock;
             TransformDataSetter = new TransformDataSetter(gameObject, propBlock.TransformProperty);
         }
     }

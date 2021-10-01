@@ -25,7 +25,7 @@ namespace SaberFactory.UI.Lib
 
             go.AddComponent<CanvasGroup>();
 
-            var subView = (SubView) _container.InstantiateComponent(subViewType, go);
+            var subView = (SubView)_container.InstantiateComponent(subViewType, go);
             return subView;
         }
     }

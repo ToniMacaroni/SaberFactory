@@ -22,13 +22,13 @@ namespace SaberFactory.Models
     {
         public static readonly AssetTypeDefinition CustomSaber = new AssetTypeDefinition(EAssetType.Model, EAssetSubType.CustomSaber);
 
-        public EAssetType AssetType { get; }
-        public EAssetSubType AssetSubType { get; }
-
         public AssetTypeDefinition(EAssetType assetType, EAssetSubType assetSubType)
         {
             AssetType = assetType;
             AssetSubType = assetSubType;
         }
+
+        public EAssetType AssetType { get; }
+        public EAssetSubType AssetSubType { get; }
     }
 }

@@ -1,18 +1,16 @@
-﻿using System;
-using SaberFactory.Helpers;
+﻿using SaberFactory.Helpers;
 using UnityEngine;
 
 namespace SaberFactory.Instances
 {
     /// <summary>
-    /// Extension class for <see cref="Material"/> with more information
-    /// and possibly to revert a changed <see cref="Material"/>
+    ///     Extension class for <see cref="Material" /> with more information
+    ///     and possibly to revert a changed <see cref="Material" />
     /// </summary>
     internal class MaterialDescriptor
     {
-        public Material Material;
-
         public bool IsValid => Material != null;
+        public Material Material;
 
         private readonly Material _originalMaterial;
 

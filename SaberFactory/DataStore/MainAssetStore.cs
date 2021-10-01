@@ -3,36 +3,38 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using IPA.Utilities.Async;
 using SaberFactory.Configuration;
 using SaberFactory.Helpers;
 using SaberFactory.Loaders;
 using SaberFactory.Models;
 using SaberFactory.Models.CustomSaber;
 using SiraUtil.Tools;
-using UnityEngine;
 
 namespace SaberFactory.DataStore
 {
     /// <summary>
-    /// Class for managing store assets ie. parts and custom sabers
+    ///     Class for managing store assets ie. parts and custom sabers
     /// </summary>
     internal class MainAssetStore : IDisposable
     {
         public bool IsLoading { get; private set; }
-        public Task CurrentTask;
 
         public List<string> AdditionalCustomSaberFolders { get; } = new List<string>();
 
-        private readonly CustomSaberAssetLoader _customSaberAssetLoader;
-        private readonly CustomSaberModelLoader _customSaberModelLoader;
+        public Task<ModelComposition> this[string path] => GetCompositionByPath(path);
+
+        public Task<ModelComposition> this[PreloadMetaData metaData] => GetCompositionByPath(metaData.AssetMetaPath.RelativePath);
+        public Task CurrentTask;
 
         private readonly PluginConfig _config;
+
+        private readonly CustomSaberAssetLoader _customSaberAssetLoader;
+        private readonly CustomSaberModelLoader _customSaberModelLoader;
         private readonly SiraLog _logger;
-        private readonly PluginDirectories _pluginDirs;
+        private readonly Dictionary<string, PreloadMetaData> _metaData;
 
         private readonly Dictionary<string, ModelComposition> _modelCompositions;
-        private readonly Dictionary<string, PreloadMetaData> _metaData;
+        private readonly PluginDirectories _pluginDirs;
 
         private MainAssetStore(
             PluginConfig config,
@@ -54,14 +56,15 @@ namespace SaberFactory.DataStore
             {
                 var relPath = PathTools.ToRelativePath(directory.FullName);
                 relPath = PathTools.CorrectRelativePath(relPath);
-                relPath = relPath.Substring(relPath.IndexOf('\\')+1);
+                relPath = relPath.Substring(relPath.IndexOf('\\') + 1);
                 AdditionalCustomSaberFolders.Add(relPath);
             }
         }
 
-        public Task<ModelComposition> this[string path] => GetCompositionByPath(path);
-
-        public Task<ModelComposition> this[PreloadMetaData metaData] => GetCompositionByPath(metaData.AssetMetaPath.RelativePath);
+        public void Dispose()
+        {
+            UnloadAll();
+        }
 
         public async Task<ModelComposition> GetCompositionByPath(string relativePath)
         {
@@ -73,11 +76,6 @@ namespace SaberFactory.DataStore
         public async Task<ModelComposition> GetCompositionByMeta(PreloadMetaData meta)
         {
             return await this[PathTools.ToRelativePath(meta.AssetMetaPath.Path)];
-        }
-
-        public void Dispose()
-        {
-            UnloadAll();
         }
 
         public async Task LoadAllMetaAsync(EAssetTypeConfiguration assetType)
@@ -121,10 +119,7 @@ namespace SaberFactory.DataStore
 
         public void UnloadAll()
         {
-            foreach (var modelCompositions in _modelCompositions.Values)
-            {
-                modelCompositions.Dispose();
-            }
+            foreach (var modelCompositions in _modelCompositions.Values) modelCompositions.Dispose();
             _modelCompositions.Clear();
             _metaData.Clear();
         }
@@ -134,7 +129,7 @@ namespace SaberFactory.DataStore
             if (!_modelCompositions.TryGetValue(path, out var comp)) return;
             comp.Dispose();
             _modelCompositions.Remove(path);
-            _metaData.Remove(path+".meta");
+            _metaData.Remove(path + ".meta");
         }
 
         public async Task Reload(string path)
@@ -152,10 +147,7 @@ namespace SaberFactory.DataStore
 
         public void Delete(string path)
         {
-            if (_metaData.TryGetValue(path + ".meta", out var meta) && meta.AssetMetaPath.HasMetaData)
-            {
-                File.Delete(meta.AssetMetaPath.MetaDataPath);
-            }
+            if (_metaData.TryGetValue(path + ".meta", out var meta) && meta.AssetMetaPath.HasMetaData) File.Delete(meta.AssetMetaPath.MetaDataPath);
 
             Unload(path);
             var filePath = PathTools.ToFullPath(path);
@@ -226,7 +218,7 @@ namespace SaberFactory.DataStore
 
         private void AddModelComposition(string key, ModelComposition modelComposition)
         {
-            if(!_modelCompositions.ContainsKey(key)) _modelCompositions.Add(key, modelComposition);
+            if (!_modelCompositions.ContainsKey(key)) _modelCompositions.Add(key, modelComposition);
         }
 
         private async Task<ModelComposition> LoadModelCompositionAsync(string relativeBundlePath)
@@ -246,7 +238,7 @@ namespace SaberFactory.DataStore
         private async Task<ModelComposition> LoadComposition(string relativePath)
         {
             var composition = await LoadModelCompositionAsync(relativePath);
-            if(composition!=null) _modelCompositions.Add(relativePath, composition);
+            if (composition != null) _modelCompositions.Add(relativePath, composition);
             return composition;
         }
     }

@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using CustomSaber;
 using HarmonyLib;
-using ModestTree;
 using SaberFactory.Helpers;
 using SaberFactory.Instances.PostProcessors;
 using SaberFactory.Instances.Setters;
@@ -16,10 +14,9 @@ namespace SaberFactory.Instances.CustomSaber
 {
     internal class CustomSaberInstance : BasePieceInstance
     {
+        public InstanceTrailData InstanceTrailData { get; private set; }
         private readonly SiraLog _logger;
         private readonly List<IPartPostProcessor> _postProcessors;
-
-        public InstanceTrailData InstanceTrailData { get; private set; }
 
         public CustomSaberInstance(CustomSaberModel model, SiraLog logger, List<IPartPostProcessor> postProcessors) : base(model)
         {
@@ -29,11 +26,11 @@ namespace SaberFactory.Instances.CustomSaber
         }
 
         /// <summary>
-        /// Creates an <see cref="InstanceTrailData"/> object
-        /// with the correct trail transforms
+        ///     Creates an <see cref="InstanceTrailData" /> object
+        ///     with the correct trail transforms
         /// </summary>
-        /// <param name="saberObject">The saber gameobject that the <see cref="CustomTrail"/> component is on</param>
-        /// <param name="trailModel">The <see cref="TrailModel"/> to use</param>
+        /// <param name="saberObject">The saber gameobject that the <see cref="CustomTrail" /> component is on</param>
+        /// <param name="trailModel">The <see cref="TrailModel" /> to use</param>
         public void InitializeTrailData(GameObject saberObject, TrailModel trailModel)
         {
             if (saberObject is null || trailModel is null) return;
@@ -52,10 +49,7 @@ namespace SaberFactory.Instances.CustomSaber
                 return newTrail;
             }
 
-            if (trails is null || trails.Length < 1)
-            {
-                trails = new[] {SetupTrail(12, 0, 1, null)};
-            }
+            if (trails is null || trails.Length < 1) trails = new[] { SetupTrail(12, 0, 1, null) };
 
             var saberTrail = trails[0];
 
@@ -64,12 +58,9 @@ namespace SaberFactory.Instances.CustomSaber
             if (trailModel.TrailOriginTrails is { } && trailModel.TrailOriginTrails.Count > 1)
             {
                 secondaryTrails = new List<CustomTrail>();
-                for (int i = 1; i < trails.Length; i++)
-                {
-                    Object.DestroyImmediate(trails[i]);
-                }
+                for (var i = 1; i < trails.Length; i++) Object.DestroyImmediate(trails[i]);
 
-                for (int i = 1; i < trailModel.TrailOriginTrails.Count; i++)
+                for (var i = 1; i < trailModel.TrailOriginTrails.Count; i++)
                 {
                     var otherTrail = trailModel.TrailOriginTrails[i];
                     secondaryTrails.Add(SetupTrail(
@@ -82,10 +73,7 @@ namespace SaberFactory.Instances.CustomSaber
             else if (trails.Length > 1)
             {
                 secondaryTrails = new List<CustomTrail>();
-                for (int i = 1; i < trails.Length; i++)
-                {
-                    secondaryTrails.Add(trails[i]);
-                }
+                for (var i = 1; i < trails.Length; i++) secondaryTrails.Add(trails[i]);
             }
 
             // if trail comes from the preset save system
@@ -97,16 +85,14 @@ namespace SaberFactory.Instances.CustomSaber
 
                 // set texture wrap mode
                 if (trailModel.Material != null && trailModel.Material.Material.TryGetMainTexture(out var tex))
-                {
                     trailModel.OriginalTextureWrapMode = tex.wrapMode;
-                }
             }
 
-            Transform pointStart = saberTrail.PointStart;
-            Transform pointEnd = saberTrail.PointEnd;
+            var pointStart = saberTrail.PointStart;
+            var pointEnd = saberTrail.PointEnd;
 
             // Correction for sabers that have the transforms set up the other way around
-            bool isTrailReversed = pointStart.localPosition.z > pointEnd.localPosition.z;
+            var isTrailReversed = pointStart.localPosition.z > pointEnd.localPosition.z;
 
             if (isTrailReversed)
             {
@@ -131,34 +117,26 @@ namespace SaberFactory.Instances.CustomSaber
                 materials.Add(rendererMaterials[index]);
             }
 
-            foreach (Renderer renderer in GameObject.GetComponentsInChildren<Renderer>())
+            foreach (var renderer in GameObject.GetComponentsInChildren<Renderer>())
             {
-                if (renderer is null)
-                {
-                    continue;
-                }
+                if (renderer is null) continue;
 
                 var rendererMaterials = renderer.sharedMaterials;
                 var materialCount = rendererMaterials.Length;
 
-                for (int i = 0; i < materialCount; i++)
+                for (var i = 0; i < materialCount; i++)
                 {
                     var material = rendererMaterials[i];
 
                     if (material is null ||
                         !material.HasProperty(MaterialProperties.MainColor))
-                    {
                         continue;
-                    }
 
                     // always color materials if "_CustomColors" is 1
                     // if "_CustomColors" is present but != 1 don't color the material at all
                     if (material.TryGetFloat(MaterialProperties.CustomColors, out var val))
                     {
-                        if (val > 0)
-                        {
-                            AddMaterial(renderer, rendererMaterials, i);
-                        }
+                        if (val > 0) AddMaterial(renderer, rendererMaterials, i);
                     }
                     //if "_CustomColors" isn't present check for glow > 1 and bloom > 1
                     else if (material.TryGetFloat(MaterialProperties.Glow, out val) && val > 0)
@@ -180,7 +158,7 @@ namespace SaberFactory.Instances.CustomSaber
             instance.SetActive(true);
 
             PropertyBlockSetterHandler = new CustomSaberPropertyBlockSetterHandler(instance, Model as CustomSaberModel);
-            _postProcessors.Do(x=>x.ProcessPart(instance));
+            _postProcessors.Do(x => x.ProcessPart(instance));
             return instance;
         }
 

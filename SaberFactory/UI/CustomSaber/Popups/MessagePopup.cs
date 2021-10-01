@@ -1,15 +1,14 @@
-﻿using BeatSaberMarkupLanguage.Attributes;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using BeatSaberMarkupLanguage.Attributes;
 using SaberFactory.UI.Lib;
-
 
 namespace SaberFactory.UI.CustomSaber.Popups
 {
     internal class MessagePopup : Popup
     {
         [UIValue("message")] protected string _message;
-        [UIValue("yes-button-text")] protected string _yesButtonText;
         [UIValue("no-button-active")] protected bool _noButtonActive;
+        [UIValue("yes-button-text")] protected string _yesButtonText;
 
         private TaskCompletionSource<bool> _taskCompletionSource;
 

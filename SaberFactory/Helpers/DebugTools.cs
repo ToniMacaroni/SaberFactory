@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using Debug = UnityEngine.Debug;
 
 namespace SaberFactory.Helpers
 {
@@ -15,11 +14,8 @@ namespace SaberFactory.Helpers
             var go = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             go.transform.position = options.Pos;
             go.transform.SetParent(options.Parent, false);
-            go.transform.localScale = Vector3.one * (options.Size??0.03f);
-            if (options.Color.HasValue)
-            {
-                go.GetComponent<Renderer>().material.color = options.Color.Value.ColorWithAlpha(0);
-            }
+            go.transform.localScale = Vector3.one * (options.Size ?? 0.03f);
+            if (options.Color.HasValue) go.GetComponent<Renderer>().material.color = options.Color.Value.ColorWithAlpha(0);
             return go;
         }
 

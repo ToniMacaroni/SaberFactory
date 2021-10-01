@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using BeatSaberMarkupLanguage.Components;
-using BeatSaberMarkupLanguage.Components.Settings;
 using BeatSaberMarkupLanguage.Parser;
 using JetBrains.Annotations;
 using SaberFactory.Helpers;
@@ -20,13 +17,14 @@ namespace SaberFactory.UI.Lib
 
         public BSMLParserParams ParserParams { get; private set; }
 
-        public SubViewSwitcher SubViewSwitcher;
-
-        private bool _firstActivation = true;
-
         protected virtual string _resourceName => string.Join(".", GetType().Namespace, GetType().Name);
 
+        public SubViewSwitcher SubViewSwitcher;
+
         protected SiraLog Logger;
+        private bool _firstActivation = true;
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         [Inject]
         private void Construct(SiraLog logger)
@@ -46,7 +44,7 @@ namespace SaberFactory.UI.Lib
             }
 
             gameObject.SetActive(true);
-            if(notify) DidOpen();
+            if (notify) DidOpen();
         }
 
         public void Close()
@@ -56,12 +54,10 @@ namespace SaberFactory.UI.Lib
 
         public virtual void DidOpen()
         {
-
         }
 
         public virtual void DidClose()
         {
-
         }
 
         public void GoBack()
@@ -78,20 +74,20 @@ namespace SaberFactory.UI.Lib
         {
         }
 
-        internal class Factory : PlaceholderFactory<Type, InitData, SubView> {}
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        internal class Factory : PlaceholderFactory<Type, InitData, SubView>
+        {
+        }
 
         internal struct InitData
         {
             public string Name;
             public Transform Parent;
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

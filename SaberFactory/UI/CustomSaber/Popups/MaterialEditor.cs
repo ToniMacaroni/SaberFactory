@@ -1,9 +1,8 @@
 ﻿using System;
-using BeatSaberMarkupLanguage.Attributes;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components.Settings;
 using SaberFactory.Helpers;
 using SaberFactory.Instances;
@@ -11,8 +10,6 @@ using SaberFactory.UI.CustomSaber.CustomComponents;
 using SaberFactory.UI.Lib;
 using UnityEngine;
 using UnityEngine.Rendering;
-using Debug = UnityEngine.Debug;
-
 
 namespace SaberFactory.UI.CustomSaber.Popups
 {
@@ -21,7 +18,7 @@ namespace SaberFactory.UI.CustomSaber.Popups
         [UIComponent("material-dropdown")] private readonly DropDownListSetting _materialDropDown = null;
         [UIComponent("prop-list")] private readonly PropList _propList = null;
 
-        [UIValue("materials")] private List<object> _materials = new List<object>();
+        [UIValue("materials")] private readonly List<object> _materials = new List<object>();
 
         public async void Show(MaterialDescriptor materialDescriptor)
         {
@@ -49,8 +46,8 @@ namespace SaberFactory.UI.CustomSaber.Popups
             var descriptorArray = materialDescriptors.ToArray();
 
             _materials.Clear();
-            _materials.Add(descriptorArray.Where(x=>x.Material!=null).Select(x=>x.Material.name));
-            
+            _materials.Add(descriptorArray.Where(x => x.Material != null).Select(x => x.Material.name));
+
             _materialDropDown.transform.parent.gameObject.SetActive(true);
             SetMaterial(descriptorArray.First().Material);
 
@@ -73,7 +70,7 @@ namespace SaberFactory.UI.CustomSaber.Popups
             {
                 EPropertyType type;
 
-                if(prop.HasAttribute(MaterialAttributes.HideInSf)) continue;
+                if (prop.HasAttribute(MaterialAttributes.HideInSf)) continue;
 
                 if (prop.Attributes.Contains("MaterialToggle") || prop.Name == "_CustomColors")
                 {
@@ -83,7 +80,7 @@ namespace SaberFactory.UI.CustomSaber.Popups
 
                     void Callback(object obj)
                     {
-                        material.SetFloat(prop.PropId, obj.Cast<bool>()?1:0);
+                        material.SetFloat(prop.PropId, obj.Cast<bool>() ? 1 : 0);
                     }
 
                     props.Add(new PropertyDescriptor(prop.Description, type, propObject, Callback));
@@ -100,13 +97,9 @@ namespace SaberFactory.UI.CustomSaber.Popups
                     var propertyDescriptor = new PropertyDescriptor(prop.Description, type, propObject, callback);
 
                     if (prop is ShaderPropertyInfo.ShaderRange range)
-                    {
                         propertyDescriptor.AddtionalData = new Vector2(range.Min, range.Max);
-                    }
                     else if (prop is ShaderPropertyInfo.ShaderTexture texProp)
-                    {
                         propertyDescriptor.AddtionalData = !prop.HasAttribute(MaterialAttributes.SfNoPreview);
-                    }
 
                     props.Add(propertyDescriptor);
                 }
@@ -143,14 +136,10 @@ namespace SaberFactory.UI.CustomSaber.Popups
         {
             return type switch
             {
-                ShaderPropertyType.Float => (obj) => { material.SetFloat(propId, (float)obj); }
-                ,
-                ShaderPropertyType.Range => (obj) => { material.SetFloat(propId, (float)obj); }
-                ,
-                ShaderPropertyType.Color => (obj) => { material.SetColor(propId, (Color)obj); }
-                ,
-                ShaderPropertyType.Texture => (obj) => { material.SetTexture(propId, (Texture2D)obj); }
-                ,
+                ShaderPropertyType.Float => obj => { material.SetFloat(propId, (float)obj); },
+                ShaderPropertyType.Range => obj => { material.SetFloat(propId, (float)obj); },
+                ShaderPropertyType.Color => obj => { material.SetColor(propId, (Color)obj); },
+                ShaderPropertyType.Texture => obj => { material.SetTexture(propId, (Texture2D)obj); },
                 _ => null
             };
         }
