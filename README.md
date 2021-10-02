@@ -1,11 +1,20 @@
-# Saber Factory 2 *[SaberFactory.com](https://saberfactory.com)*.  
+# Saber Factory 2  
 
-A highly customizable saber mod for Beat Saber
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/ToniMacaroni/SaberFactory/Build%20Saber%20Factory)
+![GitHub all releases](https://img.shields.io/github/downloads/ToniMacaroni/SaberFactory/total)
+![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/ToniMacaroni/SaberFactory?label=version)
 
-Mod Download => **[Releases](https://github.com/ToniMacaroni/SaberFactory/releases)**
+**A highly customizable saber mod for Beat Saber**
+
+|   |  |
+| ------------- | ------------- |
+| Mod Download  | **[Latest Version](https://github.com/ToniMacaroni/SaberFactory/releases)**  |
+| Website  | **[SaberFactory.com](https://saberfactory.com)**  |
 
 To get more content and help with the mod or creation of content  
-join the the **[Saber Factory Discord](https://discord.gg/PjD7WcChH3)** server
+join the the **[Saber Factory Discord](https://discord.gg/PjD7WcChH3)** server.
+
+Or if you want to help the project grow:
 
 | [:heart: Donate](https://ko-fi.com/tonimacaroni)  |
 | ------------- |
