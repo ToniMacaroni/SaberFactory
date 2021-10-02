@@ -4,11 +4,18 @@ using System.Collections.Generic;
 namespace SaberFactory.Models
 {
     /// <summary>
-    /// Class for managing a collection of parts
+    ///     Class for managing a collection of parts
     /// </summary>
     /// <typeparam name="T"></typeparam>
     internal class PieceCollection<T> : IEnumerable
     {
+        public T this[AssetTypeDefinition definition]
+        {
+            get => GetPiece(definition);
+            set => AddPiece(definition, value);
+        }
+
+        public int PieceCount => _pieceModels.Count;
         private readonly Dictionary<AssetTypeDefinition, T> _pieceModels;
 
         public PieceCollection()
@@ -16,10 +23,9 @@ namespace SaberFactory.Models
             _pieceModels = new Dictionary<AssetTypeDefinition, T>();
         }
 
-        public T this[AssetTypeDefinition definition]
+        public IEnumerator GetEnumerator()
         {
-            get => GetPiece(definition);
-            set => AddPiece(definition, value);
+            return _pieceModels.Values.GetEnumerator();
         }
 
         public bool HasPiece(AssetTypeDefinition definition)
@@ -43,12 +49,5 @@ namespace SaberFactory.Models
             if (_pieceModels.ContainsKey(definition)) return _pieceModels[definition];
             return default;
         }
-
-        public IEnumerator GetEnumerator()
-        {
-            return _pieceModels.Values.GetEnumerator();
-        }
-
-        public int PieceCount => _pieceModels.Count;
     }
 }

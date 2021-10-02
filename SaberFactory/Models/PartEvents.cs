@@ -6,29 +6,26 @@ namespace SaberFactory.Models
 {
     internal class PartEvents
     {
-        public UnityEvent OnSlice;
-        public UnityEvent OnComboBreak;
         public UnityEvent MultiplierUp;
-        public UnityEvent SaberStartColliding;
-        public UnityEvent SaberStopColliding;
-        public UnityEvent OnLevelStart;
-        public UnityEvent OnLevelFail;
-        public UnityEvent OnLevelEnded;
-        public UnityEvent OnBlueLightOn;
-        public UnityEvent OnRedLightOn;
-
-        public UnityEvent<int> OnComboChanged;
 
         public UnityEvent<float> OnAccuracyChanged;
+        public UnityEvent OnBlueLightOn;
+        public UnityEvent OnComboBreak;
+
+        public UnityEvent<int> OnComboChanged;
+        public UnityEvent OnLevelEnded;
+        public UnityEvent OnLevelFail;
+        public UnityEvent OnLevelStart;
+        public UnityEvent OnRedLightOn;
+        public UnityEvent OnSlice;
+        public UnityEvent SaberStartColliding;
+        public UnityEvent SaberStopColliding;
 
         public static PartEvents FromCustomSaber(GameObject saberObject)
         {
             var eventManager = saberObject.GetComponent<EventManager>();
 
-            if (!eventManager)
-            {
-                return null;
-            }
+            if (!eventManager) return null;
 
             var partEvents = new PartEvents
             {

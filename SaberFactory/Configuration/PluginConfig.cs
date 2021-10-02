@@ -5,13 +5,11 @@ using IPA.Config.Stores.Attributes;
 using IPA.Config.Stores.Converters;
 
 [assembly: InternalsVisibleTo(GeneratedStore.AssemblyVisibilityTarget)]
+
 namespace SaberFactory.Configuration
 {
     internal class PluginConfig
     {
-        [Ignore]
-        public bool RuntimeFirstLaunch;
-
         public bool Enabled { get; set; } = true;
 
         // is used to check if it's the user's first time
@@ -46,11 +44,10 @@ namespace SaberFactory.Configuration
         public bool ControlTrailWithThumbstick { get; set; } = true;
 
         public float SaberAudioVolumeMultiplier { get; set; } = 1;
-        
+
         // How many threads to spawn when loading all sabers
         // ! Not used as of right now !
-        [Ignore]
-        public int LoadingThreads { get; set; } = 2;
+        [Ignore] public int LoadingThreads { get; set; } = 2;
 
         // Which type to use with the mod (parts / custom sabers)
         [UseConverter(typeof(EnumConverter<EAssetTypeConfiguration>))]
@@ -60,20 +57,19 @@ namespace SaberFactory.Configuration
         [UseConverter(typeof(ListConverter<string>))]
         public List<string> Favorites { get; set; } = new List<string>();
 
+        [Ignore] public bool RuntimeFirstLaunch;
+
         /// <summary>
-        /// Add an asset to the favorites list
+        ///     Add an asset to the favorites list
         /// </summary>
         /// <param name="path"></param>
         public void AddFavorite(string path)
         {
-            if (!IsFavorite(path))
-            {
-                Favorites.Add(path);
-            }
+            if (!IsFavorite(path)) Favorites.Add(path);
         }
 
         /// <summary>
-        /// Remove an asset from the favorites list
+        ///     Remove an asset from the favorites list
         /// </summary>
         /// <param name="path"></param>
         public void RemoveFavorite(string path)
@@ -82,7 +78,7 @@ namespace SaberFactory.Configuration
         }
 
         /// <summary>
-        /// Check if an asset is marked as favorite
+        ///     Check if an asset is marked as favorite
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>

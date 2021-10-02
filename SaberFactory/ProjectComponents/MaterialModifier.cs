@@ -1,20 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using Zenject;
 
 namespace SaberFactory.ProjectComponents
 {
     public class MaterialModifierCollection : MonoBehaviour
     {
-        [SerializeField]
-        public List<MaterialModifier> Modifiers;
+        [SerializeField] public List<MaterialModifier> Modifiers;
     }
 
     public class MaterialModifier
     {
-        [SerializeField] public Material Material;
         [SerializeField] public List<string> EditableProperties;
+        [SerializeField] public Material Material;
     }
 }

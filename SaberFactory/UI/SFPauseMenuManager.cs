@@ -8,7 +8,7 @@ using Zenject;
 namespace SaberFactory.UI
 {
     /// <summary>
-    /// Currently not used but kept just in case
+    ///     Currently not used but kept just in case
     /// </summary>
     internal class SFPauseMenuManager : IInitializable
     {
@@ -20,7 +20,9 @@ namespace SaberFactory.UI
             {
                 CreateCheckbox();
             }
-            catch (Exception) { }
+            catch (Exception)
+            {
+            }
         }
 
         public void CreateCheckbox()

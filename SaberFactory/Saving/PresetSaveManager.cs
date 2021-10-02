@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
-using CustomSaber;
 using Newtonsoft.Json;
 using SaberFactory.DataStore;
 using SaberFactory.Helpers;
@@ -11,17 +9,14 @@ using SaberFactory.Instances;
 using SaberFactory.Models;
 using SaberFactory.Models.CustomSaber;
 using UnityEngine;
-using Zenject;
 
 namespace SaberFactory.Saving
 {
     internal class PresetSaveManager
     {
-        public event Action OnSaberLoaded;
-
         private readonly MainAssetStore _mainAssetStore;
-        private readonly TextureStore _textureStore;
         private readonly DirectoryInfo _presetDir;
+        private readonly TextureStore _textureStore;
 
         private PresetSaveManager(MainAssetStore mainAssetStore, TextureStore textureStore, PluginDirectories pluginDirs)
         {
@@ -32,6 +27,8 @@ namespace SaberFactory.Saving
             SerMapper.CreateEntry<TrailModel, SerializableTrail>();
             SerMapper.CreateEntry<SaberModel, SerializableSaber>();
         }
+
+        public event Action OnSaberLoaded;
 
         public void SaveSaber(SaberSet saberSet, string fileName)
         {
@@ -53,7 +50,7 @@ namespace SaberFactory.Saving
             var pieceList = new List<SerializablePiece>();
             foreach (BasePieceModel pieceModel in saberModel.PieceCollection)
             {
-                var piece = new SerializablePiece {Path = pieceModel.StoreAsset.RelativePath};
+                var piece = new SerializablePiece { Path = pieceModel.StoreAsset.RelativePath };
 
                 var tProp = pieceModel.PropertyBlock.TransformProperty;
                 var transform = new SerializableTransform
@@ -77,10 +74,7 @@ namespace SaberFactory.Saving
 
                 SerMapper.Map(trailModel, trail);
 
-                if (trailModel.Material?.Material != null)
-                {
-                    trail.Material = SerializableMaterial.FromMaterial(trailModel.Material.Material);
-                }
+                if (trailModel.Material?.Material != null) trail.Material = SerializableMaterial.FromMaterial(trailModel.Material.Material);
 
                 serializableSaber.Trail = trail;
             }
@@ -124,9 +118,9 @@ namespace SaberFactory.Saving
             }
 
             var trailModel
-                =saberModel.GetCustomSaber(out var customsaber)
-                ?customsaber.TrailModel
-                :new TrailModel();
+                = saberModel.GetCustomSaber(out var customsaber)
+                    ? customsaber.TrailModel
+                    : new TrailModel();
 
             var trail = serializableSaber.Trail;
             if (trail != null)
@@ -140,20 +134,13 @@ namespace SaberFactory.Saving
                 SerMapper.Map(trail, trailModel);
 
                 // if trail comes from another saber
-                if (!string.IsNullOrEmpty(trail.TrailOrigin))
-                {
-                    await LoadFromTrailOrigin(trailModel, trail.TrailOrigin);
-                }
+                if (!string.IsNullOrEmpty(trail.TrailOrigin)) await LoadFromTrailOrigin(trailModel, trail.TrailOrigin);
 
                 // assign trailmodel to custom saber or saber factory saber
                 // depending on which trail type is being used
-                if (customsaber is null)
-                {
-                    saberModel.TrailModel = trailModel;
-                }
+                if (customsaber is null) saberModel.TrailModel = trailModel;
 
                 trail.Material?.ApplyToMaterial(trailModel.Material?.Material, ResolveTexture);
-
             }
         }
 
@@ -164,7 +151,7 @@ namespace SaberFactory.Saving
         }
 
         /// <summary>
-        /// Load trail from another saber
+        ///     Load trail from another saber
         /// </summary>
         /// <param name="trailModel">TrailModel to load the other saber's data into</param>
         /// <param name="trailOrigin">Path of the other saber</param>
@@ -172,7 +159,7 @@ namespace SaberFactory.Saving
         private async Task LoadFromTrailOrigin(TrailModel trailModel, string trailOrigin)
         {
             var comp = await _mainAssetStore[trailOrigin];
-            var cs = (comp?.GetLeft() as CustomSaberModel);
+            var cs = comp?.GetLeft() as CustomSaberModel;
             if (cs is null) return;
             var originTrailModel = cs.GrabTrail(true);
             if (originTrailModel == null) return;

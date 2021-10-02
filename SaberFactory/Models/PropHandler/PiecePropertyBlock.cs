@@ -1,7 +1,7 @@
 ﻿namespace SaberFactory.Models.PropHandler
 {
     /// <summary>
-    /// Base class for storing customizable / serializable properties
+    ///     Base class for storing customizable / serializable properties
     /// </summary>
     internal abstract class PiecePropertyBlock
     {

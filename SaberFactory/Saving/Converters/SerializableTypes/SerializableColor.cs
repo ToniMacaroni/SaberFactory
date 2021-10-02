@@ -4,10 +4,10 @@ namespace SaberFactory.Saving.Converters.SerializableTypes
 {
     internal class SerializableColor
     {
-        public float R;
-        public float G;
-        public float B;
         public float A;
+        public float B;
+        public float G;
+        public float R;
 
         public Color ToColor()
         {

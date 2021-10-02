@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-using SaberFactory.Configuration;
 using UnityEngine;
-using Zenject;
 
 namespace SaberFactory.UI.Lib.BSML
 {
@@ -9,12 +7,13 @@ namespace SaberFactory.UI.Lib.BSML
     {
         public static readonly Dictionary<string, Color> ColorTheme = new Dictionary<string, Color>
         {
-            {"light-bg", GetColor("#FFF")},
-            {"dark-bg", GetColor("#0000FF")},
-            {"default-panel", GetColor("#666")},
-            {"saber-selector", GetColor("#666")},
-            {"saber-selector-sec", GetColor("#000000CC")},
-            {"navbar", GetColor("#000000CC")},
+            { "light-bg", GetColor("#FFF") },
+            { "dark-bg", GetColor("#0000FF") },
+            { "default-panel", GetColor("#668F8F") },
+            { "saber-selector", GetColor("#668F8F") },
+            { "saber-selector-sec", GetColor("#668F8F") },
+            { "navbar", GetColor("#000000CC") },
+            { "prop-cell", GetColor("#00000090") }
         };
 
         public static bool GetDefinedColor(string name, out Color color)

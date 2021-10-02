@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -47,10 +46,7 @@ namespace SaberFactory.Helpers
 
         public static void SetMainColor(this Material material, Color color)
         {
-            if (material.HasProperty(MaterialProperties.MainColor))
-            {
-                material.SetColor(MaterialProperties.MainColor, color);
-            }
+            if (material.HasProperty(MaterialProperties.MainColor)) material.SetColor(MaterialProperties.MainColor, color);
         }
 
         public static bool HasCustomColorsEnabled(this Material material)
@@ -62,10 +58,10 @@ namespace SaberFactory.Helpers
         {
             var shader = material.shader;
             var propCount = shader.GetPropertyCount();
-            for (int i = 0; i < propCount; i++)
+            for (var i = 0; i < propCount; i++)
             {
-                if(!string.IsNullOrEmpty(ignoredAttribute) &&
-                   shader.GetPropertyAttributes(i).Contains(ignoredAttribute))
+                if (!string.IsNullOrEmpty(ignoredAttribute) &&
+                    shader.GetPropertyAttributes(i).Contains(ignoredAttribute))
                     continue;
 
                 var nameId = shader.GetPropertyNameId(i);
@@ -126,10 +122,7 @@ namespace SaberFactory.Helpers
                 return;
             }
 
-            if (type == typeof(Texture))
-            {
-                material.SetTexture(nameId, (Texture)obj);
-            }
+            if (type == typeof(Texture)) material.SetTexture(nameId, (Texture)obj);
         }
 
         public static void SetProperty(this Material material, int nameId, object obj, ShaderPropertyType type)

@@ -8,23 +8,14 @@ using BeatSaberMarkupLanguage.Tags;
 using BeatSaberMarkupLanguage.TypeHandlers;
 using SaberFactory.UI.Lib.BSML.Tags;
 using SiraUtil.Tools;
-using UnityEngine;
 using Zenject;
 
 namespace SaberFactory.UI.Lib.BSML
 {
-    class CustomComponentHandler : IInitializable
+    internal class CustomComponentHandler : IInitializable
     {
-        private readonly SiraLog _logger;
-
         public static bool Registered { get; private set; }
-
-        #region Factories
-
-        private readonly Popup.Factory _popupFactory;
-        private readonly CustomUiComponent.Factory _customUiComponentFactory;
-
-        #endregion
+        private readonly SiraLog _logger;
 
         private CustomComponentHandler(
             SiraLog logger,
@@ -43,22 +34,13 @@ namespace SaberFactory.UI.Lib.BSML
 
         private void RegisterAll(BSMLParser parser)
         {
-            if(Registered) return;
+            if (Registered) return;
 
-            foreach (BSMLTag tag in InstantiateOfType<BSMLTag>())
-            {
-                parser.RegisterTag(tag);
-            }
+            foreach (var tag in InstantiateOfType<BSMLTag>()) parser.RegisterTag(tag);
 
-            foreach (BSMLMacro macro in InstantiateOfType<BSMLMacro>())
-            {
-                parser.RegisterMacro(macro);
-            }
+            foreach (var macro in InstantiateOfType<BSMLMacro>()) parser.RegisterMacro(macro);
 
-            foreach (TypeHandler handler in InstantiateOfType<TypeHandler>())
-            {
-                parser.RegisterTypeHandler(handler);
-            }
+            foreach (var handler in InstantiateOfType<TypeHandler>()) parser.RegisterTypeHandler(handler);
 
             RegisterCustomComponents(parser);
 
@@ -69,21 +51,17 @@ namespace SaberFactory.UI.Lib.BSML
 
         private void RegisterCustomComponents(BSMLParser parser)
         {
-            foreach (var type in GetListOfType<CustomUiComponent>())
-            {
-                parser.RegisterTag(new CustomUiComponentTag(type, _customUiComponentFactory));
-            }
+            foreach (var type in GetListOfType<CustomUiComponent>()) parser.RegisterTag(new CustomUiComponentTag(type, _customUiComponentFactory));
 
-            foreach (var type in GetListOfType<Popup>())
-            {
-                parser.RegisterTag(new PopupTag(type, _popupFactory));
-            }
+            foreach (var type in GetListOfType<Popup>()) parser.RegisterTag(new PopupTag(type, _popupFactory));
         }
 
         private List<T> InstantiateOfType<T>(params object[] constructorArgs)
         {
-            List<T> objects = new List<T>();
-            foreach (Type type in Assembly.GetExecutingAssembly().GetTypes().Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(typeof(T)) && myType!=typeof(CustomUiComponentTag) && myType!=typeof(PopupTag)))
+            var objects = new List<T>();
+            foreach (var type in Assembly.GetExecutingAssembly().GetTypes().Where(myType =>
+                myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(typeof(T)) && myType != typeof(CustomUiComponentTag) &&
+                myType != typeof(PopupTag)))
                 objects.Add((T)Activator.CreateInstance(type, constructorArgs));
 
             return objects;
@@ -92,10 +70,18 @@ namespace SaberFactory.UI.Lib.BSML
         private List<Type> GetListOfType<T>()
         {
             var types = new List<Type>();
-            foreach (var type in Assembly.GetExecutingAssembly().GetTypes().Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(typeof(T))))
+            foreach (var type in Assembly.GetExecutingAssembly().GetTypes()
+                .Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(typeof(T))))
                 types.Add(type);
 
             return types;
         }
+
+        #region Factories
+
+        private readonly Popup.Factory _popupFactory;
+        private readonly CustomUiComponent.Factory _customUiComponentFactory;
+
+        #endregion
     }
 }

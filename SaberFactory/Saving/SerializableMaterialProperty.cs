@@ -22,7 +22,7 @@ namespace SaberFactory.Saving
                 _ => null
             };
 
-            return value == null ? null : new SerializableMaterialProperty {Name = name, Type = type, Value = value};
+            return value == null ? null : new SerializableMaterialProperty { Name = name, Type = type, Value = value };
         }
     }
 }

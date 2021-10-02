@@ -13,7 +13,7 @@ namespace SaberFactory.Editor
         {
             set
             {
-                if(_rootTransform) _rootTransform.gameObject.SetActive(value);
+                if (_rootTransform) _rootTransform.gameObject.SetActive(value);
             }
         }
 
@@ -24,9 +24,9 @@ namespace SaberFactory.Editor
         }
 
         public Transform SaberContainerTransform { get; private set; }
+        private readonly FileInfo _customPedestalFile;
 
         private readonly EmbeddedAssetLoader _embeddedAssetLoader;
-        private readonly FileInfo _customPedestalFile;
 
         private Transform _rootTransform;
 
@@ -58,7 +58,6 @@ namespace SaberFactory.Editor
         private async Task<GameObject> GetPedestalAsset()
         {
             if (_customPedestalFile.Exists)
-            {
                 try
                 {
                     var customPedestal = await Readers.LoadAssetFromAssetBundleAsync<GameObject>(_customPedestalFile.FullName, "Pedestal");
@@ -67,18 +66,15 @@ namespace SaberFactory.Editor
                 }
                 catch (Exception e)
                 {
-                    Debug.LogError("Couldn't load custom pedestal: \n"+e);
+                    Debug.LogError("Couldn't load custom pedestal: \n" + e);
                 }
-            }
+
             return await _embeddedAssetLoader.LoadAsset<GameObject>("Pedestal");
         }
 
         public void Destroy()
         {
-            if (_rootTransform != null)
-            {
-                _rootTransform.gameObject.TryDestroy();
-            }
+            if (_rootTransform != null) _rootTransform.gameObject.TryDestroy();
         }
     }
 }

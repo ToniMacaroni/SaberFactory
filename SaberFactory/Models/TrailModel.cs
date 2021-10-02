@@ -7,39 +7,32 @@ using UnityEngine;
 namespace SaberFactory.Models
 {
     /// <summary>
-    /// Stores information on how to build a trail
+    ///     Stores information on how to build a trail
     /// </summary>
     internal class TrailModel
     {
-        [MapSerialize]
-        public Vector3 TrailPosOffset;
-
-        [MapSerialize]
-        public float Width;
-
-        [MapSerialize]
-        public int Length;
-        
         public int OriginalLength { get; private set; }
+
+        [MapSerialize] public bool ClampTexture;
+
+        [MapSerialize] public bool Flip;
+
+        [MapSerialize] public int Length;
 
         public MaterialDescriptor Material;
 
-        [MapSerialize]
-        public float Whitestep;
-
-        [MapSerialize]
-        public string TrailOrigin;
-
-        [MapSerialize]
-        public bool ClampTexture;
-
-        [MapSerialize]
-        public bool Flip;
-
         public TextureWrapMode? OriginalTextureWrapMode;
+
+        [MapSerialize] public string TrailOrigin;
 
         // for custom sabers with multiple trails
         public List<CustomTrail> TrailOriginTrails;
+
+        [MapSerialize] public Vector3 TrailPosOffset;
+
+        [MapSerialize] public float Whitestep;
+
+        [MapSerialize] public float Width;
 
         public TrailModel(
             Vector3 trailPosOffset,
@@ -62,7 +55,6 @@ namespace SaberFactory.Models
 
         public TrailModel()
         {
-            
         }
 
         public void CopyFrom(TrailModel other)

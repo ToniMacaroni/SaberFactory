@@ -1,51 +1,50 @@
-﻿<bg xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
-	
-	<vertical custom_bg='' custom_color="$default-panel" border="square" pad="2" vertical-fit="PreferredSize">
+﻿<bg>
 
-		<horizontal pad='2' bg='panel-top' skew='0' bg-color='#00b6ff40'>
-			<checkbox text='Saber Factory Enabled' value='mod-enabled' apply-on-change='true' />
-		</horizontal>
-		<vertical pad='2' bg='round-rect-panel' bg-color='#00000050' spacing='1'>
-			<checkbox text='Enable Events' value='events-enabled' apply-on-change='true'
-			          hover-hint='Enable events on the saber (like fc effects)'/>
-			<checkbox text='Random Sabers' value='random-sabers' apply-on-change='true'
-			          hover-hint='Choose a random saber on every song start'/>
-			<checkbox text='Override song saber' value='override-song-saber' apply-on-change='true'
-			          hover-hint='Use your own saber instead of the one dictated by the song'/>
-      <text text='More settings in "Beat Saber\UserData\Saber Factory.json"' align='Center' font-color='#ffffff60'></text>
-		</vertical>
+    <vertical bg="round-rect-panel" custom-color="$default-panel" pad="2" vertical-fit="PreferredSize">
+
+        <horizontal pad='2' bg='panel-top' skew='0' bg-color='#00b6ff40'>
+            <checkbox text='Saber Factory Enabled' value='mod-enabled' apply-on-change='true'/>
+        </horizontal>
+        <vertical pad='2' bg='round-rect-panel' bg-color='#00000050' spacing='1'>
+            <checkbox text='Enable Events' value='events-enabled' apply-on-change='true'
+                      hover-hint='Enable events on the saber (like fc effects)'/>
+            <checkbox text='Random Sabers' value='random-sabers' apply-on-change='true'
+                      hover-hint='Choose a random saber on every song start'/>
+            <checkbox text='Override song saber' value='override-song-saber' apply-on-change='true'
+                      hover-hint='Use your own saber instead of the one dictated by the song'/>
+            <text text='More settings in "Beat Saber\UserData\Saber Factory.json"' align='Center' font-color='#ffffff60'></text>
+        </vertical>
 
 
+        <horizontal bg='panel-top' skew='0' bg-color='#00b6ff20' pad='2'>
+            <sui.icon-button
+                    pad='1'
+                    pref-width='15'
+                    preferred-height='15'
+                    on-click='profile-clicked'
+                    icon='SaberFactory.Resources.Icons.profile.png'
+                    hover-hint='Support me on Ko-Fi'
+                    skew='0' show-line='false' normal-color='#00000000' hovered-color='#00b6ff40' use-gradient='false'/>
+            <sui.icon-button
+                    pad='1'
+                    pref-width='15'
+                    preferred-height='15'
+                    on-click='discord-clicked'
+                    icon='SaberFactory.Resources.Icons.discord.png'
+                    hover-hint='Join our lovely server for help with the mod'
+                    skew='0' show-line='false' normal-color='#00000000' hovered-color='#00b6ff40' use-gradient='false'/>
+            <sui.icon-button
+                    id='github-button'
+                    active='false'
+                    pad='2'
+                    pref-width='15'
+                    preferred-height='15'
+                    on-click='github-clicked'
+                    icon='SaberFactory.Resources.Icons.update.png'
+                    hover-hint='New version available on Github (click to see changelogs)'
+                    skew='0' show-line='false' icon-color='#5dc968' normal-color='#00000000' hovered-color='#00b6ff40' use-gradient='false'/>
+        </horizontal>
+    </vertical>
 
-		<horizontal bg='panel-top' skew='0' bg-color='#00b6ff20' pad='2'>
-			<sui.icon-button
-				pad='1'
-				pref-width='15'
-				preferred-height='15'
-				on-click='profile-clicked'
-				icon='SaberFactory.Resources.Icons.profile.png'
-				hover-hint='Support me on Ko-Fi'
-				skew='0' show-line='false' normal-color='#00000000' hovered-color='#00b6ff40' use-gradient='false'/>
-			<sui.icon-button
-				pad='1'
-				pref-width='15'
-				preferred-height='15'
-				on-click='discord-clicked'
-				icon='SaberFactory.Resources.Icons.discord.png'
-				hover-hint='Join our lovely server for help with the mod'
-				skew='0' show-line='false' normal-color='#00000000' hovered-color='#00b6ff40' use-gradient='false'/>
-			<sui.icon-button
-				id='github-button'
-				active='false'
-				pad='2'
-				pref-width='15'
-				preferred-height='15'
-				on-click='github-clicked'
-				icon='SaberFactory.Resources.Icons.update.png'
-				hover-hint='New version available on Github (click to see changelogs)'
-				skew='0' show-line='false' icon-color='#5dc968' normal-color='#00000000' hovered-color='#00b6ff40' use-gradient='false'/>
-		</horizontal>
-	</vertical>
-
-	<sui.changelog-popup id='changelog-popup' />
+    <sui.changelog-popup id='changelog-popup'/>
 </bg>

@@ -14,10 +14,11 @@ using Zenject;
 namespace SaberFactory.Editor
 {
     /// <summary>
-    /// Class for managing the presentation of the saber factory editor
+    ///     Class for managing the presentation of the saber factory editor
     /// </summary>
     internal class Editor : IInitializable, IDisposable
     {
+        public static Editor Instance;
         public bool IsActive { get; private set; }
 
         public bool IsSaberInHand
@@ -30,22 +31,21 @@ namespace SaberFactory.Editor
             }
         }
 
-        public static Editor Instance;
+        private readonly EditorInstanceManager _editorInstanceManager;
 
         private readonly SiraLog _logger;
-        private readonly PluginConfig _pluginConfig;
-        private readonly SaberFactoryUI _saberFactoryUi;
-        private readonly EditorInstanceManager _editorInstanceManager;
-        private readonly SaberSet _saberSet;
-        private readonly PlayerDataModel _playerDataModel;
-        private readonly SaberGrabController _saberGrabController;
         private readonly MenuSaberProvider _menuSaberProvider;
 
         private readonly Pedestal _pedestal;
+        private readonly PlayerDataModel _playerDataModel;
+        private readonly PluginConfig _pluginConfig;
+        private readonly SaberFactoryUI _saberFactoryUi;
+        private readonly SaberGrabController _saberGrabController;
+        private readonly SaberSet _saberSet;
         private readonly SFLogoAnim _sfLogoAnim;
-        private SaberInstance _spawnedSaber;
         private bool _isFirstActivation = true;
         private bool _isSaberInHand;
+        private SaberInstance _spawnedSaber;
 
         private Editor(
             SiraLog logger,
@@ -75,6 +75,14 @@ namespace SaberFactory.Editor
             GameplaySetupViewPatch.EntryEnabled = _pluginConfig.ShowGameplaySettingsButton;
         }
 
+        public void Dispose()
+        {
+            Instance = null;
+            _saberFactoryUi.OnClosePressed -= Close;
+
+            _pedestal.Destroy();
+        }
+
         public async void Initialize()
         {
             _saberFactoryUi.Initialize();
@@ -82,14 +90,6 @@ namespace SaberFactory.Editor
             // Create Pedestal
             var pos = new Vector3(0.3f, 0, 0.9f);
             await _pedestal.Instantiate(pos, Quaternion.Euler(0, 25, 0));
-        }
-
-        public void Dispose()
-        {
-            Instance = null;
-            _saberFactoryUi.OnClosePressed -= Close;
-
-            _pedestal.Destroy();
         }
 
         public async void Open()
@@ -153,7 +153,7 @@ namespace SaberFactory.Editor
 
             if (IsSaberInHand)
             {
-                _spawnedSaber.CreateTrail(editor: true);
+                _spawnedSaber.CreateTrail(true);
                 _saberGrabController.HideHandle();
             }
             else
@@ -169,13 +169,7 @@ namespace SaberFactory.Editor
             await Task.Yield();
 
             if (_pluginConfig.AnimateSaberSelection)
-            {
-                await AnimationHelper.AsyncAnimation(0.3f, CancellationToken.None, t =>
-                {
-                    parent.localScale = new Vector3(t, t, t);
-                });
-            }
-
+                await AnimationHelper.AsyncAnimation(0.3f, CancellationToken.None, t => { parent.localScale = new Vector3(t, t, t); });
         }
     }
 }

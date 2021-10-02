@@ -4,16 +4,6 @@ namespace SaberFactory.Misc
 {
     public class SplineControlPoint
     {
-        public int ControlPointIndex = -1;
-
-        public float Dist;
-
-        protected Spline mSpline;
-        public Vector3 Normal;
-        public Vector3 Position;
-        public int SegmentIndex = -1;
-
-
         public SplineControlPoint NextControlPoint => mSpline.NextControlPoint(this);
 
         public SplineControlPoint PreviousControlPoint => mSpline.PreviousControlPoint(this);
@@ -30,6 +20,14 @@ namespace SaberFactory.Misc
         public Vector3 PreviousNormal => mSpline.PreviousNormal(this);
 
         public bool IsValid => NextControlPoint != null;
+        public int ControlPointIndex = -1;
+
+        public float Dist;
+        public Vector3 Normal;
+        public Vector3 Position;
+        public int SegmentIndex = -1;
+
+        protected Spline mSpline;
 
 
         private Vector3 GetNext2Position()

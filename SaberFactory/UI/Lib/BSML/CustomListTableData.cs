@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using BeatSaberMarkupLanguage;
 using HMUI;
 using IPA.Utilities;
@@ -15,21 +14,17 @@ namespace SaberFactory.UI.Lib.BSML
     {
         public enum ListStyle
         {
-            List, Box, Simple
+            List,
+            Box,
+            Simple
         }
 
-        private ListStyle _listStyle = ListStyle.List;
-
-        private LevelListTableCell _songListTableCellInstance;
-        //private AnnotatedBeatmapLevelCollectionTableCell _levelPackTableCellInstance;
-        private SimpleTextTableCell _simpleTextTableCellInstance;
-
-        public List<CustomCellInfo> Data = new List<CustomCellInfo>();
-        public float cellSize = 8.5f;
         private const string ReuseIdentifier = "BSMLListTableCell";
-        public TableView TableView;
 
-        public bool ExpandCell = false;
+        private static readonly Color HeartColor = new Color(0.921f, 0.360f, 0.321f);
+
+        private static readonly Sprite FolderSprite =
+            Utilities.FindSpriteInAssembly("SaberFactory.Resources.Icons.folder.png");
 
         public ListStyle Style
         {
@@ -54,101 +49,26 @@ namespace SaberFactory.UI.Lib.BSML
             }
         }
 
-        private static readonly Color HeartColor = new Color(0.921f, 0.360f, 0.321f);
+        public float cellSize = 8.5f;
 
-        private static readonly Sprite FolderSprite =
-            Utilities.FindSpriteInAssembly("SaberFactory.Resources.Icons.folder.png");
+        public List<CustomCellInfo> Data = new List<CustomCellInfo>();
 
-        #region Accessors
+        public bool ExpandCell;
+        public TableView TableView;
 
-        private static readonly FieldAccessor<LevelListTableCell, Image>.Accessor _favoriteImageAccessor =
-            FieldAccessor<LevelListTableCell, Image>.GetAccessor("_favoritesBadgeImage");
+        private ListStyle _listStyle = ListStyle.List;
 
-        private static readonly FieldAccessor<LevelListTableCell, TextMeshProUGUI>.Accessor _songNameTextAccessor =
-            FieldAccessor<LevelListTableCell, TextMeshProUGUI>.GetAccessor("_songNameText");
+        //private AnnotatedBeatmapLevelCollectionTableCell _levelPackTableCellInstance;
+        private SimpleTextTableCell _simpleTextTableCellInstance;
 
-        private static readonly FieldAccessor<LevelListTableCell, TextMeshProUGUI>.Accessor _songAuthorTextAccessor =
-            FieldAccessor<LevelListTableCell, TextMeshProUGUI>.GetAccessor("_songAuthorText");
-
-        private static readonly FieldAccessor<LevelListTableCell, TextMeshProUGUI>.Accessor _songDurationTextAccessor =
-            FieldAccessor<LevelListTableCell, TextMeshProUGUI>.GetAccessor("_songDurationText");
-
-        private static readonly FieldAccessor<LevelListTableCell, TextMeshProUGUI>.Accessor _songBpmTextAccessor =
-            FieldAccessor<LevelListTableCell, TextMeshProUGUI>.GetAccessor("_songBpmText");
-
-        private static readonly FieldAccessor<LevelListTableCell, Image>.Accessor _coverImageAccessor =
-            FieldAccessor<LevelListTableCell, Image>.GetAccessor("_coverImage");
-
-        private static readonly FieldAccessor<LevelListTableCell, Image>.Accessor _backgroundImageAccessor =
-            FieldAccessor<LevelListTableCell, Image>.GetAccessor("_backgroundImage");
-
-        #endregion
-
-        public LevelListTableCell GetTableCell()
-        {
-            LevelListTableCell tableCell = (LevelListTableCell)TableView.DequeueReusableCellForIdentifier(ReuseIdentifier);
-            if (!tableCell)
-            {
-                if (_songListTableCellInstance == null)
-                    _songListTableCellInstance = Resources.FindObjectsOfTypeAll<LevelListTableCell>().First(x => (x.name == "LevelListTableCell"));
-
-                tableCell = Instantiate(_songListTableCellInstance);
-
-                var t = _favoriteImageAccessor(ref tableCell).gameObject.transform.AsRectTransform();
-                t.sizeDelta = new Vector2(5, 5);
-                t.anchoredPosition = new Vector2(-8.5f, 0);
-
-                tableCell.SetField("_highlightBackgroundColor", new Color(0.360f, 0.647f, 1, 0.7f));
-                tableCell.SetField("_selectedBackgroundColor", new Color(0.360f, 0.647f, 1, 0.9f));
-                tableCell.SetField("_selectedAndHighlightedBackgroundColor", new Color(0.360f, 0.647f, 1, 0.9f));
-                var bg = _backgroundImageAccessor(ref tableCell).Cast<ImageView>();
-                bg.SetSkew(0);
-                bg.color1 = bg.color1.ColorWithAlpha(0.4f);
-                _songAuthorTextAccessor(ref tableCell).richText = true;
-            }
-
-            tableCell.SetField("_notOwned", false);
-
-            tableCell.reuseIdentifier = ReuseIdentifier;
-            return tableCell;
-        }
-
-        // public AnnotatedBeatmapLevelCollectionTableCell GetLevelPackTableCell()
-        // {
-        //     var tableCell = (AnnotatedBeatmapLevelCollectionTableCell)TableView.DequeueReusableCellForIdentifier(ReuseIdentifier);
-        //     if (!tableCell)
-        //     {
-        //         if (_levelPackTableCellInstance == null)
-        //             _levelPackTableCellInstance = Resources.FindObjectsOfTypeAll<AnnotatedBeatmapLevelCollectionTableCell>().First(x => x.name == "AnnotatedBeatmapLevelCollectionTableCell");
-        //
-        //         tableCell = Instantiate(_levelPackTableCellInstance);
-        //     }
-        //
-        //     tableCell.reuseIdentifier = ReuseIdentifier;
-        //     return tableCell;
-        // }
-
-        public SimpleTextTableCell GetSimpleTextTableCell()
-        {
-            SimpleTextTableCell tableCell = (SimpleTextTableCell)TableView.DequeueReusableCellForIdentifier(ReuseIdentifier);
-            if (!tableCell)
-            {
-                if (_simpleTextTableCellInstance == null)
-                    _simpleTextTableCellInstance = Resources.FindObjectsOfTypeAll<SimpleTextTableCell>().First(x => x.name == "SimpleTextTableCell");
-
-                tableCell = Instantiate(_simpleTextTableCellInstance);
-            }
-
-            tableCell.reuseIdentifier = ReuseIdentifier;
-            return tableCell;
-        }
+        private LevelListTableCell _songListTableCellInstance;
 
         public virtual TableCell CellForIdx(TableView tableView, int idx)
         {
             switch (_listStyle)
             {
                 case ListStyle.List:
-                    LevelListTableCell tableCell = GetTableCell();
+                    var tableCell = GetTableCell();
                     var cellData = Data[idx];
 
                     var nameText = _songNameTextAccessor(ref tableCell);
@@ -193,29 +113,18 @@ namespace SaberFactory.UI.Lib.BSML
                     }
 
                     if (!string.IsNullOrEmpty(cellData.RightText))
-                    {
                         songDurationText.gameObject.SetActive(false);
-                    }
                     else
-                    {
                         songDurationText.text = cellData.RightText;
-                    }
 
                     if (!string.IsNullOrEmpty(cellData.RightBottomText))
-                    {
                         songBpmText.gameObject.SetActive(false);
-                    }
                     else
-                    {
                         songBpmText.text = cellData.RightBottomText;
-                    }
 
                     favoriteImage.enabled = cellData.IsFavorite;
 
-                    if (cellData.IsFavorite)
-                    {
-                        favoriteImage.color = HeartColor;
-                    }
+                    if (cellData.IsFavorite) favoriteImage.color = HeartColor;
 
                     tableCell.transform.Find("BpmIcon").gameObject.SetActive(false);
 
@@ -239,7 +148,7 @@ namespace SaberFactory.UI.Lib.BSML
                 //
                 //     return cell;
                 case ListStyle.Simple:
-                    SimpleTextTableCell simpleCell = GetSimpleTextTableCell();
+                    var simpleCell = GetSimpleTextTableCell();
                     simpleCell.GetField<TextMeshProUGUI, SimpleTextTableCell>("_text").richText = true;
                     simpleCell.GetField<TextMeshProUGUI, SimpleTextTableCell>("_text").enableWordWrapping = true;
                     simpleCell.text = Data[idx].Text;
@@ -260,15 +169,99 @@ namespace SaberFactory.UI.Lib.BSML
             return Data.Count();
         }
 
+        public LevelListTableCell GetTableCell()
+        {
+            var tableCell = (LevelListTableCell)TableView.DequeueReusableCellForIdentifier(ReuseIdentifier);
+            if (!tableCell)
+            {
+                if (_songListTableCellInstance == null)
+                    _songListTableCellInstance = Resources.FindObjectsOfTypeAll<LevelListTableCell>().First(x => x.name == "LevelListTableCell");
+
+                tableCell = Instantiate(_songListTableCellInstance);
+
+                var t = _favoriteImageAccessor(ref tableCell).gameObject.transform.AsRectTransform();
+                t.sizeDelta = new Vector2(5, 5);
+                t.anchoredPosition = new Vector2(-8.5f, 0);
+
+                tableCell.SetField("_highlightBackgroundColor", new Color(0.360f, 0.647f, 1, 0.7f));
+                tableCell.SetField("_selectedBackgroundColor", new Color(0.360f, 0.647f, 1, 0.9f));
+                tableCell.SetField("_selectedAndHighlightedBackgroundColor", new Color(0.360f, 0.647f, 1, 0.9f));
+                var bg = _backgroundImageAccessor(ref tableCell).Cast<ImageView>();
+                bg.SetSkew(0);
+                bg.color1 = bg.color1.ColorWithAlpha(0.4f);
+                _songAuthorTextAccessor(ref tableCell).richText = true;
+            }
+
+            tableCell.SetField("_notOwned", false);
+
+            tableCell.reuseIdentifier = ReuseIdentifier;
+            return tableCell;
+        }
+
+        // public AnnotatedBeatmapLevelCollectionTableCell GetLevelPackTableCell()
+        // {
+        //     var tableCell = (AnnotatedBeatmapLevelCollectionTableCell)TableView.DequeueReusableCellForIdentifier(ReuseIdentifier);
+        //     if (!tableCell)
+        //     {
+        //         if (_levelPackTableCellInstance == null)
+        //             _levelPackTableCellInstance = Resources.FindObjectsOfTypeAll<AnnotatedBeatmapLevelCollectionTableCell>().First(x => x.name == "AnnotatedBeatmapLevelCollectionTableCell");
+        //
+        //         tableCell = Instantiate(_levelPackTableCellInstance);
+        //     }
+        //
+        //     tableCell.reuseIdentifier = ReuseIdentifier;
+        //     return tableCell;
+        // }
+
+        public SimpleTextTableCell GetSimpleTextTableCell()
+        {
+            var tableCell = (SimpleTextTableCell)TableView.DequeueReusableCellForIdentifier(ReuseIdentifier);
+            if (!tableCell)
+            {
+                if (_simpleTextTableCellInstance == null)
+                    _simpleTextTableCellInstance = Resources.FindObjectsOfTypeAll<SimpleTextTableCell>().First(x => x.name == "SimpleTextTableCell");
+
+                tableCell = Instantiate(_simpleTextTableCellInstance);
+            }
+
+            tableCell.reuseIdentifier = ReuseIdentifier;
+            return tableCell;
+        }
+
         public class CustomCellInfo
         {
-            public string Text;
-            public string Subtext;
             public Sprite Icon;
-            public bool IsFavorite;
-            public string RightText;
-            public string RightBottomText;
             public bool IsCategory;
-        };
+            public bool IsFavorite;
+            public string RightBottomText;
+            public string RightText;
+            public string Subtext;
+            public string Text;
+        }
+
+        #region Accessors
+
+        private static readonly FieldAccessor<LevelListTableCell, Image>.Accessor _favoriteImageAccessor =
+            FieldAccessor<LevelListTableCell, Image>.GetAccessor("_favoritesBadgeImage");
+
+        private static readonly FieldAccessor<LevelListTableCell, TextMeshProUGUI>.Accessor _songNameTextAccessor =
+            FieldAccessor<LevelListTableCell, TextMeshProUGUI>.GetAccessor("_songNameText");
+
+        private static readonly FieldAccessor<LevelListTableCell, TextMeshProUGUI>.Accessor _songAuthorTextAccessor =
+            FieldAccessor<LevelListTableCell, TextMeshProUGUI>.GetAccessor("_songAuthorText");
+
+        private static readonly FieldAccessor<LevelListTableCell, TextMeshProUGUI>.Accessor _songDurationTextAccessor =
+            FieldAccessor<LevelListTableCell, TextMeshProUGUI>.GetAccessor("_songDurationText");
+
+        private static readonly FieldAccessor<LevelListTableCell, TextMeshProUGUI>.Accessor _songBpmTextAccessor =
+            FieldAccessor<LevelListTableCell, TextMeshProUGUI>.GetAccessor("_songBpmText");
+
+        private static readonly FieldAccessor<LevelListTableCell, Image>.Accessor _coverImageAccessor =
+            FieldAccessor<LevelListTableCell, Image>.GetAccessor("_coverImage");
+
+        private static readonly FieldAccessor<LevelListTableCell, Image>.Accessor _backgroundImageAccessor =
+            FieldAccessor<LevelListTableCell, Image>.GetAccessor("_backgroundImage");
+
+        #endregion
     }
 }

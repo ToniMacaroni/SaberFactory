@@ -1,6 +1,6 @@
 ﻿using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components.Settings;
-using TMPro;
+using SaberFactory.UI.Lib.BSML;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,8 +20,11 @@ namespace SaberFactory.UI.Lib.PropCells
             _toggleSetting.ReceiveValue();
             _toggleSetting.text.text = data.Text;
 
-            _backgroundImage.type = Image.Type.Sliced;
-            _backgroundImage.color = new Color(1, 0, 0, 0.5f);
+            if (ThemeManager.GetDefinedColor("prop-cell", out var bgColor))
+            {
+                _backgroundImage.type = Image.Type.Sliced;
+                _backgroundImage.color = bgColor;
+            }
         }
 
         [UIAction("bool-changed")]

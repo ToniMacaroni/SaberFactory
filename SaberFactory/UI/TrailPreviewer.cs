@@ -10,7 +10,7 @@ using Object = UnityEngine.Object;
 namespace SaberFactory.UI
 {
     /// <summary>
-    /// Class for previewing the saber trail in the editor
+    ///     Class for previewing the saber trail in the editor
     /// </summary>
     internal class TrailPreviewer
     {
@@ -25,10 +25,18 @@ namespace SaberFactory.UI
             set => SetLength(value);
         }
 
-        private readonly SiraLog _logger;
-        private GameObject _prefab;
+        public bool OnlyColorVertex
+        {
+            set
+            {
+                _sections.Do(x=>x.OnlyColorVertex = value);
+            }
+        }
 
-        private List<TrailPreviewSection> _sections = new List<TrailPreviewSection>();
+        private readonly SiraLog _logger;
+
+        private readonly List<TrailPreviewSection> _sections = new List<TrailPreviewSection>();
+        private GameObject _prefab;
 
         public TrailPreviewer(SiraLog logger, EmbeddedAssetLoader assetLoader)
         {
@@ -48,17 +56,17 @@ namespace SaberFactory.UI
             }
         }
 
-        public void Create(Transform parent, InstanceTrailData trailData)
+        public void Create(Transform parent, InstanceTrailData trailData, bool onlyColorVertex)
         {
             _sections.Clear();
             var (pointStart, pointEnd) = trailData.GetPoints();
-            _sections.Add(new TrailPreviewSection(0, parent, pointStart, pointEnd, _prefab));
-            
-            for (int i = 0; i < trailData.SecondaryTrails.Count; i++)
+            _sections.Add(new TrailPreviewSection(0, parent, pointStart, pointEnd, _prefab){OnlyColorVertex = onlyColorVertex});
+
+            for (var i = 0; i < trailData.SecondaryTrails.Count; i++)
             {
                 var trail = trailData.SecondaryTrails[i];
-                if(trail.Trail.PointStart is null || trail.Trail.PointEnd is null) continue;
-                _sections.Add(new TrailPreviewSection(i+1, parent, trail.Trail.PointStart, trail.Trail.PointEnd, _prefab, trail));
+                if (trail.Trail.PointStart is null || trail.Trail.PointEnd is null) continue;
+                _sections.Add(new TrailPreviewSection(i + 1, parent, trail.Trail.PointStart, trail.Trail.PointEnd, _prefab, trail){OnlyColorVertex = onlyColorVertex});
             }
 
 
@@ -75,12 +83,12 @@ namespace SaberFactory.UI
 
         public void SetColor(Color color)
         {
-            _sections.Do(x=>x.SetColor(color));
+            _sections.Do(x => x.SetColor(color));
         }
 
         public void UpdateWidth()
         {
-            _sections.Do(x=>x.UpdateWidth());
+            _sections.Do(x => x.UpdateWidth());
         }
 
         public Material GetMaterial()
@@ -91,12 +99,12 @@ namespace SaberFactory.UI
 
         public void SetLength(float val)
         {
-            _sections.Do(x=>x.SetLength(val));
+            _sections.Do(x => x.SetLength(val));
         }
 
         public void Destroy()
         {
-            _sections.Do(x=>x.Destroy());
+            _sections.Do(x => x.Destroy());
             _sections.Clear();
         }
 
@@ -104,16 +112,17 @@ namespace SaberFactory.UI
         {
             public int TrailIdx { get; }
             public bool IsPrimaryTrail => TrailIdx == 0;
-            
+
             private readonly GameObject _instance;
-            private readonly Transform _transform;
-            private readonly Renderer _renderer;
             private readonly Mesh _mesh;
+            private readonly Transform _pointEnd;
+            public bool OnlyColorVertex;
 
             private readonly Transform _pointStart;
-            private readonly Transform _pointEnd;
+            private readonly Renderer _renderer;
 
             private readonly InstanceTrailData.SecondaryTrailHandler _trailHandler;
+            private readonly Transform _transform;
 
             public TrailPreviewSection(
                 int idx,
@@ -124,52 +133,42 @@ namespace SaberFactory.UI
                 InstanceTrailData.SecondaryTrailHandler trailHandler = null)
             {
                 TrailIdx = idx;
-                
+
                 _trailHandler = trailHandler;
                 _pointStart = pointStart;
                 _pointEnd = pointEnd;
-                
+
                 _instance = Object.Instantiate(prefab, _pointEnd.position, Quaternion.Euler(-90, 25, 0), parent);
                 _instance.name = "Trail preview " + idx;
                 _transform = _instance.transform;
                 _renderer = _instance.GetComponentInChildren<Renderer>();
-                _mesh = _instance.GetComponentInChildren<MeshFilter>().mesh;
+                _mesh = _instance.GetComponentInChildren<MeshFilter>().sharedMesh;
                 _renderer.sortingOrder = 3;
 
-                if (trailHandler is {})
-                {
-                    SetMaterial(trailHandler.Trail.TrailMaterial);
-                }
+                if (trailHandler is { }) SetMaterial(trailHandler.Trail.TrailMaterial);
             }
-            
+
             public void SetMaterial(Material mat)
             {
                 if (_renderer is null) return;
-                _renderer.material = mat;
+                _renderer.sharedMaterial = mat;
             }
-            
+
             public Material GetMaterial()
             {
-                if (_renderer is null) return null;
-                return _renderer.material;
+                return _renderer?.sharedMaterial;
             }
 
             public void SetColor(Color color)
             {
-                if (_renderer.material != null)
+                if (_renderer.sharedMaterial is {})
                 {
-                    var mat = _renderer.material;
-                    if (mat.HasCustomColorsEnabled())
-                    {
-                        mat.SetMainColor(color);
-                    }
+                    var mat = _renderer.sharedMaterial;
+                    if (mat.HasCustomColorsEnabled() && !OnlyColorVertex) mat.SetMainColor(color);
                 }
-                
+
                 var newColors = new Color[4];
-                for (int i = 0; i < newColors.Length; i++)
-                {
-                    newColors[i] = color;
-                }
+                for (var i = 0; i < newColors.Length; i++) newColors[i] = color;
 
                 _mesh.colors = newColors;
             }
@@ -193,7 +192,7 @@ namespace SaberFactory.UI
                     SetLengthInternal(val);
                     return;
                 }
-                
+
                 _trailHandler.UpdateLength((int)val);
                 SetLengthInternal(_trailHandler.Trail.Length);
             }
@@ -201,7 +200,7 @@ namespace SaberFactory.UI
             private void SetLengthInternal(float val)
             {
                 var currentScale = _transform.localScale;
-                currentScale.x = val*0.05f;
+                currentScale.x = val * 0.05f;
                 _transform.localScale = currentScale;
             }
 

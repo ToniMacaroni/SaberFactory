@@ -2,14 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using BeatSaberMarkupLanguage;
 using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Parser;
 using BeatSaberMarkupLanguage.TypeHandlers;
-using HarmonyLib;
 using HMUI;
-using IPA.Utilities;
 using SaberFactory.Helpers;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,14 +19,20 @@ namespace SaberFactory.UI.Lib.BSML
     {
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>
         {
-            { "border", new[]{ "border" } },
-            { "raycast", new[]{ "raycast", "block" } },
-            { "skew", new[]{"skew"}},
-            { "custom_color", new[]{"custom_color"}},
-            { "custom_bg", new[]{"custom_bg"}}
+            { "border", new[] { "border" } },
+            { "raycast", new[] { "raycast", "block" } },
+            { "skew", new[] { "skew" } },
+            { "customColor", new[] { "custom-color" } },
+            { "custom_bg", new[] { "custom_bg" } }
         };
 
         public override Dictionary<string, Action<Backgroundable, string>> Setters => new Dictionary<string, Action<Backgroundable, string>>();
+        private readonly Sprite _borderSprite;
+        private Material _bgMaterial;
+        private Sprite _bgSprite;
+        private GameObject _borderTemplate;
+
+        private ImageView _imageViewPrefab;
 
         public BackgroundableHandler()
         {
@@ -38,7 +41,8 @@ namespace SaberFactory.UI.Lib.BSML
                 "SaberFactory.Resources.UI.border.png"));
             tex.wrapMode = TextureWrapMode.Clamp;
             tex.filterMode = FilterMode.Point;
-            _borderSprite = Sprite.Create(tex, new Rect(0.0f, 0.0f, tex.width, tex.height), new Vector2(0f,32f), 100, 1, SpriteMeshType.FullRect, new Vector4(0,7,7,0));
+            _borderSprite = Sprite.Create(tex, new Rect(0.0f, 0.0f, tex.width, tex.height), new Vector2(0f, 32f), 100, 1, SpriteMeshType.FullRect,
+                new Vector4(0, 7, 7, 0));
         }
 
         public override void HandleType(BSMLParser.ComponentTypeWithData componentType, BSMLParserParams parserParams)
@@ -57,31 +61,17 @@ namespace SaberFactory.UI.Lib.BSML
                 }
             }
 
-            if (componentType.data.TryGetValue("custom_color", out var customColor))
-            {
-                TrySetBackgroundColor(backgroundable, customColor);
-            }
+            if (componentType.data.TryGetValue("customColor", out var customColor)) TrySetBackgroundColor(backgroundable, customColor);
 
-            if (componentType.data.TryGetValue("border", out var borderAttr))
-            {
-                AddBorder(backgroundable.gameObject, borderAttr=="square");
-            }
+            if (componentType.data.TryGetValue("border", out var borderAttr)) AddBorder(backgroundable.gameObject, borderAttr == "square");
 
             if (componentType.data.TryGetValue("raycast", out var raycastAttr))
-            {
                 if (backgroundable.background != null)
-                {
                     backgroundable.background.raycastTarget = bool.Parse(raycastAttr);
-                }
-            }
 
             if (componentType.data.TryGetValue("skew", out var skew))
-            {
                 if (backgroundable.background is ImageView imageView)
-                {
                     imageView.SetSkew(float.Parse(skew));
-                }
-            }
         }
 
         private void AddBorder(GameObject go, bool squareSprite = false)
@@ -98,7 +88,7 @@ namespace SaberFactory.UI.Lib.BSML
 
             borderGo.transform.SetParent(go.transform, false);
 
-            if (go.GetComponent<HorizontalOrVerticalLayoutGroup>() is {})
+            if (go.GetComponent<HorizontalOrVerticalLayoutGroup>() is { })
             {
                 var layout = borderGo.gameObject.AddComponent<LayoutElement>();
                 layout.ignoreLayout = true;
@@ -162,14 +152,8 @@ namespace SaberFactory.UI.Lib.BSML
 
         public static void TrySetBackgroundColor(Backgroundable background, string colorStr)
         {
-            if(!ThemeManager.GetColor(colorStr, out var color)) return;
+            if (!ThemeManager.GetColor(colorStr, out var color)) return;
             background.background.color = color;
         }
-
-        private ImageView _imageViewPrefab;
-        private Sprite _bgSprite;
-        private Material _bgMaterial;
-        private readonly Sprite _borderSprite;
-        private GameObject _borderTemplate;
     }
 }

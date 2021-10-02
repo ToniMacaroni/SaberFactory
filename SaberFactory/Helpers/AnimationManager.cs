@@ -6,11 +6,11 @@ namespace SaberFactory.Helpers
 {
     public class AnimationManager
     {
-        private CancellationTokenSource _cancellationTokenSource;
-
-        private readonly float _speedDivision;
         private readonly Action<float> _inAnimation;
         private readonly Action<float> _outAnimation;
+
+        private readonly float _speedDivision;
+        private CancellationTokenSource _cancellationTokenSource;
 
         public AnimationManager(float speedDivision, Action<float> inAnimation, Action<float> outAnimation)
         {

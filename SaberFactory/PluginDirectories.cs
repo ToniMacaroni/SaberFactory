@@ -6,11 +6,10 @@ namespace SaberFactory
 {
     public class PluginDirectories
     {
-        public DirectoryInfo SaberFactoryDir;
-        public DirectoryInfo PresetDir;
-        public DirectoryInfo CustomSaberDir;
-
         private const string CustomSabersDirName = "CustomSabers";
+        public DirectoryInfo CustomSaberDir;
+        public DirectoryInfo PresetDir;
+        public DirectoryInfo SaberFactoryDir;
 
         public PluginDirectories()
         {
@@ -23,13 +22,13 @@ namespace SaberFactory
             if (!CustomSaberDir.Exists)
             {
                 CustomSaberDir = SaberFactoryDir.GetDirectory(CustomSabersDirName);
-                PathTools.RelativeExtension = Path.Combine(userDataDir.Name, SaberFactoryDir.Name)+Path.DirectorySeparatorChar;
+                PathTools.RelativeExtension = Path.Combine(userDataDir.Name, SaberFactoryDir.Name) + Path.DirectorySeparatorChar;
             }
 
             if (!CustomSaberDir.Exists)
             {
                 CustomSaberDir = userDataDir.GetDirectory(CustomSabersDirName);
-                PathTools.RelativeExtension = userDataDir.Name+Path.DirectorySeparatorChar;
+                PathTools.RelativeExtension = userDataDir.Name + Path.DirectorySeparatorChar;
             }
 
             if (!CustomSaberDir.Exists)

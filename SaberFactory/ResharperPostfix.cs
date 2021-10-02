@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 namespace SaberFactory
 {
     /// <summary>
-    /// Include some postfix templates for resharper
+    ///     Include some postfix templates for resharper
     /// </summary>
     internal static class ResharperPostfix
     {
@@ -21,7 +21,7 @@ namespace SaberFactory
         [SourceTemplate]
         public static void isnotnull(this object obj)
         {
-            if (obj is {})
+            if (obj is { })
             {
                 //$ $END$
             }

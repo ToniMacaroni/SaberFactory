@@ -19,7 +19,7 @@ namespace SaberFactory.Instances.Trail
         public static SFTrailRenderer Create()
         {
             var go = new GameObject("SFTrailRenderer");
-            var renderer =  go.AddComponent<SFTrailRenderer>();
+            var renderer = go.AddComponent<SFTrailRenderer>();
             renderer.MeshRenderer = go.AddComponent<MeshRenderer>();
             renderer.MeshFilter = go.AddComponent<MeshFilter>();
             return renderer;

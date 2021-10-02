@@ -1,9 +1,9 @@
-﻿<bg bg="round-rect-panel" bg-color="#333" border="" raycast="true" xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
-	<vertical pad='10' vertical-fit='PreferredSize' spacing='10'>
-		<text font-size='7' text='~message' align='Center'/>
-		<horizontal>
-			<button pref-height='10' pref-width='25' text='~yes-button-text' on-click='yes-click'/>
-			<button pref-height='10' pref-width='25' text='No' active='~no-button-active' on-click='no-click'/>
-		</horizontal>
-	</vertical>
+﻿<bg bg="round-rect-panel" bg-color="#333" border="" raycast="true">
+    <vertical pad='10' vertical-fit='PreferredSize' spacing='10'>
+        <text font-size='7' text='~message' align='Center'/>
+        <horizontal>
+            <button pref-height='10' pref-width='25' text='~yes-button-text' on-click='yes-click'/>
+            <button pref-height='10' pref-width='25' text='No' active='~no-button-active' on-click='no-click'/>
+        </horizontal>
+    </vertical>
 </bg>

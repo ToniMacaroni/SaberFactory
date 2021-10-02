@@ -12,6 +12,12 @@ namespace SaberFactory.Helpers
 {
     internal static class UIHelpers
     {
+        private static readonly FieldAccessor<ImageView, float>.Accessor SkewAcc =
+            FieldAccessor<ImageView, float>.GetAccessor("_skew");
+
+        private static readonly FieldAccessor<ImageView, bool>.Accessor GradientAcc =
+            FieldAccessor<ImageView, bool>.GetAccessor("_gradient");
+
         public static async Task<BSMLParserParams> ParseFromResourceAsync(string resource, GameObject parent, object host)
         {
             var data = await Readers.ReadResourceAsync(resource);
@@ -39,34 +45,25 @@ namespace SaberFactory.Helpers
 
         public static async Task DoHorizontalTransition(this Transform transform, CancellationToken cancelToken)
         {
-            float moveOffset = 20f;
-            await AnimationHelper.AsyncAnimation(0.8f, cancelToken, t =>
-            {
-                transform.localPosition = new Vector3(moveOffset * (1f - t), 0, 0);
-            });
+            var moveOffset = 20f;
+            await AnimationHelper.AsyncAnimation(0.8f, cancelToken, t => { transform.localPosition = new Vector3(moveOffset * (1f - t), 0, 0); });
         }
 
         public static async Task DoVerticalTransition(this Transform transform, CancellationToken cancelToken)
         {
-            float moveOffset = 20f;
-            await AnimationHelper.AsyncAnimation(0.8f, cancelToken, t =>
-            {
-                transform.localPosition = new Vector3(0, moveOffset * (1f - t), 0);
-            });
+            var moveOffset = 20f;
+            await AnimationHelper.AsyncAnimation(0.8f, cancelToken, t => { transform.localPosition = new Vector3(0, moveOffset * (1f - t), 0); });
         }
 
         public static async Task DoZTransition(this Transform transform, CancellationToken cancelToken)
         {
-            float moveOffset = 20f;
-            await AnimationHelper.AsyncAnimation(0.8f, cancelToken, t =>
-            {
-                transform.localPosition = new Vector3(0, 0, moveOffset * (1f - t));
-            });
+            var moveOffset = 20f;
+            await AnimationHelper.AsyncAnimation(0.8f, cancelToken, t => { transform.localPosition = new Vector3(0, 0, moveOffset * (1f - t)); });
         }
 
         public static async Task AnimateIn(this IAnimatableUi animatable, CancellationToken cancelToken)
         {
-            if(!(animatable is MonoBehaviour comp)) return;
+            if (!(animatable is MonoBehaviour comp)) return;
 
             switch (animatable.AnimationType)
             {
@@ -91,11 +88,5 @@ namespace SaberFactory.Helpers
         {
             return go.transform.Cast<RectTransform>();
         }
-
-        private static readonly FieldAccessor<ImageView, float>.Accessor SkewAcc =
-            FieldAccessor<ImageView, float>.GetAccessor("_skew");
-
-        private static readonly FieldAccessor<ImageView, bool>.Accessor GradientAcc =
-            FieldAccessor<ImageView, bool>.GetAccessor("_gradient");
     }
 }

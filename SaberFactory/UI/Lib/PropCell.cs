@@ -7,9 +7,9 @@ namespace SaberFactory.UI.Lib
 {
     public class PropCell : TableCell
     {
-        [UIComponent("float-container")] private readonly GameObject _floatContainer = null;
         [UIComponent("bool-container")] private readonly GameObject _boolContainer = null;
         [UIComponent("color-container")] private readonly GameObject _colorContainer = null;
+        [UIComponent("float-container")] private readonly GameObject _floatContainer = null;
         [UIComponent("texture-container")] private readonly GameObject _textureContainer = null;
 
         public void SetData(PropertyDescriptor data)

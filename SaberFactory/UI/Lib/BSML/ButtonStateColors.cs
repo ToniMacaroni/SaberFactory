@@ -8,12 +8,12 @@ namespace SaberFactory.UI.Lib.BSML
 {
     public class ButtonStateColors : MonoBehaviour
     {
+        public Color HoveredColor = new Color(0, 0, 0, 0.8f);
         public ImageView Image;
-        public ImageView UnderlineImage;
 
         public Color NormalColor = new Color(0, 0, 0, 0.5f);
-        public Color HoveredColor = new Color(0, 0, 0, 0.8f);
         public Color SelectedColor;
+        public ImageView UnderlineImage;
 
         private NoTransitionsButton.SelectionState _currentSelectionState = NoTransitionsButton.SelectionState.Normal;
 
@@ -46,7 +46,7 @@ namespace SaberFactory.UI.Lib.BSML
                     break;
                 case NoTransitionsButton.SelectionState.Highlighted:
                     Image.color = HoveredColor;
-                    if(UnderlineImage is {}) UnderlineImage.enabled = true;
+                    if (UnderlineImage is { }) UnderlineImage.enabled = true;
                     break;
                 case NoTransitionsButton.SelectionState.Pressed:
                     Image.color = SelectedColor;
@@ -56,6 +56,11 @@ namespace SaberFactory.UI.Lib.BSML
                     break;
             }
         }
+
+        public void UpdateSelectionState()
+        {
+            SelectionDidChange(_currentSelectionState);
+        }
     }
 
     [ComponentHandler(typeof(ButtonStateColors))]
@@ -63,17 +68,17 @@ namespace SaberFactory.UI.Lib.BSML
     {
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>
         {
-            {"normalColor", new[] {"normal-color"}},
-            {"hoveredColor", new[] {"hovered-color"}},
-            {"selectedColor", new[] {"selected-color"}}
+            { "normalColor", new[] { "normal-color" } },
+            { "hoveredColor", new[] { "hovered-color" } },
+            { "selectedColor", new[] { "selected-color" } }
         };
 
         public override Dictionary<string, Action<ButtonStateColors, string>> Setters =>
             new Dictionary<string, Action<ButtonStateColors, string>>
             {
-                {"normalColor", (colors, val) => colors.SetNormalColor(val) },
-                {"hoveredColor", (colors, val) => colors.SetHoveredColor(val) },
-                {"selectedColor", (colors, val) => colors.SetSelectedColor(val) },
+                { "normalColor", (colors, val) => colors.SetNormalColor(val) },
+                { "hoveredColor", (colors, val) => colors.SetHoveredColor(val) },
+                { "selectedColor", (colors, val) => colors.SetSelectedColor(val) }
             };
     }
 }

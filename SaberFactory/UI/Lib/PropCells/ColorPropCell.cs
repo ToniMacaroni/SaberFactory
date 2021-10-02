@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components.Settings;
+using SaberFactory.UI.Lib.BSML;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,8 +22,11 @@ namespace SaberFactory.UI.Lib.PropCells
             _propName.text = data.Text;
             _colorSetting.CurrentColor = color;
 
-            _backgroundImage.type = Image.Type.Sliced;
-            _backgroundImage.color = new Color(1, 0, 0, 0.5f);
+            if (ThemeManager.GetDefinedColor("prop-cell", out var bgColor))
+            {
+                _backgroundImage.type = Image.Type.Sliced;
+                _backgroundImage.color = bgColor;
+            }
 
             var positioner = _colorSetting.modalColorPicker.gameObject.AddComponent<ModalPositioner>();
             positioner.SetPosition(new Vector2(11, 10));

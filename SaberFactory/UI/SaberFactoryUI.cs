@@ -12,24 +12,23 @@ using VRUIControls;
 namespace SaberFactory.UI
 {
     /// <summary>
-    /// Base class to build ui configurations upon
+    ///     Base class to build ui configurations upon
     /// </summary>
     internal class SaberFactoryUI
     {
-        public event Action OnClosePressed;
-
-        private readonly SiraLog _logger;
-        private readonly CustomScreen.Factory _screenFactory;
-        private readonly BaseGameUiHandler _baseGameUiHandler;
-        private readonly PhysicsRaycasterWithCache _physicsRaycaster;
+        public GameObject GameObject { get; private set; }
+        protected CurvedCanvasSettings _curvedCanvasSettings;
+        protected GameObject _curvedGO;
 
         protected List<CustomScreen> _screens;
+        private readonly BaseGameUiHandler _baseGameUiHandler;
 
-        public GameObject GameObject { get; private set; }
-        protected GameObject _curvedGO;
-        protected CurvedCanvasSettings _curvedCanvasSettings;
+        private readonly SiraLog _logger;
+        private readonly PhysicsRaycasterWithCache _physicsRaycaster;
+        private readonly CustomScreen.Factory _screenFactory;
 
-        protected SaberFactoryUI(SiraLog logger, CustomScreen.Factory screenFactory, BaseGameUiHandler baseGameUiHandler, PhysicsRaycasterWithCache physicsRaycaster)
+        protected SaberFactoryUI(SiraLog logger, CustomScreen.Factory screenFactory, BaseGameUiHandler baseGameUiHandler,
+            PhysicsRaycasterWithCache physicsRaycaster)
         {
             _logger = logger;
             _screenFactory = screenFactory;
@@ -38,6 +37,8 @@ namespace SaberFactory.UI
 
             _screens = new List<CustomScreen>();
         }
+
+        public event Action OnClosePressed;
 
         public void Initialize()
         {
@@ -64,27 +65,20 @@ namespace SaberFactory.UI
 
         public virtual void SetupUI()
         {
-
         }
 
         public void Open()
         {
             _baseGameUiHandler.DismissGameUI();
 
-            foreach (var screen in _screens)
-            {
-                screen.Open();
-            }
+            foreach (var screen in _screens) screen.Open();
 
             DidOpen();
         }
 
         public void Close(bool instant = false)
         {
-            foreach (var screen in _screens)
-            {
-                screen.Close(instant);
-            }
+            foreach (var screen in _screens) screen.Close(instant);
 
             DidClose();
 
@@ -98,12 +92,10 @@ namespace SaberFactory.UI
 
         protected virtual void DidOpen()
         {
-
         }
 
         protected virtual void DidClose()
         {
-
         }
 
         public void SetRadius(float radius)

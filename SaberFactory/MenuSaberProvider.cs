@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using SaberFactory.Instances;
 using SaberFactory.Models;
@@ -9,8 +8,6 @@ namespace SaberFactory
 {
     public class MenuSaberProvider
     {
-        public event Action<bool> OnSaberVisibilityRequested;
-
         private readonly SaberInstance.Factory _saberInstanceFactory;
         private readonly SaberSet _saberSet;
 
@@ -20,18 +17,17 @@ namespace SaberFactory
             _saberSet = saberSet;
         }
 
+        public event Action<bool> OnSaberVisibilityRequested;
+
         public async Task<SaberInstance> CreateSaber(Transform parent, SaberType saberType, Color color, bool createTrail)
         {
-            if (_saberSet.CurrentLoadingTask != null)
-            {
-                await _saberSet.CurrentLoadingTask;
-            }
+            if (_saberSet.CurrentLoadingTask != null) await _saberSet.CurrentLoadingTask;
 
             var saberModel = saberType == SaberType.SaberA ? _saberSet.LeftSaber : _saberSet.RightSaber;
 
             var saber = _saberInstanceFactory.Create(saberModel);
             saber.SetParent(parent);
-            if(createTrail) saber.CreateTrail(editor: true);
+            if (createTrail) saber.CreateTrail(true);
             saber.SetColor(color);
 
             return saber;

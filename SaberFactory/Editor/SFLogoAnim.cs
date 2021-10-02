@@ -1,16 +1,15 @@
 ﻿using System.Threading.Tasks;
 using SaberFactory.Helpers;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace SaberFactory.Editor
 {
     internal class SFLogoAnim
     {
         private readonly EmbeddedAssetLoader _embeddedAssetLoader;
+        private Animator _animator;
 
         private GameObject _instance;
-        private Animator _animator;
 
         public SFLogoAnim(EmbeddedAssetLoader embeddedAssetLoader)
         {

@@ -4,10 +4,10 @@ namespace SaberFactory.Saving.Converters.SerializableTypes
 {
     internal class SerializableVector4
     {
+        public float W;
         public float X;
         public float Y;
         public float Z;
-        public float W;
 
         public Vector4 ToVector()
         {

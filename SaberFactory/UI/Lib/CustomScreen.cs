@@ -5,17 +5,17 @@ using SiraUtil.Tools;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
+using Screen = HMUI.Screen;
 
 namespace SaberFactory.UI.Lib
 {
     /// <summary>
-    /// Implementation of a <see cref="HMUI.Screen"/>
-    /// basically a container for viewcontrollers
+    ///     Implementation of a <see cref="HMUI.Screen" />
+    ///     basically a container for viewcontrollers
     /// </summary>
-    internal class CustomScreen : HMUI.Screen
+    internal class CustomScreen : Screen
     {
         public ViewController CurrentViewController { get; private set; }
-
         private SiraLog _logger;
         private CustomViewController.Factory _viewControllerFactory;
 
@@ -68,13 +68,12 @@ namespace SaberFactory.UI.Lib
         public virtual void Close(bool instant = false)
         {
             SetRootViewController(null, ViewController.AnimationType.Out);
-            if (instant)
-            {
-                gameObject.SetActive(false);
-            }
+            if (instant) gameObject.SetActive(false);
         }
 
-        internal class Factory : PlaceholderFactory<InitData, CustomScreen>{}
+        internal class Factory : PlaceholderFactory<InitData, CustomScreen>
+        {
+        }
 
         internal struct InitData
         {

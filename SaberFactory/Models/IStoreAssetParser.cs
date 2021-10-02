@@ -3,7 +3,7 @@
 namespace SaberFactory.Models
 {
     /// <summary>
-    /// Used to give the correct model imeplementation from an store asset
+    ///     Used to give the correct model imeplementation from an store asset
     /// </summary>
     internal interface IStoreAssetParser
     {

@@ -1,24 +1,21 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Rendering;
-using Debug = UnityEngine.Debug;
 
 namespace SaberFactory.Helpers
 {
     internal class ShaderPropertyInfo
     {
-        public List<ShaderRange> Ranges = new List<ShaderRange>();
-        public List<ShaderFloat> Floats = new List<ShaderFloat>();
-        public List<ShaderVector> Vectors = new List<ShaderVector>();
-        public List<ShaderTexture> Textures = new List<ShaderTexture>();
         public List<ShaderColor> Colors = new List<ShaderColor>();
+        public List<ShaderFloat> Floats = new List<ShaderFloat>();
+        public List<ShaderRange> Ranges = new List<ShaderRange>();
+        public List<ShaderTexture> Textures = new List<ShaderTexture>();
+        public List<ShaderVector> Vectors = new List<ShaderVector>();
 
         public ShaderPropertyInfo(Shader shader)
         {
-            for (int i = 0; i < shader.GetPropertyCount(); i++)
-            {
+            for (var i = 0; i < shader.GetPropertyCount(); i++)
                 switch (shader.GetPropertyType(i))
                 {
                     case ShaderPropertyType.Range:
@@ -37,7 +34,6 @@ namespace SaberFactory.Helpers
                         Colors.Add(new ShaderColor(shader, i));
                         break;
                 }
-            }
         }
 
         public List<BaseProperty> GetAll()
@@ -54,23 +50,21 @@ namespace SaberFactory.Helpers
         public BaseProperty FindFromAll(string name)
         {
             if (Find(Ranges, name, out var prop)) return prop;
-            if(Find(Floats, name, out prop)) return prop;
-            if(Find(Vectors, name, out prop)) return prop;
-            if(Find(Textures, name, out prop)) return prop;
-            if(Find(Colors, name, out prop)) return prop;
+            if (Find(Floats, name, out prop)) return prop;
+            if (Find(Vectors, name, out prop)) return prop;
+            if (Find(Textures, name, out prop)) return prop;
+            if (Find(Colors, name, out prop)) return prop;
             return null;
         }
 
         public bool Find<T>(List<T> list, string name, out BaseProperty prop) where T : BaseProperty
         {
             foreach (var p in list)
-            {
                 if (p.Name == name)
                 {
                     prop = p;
                     return true;
                 }
-            }
 
             prop = null;
             return false;

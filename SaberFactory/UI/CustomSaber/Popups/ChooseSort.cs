@@ -9,21 +9,26 @@ namespace SaberFactory.UI.CustomSaber.Popups
 {
     internal class ChooseSort : Popup
     {
+        public enum ESortMode
+        {
+            Name,
+            Date,
+            Size,
+            Author
+        }
+
         [UIComponent("sort-list")] private readonly CustomList _sortList = null;
 
-        private Action<ESortMode> _onSelectionChanged;
-
         public bool ShouldScrollToTop { get; set; } = true;
+
+        private Action<ESortMode> _onSelectionChanged;
 
         public async void Show(Action<ESortMode> onSelectionChanged)
         {
             _onSelectionChanged = onSelectionChanged;
 
             var modes = new List<SortModeItem>();
-            foreach (var mode in (ESortMode[])Enum.GetValues(typeof(ESortMode)))
-            {
-                modes.Add(new SortModeItem(mode));
-            }
+            foreach (var mode in (ESortMode[])Enum.GetValues(typeof(ESortMode))) modes.Add(new SortModeItem(mode));
 
             _ = Create(true);
             _sortList.OnItemSelected += SortSelected;
@@ -52,7 +57,7 @@ namespace SaberFactory.UI.CustomSaber.Popups
             Exit();
         }
 
-        class SortModeItem : ICustomListItem
+        private class SortModeItem : ICustomListItem
         {
             public readonly ESortMode SortMode;
 
@@ -65,14 +70,6 @@ namespace SaberFactory.UI.CustomSaber.Popups
             public string ListAuthor { get; }
             public Sprite ListCover { get; }
             public bool IsFavorite { get; }
-        }
-
-        public enum ESortMode
-        {
-            Name,
-            Date,
-            Size,
-            Author
         }
     }
 }

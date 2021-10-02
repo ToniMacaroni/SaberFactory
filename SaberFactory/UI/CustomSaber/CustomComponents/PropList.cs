@@ -1,12 +1,11 @@
 ﻿using System;
-using BeatSaberMarkupLanguage.Attributes;
 using System.Collections.Generic;
+using BeatSaberMarkupLanguage.Attributes;
 using SaberFactory.Helpers;
 using SaberFactory.UI.Lib;
 using SaberFactory.UI.Lib.PropCells;
 using UnityEngine;
 using UnityEngine.UI;
-
 
 namespace SaberFactory.UI.CustomSaber.CustomComponents
 {
@@ -14,23 +13,17 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
     {
         [UIObject("item-container")] private readonly GameObject _itemContainer = null;
 
-        private List<BasePropCell> _cells = new List<BasePropCell>();
+        private readonly List<BasePropCell> _cells = new List<BasePropCell>();
 
         public void SetItems(IEnumerable<PropertyDescriptor> props)
         {
             Clear();
-            foreach (var propertyDescriptor in props)
-            {
-                AddCell(propertyDescriptor);
-            }
+            foreach (var propertyDescriptor in props) AddCell(propertyDescriptor);
         }
 
         public void Clear()
         {
-            foreach (Transform t in _itemContainer.transform)
-            {
-                t.gameObject.TryDestroy();
-            }
+            foreach (Transform t in _itemContainer.transform) t.gameObject.TryDestroy();
             _cells.Clear();
         }
 
@@ -56,7 +49,7 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
                 EPropertyType.Bool => typeof(BoolPropCell),
                 EPropertyType.Color => typeof(ColorPropCell),
                 EPropertyType.Texture => typeof(TexturePropCell),
-                _ => throw new ArgumentOutOfRangeException()
+                _ => throw new ArgumentOutOfRangeException(nameof(data), "cell type not handled")
             };
 
             var comp = (BasePropCell)go.AddComponent(cellType);
@@ -64,7 +57,5 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
             comp.SetData(data);
             _cells.Add(comp);
         }
-
-        
     }
 }

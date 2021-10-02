@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using SaberFactory.Helpers;
 using UnityEngine;
 
@@ -7,11 +6,10 @@ namespace SaberFactory.UI.Lib
 {
     internal class Popup : CustomParsable
     {
-        private Transform _originalParent;
-        private AnimationManager _animationManager;
-
         protected Transform _cachedTransform;
+        private AnimationManager _animationManager;
         private CanvasGroup _canvasGroup;
+        private Transform _originalParent;
         private CanvasGroup _parentCanvasGroup;
 
         protected virtual void Awake()
@@ -29,8 +27,8 @@ namespace SaberFactory.UI.Lib
 
         private void OutAnimation(float t)
         {
-            _canvasGroup.alpha = 1-t;
-            _cachedTransform.localScale = new Vector3(1-t, 1-t, 1-t);
+            _canvasGroup.alpha = 1 - t;
+            _cachedTransform.localScale = new Vector3(1 - t, 1 - t, 1 - t);
         }
 
         protected async Task AnimateIn()
@@ -43,7 +41,7 @@ namespace SaberFactory.UI.Lib
             await _animationManager.AnimateOut();
         }
 
-        protected async Task Create(bool animated)
+        protected async Task Create(bool animated, bool fadeParents = true)
         {
             Parse();
 
@@ -57,25 +55,18 @@ namespace SaberFactory.UI.Lib
                 _canvasGroup.alpha = 1;
             }
 
-            FadeParentCanvases();
-
+            if(fadeParents) FadeParentCanvases();
         }
 
         protected async Task Hide(bool animated)
         {
             ShowParentCanvases();
 
-            if (animated)
-            {
-                await AnimateOut();
-            }
+            if (animated) await AnimateOut();
 
             Unparse();
 
-            if (_originalParent != null)
-            {
-                transform.SetParent(_originalParent, false);
-            }
+            if (_originalParent != null) transform.SetParent(_originalParent, false);
         }
 
         protected void ParentToViewController()
@@ -88,10 +79,7 @@ namespace SaberFactory.UI.Lib
             while (parent != null)
             {
                 var vc = parent.GetComponent<CustomViewController>();
-                if (vc != null)
-                {
-                    break;
-                }
+                if (vc != null) break;
 
                 parent = parent.parent;
             }
@@ -124,6 +112,8 @@ namespace SaberFactory.UI.Lib
             _parentCanvasGroup = null;
         }
 
-        internal class Factory : ComponentPlaceholderFactory<Popup> {}
+        internal class Factory : ComponentPlaceholderFactory<Popup>
+        {
+        }
     }
 }

@@ -28,7 +28,6 @@ namespace SaberFactory.Instances.Trail
         {
             if (_instanceTrailData is null)
             {
-
                 if (_backupTrail is null) return;
 
                 var trailStart = TrailInstance.gameObject.CreateGameObject("Trail StartNew");
@@ -77,15 +76,12 @@ namespace SaberFactory.Instances.Trail
                 editor
             );
 
-            if (!trailConfig.OnlyUseVertexColor)
-            {
-                _canColorMaterial = IsMaterialColorable(_instanceTrailData.Material.Material);
-            }
+            if (!trailConfig.OnlyUseVertexColor) _canColorMaterial = IsMaterialColorable(_instanceTrailData.Material.Material);
         }
 
         public void DestroyTrail(bool immediate = false)
         {
-            if(immediate) TrailInstance.TryDestoryImmediate();
+            if (immediate) TrailInstance.TryDestoryImmediate();
             else TrailInstance.TryDestroy();
         }
 
@@ -94,19 +90,20 @@ namespace SaberFactory.Instances.Trail
             _instanceTrailData = instanceTrailData;
         }
 
+        public void SetColor(Color color)
+        {
+            if (TrailInstance is { }) TrailInstance.Color = color;
+
+            if (_canColorMaterial) _instanceTrailData.Material.Material.SetMainColor(color);
+        }
+
         private bool IsMaterialColorable(Material material)
         {
-            if (material is null || !material.HasProperty(MaterialProperties.MainColor))
-            {
-                return false;
-            }
+            if (material is null || !material.HasProperty(MaterialProperties.MainColor)) return false;
 
             if (material.TryGetFloat(MaterialProperties.CustomColors, out var val))
             {
-                if (val > 0)
-                {
-                    return true;
-                }
+                if (val > 0) return true;
             }
             else if (material.TryGetFloat(MaterialProperties.Glow, out val) && val > 0)
             {
@@ -118,19 +115,6 @@ namespace SaberFactory.Instances.Trail
             }
 
             return false;
-        }
-
-        public void SetColor(Color color)
-        {
-            if (TrailInstance is { })
-            {
-                TrailInstance.Color = color;
-            }
-
-            if (_canColorMaterial)
-            {
-                _instanceTrailData.Material.Material.SetMainColor(color);
-            }
         }
     }
 }

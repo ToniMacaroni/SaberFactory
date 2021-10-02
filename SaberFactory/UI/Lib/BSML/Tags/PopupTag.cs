@@ -8,9 +8,9 @@ namespace SaberFactory.UI.Lib.BSML.Tags
     internal class PopupTag : BSMLTag
     {
         public override string[] Aliases => new[] { "sui." + BSMLTools.GetKebabCaseName(_type) };
+        private readonly Popup.Factory _factory;
 
         private readonly Type _type;
-        private readonly Popup.Factory _factory;
 
         public PopupTag(Type type, Popup.Factory factory)
         {

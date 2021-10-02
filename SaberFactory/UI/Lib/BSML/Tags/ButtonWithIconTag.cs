@@ -6,7 +6,6 @@ using HMUI;
 using SaberFactory.Helpers;
 using UnityEngine;
 using UnityEngine.UI;
-using Object = UnityEngine.Object;
 
 namespace SaberFactory.UI.Lib.BSML.Tags
 {
@@ -16,16 +15,17 @@ namespace SaberFactory.UI.Lib.BSML.Tags
 
         public override GameObject CreateObject(Transform parent)
         {
-            Button button = Object.Instantiate(Resources.FindObjectsOfTypeAll<Button>().Last(x => x.name == "PracticeButton"), parent, false);
+            var button = Object.Instantiate(Resources.FindObjectsOfTypeAll<Button>().Last(x => x.name == "PracticeButton"), parent, false);
             button.name = "CustomIconButton";
             button.interactable = true;
 
             Object.Destroy(button.GetComponent<HoverHint>());
             Object.Destroy(button.GetComponent<LocalizedHoverHint>());
             button.GetComponent<ButtonStaticAnimations>().TryDestroy();
-            button.gameObject.AddComponent<ExternalComponents>().components.Add(button.GetComponentsInChildren<LayoutGroup>().First(x => x.name == "Content"));
+            button.gameObject.AddComponent<ExternalComponents>().components
+                .Add(button.GetComponentsInChildren<LayoutGroup>().First(x => x.name == "Content"));
 
-            Transform contentTransform = button.transform.Find("Content");
+            var contentTransform = button.transform.Find("Content");
 
             contentTransform.GetComponent<LayoutElement>().minWidth = 0;
 
@@ -38,7 +38,7 @@ namespace SaberFactory.UI.Lib.BSML.Tags
             iconImage.sprite = Utilities.ImageResources.BlankSprite;
             iconImage.preserveAspect = true;
 
-            ButtonImageController btnImageController = button.gameObject.AddComponent<ButtonImageController>();
+            var btnImageController = button.gameObject.AddComponent<ButtonImageController>();
             btnImageController.ForegroundImage = iconImage;
             btnImageController.BackgroundImage = button.transform.Find("BG").GetComponent<ImageView>();
             btnImageController.LineImage = button.transform.Find("Underline").GetComponent<ImageView>();
@@ -52,10 +52,7 @@ namespace SaberFactory.UI.Lib.BSML.Tags
             buttonStateColors.UnderlineImage = btnImageController.LineImage;
             noTransitionsButton.selectionStateDidChangeEvent += buttonStateColors.SelectionDidChange;
 
-            if (!button.gameObject.activeSelf)
-            {
-                button.gameObject.SetActive(true);
-            }
+            if (!button.gameObject.activeSelf) button.gameObject.SetActive(true);
 
             return button.gameObject;
         }

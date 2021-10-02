@@ -1,8 +1,7 @@
-﻿<sui.icon-button xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
-                 xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'
-                 id='icon-button'
-                 pref-width='14'
-                 preferred-height='15'
-                 on-click='clicked'
-                 hover-hint='~hover-hint'
-                 skew='0' line-color='#00C0FF' normal-color='#00000055' hovered-color='#5ca5ff80'/>
+﻿<sui.icon-button
+        id='icon-button'
+        pref-width='14'
+        preferred-height='15'
+        on-click='clicked'
+        hover-hint='~hover-hint'
+        skew='0' show-line='false' normal-color='#00000055' hovered-color='#5ca5ff80'/>

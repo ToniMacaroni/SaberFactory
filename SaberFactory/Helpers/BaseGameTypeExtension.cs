@@ -42,10 +42,7 @@ namespace SaberFactory.Helpers
 
         public static void SetCurve(GameObject root, float radius)
         {
-            foreach (var curvedCanvasSettingse in root.GetComponentsInChildren<CurvedCanvasSettings>())
-            {
-                curvedCanvasSettingse.SetRadius(radius);
-            }
+            foreach (var curvedCanvasSettingse in root.GetComponentsInChildren<CurvedCanvasSettings>()) curvedCanvasSettingse.SetRadius(radius);
         }
 
         public static float GetTransfomWidth(Transform t1, Transform t2)

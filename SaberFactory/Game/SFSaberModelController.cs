@@ -18,15 +18,23 @@ namespace SaberFactory.Game
 
     internal class SfSaberModelController : SaberModelController, IColorable
     {
-        [Inject] private readonly SiraLog _logger = null;
-        [Inject] private readonly SaberSet _saberSet = null;
-        [Inject] private readonly SaberInstance.Factory _saberInstanceFactory = null;
-        [Inject] private readonly GameSaberSetup _gameSaberSetup = null;
         [InjectOptional] private readonly AFHandler _afHandler = null;
         [InjectOptional] private readonly EventPlayer _eventPlayer = null;
+        [Inject] private readonly GameSaberSetup _gameSaberSetup = null;
+        [Inject] private readonly SiraLog _logger = null;
+        [Inject] private readonly SaberInstance.Factory _saberInstanceFactory = null;
+        [Inject] private readonly SaberSet _saberSet = null;
+        private Color? _saberColor;
 
         private SaberInstance _saberInstance;
-        private Color? _saberColor;
+
+        public void SetColor(Color color)
+        {
+            _saberColor = color;
+            _saberInstance.SetColor(color);
+        }
+
+        public Color Color => _saberColor.GetValueOrDefault();
 
         public override async void Init(Transform parent, Saber saber)
         {
@@ -38,7 +46,7 @@ namespace SaberFactory.Game
 
             _saberInstance = _saberInstanceFactory.Create(saberModel);
             _saberInstance.SetParent(transform);
-            _saberInstance.CreateTrail(editor: false, backupTrail: _saberTrail);
+            _saberInstance.CreateTrail(false, _saberTrail);
             SetColor(_saberColor ?? _colorManager.ColorForSaberType(_saberInstance.Model.SaberSlot.ToSaberType()));
 
             if (_afHandler != null && AFHandler.IsValid && AFHandler.ShouldFire)
@@ -53,13 +61,5 @@ namespace SaberFactory.Game
 
             _logger.Info("Instantiated Saber");
         }
-
-        public void SetColor(Color color)
-        {
-            _saberColor = color;
-            _saberInstance.SetColor(color);
-        }
-
-        public Color Color => _saberColor.GetValueOrDefault();
     }
 }

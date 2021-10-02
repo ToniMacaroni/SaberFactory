@@ -4,18 +4,18 @@ using UnityEngine;
 namespace SaberFactory.Models
 {
     /// <summary>
-    /// Class for handling gameobject outside of the left and right sabers or parts
-    /// Mostly used for custom sabers
+    ///     Class for handling gameobject outside of the left and right sabers or parts
+    ///     Mostly used for custom sabers
     /// </summary>
     internal class AdditionalInstanceHandler
     {
         public bool IsInstantiated => _instance != null;
 
-        private GameObject _instance;
+        private readonly GameObject _prefab;
         private GameObject _customSaberLeftSaber;
         private GameObject _customSaberRightSaber;
 
-        private readonly GameObject _prefab;
+        private GameObject _instance;
 
         public AdditionalInstanceHandler(GameObject prefab)
         {
@@ -24,10 +24,7 @@ namespace SaberFactory.Models
 
         public GameObject GetInstance()
         {
-            if (!_instance)
-            {
-                Instantiate();
-            }
+            if (!_instance) Instantiate();
 
             return _instance;
         }
@@ -39,8 +36,8 @@ namespace SaberFactory.Models
 
         public GameObject GetSaber(ESaberSlot saberSlot)
         {
-            if ((saberSlot == ESaberSlot.Left && !_customSaberLeftSaber) ||
-                (saberSlot == ESaberSlot.Right && !_customSaberRightSaber))
+            if (saberSlot == ESaberSlot.Left && !_customSaberLeftSaber ||
+                saberSlot == ESaberSlot.Right && !_customSaberRightSaber)
             {
                 var saber = FindInInstance(saberSlot == ESaberSlot.Left ? "LeftSaber" : "RightSaber");
 

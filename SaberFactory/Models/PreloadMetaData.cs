@@ -1,9 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Threading.Tasks;
 using BeatSaberMarkupLanguage;
-using IPA.Utilities.Async;
 using SaberFactory.Loaders;
 using SaberFactory.UI;
 using UnityEngine;
@@ -12,18 +10,15 @@ namespace SaberFactory.Models
 {
     internal class PreloadMetaData : ICustomListItem
     {
-        public readonly AssetMetaPath AssetMetaPath;
         public AssetTypeDefinition AssetTypeDefinition { get; private set; }
-
-        private string _name;
-        private string _author;
-
-        private byte[] _coverData;
-        private Texture2D _coverTex;
-        private Sprite _coverSprite;
 
         public Texture2D CoverTex => _coverTex ??= LoadTexture();
         public Sprite CoverSprite => _coverSprite ??= LoadSprite();
+        public readonly AssetMetaPath AssetMetaPath;
+
+        private byte[] _coverData;
+        private Sprite _coverSprite;
+        private Texture2D _coverTex;
 
         public PreloadMetaData(AssetMetaPath assetMetaPath)
         {
@@ -34,21 +29,26 @@ namespace SaberFactory.Models
         {
             AssetMetaPath = assetMetaPath;
             AssetTypeDefinition = assetTypeDefinition;
-            _name = customListItem.ListName;
-            _author = customListItem.ListAuthor;
+            ListName = customListItem.ListName;
+            ListAuthor = customListItem.ListAuthor;
             _coverSprite = customListItem.ListCover;
         }
 
+        public string ListName { get; private set; }
+
+        public string ListAuthor { get; private set; }
+
+        public Sprite ListCover => CoverSprite;
+
+        public bool IsFavorite { get; set; }
+
         public void SaveToFile()
         {
-            if (AssetMetaPath.HasMetaData)
-            {
-                File.Delete(AssetMetaPath.MetaDataPath);
-            }
+            if (AssetMetaPath.HasMetaData) File.Delete(AssetMetaPath.MetaDataPath);
 
             var ser = new SerializableMeta();
-            ser.Name = _name;
-            ser.Author = _author;
+            ser.Name = ListName;
+            ser.Author = ListAuthor;
             ser.AssetTypeDefinition = AssetTypeDefinition;
 
             if (_coverSprite != null)
@@ -75,8 +75,8 @@ namespace SaberFactory.Models
             var ser = (SerializableMeta)formatter.Deserialize(fs);
             fs.Close();
 
-            _name = ser.Name;
-            _author = ser.Author;
+            ListName = ser.Name;
+            ListAuthor = ser.Author;
             _coverData = ser.CoverData;
             AssetTypeDefinition = ser.AssetTypeDefinition;
 
@@ -89,13 +89,13 @@ namespace SaberFactory.Models
         }
 
         /// <summary>
-        /// Get Texture png data from non-readable texture
+        ///     Get Texture png data from non-readable texture
         /// </summary>
         /// <param name="tex">The texture to read from</param>
         /// <returns>png bytes</returns>
         private byte[] GetTextureData(Texture2D tex)
         {
-            RenderTexture tmp = RenderTexture.GetTemporary(
+            var tmp = RenderTexture.GetTemporary(
                 tex.width,
                 tex.height,
                 0,
@@ -104,9 +104,9 @@ namespace SaberFactory.Models
 
             Graphics.Blit(tex, tmp);
 
-            RenderTexture previous = RenderTexture.active;
+            var previous = RenderTexture.active;
             RenderTexture.active = tmp;
-            Texture2D myTexture2D = new Texture2D(tex.width, tex.height);
+            var myTexture2D = new Texture2D(tex.width, tex.height);
             myTexture2D.ReadPixels(new Rect(0, 0, tmp.width, tmp.height), 0, 0);
             myTexture2D.Apply();
             RenderTexture.active = previous;
@@ -117,29 +117,21 @@ namespace SaberFactory.Models
 
         private Texture2D LoadTexture()
         {
-            return _coverData==null?null:Utilities.LoadTextureRaw(_coverData);
+            return _coverData == null ? null : Utilities.LoadTextureRaw(_coverData);
         }
 
         private Sprite LoadSprite()
         {
-            return CoverTex==null?null:Utilities.LoadSpriteFromTexture(CoverTex);
+            return CoverTex == null ? null : Utilities.LoadSpriteFromTexture(CoverTex);
         }
-
-        public string ListName => _name;
-
-        public string ListAuthor => _author;
-
-        public Sprite ListCover => CoverSprite;
-
-        public bool IsFavorite { get; set; }
 
         [Serializable]
         internal class SerializableMeta
         {
-            public string Name;
+            public AssetTypeDefinition AssetTypeDefinition;
             public string Author;
             public byte[] CoverData;
-            public AssetTypeDefinition AssetTypeDefinition;
+            public string Name;
         }
     }
 }

@@ -1,38 +1,38 @@
-﻿<vertical spacing='1' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
-          xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
+﻿<vertical xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+          xsi:noNamespaceSchemaLocation='https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd' spacing="1">
 
-  <vertical pref-width='14.5' custom_bg='' custom_color='$navbar' pad='2'>
-    <macro.for-each items='nav-buttons'>
-      <sui.nav-button pref-width='12'
-        id='button'
-        on-selected='selected'
-        icon='~icon'
-        hover-hint='~hover-hint'
-        on-color='#fff'
-        off-color='#ffffff60' />
-    </macro.for-each>
+    <vertical pref-width='14.5' bg='round-rect-panel' custom-color='$navbar' pad='2'>
+        <macro.for-each items='nav-buttons'>
+            <sui.nav-button pref-width='12'
+                            id='button'
+                            on-selected='selected'
+                            icon='~icon'
+                            hover-hint='~hover-hint'
+                            on-color='#000000dd'
+                            off-color='#ffffff60'/>
+        </macro.for-each>
 
-    <sui.nav-button
-      icon='SaberFactory.Resources.Icons.cog.png' pref-width='12'
-      hover-hint='Set up Saber Factory'
-      on-selected='clicked-settings'
-      on-color='#fff'
-      off-color='#ffffff60'>
-      <text id='settings-notify-text' active='false' text='Update' font-size='3' align='TopGeoAligned' color='#5dc968' />
-    </sui.nav-button>
-  </vertical>
+        <sui.nav-button
+                icon='SaberFactory.Resources.Icons.cog.png' pref-width='12'
+                hover-hint='Set up Saber Factory'
+                on-selected='clicked-settings'
+                on-color='#000000dd'
+                off-color='#ffffff60'>
+            <text id='settings-notify-text' active='false' text='Update' font-size='3' align='TopGeoAligned' color='#5dc968'/>
+        </sui.nav-button>
+    </vertical>
 
-  <vertical pref-width='14.5' custom_bg='' custom_color='$navbar' pad-left='2' pad-right='1' pad-top='1'
-            pad-bottom='1' preferred-height='16' vertical-fit='PreferredSize'>
-    <sui.icon-button
-      id='exit_btn'
-      pref-width='15'
-      pref-height='15'
-      on-click='clicked-exit'
-      icon='#HorizontalArrowIcon'
-      hover-hint='Exit this earths athmosphere'
-      skew='0' show-line='false' normal-color='#00000000' hovered-color='#ff424280' icon-color='#ffffff50'>
-    </sui.icon-button>
-  </vertical>
+    <vertical pref-width='14' pref-height="15" bg='round-rect-panel' custom-color='$navbar' pad-left='2' pad-right='1' pad-top='1'
+              pad-bottom='1' vertical-fit='PreferredSize'>
+        <sui.icon-button
+                id='exit_btn'
+                pref-width='15'
+                pref-height='15'
+                on-click='clicked-exit'
+                icon='#HorizontalArrowIcon'
+                hover-hint='Exit this earths athmosphere'
+                skew='0' show-line='false' normal-color='#00000000' hovered-color='#ff424280' icon-color='#ffffff50'>
+        </sui.icon-button>
+    </vertical>
 
 </vertical>

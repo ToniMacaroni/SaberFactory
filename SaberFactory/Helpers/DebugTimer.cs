@@ -6,8 +6,8 @@ namespace SaberFactory.Helpers
 {
     public class DebugTimer
     {
-        private readonly string _taskName;
         private readonly Stopwatch _stopwatch;
+        private readonly string _taskName;
 
         public DebugTimer(string taskName = null)
         {

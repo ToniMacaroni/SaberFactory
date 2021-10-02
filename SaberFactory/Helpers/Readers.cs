@@ -61,23 +61,23 @@ namespace SaberFactory.Helpers
         {
             var taskSource = new TaskCompletionSource<AssetBundle>();
 
-            AssetBundleCreateRequest asetBundleCreateRequest = AssetBundle.LoadFromMemoryAsync(data);
+            var asetBundleCreateRequest = AssetBundle.LoadFromMemoryAsync(data);
             asetBundleCreateRequest.completed += delegate
             {
-                AssetBundle assetBundle = asetBundleCreateRequest.assetBundle;
+                var assetBundle = asetBundleCreateRequest.assetBundle;
                 taskSource.TrySetResult(assetBundle);
             };
             return await taskSource.Task;
         }
 
-        public static async Task<T> LoadAssetFromAssetBundleAsync<T>(this AssetBundle assetBundle, string assetName) where T : UnityEngine.Object
+        public static async Task<T> LoadAssetFromAssetBundleAsync<T>(this AssetBundle assetBundle, string assetName) where T : Object
         {
             var taskSource = new TaskCompletionSource<T>();
 
-            AssetBundleRequest assetBundleRequest = assetBundle.LoadAssetAsync<T>(assetName);
+            var assetBundleRequest = assetBundle.LoadAssetAsync<T>(assetName);
             assetBundleRequest.completed += delegate
             {
-                T asset = (T)assetBundleRequest.asset;
+                var asset = (T)assetBundleRequest.asset;
 
                 taskSource.TrySetResult(asset);
             };
@@ -85,17 +85,14 @@ namespace SaberFactory.Helpers
             return await taskSource.Task;
         }
 
-        public static async Task<Tuple<T, AssetBundle>> LoadAssetFromAssetBundleAsync<T>(byte[] bundleData, string assetName) where T : UnityEngine.Object
+        public static async Task<Tuple<T, AssetBundle>> LoadAssetFromAssetBundleAsync<T>(byte[] bundleData, string assetName) where T : Object
         {
             var assetBundle = await LoadAssetBundleAsync(bundleData);
             if (assetBundle == null) return null;
 
             var asset = await assetBundle.LoadAssetFromAssetBundleAsync<T>(assetName);
 
-            if (asset == null)
-            {
-                assetBundle.Unload(true);
-            }
+            if (asset == null) assetBundle.Unload(true);
 
             return new Tuple<T, AssetBundle>(asset, assetBundle);
         }
@@ -123,10 +120,7 @@ namespace SaberFactory.Helpers
                 }
 
                 var assetRequest = createRequest.assetBundle.LoadAssetAsync<T>(assetName);
-                assetRequest.completed += delegate
-                {
-                    tcs.SetResult(new Tuple<T, AssetBundle>((T)assetRequest.asset, createRequest.assetBundle));
-                };
+                assetRequest.completed += delegate { tcs.SetResult(new Tuple<T, AssetBundle>((T)assetRequest.asset, createRequest.assetBundle)); };
             };
 
             return await tcs.Task;

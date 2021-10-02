@@ -5,7 +5,7 @@ using UnityEngine;
 namespace SaberFactory.UI.Lib
 {
     /// <summary>
-    /// Direct implementation of <see cref="ICustomParsable"/>
+    ///     Direct implementation of <see cref="ICustomParsable" />
     /// </summary>
     internal class CustomParsable : MonoBehaviour, ICustomParsable
     {
@@ -20,10 +20,7 @@ namespace SaberFactory.UI.Lib
 
         public void Unparse()
         {
-            foreach (Transform t in transform)
-            {
-                t.gameObject.TryDestroy();
-            }
+            foreach (Transform t in transform) t.gameObject.TryDestroy();
         }
     }
 }

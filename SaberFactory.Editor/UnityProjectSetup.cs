@@ -1,25 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEditor;
 using UnityEngine;
 
 namespace SaberFactory.Editor
 {
-    class UnityProjectSetup : EditorWindow
+    internal class UnityProjectSetup : EditorWindow
     {
-        [MenuItem("Window/Setup Saber Factory")]
-        public static void ShowWindow()
-        {
-            GetWindow<UnityProjectSetup>(false, "Project Setup");
-        }
-
         private void OnGUI()
         {
             GUILayout.Label("Following stuff needs to be set up!");
 
-            bool needsFixing = false;
+            var needsFixing = false;
 
 #pragma warning disable 618
             if (!PlayerSettings.virtualRealitySupported)
@@ -41,10 +32,13 @@ namespace SaberFactory.Editor
                 needsFixing = true;
             }
 
-            if (!needsFixing)
-            {
-                Close();
-            }
+            if (!needsFixing) Close();
+        }
+
+        [MenuItem("Window/Setup Saber Factory")]
+        public static void ShowWindow()
+        {
+            GetWindow<UnityProjectSetup>(false, "Project Setup");
         }
 
         private void AddFixButton(string text, Action callback)

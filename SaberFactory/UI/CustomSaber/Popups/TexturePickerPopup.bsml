@@ -1,15 +1,15 @@
-﻿<horizontal anchor-pos-x="23" anchor-pos-y="-60" xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
-	<vertical pad='2' bg='round-rect-panel' bg-color='#777' border="" raycast="true">
-		<text text='UserData/Saber Factory/Textures' align='Center'/>
-		<list id='item-list' select-cell='item-selected'/>
-		<horizontal bg='round-rect-panel' background-color='#00000033' preferred-height='8'>
-			<page-button event-click='item-list#PageDown' direction='Down' pref-width='8'/>
-			<page-button event-click='item-list#PageUp' direction='Up' pref-width='8'/>
-		</horizontal>
+﻿<horizontal anchor-pos-x="23" anchor-pos-y="-60">
+    <vertical pad='2' bg='round-rect-panel' bg-color='#777' border="" raycast="true">
+        <text text='UserData/Saber Factory/Textures' align='Center'/>
+        <list id='item-list' select-cell='item-selected'/>
+        <horizontal bg='round-rect-panel' background-color='#00000033' preferred-height='8'>
+            <page-button event-click='item-list#PageDown' direction='Down' pref-width='8'/>
+            <page-button event-click='item-list#PageUp' direction='Up' pref-width='8'/>
+        </horizontal>
 
-		<horizontal>
-			<sui.button text="Cancel" on-click="click-cancel" />
-			<sui.button text="Select" on-click="click-select" />
-		</horizontal>
-	</vertical>
+        <horizontal>
+            <sui.button text="Cancel" on-click="click-cancel"/>
+            <sui.button text="Select" on-click="click-select"/>
+        </horizontal>
+    </vertical>
 </horizontal>

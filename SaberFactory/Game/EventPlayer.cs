@@ -1,9 +1,9 @@
-﻿using IPA.Utilities;
-using SaberFactory.Configuration;
-using SaberFactory.Models;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using IPA.Utilities;
+using SaberFactory.Configuration;
+using SaberFactory.Models;
 using UnityEngine;
 using Zenject;
 
@@ -11,24 +11,41 @@ namespace SaberFactory.Game
 {
     internal class EventPlayer : IDisposable
     {
-        private List<PartEvents> _partEventsList;
-        private SaberType _saberType;
-        private bool _didInit;
-
-        [Inject] private readonly PluginConfig _pluginConfig = null;
-
-        [Inject(Id = "LastNoteId")] private float _lastNoteTime;
-
-        [Inject] private readonly ObstacleSaberSparkleEffectManager _obstacleSaberSparkleEffectManager = null;
-
-        [Inject] private readonly GameEnergyCounter _energyCounter = null;
-
-        [Inject] private readonly ScoreController _scoreController = null;
+        private static readonly FieldAccessor<ScoreController, int>.Accessor _scoreControllerNotes =
+            FieldAccessor<ScoreController, int>.GetAccessor("_cutOrMissedNotes");
 
         [Inject] private readonly BeatmapObjectManager _beatmapObjectManager = null;
 
-        private static readonly FieldAccessor<ScoreController, int>.Accessor _scoreControllerNotes =
-            FieldAccessor<ScoreController, int>.GetAccessor("_cutOrMissedNotes");
+        [Inject] private readonly GameEnergyCounter _energyCounter = null;
+
+        [Inject] private readonly ObstacleSaberSparkleEffectManager _obstacleSaberSparkleEffectManager = null;
+
+        [Inject] private readonly PluginConfig _pluginConfig = null;
+
+        [Inject] private readonly ScoreController _scoreController = null;
+        private bool _didInit;
+
+        [Inject(Id = "LastNoteId")] private float _lastNoteTime;
+        private List<PartEvents> _partEventsList;
+        private SaberType _saberType;
+
+        public void Dispose()
+        {
+            if (_didInit)
+            {
+                _beatmapObjectManager.noteWasCutEvent -= OnNoteCut;
+                _beatmapObjectManager.noteWasMissedEvent -= OnNoteMiss;
+
+                _obstacleSaberSparkleEffectManager.sparkleEffectDidStartEvent -= SaberStartCollide;
+                _obstacleSaberSparkleEffectManager.sparkleEffectDidEndEvent -= SaberEndCollide;
+
+                _energyCounter.gameEnergyDidReach0Event -= InvokeOnLevelFail;
+
+                _scoreController.multiplierDidChangeEvent -= MultiplayerDidChange;
+
+                _scoreController.comboDidChangeEvent -= InvokeComboChanged;
+            }
+        }
 
         public void SetPartEventList(List<PartEvents> partEventsList, SaberType saberType)
         {
@@ -52,7 +69,7 @@ namespace SaberFactory.Game
 
             // MultiplierUp
             _scoreController.multiplierDidChangeEvent += MultiplayerDidChange;
-            
+
             // Combo changed
             _scoreController.comboDidChangeEvent += InvokeComboChanged;
 
@@ -61,82 +78,52 @@ namespace SaberFactory.Game
 
         public void InvokeLevelEnded()
         {
-            foreach (var partEvents in _partEventsList)
-            {
-                partEvents.OnLevelEnded?.Invoke();
-            }
+            foreach (var partEvents in _partEventsList) partEvents.OnLevelEnded?.Invoke();
         }
 
         public void InvokeCombobreak()
         {
-            foreach (var partEvents in _partEventsList)
-            {
-                partEvents.OnComboBreak?.Invoke();
-            }
+            foreach (var partEvents in _partEventsList) partEvents.OnComboBreak?.Invoke();
         }
 
         public void InvokeOnLevelFail()
         {
-            foreach (var partEvents in _partEventsList)
-            {
-                partEvents.OnLevelFail?.Invoke();
-            }
+            foreach (var partEvents in _partEventsList) partEvents.OnLevelFail?.Invoke();
         }
 
         public void InvokeMultiplierUp()
         {
-            foreach (var partEvents in _partEventsList)
-            {
-                partEvents.MultiplierUp?.Invoke();
-            }
+            foreach (var partEvents in _partEventsList) partEvents.MultiplierUp?.Invoke();
         }
 
         public void InvokeOnSlice()
         {
-            foreach (var partEvents in _partEventsList)
-            {
-                partEvents.OnSlice?.Invoke();
-            }
+            foreach (var partEvents in _partEventsList) partEvents.OnSlice?.Invoke();
         }
 
         public void InvokeSaberStartColliding()
         {
-            foreach (var partEvents in _partEventsList)
-            {
-                partEvents.SaberStartColliding?.Invoke();
-            }
+            foreach (var partEvents in _partEventsList) partEvents.SaberStartColliding?.Invoke();
         }
 
         public void InvokeSaberStopColliding()
         {
-            foreach (var partEvents in _partEventsList)
-            {
-                partEvents.SaberStopColliding?.Invoke();
-            }
+            foreach (var partEvents in _partEventsList) partEvents.SaberStopColliding?.Invoke();
         }
 
         public void InvokeOnLevelStart()
         {
-            foreach (var partEvents in _partEventsList)
-            {
-                partEvents.OnLevelStart?.Invoke();
-            }
+            foreach (var partEvents in _partEventsList) partEvents.OnLevelStart?.Invoke();
         }
 
         public void InvokeComboChanged(int combo)
         {
-            foreach (var partEvents in _partEventsList)
-            {
-                partEvents.OnComboChanged?.Invoke(combo);
-            }
+            foreach (var partEvents in _partEventsList) partEvents.OnComboChanged?.Invoke(combo);
         }
 
         public void InvokeAccuracyChanged(float accuracy)
         {
-            foreach (var partEvents in _partEventsList)
-            {
-                partEvents.OnAccuracyChanged?.Invoke(accuracy);
-            }
+            foreach (var partEvents in _partEventsList) partEvents.OnAccuracyChanged?.Invoke(accuracy);
         }
 
         #region Events
@@ -149,7 +136,7 @@ namespace SaberFactory.Game
             }
             else
             {
-                if(_saberType==noteCutInfo.saberType) InvokeOnSlice();
+                if (_saberType == noteCutInfo.saberType) InvokeOnSlice();
             }
 
             FireAccuracyEvents();
@@ -163,10 +150,7 @@ namespace SaberFactory.Game
 
         private void OnNoteMiss(NoteController noteController)
         {
-            if (noteController.noteData.colorType != ColorType.None)
-            {
-                InvokeCombobreak();
-            }
+            if (noteController.noteData.colorType != ColorType.None) InvokeCombobreak();
 
             if (Mathf.Approximately(noteController.noteData.time, _lastNoteTime))
             {
@@ -179,26 +163,17 @@ namespace SaberFactory.Game
 
         private void SaberEndCollide(SaberType saberType)
         {
-            if (saberType == _saberType)
-            {
-                InvokeSaberStopColliding();
-            }
+            if (saberType == _saberType) InvokeSaberStopColliding();
         }
 
         private void SaberStartCollide(SaberType saberType)
         {
-            if (saberType == _saberType)
-            {
-                InvokeSaberStartColliding();
-            }
+            if (saberType == _saberType) InvokeSaberStartColliding();
         }
 
         private void MultiplayerDidChange(int multiplier, float progress)
         {
-            if (multiplier > 1 && progress < 0.1f)
-            {
-                InvokeMultiplierUp();
-            }
+            if (multiplier > 1 && progress < 0.1f) InvokeMultiplierUp();
         }
 
         private IEnumerator CalculateAccuracyAndFireEventsCoroutine()
@@ -220,23 +195,5 @@ namespace SaberFactory.Game
         }
 
         #endregion
-
-        public void Dispose()
-        {
-            if (_didInit)
-            {
-                _beatmapObjectManager.noteWasCutEvent -= OnNoteCut;
-                _beatmapObjectManager.noteWasMissedEvent -= OnNoteMiss;
-
-                _obstacleSaberSparkleEffectManager.sparkleEffectDidStartEvent -= SaberStartCollide;
-                _obstacleSaberSparkleEffectManager.sparkleEffectDidEndEvent -= SaberEndCollide;
-
-                _energyCounter.gameEnergyDidReach0Event -= InvokeOnLevelFail;
-
-                _scoreController.multiplierDidChangeEvent -= MultiplayerDidChange;
-
-                _scoreController.comboDidChangeEvent -= InvokeComboChanged;
-            }
-        }
     }
 }

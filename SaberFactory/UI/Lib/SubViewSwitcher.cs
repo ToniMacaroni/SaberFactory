@@ -9,14 +9,9 @@ namespace SaberFactory.UI.Lib
     {
         public SubView CurrentSubView { get; private set; }
 
-        private SubView _previousSubView;
-
         private CancellationTokenSource _currentTokenSource;
 
-        public SubViewSwitcher()
-        {
-
-        }
+        private SubView _previousSubView;
 
         public async void SwitchView(SubView newSubView, bool notify = true)
         {
@@ -62,10 +57,10 @@ namespace SaberFactory.UI.Lib
 
             float moveOffset = 20;
 
-            if (_previousSubView is {})
+            if (_previousSubView is { })
             {
                 var toDismissCG = _previousSubView.GetComponent<CanvasGroup>();
-                float baseCanvasGroupAlpha = toDismissCG.alpha;
+                var baseCanvasGroupAlpha = toDismissCG.alpha;
 
                 await Animate(t =>
                 {
@@ -86,16 +81,17 @@ namespace SaberFactory.UI.Lib
 
         private async Task Animate(Action<float> transitionAnimation, CancellationToken cancellationToken)
         {
-            float elapsedTime = 0.0f;
+            var elapsedTime = 0.0f;
             while (elapsedTime < 0.200000005960464)
             {
                 if (cancellationToken.IsCancellationRequested) return;
 
-                float num = Easing.OutQuart(elapsedTime / 0.2f);
+                var num = Easing.OutQuart(elapsedTime / 0.2f);
                 transitionAnimation?.Invoke(num);
                 elapsedTime += Time.deltaTime;
                 await Task.Yield();
             }
+
             transitionAnimation?.Invoke(1f);
         }
     }

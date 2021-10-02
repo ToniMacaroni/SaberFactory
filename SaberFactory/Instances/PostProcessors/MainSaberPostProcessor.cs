@@ -1,7 +1,7 @@
 using HarmonyLib;
 using SaberFactory.Configuration;
-using UnityEngine;
 using SaberFactory.Helpers;
+using UnityEngine;
 
 namespace SaberFactory.Instances.PostProcessors
 {
@@ -13,12 +13,12 @@ namespace SaberFactory.Instances.PostProcessors
         {
             _config = config;
         }
-        
+
         public void ProcessSaber(GameObject saberObject)
         {
             saberObject.SetLayer<Renderer>(12);
-            saberObject.GetComponentsInChildren<Collider>().Do(x=>x.enabled = false);
-            saberObject.GetComponentsInChildren<AudioSource>(true).Do(x=>x.volume = x.volume*_config.SaberAudioVolumeMultiplier);
+            saberObject.GetComponentsInChildren<Collider>().Do(x => x.enabled = false);
+            saberObject.GetComponentsInChildren<AudioSource>(true).Do(x => x.volume = x.volume * _config.SaberAudioVolumeMultiplier);
         }
     }
 }
