@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using BeatSaberMarkupLanguage.Attributes;
+using HMUI;
 using IPA.Loader;
 using IPA.Utilities;
 using SaberFactory.Configuration;
@@ -16,7 +19,10 @@ using SaberFactory.Models;
 using SaberFactory.UI.CustomSaber.CustomComponents;
 using SaberFactory.UI.CustomSaber.Popups;
 using SaberFactory.UI.Lib;
+using SiraUtil;
 using Zenject;
+using Debug = UnityEngine.Debug;
+using Utilities = BeatSaberMarkupLanguage.Utilities;
 
 namespace SaberFactory.UI.CustomSaber.Views
 {
@@ -90,6 +96,14 @@ namespace SaberFactory.UI.CustomSaber.Views
             _listTitle = "<color=#2f6594>Saber Factory " + _metadata.HVersion + "</color>";
             _saberList.SetText(_listTitle);
             await LoadSabers();
+            
+            if (CommonHelpers.IsDate(null, 10) &&
+                _pluginConfig.SpecialBackground && 
+                _saberList.transform.GetChild(0)?.GetComponent<ImageView>() is { } imageView)
+            {
+                imageView.sprite = Utilities.FindSpriteInAssembly("SaberFactory.Resources.UI.halloween_bg.png");
+                imageView.overrideSprite = imageView.sprite;
+            }
         }
 
         private async void DirectorySelected(string dir)

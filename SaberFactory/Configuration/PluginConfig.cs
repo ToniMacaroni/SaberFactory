@@ -45,9 +45,12 @@ namespace SaberFactory.Configuration
 
         public float SaberAudioVolumeMultiplier { get; set; } = 1;
 
+        public bool SpecialBackground { get; set; } = true;
+
         // How many threads to spawn when loading all sabers
         // ! Not used as of right now !
         [Ignore] public int LoadingThreads { get; set; } = 2;
+
 
         // Which type to use with the mod (parts / custom sabers)
         [UseConverter(typeof(EnumConverter<EAssetTypeConfiguration>))]
