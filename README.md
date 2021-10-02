@@ -5,7 +5,7 @@
 <p align="center">
     <a href="https://github.com/ToniMacaroni/SaberFactory/actions/workflows/integrate.yml" alt="build status">
         <img src="https://img.shields.io/github/workflow/status/ToniMacaroni/SaberFactory/Build%20Saber%20Factory" /></a>
-    <a href="#backers" alt="total downloads">
+    <a alt="total downloads">
         <img src="https://img.shields.io/github/downloads/ToniMacaroni/SaberFactory/total" /></a>
     <a href="https://github.com/ToniMacaroni/SaberFactory/releases" alt="latest version">
         <img src="https://img.shields.io/github/v/tag/ToniMacaroni/SaberFactory?label=version" /></a>

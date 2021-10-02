@@ -47,6 +47,8 @@ namespace SaberFactory.Configuration
 
         public bool SpecialBackground { get; set; } = true;
 
+        public bool ReloadOnSaberUpdate { get; set; } = false;
+
         // How many threads to spawn when loading all sabers
         // ! Not used as of right now !
         [Ignore] public int LoadingThreads { get; set; } = 2;
@@ -59,7 +61,7 @@ namespace SaberFactory.Configuration
         // List of sabers / parts marked as favorite
         [UseConverter(typeof(ListConverter<string>))]
         public List<string> Favorites { get; set; } = new List<string>();
-
+        
         [Ignore] public bool RuntimeFirstLaunch;
 
         /// <summary>
