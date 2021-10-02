@@ -26,9 +26,9 @@ namespace SaberFactory.UI.CustomSaber.Views
         [UIComponent("choose-trail-popup")] private readonly ChooseTrailPopup _chooseTrailPopup = null;
 
         [UIObject("main-container")] private readonly GameObject _mainContainer = null;
+        [UIObject("no-trail-container")] private readonly GameObject _noTrailContainer = null;
 
         [UIComponent("material-editor")] private readonly MaterialEditor _materialEditor = null;
-        [UIObject("no-trail-container")] private readonly GameObject _noTrailContainer = null;
 
         [UIValue("trail-width-max")] private float _trailWidthMax => _pluginConfig.TrailWidthMax;
 
@@ -60,7 +60,11 @@ namespace SaberFactory.UI.CustomSaber.Views
         private bool UseVertexColorOnly
         {
             get => _trailConfig.OnlyUseVertexColor;
-            set => _trailConfig.OnlyUseVertexColor = value;
+            set
+            {
+                _trailConfig.OnlyUseVertexColor = value;
+                _trailPreviewer.OnlyColorVertex = value;
+            } 
         }
 
         private bool NoTrailViewActive
@@ -83,7 +87,6 @@ namespace SaberFactory.UI.CustomSaber.Views
         [Inject] private readonly TrailPreviewer _trailPreviewer = null;
         [Inject] private readonly IVRPlatformHelper _vrPlatformHelper = null;
 
-        private bool _autoUpdateTrail;
         private bool _dirty;
 
         private InstanceTrailData _instanceTrailData;
@@ -96,8 +99,6 @@ namespace SaberFactory.UI.CustomSaber.Views
 
         private void Update()
         {
-            // if (!_autoUpdateTrail) return;
-
             if (_time < 0.3)
             {
                 _time += Time.deltaTime;
@@ -115,8 +116,6 @@ namespace SaberFactory.UI.CustomSaber.Views
         [UIAction("#post-parse")]
         private void Setup()
         {
-            _autoUpdateTrail = _pluginConfig.AutoUpdateTrail;
-
             _mainContainer.GetComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
             _advancedContainer.SetActive(_pluginConfig.ShowAdvancedTrailSettings);
@@ -149,17 +148,18 @@ namespace SaberFactory.UI.CustomSaber.Views
 
         private void OnjoystickWasNotCenteredThisFrameEvent(Vector2 deltaPos)
         {
-            var newWidth = Mathf.Clamp(_instanceTrailData.Width + deltaPos.y * -0.005f, 0, _trailWidthMax);
-            WidthValue = newWidth;
+            WidthValue = Mathf.Clamp(_instanceTrailData.Width + deltaPos.y * -0.005f, 0, _trailWidthMax);
 
-            var newLength = Mathf.Clamp(_trailFloatLength + deltaPos.x * 0.1f, 0, 30);
-            LengthValue = (int)newLength;
+            LengthValue = Mathf.Clamp(_trailFloatLength + deltaPos.x * 0.1f, 0, 30);
+            
+            ParserParams.EmitEvent("update-proportions");
         }
 
         private void LoadFromModel(InstanceTrailData trailData)
         {
             _instanceTrailData = trailData;
 
+            _trailFloatLength = _instanceTrailData?.Length ?? 0;
             UpdateProps();
         }
 
@@ -228,12 +228,14 @@ namespace SaberFactory.UI.CustomSaber.Views
 
             if (saberInstance.TrailHandler is { })
             {
+                //in hand
                 LoadFromModel(trailData);
                 RefreshButtonActive = true;
             }
             else
             {
-                _trailPreviewer.Create(saberInstance.GameObject.transform.parent, trailData);
+                //on pedestal
+                _trailPreviewer.Create(saberInstance.GameObject.transform.parent, trailData, UseVertexColorOnly);
                 LoadFromModel(trailData);
                 _trailPreviewer.SetColor(_playerDataModel.playerData.colorSchemesSettings.GetSelectedColorScheme().saberAColor);
                 RefreshButtonActive = false;
@@ -291,14 +293,14 @@ namespace SaberFactory.UI.CustomSaber.Views
 
         #region Values
 
-        private int LengthValue
+        private float LengthValue
         {
-            get => _instanceTrailData?.Length ?? 1;
+            get => _trailFloatLength;
             set
             {
-                if (_instanceTrailData is null) return;
-                _instanceTrailData.Length = value;
                 _trailFloatLength = value;
+                if (_instanceTrailData is null) return;
+                _instanceTrailData.Length = (int)value;
                 _dirty = true;
                 if (_refreshButtonActive) return;
                 _trailPreviewer.SetLength(value);

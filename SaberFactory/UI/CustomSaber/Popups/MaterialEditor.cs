@@ -64,9 +64,9 @@ namespace SaberFactory.UI.CustomSaber.Popups
         {
             var props = new List<PropertyDescriptor>();
 
-            var spi = new ShaderPropertyInfo(material.shader);
+            var shaderPropertyInfo = new ShaderPropertyInfo(material.shader);
 
-            foreach (var prop in spi.GetAll())
+            foreach (var prop in shaderPropertyInfo.GetAll())
             {
                 EPropertyType type;
 
@@ -98,7 +98,7 @@ namespace SaberFactory.UI.CustomSaber.Popups
 
                     if (prop is ShaderPropertyInfo.ShaderRange range)
                         propertyDescriptor.AddtionalData = new Vector2(range.Min, range.Max);
-                    else if (prop is ShaderPropertyInfo.ShaderTexture texProp)
+                    else if (prop is ShaderPropertyInfo.ShaderTexture)
                         propertyDescriptor.AddtionalData = !prop.HasAttribute(MaterialAttributes.SfNoPreview);
 
                     props.Add(propertyDescriptor);

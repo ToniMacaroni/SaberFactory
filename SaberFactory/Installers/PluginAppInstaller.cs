@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using IPA.Loader;
 using IPA.Logging;
 using SaberFactory.Configuration;
 using SaberFactory.DataStore;
@@ -18,12 +19,14 @@ namespace SaberFactory.Installers
     internal class PluginAppInstaller : Installer
     {
         private readonly PluginConfig _config;
+        private readonly PluginMetadata _metadata;
         private readonly Logger _logger;
 
-        private PluginAppInstaller(Logger logger, PluginConfig config)
+        private PluginAppInstaller(Logger logger, PluginConfig config, PluginMetadata metadata)
         {
             _logger = logger;
             _config = config;
+            _metadata = metadata;
         }
 
         public override void InstallBindings()
@@ -46,6 +49,7 @@ namespace SaberFactory.Installers
 
             Container.Bind<PluginDirectories>().AsSingle();
 
+            Container.BindInstance(_metadata).AsSingle();
             Container.BindLoggerAsSiraLogger(_logger);
             Container.BindInstance(_config).AsSingle();
             Container.Bind<PluginManager>().AsSingle();

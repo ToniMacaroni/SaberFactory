@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using BeatSaberMarkupLanguage.Attributes;
+using IPA.Loader;
 using IPA.Utilities;
 using SaberFactory.Configuration;
 using SaberFactory.DataStore;
@@ -56,9 +57,11 @@ namespace SaberFactory.UI.CustomSaber.Views
         [Inject] private readonly PluginConfig _pluginConfig = null;
         [Inject] private readonly List<RemoteLocationPart> _remoteParts = null;
         [Inject] private readonly SaberSet _saberSet = null;
+        [Inject] private readonly PluginMetadata _metadata = null;
         private ModelComposition _currentComposition;
         private PreloadMetaData _currentPreloadMetaData;
         private SaberListDirectoryManager _dirManager;
+        private string _listTitle;
 
         private bool _showDownloadSabersPopup;
 
@@ -84,13 +87,15 @@ namespace SaberFactory.UI.CustomSaber.Views
             _dirManager = new SaberListDirectoryManager(_mainAssetStore.AdditionalCustomSaberFolders);
             _saberList.OnItemSelected += SaberSelected;
             _saberList.OnCategorySelected += DirectorySelected;
+            _listTitle = "<color=#2f6594>Saber Factory " + _metadata.HVersion + "</color>";
+            _saberList.SetText(_listTitle);
             await LoadSabers();
         }
 
         private async void DirectorySelected(string dir)
         {
             _dirManager.Navigate(dir);
-            _saberList.SetText(_dirManager.IsInRoot ? "Saber-Os" : _dirManager.DirectoryString);
+            _saberList.SetText(_dirManager.IsInRoot ? _listTitle : _dirManager.DirectoryString);
             _saberList.Deselect();
 
             await ShowSabers(true);

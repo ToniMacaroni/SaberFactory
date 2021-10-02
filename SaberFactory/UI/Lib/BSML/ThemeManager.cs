@@ -9,10 +9,11 @@ namespace SaberFactory.UI.Lib.BSML
         {
             { "light-bg", GetColor("#FFF") },
             { "dark-bg", GetColor("#0000FF") },
-            { "default-panel", GetColor("#666") },
-            { "saber-selector", GetColor("#666") },
-            { "saber-selector-sec", GetColor("#000000CC") },
-            { "navbar", GetColor("#000000CC") }
+            { "default-panel", GetColor("#668F8F") },
+            { "saber-selector", GetColor("#668F8F") },
+            { "saber-selector-sec", GetColor("#668F8F") },
+            { "navbar", GetColor("#000000CC") },
+            { "prop-cell", GetColor("#00000090") }
         };
 
         public static bool GetDefinedColor(string name, out Color color)

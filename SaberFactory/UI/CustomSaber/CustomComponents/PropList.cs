@@ -49,7 +49,7 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
                 EPropertyType.Bool => typeof(BoolPropCell),
                 EPropertyType.Color => typeof(ColorPropCell),
                 EPropertyType.Texture => typeof(TexturePropCell),
-                _ => throw new ArgumentOutOfRangeException()
+                _ => throw new ArgumentOutOfRangeException(nameof(data), "cell type not handled")
             };
 
             var comp = (BasePropCell)go.AddComponent(cellType);

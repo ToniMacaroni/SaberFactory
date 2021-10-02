@@ -37,7 +37,7 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
 
             await _textureStore.LoadAllTexturesAsync();
 
-            _ = Create(true);
+            _ = Create(false, false);
             RefreshList(_textureStore.GetAllTextures().ToList());
 
             await AnimateIn();
@@ -49,9 +49,7 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
             var cells = new List<CustomListTableData.CustomCellInfo>();
             foreach (var textureAsset in _textureAssets)
             {
-                Sprite tex = null;
-                if (textureAsset.Name != "trail2.png") tex = textureAsset.Sprite;
-                var cell = new CustomListTableData.CustomCellInfo(textureAsset.Name, null, tex);
+                var cell = new CustomListTableData.CustomCellInfo(textureAsset.Name, null, textureAsset.Sprite);
                 cells.Add(cell);
             }
 

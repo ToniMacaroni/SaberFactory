@@ -22,7 +22,7 @@ namespace SaberFactory.UI.Lib.BSML
             { "border", new[] { "border" } },
             { "raycast", new[] { "raycast", "block" } },
             { "skew", new[] { "skew" } },
-            { "custom_color", new[] { "custom_color" } },
+            { "customColor", new[] { "custom-color" } },
             { "custom_bg", new[] { "custom_bg" } }
         };
 
@@ -61,7 +61,7 @@ namespace SaberFactory.UI.Lib.BSML
                 }
             }
 
-            if (componentType.data.TryGetValue("custom_color", out var customColor)) TrySetBackgroundColor(backgroundable, customColor);
+            if (componentType.data.TryGetValue("customColor", out var customColor)) TrySetBackgroundColor(backgroundable, customColor);
 
             if (componentType.data.TryGetValue("border", out var borderAttr)) AddBorder(backgroundable.gameObject, borderAttr == "square");
 

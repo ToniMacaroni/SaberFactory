@@ -41,7 +41,7 @@ namespace SaberFactory.UI.Lib
             await _animationManager.AnimateOut();
         }
 
-        protected async Task Create(bool animated)
+        protected async Task Create(bool animated, bool fadeParents = true)
         {
             Parse();
 
@@ -55,7 +55,7 @@ namespace SaberFactory.UI.Lib
                 _canvasGroup.alpha = 1;
             }
 
-            FadeParentCanvases();
+            if(fadeParents) FadeParentCanvases();
         }
 
         protected async Task Hide(bool animated)

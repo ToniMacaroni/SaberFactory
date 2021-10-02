@@ -1,6 +1,7 @@
 ﻿using BeatSaberMarkupLanguage;
 using BeatSaberMarkupLanguage.Attributes;
 using SaberFactory.UI.CustomSaber.CustomComponents;
+using SaberFactory.UI.Lib.BSML;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -23,8 +24,11 @@ namespace SaberFactory.UI.Lib.PropCells
 
             if (data.AddtionalData is bool showPreview && showPreview) _propTexture.sprite = Utilities.LoadSpriteFromTexture(tex);
 
-            _backgroundImage.type = Image.Type.Sliced;
-            _backgroundImage.color = new Color(1, 0, 0, 0.5f);
+            if (ThemeManager.GetDefinedColor("prop-cell", out var bgColor))
+            {
+                _backgroundImage.type = Image.Type.Sliced;
+                _backgroundImage.color = bgColor;
+            }
         }
 
         private string ShortenText(string text, int length)

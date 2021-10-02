@@ -2,7 +2,7 @@
     <horizontal spacing='5' child-expand-width='false' child-control-width='false' child-align='MiddleCenter'
                 pref-height='100'>
         <vertical spacing='0.5'>
-            <vertical pref-width='80' custom_bg='' custom_color='$saber-selector-sec' pad-left='2' pad-right='2' pad-top='1'
+            <vertical pref-width='80' bg="round-rect-panel" custom-color='$saber-selector-sec' pad-left='2' pad-right='2' pad-top='1'
                       pad-bottom='1'>
                 <horizontal>
                     <sui.button text='Reload' pref-width='25' on-click='clicked-reload'/>
@@ -10,14 +10,14 @@
                     <sui.button text='Delete' pref-width='25' on-click='clicked-delete'/>
                 </horizontal>
             </vertical>
-            <sui.custom-list id='saber-list' title='Saber-Os' height='79' width='80' bg-color='$saber-selector'/>
-            <vertical pref-width='80' custom_bg='' custom_color='$saber-selector-sec' pad-left='2' pad-right='2' pad-top='1'
+            <sui.custom-list id='saber-list' title='' height='79' width='80' bg-color='$saber-selector'/>
+            <vertical pref-width='80' bg="round-rect-panel" custom-color='$saber-selector-sec' pad-left='2' pad-right='2' pad-top='1'
                       pad-bottom='1'>
                 <slider-setting text='Global Saber Width' value='saber-width' get-event='update-width' apply-on-change='true'
                                 max='~global-saber-width-max' increment='0.05'/>
             </vertical>
         </vertical>
-        <vertical preferred-width='15' child-control-height='false' child-expand-height='false'>
+        <vertical pad-top="13" preferred-width='15' child-control-height='false' child-expand-height='false'>
 
             <horizontal pref-height='16' pref-width='12' horizontal-fit='PreferredSize'>
                 <sui.icon-button

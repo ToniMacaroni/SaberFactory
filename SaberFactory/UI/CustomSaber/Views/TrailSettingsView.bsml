@@ -1,14 +1,14 @@
 ﻿<bg>
-    <vertical id='main-container' custom_bg='' custom_color='$default-panel' border='square' child-align='MiddleCenter'
+    <vertical id='main-container' bg="round-rect-panel" custom-color='$default-panel' child-align='MiddleCenter'
               child-expand-height='false' child-control-height='false' spacing='2' pad='3'>
 
         <vertical bg='panel-top' skew='0' bg-color='#00b6ff40' pad='2' vertical-fit='PreferredSize'>
             <text text='You can modify the lenght and width using the thumbstick!' color='#ffffff80' font-size='3.5' align='Center'
                   active='~ShowThumbstickMessage'/>
-            <slider-setting text='Length' value='LengthValue' get-event='update-props' apply-on-change='true' integer-only='true'
+            <slider-setting text='Length' value='LengthValue' get-event='update-props,update-proportions' apply-on-change='true' increment="1"
                             min='0' max='30'/>
 
-            <slider-setting text='Width' value='WidthValue' get-event='update-props' apply-on-change='true' min='0'
+            <slider-setting text='Width' value='WidthValue' get-event='update-props,update-proportions' apply-on-change='true' min='0'
                             max='~trail-width-max'/>
         </vertical>
 

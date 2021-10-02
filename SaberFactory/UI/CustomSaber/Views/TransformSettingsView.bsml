@@ -1,5 +1,5 @@
 ﻿<bg>
-    <vertical custom_bg='' custom_color="$default-panel" border="square" pad="3" vertical-fit="PreferredSize">
+    <vertical bg="round-rect-panel" custom-color="$default-panel" pad="3" vertical-fit="PreferredSize">
 
         <!--<slider-setting text='Width' get-event='update-props' apply-on-change='true' min='0' max='30' increment='0.1' />-->
         <slider-setting value="RotationAmount" text='Rotation' get-event='update-props' apply-on-change='true' min='0' max='360' increment='1'/>

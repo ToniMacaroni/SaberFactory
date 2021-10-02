@@ -1,7 +1,7 @@
 ﻿<vertical xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
           xsi:noNamespaceSchemaLocation='https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd' spacing="1">
 
-    <vertical pref-width='14.5' bg='round-rect-panel' custom_color='$navbar' pad='2'>
+    <vertical pref-width='14.5' bg='round-rect-panel' custom-color='$navbar' pad='2'>
         <macro.for-each items='nav-buttons'>
             <sui.nav-button pref-width='12'
                             id='button'
@@ -22,8 +22,8 @@
         </sui.nav-button>
     </vertical>
 
-    <vertical pref-width='14.5' bg='round-rect-panel' custom_color='$navbar' pad-left='2' pad-right='1' pad-top='1'
-              pad-bottom='1' preferred-height='16' vertical-fit='PreferredSize'>
+    <vertical pref-width='14' pref-height="15" bg='round-rect-panel' custom-color='$navbar' pad-left='2' pad-right='1' pad-top='1'
+              pad-bottom='1' vertical-fit='PreferredSize'>
         <sui.icon-button
                 id='exit_btn'
                 pref-width='15'

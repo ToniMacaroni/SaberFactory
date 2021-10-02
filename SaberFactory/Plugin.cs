@@ -5,6 +5,7 @@ using HarmonyLib;
 using IPA;
 using IPA.Config;
 using IPA.Config.Stores;
+using IPA.Loader;
 using SaberFactory.Configuration;
 using SaberFactory.Helpers;
 using SaberFactory.Installers;
@@ -22,7 +23,7 @@ namespace SaberFactory
         private IPALogger _logger;
 
         [Init]
-        public async void Init(IPALogger logger, Config conf, Zenjector zenjector)
+        public async void Init(IPALogger logger, Config conf, Zenjector zenjector, PluginMetadata metadata)
         {
             _logger = logger;
 
@@ -32,7 +33,7 @@ namespace SaberFactory
 
             if (!await LoadCsDescriptors()) return;
 
-            zenjector.OnApp<PluginAppInstaller>().WithParameters(logger, pluginConfig);
+            zenjector.OnApp<PluginAppInstaller>().WithParameters(logger, pluginConfig, metadata);
             zenjector.OnMenu<PluginMenuInstaller>();
             zenjector.OnGame<PluginGameInstaller>(false);
         }
