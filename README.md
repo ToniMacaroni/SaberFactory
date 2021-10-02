@@ -1,10 +1,22 @@
-# Saber Factory 2  
+<p align="center">
+    <h1 align="center">Saber Factory 2</h1>
+</p>
 
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/ToniMacaroni/SaberFactory/Build%20Saber%20Factory)
-![GitHub all releases](https://img.shields.io/github/downloads/ToniMacaroni/SaberFactory/total)
-![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/ToniMacaroni/SaberFactory?label=version)
+<p align="center">
+    <a href="https://github.com/ToniMacaroni/SaberFactory/actions/workflows/integrate.yml" alt="build status">
+        <img src="https://img.shields.io/github/workflow/status/ToniMacaroni/SaberFactory/Build%20Saber%20Factory" /></a>
+    <a href="#backers" alt="total downloads">
+        <img src="https://img.shields.io/github/downloads/ToniMacaroni/SaberFactory/total" /></a>
+    <a href="https://github.com/ToniMacaroni/SaberFactory/releases" alt="latest version">
+        <img src="https://img.shields.io/github/v/tag/ToniMacaroni/SaberFactory?label=version" /></a>
+</p>
 
-**A highly customizable saber mod for Beat Saber**
+<p align="center">
+    <h4 align="center">A highly customizable saber mod for Beat Saber</h4>
+</p>
+
+</br>
+</br>
 
 |   |  |
 | ------------- | ------------- |
