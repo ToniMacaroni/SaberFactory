@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using IPA.Utilities;
+using UnityEngine;
 
 namespace SaberFactory.Helpers
 {
@@ -38,6 +40,12 @@ namespace SaberFactory.Helpers
         {
             if (obj is T ret) return ret;
             return default;
+        }
+
+        public static bool IsDate(int? day, int? month)
+        {
+            var time = Utils.CanUseDateTimeNowSafely ? DateTime.Now : DateTime.UtcNow;
+            return (!day.HasValue || time.Day == day) && (!month.HasValue || time.Month == month);
         }
     }
 }
