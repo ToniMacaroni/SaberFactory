@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using BeatSaberMarkupLanguage;
 using BeatSaberMarkupLanguage.Attributes;
 using HMUI;
 using IPA.Loader;
@@ -19,10 +18,8 @@ using SaberFactory.Models;
 using SaberFactory.UI.CustomSaber.CustomComponents;
 using SaberFactory.UI.CustomSaber.Popups;
 using SaberFactory.UI.Lib;
-using SiraUtil;
 using Zenject;
 using Debug = UnityEngine.Debug;
-using Utilities = BeatSaberMarkupLanguage.Utilities;
 
 namespace SaberFactory.UI.CustomSaber.Views
 {
@@ -60,10 +57,11 @@ namespace SaberFactory.UI.CustomSaber.Views
         [Inject] private readonly EditorInstanceManager _editorInstanceManager = null;
 
         [Inject] private readonly MainAssetStore _mainAssetStore = null;
+        [Inject] private readonly PluginMetadata _metadata = null;
         [Inject] private readonly PluginConfig _pluginConfig = null;
         [Inject] private readonly List<RemoteLocationPart> _remoteParts = null;
+        [Inject] private readonly SaberFileWatcher _saberFileWatcher = null;
         [Inject] private readonly SaberSet _saberSet = null;
-        [Inject] private readonly PluginMetadata _metadata = null;
         private ModelComposition _currentComposition;
         private PreloadMetaData _currentPreloadMetaData;
         private SaberListDirectoryManager _dirManager;
@@ -96,9 +94,9 @@ namespace SaberFactory.UI.CustomSaber.Views
             _listTitle = "<color=#2f6594>Saber Factory " + _metadata.HVersion + "</color>";
             _saberList.SetText(_listTitle);
             await LoadSabers();
-            
+
             if (CommonHelpers.IsDate(null, 10) &&
-                _pluginConfig.SpecialBackground && 
+                _pluginConfig.SpecialBackground &&
                 _saberList.transform.GetChild(0)?.GetComponent<ImageView>() is { } imageView)
             {
                 imageView.sprite = Utilities.FindSpriteInAssembly("SaberFactory.Resources.UI.halloween_bg.png");
@@ -178,6 +176,14 @@ namespace SaberFactory.UI.CustomSaber.Views
             if (scrollToTop) _saberList.ScrollTo(0);
 
             UpdateUi();
+        }
+
+        public void OnSaberFileUpdate(string filename)
+        {
+            var currentSaberPath = _currentComposition.GetLeft().StoreAsset.RelativePath;
+            if (!filename.Contains(currentSaberPath)) return;
+            Debug.LogError("Saber got updated\n"+filename);
+            if(File.Exists(filename)) ClickedReload();
         }
 
         private async void SaberSelected(object item)
