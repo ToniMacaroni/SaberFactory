@@ -57,7 +57,7 @@ namespace SaberFactory.UI.CustomSaber.Views
         [Inject] private readonly EditorInstanceManager _editorInstanceManager = null;
 
         [Inject] private readonly MainAssetStore _mainAssetStore = null;
-        [Inject] private readonly PluginMetadata _metadata = null;
+        [Inject(Id = nameof(SaberFactory))] private readonly PluginMetadata _metadata = null;
         [Inject] private readonly PluginConfig _pluginConfig = null;
         [Inject] private readonly List<RemoteLocationPart> _remoteParts = null;
         [Inject] private readonly SaberFileWatcher _saberFileWatcher = null;
