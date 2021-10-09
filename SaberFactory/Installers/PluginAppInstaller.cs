@@ -50,7 +50,7 @@ namespace SaberFactory.Installers
 
             Container.Bind<PluginDirectories>().AsSingle();
 
-            Container.BindInstance(_metadata).AsSingle();
+            Container.BindInstance(_metadata).WithId(nameof(SaberFactory)).AsCached();
             Container.BindLoggerAsSiraLogger(_logger);
             Container.BindInstance(_config).AsSingle();
             Container.Bind<PluginManager>().AsSingle();
