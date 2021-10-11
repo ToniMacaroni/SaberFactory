@@ -5,7 +5,7 @@ using IPA.Utilities;
 using UnityEngine;
 using Screen = HMUI.Screen;
 
-namespace SaberFactory.UI
+namespace SaberFactory.UI.Lib
 {
     /// <summary>
     ///     Class to dismiss and present the game ui system

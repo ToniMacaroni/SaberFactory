@@ -11,6 +11,7 @@ using SaberFactory.Models;
 using SaberFactory.Models.CustomSaber;
 using SaberFactory.Saving;
 using SaberFactory.UI.CustomSaber.Views;
+using SaberFactory.UI.Lib;
 using SaberFactory.UI.Lib.BSML;
 using SiraUtil;
 using Zenject;
@@ -57,7 +58,6 @@ namespace SaberFactory.Installers
 
             Container.Bind<PresetSaveManager>().AsSingle();
             Container.BindInterfacesAndSelfTo<TrailConfig>().AsSingle();
-            Container.BindInterfacesAndSelfTo<ThemeManager>().AsSingle();
 
             Container.BindInterfacesAndSelfTo<EmbeddedAssetLoader>().AsSingle();
 

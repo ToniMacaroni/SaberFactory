@@ -1,6 +1,7 @@
 ﻿using BeatSaberMarkupLanguage.Parser;
 using SaberFactory.Helpers;
 using UnityEngine;
+using Zenject;
 
 namespace SaberFactory.UI.Lib
 {
@@ -13,9 +14,11 @@ namespace SaberFactory.UI.Lib
 
         protected string ResourceName => string.Join(".", GetType().Namespace, GetType().Name);
 
+        [Inject] protected readonly BsmlDecorator BsmlDecorator = null;
+
         public virtual void Parse()
         {
-            ParserParams = UIHelpers.ParseFromResource(ResourceName, gameObject, this);
+            ParserParams = BsmlDecorator.ParseFromResource(ResourceName, gameObject, this);
         }
 
         public void Unparse()

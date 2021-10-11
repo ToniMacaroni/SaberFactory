@@ -23,12 +23,14 @@ namespace SaberFactory.UI.Lib
 
         protected SiraLog Logger;
         private bool _firstActivation = true;
+        private BsmlDecorator _bsmlDecorator;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         [Inject]
-        private void Construct(SiraLog logger)
+        private void Construct(SiraLog logger, BsmlDecorator bsmlDecorator)
         {
+            _bsmlDecorator = bsmlDecorator;
             Logger = logger;
         }
 
@@ -36,7 +38,7 @@ namespace SaberFactory.UI.Lib
         {
             if (_firstActivation)
             {
-                ParserParams = await UIHelpers.ParseFromResourceAsync(_resourceName, gameObject, this);
+                ParserParams = await _bsmlDecorator.ParseFromResourceAsync(_resourceName, gameObject, this);
 
                 gameObject.SetActive(false);
                 _firstActivation = false;

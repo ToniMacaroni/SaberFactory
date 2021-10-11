@@ -53,7 +53,7 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
             };
 
             var comp = (BasePropCell)go.AddComponent(cellType);
-            UIHelpers.ParseFromResource(comp.ContentLocation, go, comp);
+            BsmlDecorator.ParseFromResource(comp.ContentLocation, go, comp);
             comp.SetData(data);
             _cells.Add(comp);
         }
