@@ -1,11 +1,11 @@
-﻿using System;
+﻿using BeatSaberMarkupLanguage.Parser;
+using JetBrains.Annotations;
+using SaberFactory.Helpers;
+using SiraUtil.Logging;
+using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using BeatSaberMarkupLanguage.Parser;
-using JetBrains.Annotations;
-using SaberFactory.Helpers;
-using SiraUtil.Tools;
 using UnityEngine;
 using Zenject;
 

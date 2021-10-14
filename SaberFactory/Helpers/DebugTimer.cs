@@ -1,5 +1,5 @@
-﻿using System.Diagnostics;
-using SiraUtil.Tools;
+﻿using SiraUtil.Logging;
+using System.Diagnostics;
 using Debug = UnityEngine.Debug;
 
 namespace SaberFactory.Helpers

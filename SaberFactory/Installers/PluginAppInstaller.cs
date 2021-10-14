@@ -21,11 +21,9 @@ namespace SaberFactory.Installers
     {
         private readonly PluginConfig _config;
         private readonly PluginMetadata _metadata;
-        private readonly Logger _logger;
 
-        private PluginAppInstaller(Logger logger, PluginConfig config, PluginMetadata metadata)
+        private PluginAppInstaller(PluginConfig config, PluginMetadata metadata)
         {
-            _logger = logger;
             _config = config;
             _metadata = metadata;
         }
@@ -51,7 +49,6 @@ namespace SaberFactory.Installers
             Container.Bind<PluginDirectories>().AsSingle();
 
             Container.BindInstance(_metadata).WithId(nameof(SaberFactory)).AsCached();
-            Container.BindLoggerAsSiraLogger(_logger);
             Container.BindInstance(_config).AsSingle();
             Container.Bind<PluginManager>().AsSingle();
 

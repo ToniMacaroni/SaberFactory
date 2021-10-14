@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using CustomSaber;
+﻿using CustomSaber;
 using HarmonyLib;
 using SaberFactory.Configuration;
 using SaberFactory.Helpers;
@@ -9,7 +6,10 @@ using SaberFactory.Instances.CustomSaber;
 using SaberFactory.Instances.PostProcessors;
 using SaberFactory.Instances.Trail;
 using SaberFactory.Models;
-using SiraUtil.Tools;
+using SiraUtil.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Zenject;
 

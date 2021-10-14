@@ -1,7 +1,7 @@
-﻿using System.Threading;
-using HMUI;
+﻿using HMUI;
 using SaberFactory.Helpers;
-using SiraUtil.Tools;
+using SiraUtil.Logging;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;

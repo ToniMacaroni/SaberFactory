@@ -5,7 +5,7 @@ using SaberFactory.Configuration;
 using SaberFactory.Game;
 using SaberFactory.Helpers;
 using SaberFactory.Models;
-using SiraUtil.Interfaces;
+using SiraUtil.Sabers;
 using Zenject;
 
 namespace SaberFactory.Installers
@@ -29,7 +29,7 @@ namespace SaberFactory.Installers
 
             //Container.BindInterfacesAndSelfTo<AFHandler>().AsSingle();
             Container.BindInterfacesAndSelfTo<GameSaberSetup>().AsSingle();
-            Container.Bind<IModelProvider>().To<SFSaberProvider>().AsSingle();
+            Container.BindInstance(SaberModelRegistration.Create<SfSaberModelController>(300)).AsSingle();
 
 
 #if DEBUG && TEST_TRAIL

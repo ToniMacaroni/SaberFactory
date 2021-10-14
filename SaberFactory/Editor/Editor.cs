@@ -1,13 +1,13 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using SaberFactory.Configuration;
+﻿using SaberFactory.Configuration;
 using SaberFactory.HarmonyPatches;
 using SaberFactory.Helpers;
 using SaberFactory.Instances;
 using SaberFactory.Models;
 using SaberFactory.UI;
-using SiraUtil.Tools;
+using SiraUtil.Logging;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
 using Zenject;
 

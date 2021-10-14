@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using CustomSaber;
+﻿using CustomSaber;
 using HarmonyLib;
 using SaberFactory.Helpers;
 using SaberFactory.Instances.PostProcessors;
@@ -7,7 +6,8 @@ using SaberFactory.Instances.Setters;
 using SaberFactory.Instances.Trail;
 using SaberFactory.Models;
 using SaberFactory.Models.CustomSaber;
-using SiraUtil.Tools;
+using SiraUtil.Logging;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace SaberFactory.Instances.CustomSaber

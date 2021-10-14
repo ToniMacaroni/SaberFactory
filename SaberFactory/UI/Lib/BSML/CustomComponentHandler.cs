@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using BeatSaberMarkupLanguage;
+﻿using BeatSaberMarkupLanguage;
 using BeatSaberMarkupLanguage.Macros;
 using BeatSaberMarkupLanguage.Tags;
 using BeatSaberMarkupLanguage.TypeHandlers;
 using SaberFactory.UI.Lib.BSML.Tags;
-using SiraUtil.Tools;
+using SiraUtil.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using Zenject;
 
 namespace SaberFactory.UI.Lib.BSML

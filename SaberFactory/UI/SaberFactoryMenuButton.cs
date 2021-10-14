@@ -1,7 +1,7 @@
-﻿using System;
-using BeatSaberMarkupLanguage;
+﻿using BeatSaberMarkupLanguage;
 using BeatSaberMarkupLanguage.MenuButtons;
-using SiraUtil.Tools;
+using SiraUtil.Logging;
+using System;
 using Zenject;
 
 namespace SaberFactory.UI

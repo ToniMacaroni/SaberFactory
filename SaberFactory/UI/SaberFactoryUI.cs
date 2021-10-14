@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using HMUI;
+﻿using HMUI;
 using IPA.Utilities;
 using SaberFactory.Helpers;
 using SaberFactory.UI.Lib;
-using SiraUtil.Tools;
+using SiraUtil.Logging;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using VRUIControls;

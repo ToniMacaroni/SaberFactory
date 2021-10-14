@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using HarmonyLib;
+﻿using HarmonyLib;
 using SaberFactory.Helpers;
 using SaberFactory.Instances.Trail;
-using SiraUtil.Tools;
+using SiraUtil.Logging;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Object = UnityEngine.Object;
 

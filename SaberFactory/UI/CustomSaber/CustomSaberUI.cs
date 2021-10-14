@@ -1,7 +1,7 @@
 ﻿using SaberFactory.Models;
 using SaberFactory.UI.CustomSaber.Views;
 using SaberFactory.UI.Lib;
-using SiraUtil.Tools;
+using SiraUtil.Logging;
 using UnityEngine;
 using VRUIControls;
 

@@ -8,14 +8,14 @@ namespace SaberFactory.Game
 {
     internal class SaberMovementTester : IInitializable
     {
-        private readonly AudioTimeSyncController _audioController;
         private readonly InitData _initData;
-        private readonly SiraSaber.Factory _saberFactory;
+        private readonly SiraSaberFactory _saberFactory;
+        private readonly AudioTimeSyncController _audioController;
 
         private Transform _movementContainer;
         private SiraSaber _saber;
 
-        private SaberMovementTester(InitData initData, SiraSaber.Factory saberFactory, AudioTimeSyncController audioController)
+        public SaberMovementTester(InitData initData, SiraSaberFactory saberFactory, AudioTimeSyncController audioController)
         {
             _initData = initData;
             _saberFactory = saberFactory;
@@ -32,7 +32,7 @@ namespace SaberFactory.Game
 
             _movementContainer = new GameObject("SaberTester").transform;
             _movementContainer.localPosition = new Vector3(0, 1.5f, 0);
-            _saber = _saberFactory.Create();
+            _saber = _saberFactory.Spawn(SaberType.SaberB);
             _saber.transform.SetParent(_movementContainer, false);
 
             SharedCoroutineStarter.instance.StartCoroutine(AnimationCoroutine());

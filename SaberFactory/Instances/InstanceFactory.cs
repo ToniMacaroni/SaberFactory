@@ -1,6 +1,6 @@
-﻿using System;
-using SaberFactory.Models;
-using SiraUtil.Tools;
+﻿using SaberFactory.Models;
+using SiraUtil.Logging;
+using System;
 using Zenject;
 
 namespace SaberFactory.Instances

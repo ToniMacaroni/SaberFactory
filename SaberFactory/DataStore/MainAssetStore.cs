@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using SaberFactory.Configuration;
+﻿using SaberFactory.Configuration;
 using SaberFactory.Helpers;
 using SaberFactory.Loaders;
 using SaberFactory.Models;
 using SaberFactory.Models.CustomSaber;
-using SiraUtil.Tools;
+using SiraUtil.Logging;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SaberFactory.DataStore
 {

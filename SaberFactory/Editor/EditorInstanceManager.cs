@@ -1,8 +1,8 @@
-﻿using System;
-using SaberFactory.Instances;
+﻿using SaberFactory.Instances;
 using SaberFactory.Models;
 using SaberFactory.Saving;
-using SiraUtil.Tools;
+using SiraUtil.Logging;
+using System;
 using UnityEngine;
 
 namespace SaberFactory.Editor

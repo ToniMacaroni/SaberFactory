@@ -1,11 +1,12 @@
-﻿using System;
+﻿using BeatSaberMarkupLanguage;
+using SaberFactory.Helpers;
+using SaberFactory.UI;
+using SiraUtil.Web;
+using System;
 using System.IO;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using SaberFactory.Helpers;
-using SaberFactory.UI;
-using SiraUtil;
 using UnityEngine;
 
 namespace SaberFactory.Models
@@ -16,11 +17,11 @@ namespace SaberFactory.Models
         private readonly DirectoryInfo _customSaberDir;
         private readonly string _filename;
 
-        private readonly WebClient _webClient;
+        private readonly IHttpService _httpService;
 
-        private RemoteLocationPart(InitData initData, WebClient webClient, PluginDirectories pluginDirs)
+        private RemoteLocationPart(InitData initData, IHttpService httpService, PluginDirectories pluginDirs)
         {
-            _webClient = webClient;
+            _httpService = httpService;
             _customSaberDir = pluginDirs.CustomSaberDir;
 
             RemoteLocation = initData.RemoteLocation;
@@ -31,7 +32,7 @@ namespace SaberFactory.Models
             if (!string.IsNullOrEmpty(initData.CoverPath))
             {
                 var data = Utilities.GetResource(Assembly.GetExecutingAssembly(), initData.CoverPath);
-                ListCover = BeatSaberMarkupLanguage.Utilities.LoadSpriteRaw(data);
+                ListCover = Utilities.LoadSpriteRaw(data);
             }
         }
 
@@ -47,11 +48,11 @@ namespace SaberFactory.Models
         {
             try
             {
-                var response = await _webClient.GetAsync(RemoteLocation, token);
-                if (!response.IsSuccessStatusCode) return default;
+                var response = await _httpService.GetAsync(RemoteLocation, cancellationToken: token);
+                if (!response.Successful) return default;
 
                 var filename = GetFilename();
-                File.WriteAllBytes(_customSaberDir.GetFile(filename).FullName, response.ContentToBytes());
+                File.WriteAllBytes(_customSaberDir.GetFile(filename).FullName, await response.ReadAsByteArrayAsync());
                 return new Tuple<bool, string>(true, "CustomSabers\\" + filename);
             }
             catch (Exception)

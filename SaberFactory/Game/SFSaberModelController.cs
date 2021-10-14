@@ -4,18 +4,13 @@ using SaberFactory.Helpers;
 using SaberFactory.Instances;
 using SaberFactory.Models;
 using SiraUtil.Interfaces;
+using SiraUtil.Logging;
 using SiraUtil.Tools;
 using UnityEngine;
 using Zenject;
 
 namespace SaberFactory.Game
 {
-    public class SFSaberProvider : IModelProvider
-    {
-        public Type Type => typeof(SfSaberModelController);
-        public int Priority => 300;
-    }
-
     internal class SfSaberModelController : SaberModelController, IColorable
     {
         [InjectOptional] private readonly AFHandler _afHandler = null;
@@ -28,13 +23,15 @@ namespace SaberFactory.Game
 
         private SaberInstance _saberInstance;
 
-        public void SetColor(Color color)
+        public Color Color
         {
-            _saberColor = color;
-            _saberInstance.SetColor(color);
+            get => _saberColor.GetValueOrDefault();
+            set
+            {
+                _saberColor = value;
+                _saberInstance.SetColor(value);
+            }
         }
-
-        public Color Color => _saberColor.GetValueOrDefault();
 
         public override async void Init(Transform parent, Saber saber)
         {
@@ -47,7 +44,7 @@ namespace SaberFactory.Game
             _saberInstance = _saberInstanceFactory.Create(saberModel);
             _saberInstance.SetParent(transform);
             _saberInstance.CreateTrail(false, _saberTrail);
-            SetColor(_saberColor ?? _colorManager.ColorForSaberType(_saberInstance.Model.SaberSlot.ToSaberType()));
+            Color = _saberColor ?? _colorManager.ColorForSaberType(_saberInstance.Model.SaberSlot.ToSaberType());
 
             if (_afHandler != null && AFHandler.IsValid && AFHandler.ShouldFire)
             {
