@@ -25,13 +25,12 @@ namespace SaberFactory.UI.CustomSaber.Views
         {
             if (_watcher is { }) StopWatching();
 
-            _watcher = new FileSystemWatcher(_dir.FullName);
+            _watcher = new FileSystemWatcher(_dir.FullName, Filter);
 
-            _watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Attributes | NotifyFilters.LastAccess;
+            _watcher.NotifyFilter = NotifyFilters.LastWrite;  
 
-            _watcher.Changed += WatcherOnChanged;
+            _watcher.Changed += WatcherOnCreated;
 
-            _watcher.Filter = Filter;
             _watcher.IncludeSubdirectories = true;
             _watcher.EnableRaisingEvents = true;
 
@@ -40,7 +39,7 @@ namespace SaberFactory.UI.CustomSaber.Views
             Debug.LogError($"Started watching in {_dir.FullName}");
         }
 
-        private void WatcherOnChanged(object sender, FileSystemEventArgs e)
+        private void WatcherOnCreated(object sender, FileSystemEventArgs e)
         {
             HMMainThreadDispatcher.instance.Enqueue(Initiate(e.FullPath));
         }
@@ -66,7 +65,7 @@ namespace SaberFactory.UI.CustomSaber.Views
         {
             if (_watcher is null) return;
 
-            _watcher.Changed -= WatcherOnChanged;
+            _watcher.Changed -= WatcherOnCreated;
             _watcher.EnableRaisingEvents = false;
             _watcher.Dispose();
             _watcher = null;
