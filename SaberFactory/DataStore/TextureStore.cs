@@ -6,11 +6,8 @@ using SaberFactory.Helpers;
 
 namespace SaberFactory.DataStore
 {
-    internal class TextureStore
+    internal class TextureStore : ILoadingTask
     {
-        public Task CurrentLoadingTask => _currentLoadingTask ?? Task.CompletedTask;
-        public bool IsLoading { get; private set; }
-
         public Task<TextureAsset> this[string path] => GetTexture(path);
 
         private readonly Dictionary<string, TextureAsset> _textureAssets;
@@ -22,6 +19,8 @@ namespace SaberFactory.DataStore
             _textureAssets = new Dictionary<string, TextureAsset>();
             _textureDirectory = pluginDirs.SaberFactoryDir.CreateSubdirectory("Textures");
         }
+
+        public Task CurrentTask { get; private set; }
 
         public async Task<TextureAsset> GetTexture(string path)
         {
@@ -45,14 +44,10 @@ namespace SaberFactory.DataStore
 
         public async Task LoadAllTexturesAsync()
         {
-            if (!IsLoading)
-            {
-                IsLoading = true;
-                _currentLoadingTask = LoadAllTexturesAsyncInternal();
-            }
+            if (CurrentTask is null) CurrentTask = LoadAllTexturesAsyncInternal();
 
-            await _currentLoadingTask;
-            IsLoading = false;
+            await CurrentTask;
+            CurrentTask = null;
         }
 
         public void UnloadAll()

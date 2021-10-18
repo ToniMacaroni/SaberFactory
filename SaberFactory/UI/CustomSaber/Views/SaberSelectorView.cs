@@ -18,6 +18,7 @@ using SaberFactory.Models;
 using SaberFactory.UI.CustomSaber.CustomComponents;
 using SaberFactory.UI.CustomSaber.Popups;
 using SaberFactory.UI.Lib;
+using UnityEngine;
 using Zenject;
 using Debug = UnityEngine.Debug;
 
@@ -62,6 +63,7 @@ namespace SaberFactory.UI.CustomSaber.Views
         [Inject] private readonly List<RemoteLocationPart> _remoteParts = null;
         [Inject] private readonly SaberFileWatcher _saberFileWatcher = null;
         [Inject] private readonly SaberSet _saberSet = null;
+        [Inject] private readonly Serializer _serializer = null;
         private ModelComposition _currentComposition;
         private PreloadMetaData _currentPreloadMetaData;
         private SaberListDirectoryManager _dirManager;
@@ -75,13 +77,11 @@ namespace SaberFactory.UI.CustomSaber.Views
 
         public override void DidOpen()
         {
-            base.DidOpen();
             _editorInstanceManager.OnModelCompositionSet += CompositionDidChange;
         }
 
         public override void DidClose()
         {
-            base.DidClose();
             _editorInstanceManager.OnModelCompositionSet -= CompositionDidChange;
         }
 
@@ -101,6 +101,15 @@ namespace SaberFactory.UI.CustomSaber.Views
             {
                 imageView.sprite = Utilities.FindSpriteInAssembly("SaberFactory.Resources.UI.halloween_bg.png");
                 imageView.overrideSprite = imageView.sprite;
+            }
+        }
+
+        private async void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.N))
+            {
+                File.WriteAllText("Serialized.txt", (await _saberSet.ToJson(_serializer)).ToString());
+                Debug.LogWarning("Serialized");
             }
         }
 
@@ -182,8 +191,8 @@ namespace SaberFactory.UI.CustomSaber.Views
         {
             var currentSaberPath = _currentComposition.GetLeft().StoreAsset.RelativePath;
             if (!filename.Contains(currentSaberPath)) return;
-            Debug.LogError("Saber got updated\n"+filename);
-            if(File.Exists(filename)) ClickedReload();
+            Debug.LogError("Saber got updated\n" + filename);
+            if (File.Exists(filename)) ClickedReload();
         }
 
         private async void SaberSelected(object item)

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Threading.Tasks;
 using IPA.Utilities;
+using SaberFactory.DataStore;
 using UnityEngine;
 
 namespace SaberFactory.Helpers
@@ -46,6 +48,12 @@ namespace SaberFactory.Helpers
         {
             var time = Utils.CanUseDateTimeNowSafely ? DateTime.Now : DateTime.UtcNow;
             return (!day.HasValue || time.Day == day) && (!month.HasValue || time.Month == month);
+        }
+
+        public static async Task WaitForFinish(this ILoadingTask loadingTask)
+        {
+            if (loadingTask.CurrentTask == null) return;
+            await loadingTask.CurrentTask;
         }
     }
 }

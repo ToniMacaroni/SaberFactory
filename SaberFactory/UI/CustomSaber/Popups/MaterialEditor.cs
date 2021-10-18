@@ -10,6 +10,7 @@ using SaberFactory.UI.CustomSaber.CustomComponents;
 using SaberFactory.UI.Lib;
 using UnityEngine;
 using UnityEngine.Rendering;
+using Zenject;
 
 namespace SaberFactory.UI.CustomSaber.Popups
 {
@@ -19,6 +20,8 @@ namespace SaberFactory.UI.CustomSaber.Popups
         [UIComponent("prop-list")] private readonly PropList _propList = null;
 
         [UIValue("materials")] private readonly List<object> _materials = new List<object>();
+
+        [Inject] private readonly ShaderPropertyCache _shaderPropertyCache = null;
 
         public async void Show(MaterialDescriptor materialDescriptor)
         {
@@ -64,7 +67,7 @@ namespace SaberFactory.UI.CustomSaber.Popups
         {
             var props = new List<PropertyDescriptor>();
 
-            var shaderPropertyInfo = new ShaderPropertyInfo(material.shader);
+            var shaderPropertyInfo = _shaderPropertyCache[material.shader];
 
             foreach (var prop in shaderPropertyInfo.GetAll())
             {
@@ -76,7 +79,7 @@ namespace SaberFactory.UI.CustomSaber.Popups
                 {
                     var floatProp = (ShaderPropertyInfo.ShaderFloat)prop;
                     type = EPropertyType.Bool;
-                    var propObject = floatProp.GetValue(material) > 0;
+                    var propObject = (float)floatProp.GetValue(material) > 0;
 
                     void Callback(object obj)
                     {

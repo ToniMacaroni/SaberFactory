@@ -1,0 +1,13 @@
+﻿<horizontal xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+            xsi:noNamespaceSchemaLocation='https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'
+            spacing="38" anchor-min-x="0.2">
+
+    <vertical bg="round-rect-panel" custom-color="$default-panel" pad="3" pref-height="70" pref-width="70" vertical-fit="PreferredSize">
+        <div id="container"></div>
+    </vertical>
+
+    <vertical bg="round-rect-panel" custom-color="$default-panel" pad="3" pref-height="70" pref-width="50">
+        <list id="component-list" list-style="List" select-cell="component-selected"/>
+    </vertical>
+
+</horizontal>

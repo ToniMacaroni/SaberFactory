@@ -64,7 +64,7 @@ namespace SaberFactory.UI.CustomSaber.Views
             {
                 _trailConfig.OnlyUseVertexColor = value;
                 _trailPreviewer.OnlyColorVertex = value;
-            } 
+            }
         }
 
         private bool NoTrailViewActive
@@ -151,7 +151,7 @@ namespace SaberFactory.UI.CustomSaber.Views
             WidthValue = Mathf.Clamp(_instanceTrailData.Width + deltaPos.y * -0.005f, 0, _trailWidthMax);
 
             LengthValue = Mathf.Clamp(_trailFloatLength + deltaPos.x * 0.1f, 0, 30);
-            
+
             ParserParams.EmitEvent("update-proportions");
         }
 

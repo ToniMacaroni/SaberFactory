@@ -34,7 +34,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <None Remove="Resources\assets" Condition="Exists('Resources\assets')"/>
+        <None Remove="Resources\assets" Condition="Exists('Resources\assets')" />
     </ItemGroup>
 
     <ItemGroup>
@@ -56,13 +56,19 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Include="Directory.Build.props" Condition="Exists('Directory.Build.props')"/>
-        <None Include="Directory.Build.targets" Condition="Exists('Directory.Build.targets')"/>
-        <None Include="SaberFactory.Editor.csproj.user" Condition="Exists('SaberFactory.Editor.csproj.user')"/>
+        <None Include="Directory.Build.props" Condition="Exists('Directory.Build.props')" />
+        <None Include="Directory.Build.targets" Condition="Exists('Directory.Build.targets')" />
+        <None Include="SaberFactory.Editor.csproj.user" Condition="Exists('SaberFactory.Editor.csproj.user')" />
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="ThirdParty\"/>
+        <Folder Include="ThirdParty\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Include="..\SaberFactory\ProjectComponents\MaterialModifier.cs">
+        <Link>MaterialModifier.cs</Link>
+      </Compile>
     </ItemGroup>
 
 </Project>

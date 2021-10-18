@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -7,11 +8,11 @@ namespace SaberFactory.Helpers
 {
     internal class ShaderPropertyInfo
     {
-        public List<ShaderColor> Colors = new List<ShaderColor>();
-        public List<ShaderFloat> Floats = new List<ShaderFloat>();
-        public List<ShaderRange> Ranges = new List<ShaderRange>();
-        public List<ShaderTexture> Textures = new List<ShaderTexture>();
-        public List<ShaderVector> Vectors = new List<ShaderVector>();
+        public readonly List<ShaderColor> Colors = new List<ShaderColor>();
+        public readonly List<ShaderFloat> Floats = new List<ShaderFloat>();
+        public readonly List<ShaderRange> Ranges = new List<ShaderRange>();
+        public readonly List<ShaderTexture> Textures = new List<ShaderTexture>();
+        public readonly List<ShaderVector> Vectors = new List<ShaderVector>();
 
         public ShaderPropertyInfo(Shader shader)
         {
@@ -83,13 +84,13 @@ namespace SaberFactory.Helpers
             }
         }
 
-        internal class ShaderFloat : BaseProperty<float>
+        internal class ShaderFloat : BaseProperty
         {
             public ShaderFloat(Shader shader, int idx) : base(shader, idx)
             {
             }
 
-            public override float GetValue(Material mat)
+            public override object GetValue(Material mat)
             {
                 return mat.GetFloat(PropId);
             }
@@ -98,15 +99,20 @@ namespace SaberFactory.Helpers
             {
                 mat.SetFloat(PropId, (float)value);
             }
+
+            public override void FromJson(JToken token, Material mat, params object[] args)
+            {
+                SetValue(mat, token.ToObject<float>());
+            }
         }
 
-        internal class ShaderVector : BaseProperty<Vector4>
+        internal class ShaderVector : BaseProperty
         {
             public ShaderVector(Shader shader, int idx) : base(shader, idx)
             {
             }
 
-            public override Vector4 GetValue(Material mat)
+            public override object GetValue(Material mat)
             {
                 return mat.GetVector(PropId);
             }
@@ -115,15 +121,25 @@ namespace SaberFactory.Helpers
             {
                 mat.SetVector(PropId, (Vector4)value);
             }
+
+            public override void FromJson(JToken token, Material mat, params object[] args)
+            {
+                SetValue(mat, token.ToObject<Vector4>(Serializer.JsonSerializer));
+            }
+
+            public override JToken ToJson(Material mat)
+            {
+                return JArray.FromObject(GetValue(mat), Serializer.JsonSerializer);
+            }
         }
 
-        internal class ShaderTexture : BaseProperty<Texture>
+        internal class ShaderTexture : BaseProperty
         {
             public ShaderTexture(Shader shader, int idx) : base(shader, idx)
             {
             }
 
-            public override Texture GetValue(Material mat)
+            public override object GetValue(Material mat)
             {
                 return mat.GetTexture(PropId);
             }
@@ -132,15 +148,27 @@ namespace SaberFactory.Helpers
             {
                 mat.SetTexture(PropId, (Texture)value);
             }
+
+            public override void FromJson(JToken token, Material mat, params object[] args)
+            {
+                if (args[0] is null) return;
+                SetValue(mat, args[0]);
+            }
+
+            public override JToken ToJson(Material mat)
+            {
+                var tex = (Texture)GetValue(mat);
+                return JToken.FromObject(tex.name);
+            }
         }
 
-        internal class ShaderColor : BaseProperty<Color>
+        internal class ShaderColor : BaseProperty
         {
             public ShaderColor(Shader shader, int idx) : base(shader, idx)
             {
             }
 
-            public override Color GetValue(Material mat)
+            public override object GetValue(Material mat)
             {
                 return mat.GetColor(PropId);
             }
@@ -149,17 +177,16 @@ namespace SaberFactory.Helpers
             {
                 mat.SetColor(PropId, (Color)color);
             }
-        }
 
-        internal abstract class BaseProperty<T> : BaseProperty
-        {
-            protected BaseProperty(Shader shader, int idx) : base(shader, idx)
+            public override void FromJson(JToken token, Material mat, params object[] args)
             {
+                SetValue(mat, token.ToObject<Color>(Serializer.JsonSerializer));
             }
 
-            public abstract T GetValue(Material mat);
-
-            public abstract void SetValue(Material mat, object value);
+            public override JToken ToJson(Material mat)
+            {
+                return JArray.FromObject(GetValue(mat), Serializer.JsonSerializer);
+            }
         }
 
         internal abstract class BaseProperty
@@ -189,6 +216,20 @@ namespace SaberFactory.Helpers
             public bool HasAttribute(string name)
             {
                 return Attributes.Contains(name);
+            }
+
+            public abstract object GetValue(Material mat);
+
+            public abstract void SetValue(Material mat, object newValue);
+
+            public virtual void FromJson(JToken token, Material mat, params object[] args)
+            {
+                SetValue(mat, token.ToObject<object>());
+            }
+
+            public virtual JToken ToJson(Material mat)
+            {
+                return JToken.FromObject(GetValue(mat));
             }
         }
     }

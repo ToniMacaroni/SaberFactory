@@ -5,6 +5,7 @@
         Saber,
         Trail,
         Settings,
-        Transform
+        Transform,
+        Modifier
     }
 }

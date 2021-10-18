@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using CustomSaber;
+using Newtonsoft.Json.Linq;
 using SaberFactory.DataStore;
 using SaberFactory.Helpers;
 using SaberFactory.Instances;
@@ -170,6 +172,19 @@ namespace SaberFactory.Models.CustomSaber
 
             trail.PointStart.SetParent(Prefab.transform, true);
             trail.PointEnd.SetParent(Prefab.transform, true);
+        }
+
+        public override async Task FromJson(JObject obj, Serializer serializer)
+        {
+            await base.FromJson(obj, serializer);
+            if (HasTrail) await TrailModel.FromJson((JObject)obj[nameof(TrailModel)], serializer);
+        }
+
+        public override async Task<JToken> ToJson(Serializer serializer)
+        {
+            var obj = (JObject)await base.ToJson(serializer);
+            if (HasTrail) obj.Add(nameof(TrailModel), await TrailModel.ToJson(serializer));
+            return obj;
         }
 
         internal class Factory : PlaceholderFactory<StoreAsset, CustomSaberModel>

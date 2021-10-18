@@ -20,6 +20,7 @@ namespace SaberFactory.UI.CustomSaber.Views
             _trailSettingsView = AddView<TrailSettingsView>();
             _settingsView = AddView<SettingsView>();
             _transformSettingsView = AddView<TransformSettingsView>();
+            _modifiersSelectionView = AddView<MainModifierPanelView>();
         }
 
         public void ChangeCategory(ENavigationCategory category)
@@ -45,6 +46,7 @@ namespace SaberFactory.UI.CustomSaber.Views
         private TrailSettingsView _trailSettingsView;
         private SettingsView _settingsView;
         private TransformSettingsView _transformSettingsView;
+        private MainModifierPanelView _modifiersSelectionView;
 
         #endregion
     }

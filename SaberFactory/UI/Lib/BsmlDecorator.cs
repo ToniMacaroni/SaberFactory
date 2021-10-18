@@ -13,19 +13,23 @@ namespace SaberFactory.UI.Lib
 {
     internal class BsmlDecorator
     {
-        private readonly Dictionary<string, string> _templates = new Dictionary<string, string>();
-
-        private readonly Dictionary<string, Func<BsmlDecorator, string[], string>> _templateHandlers = new Dictionary<string, Func<BsmlDecorator, string[], string>>
-        {
-            {"color-template", (dec, args) => TryReplacingWithColor(args[0], out _) },
-            {"template", (dec, args) => dec._templates.TryGetValue(args[0], out var template) ? template : "" },
-            {"file", (dec, args) =>
+        private readonly Dictionary<string, Func<BsmlDecorator, string[], string>> _templateHandlers =
+            new Dictionary<string, Func<BsmlDecorator, string[], string>>
             {
-                var data = Readers.ReadResource(args[0]);
-                var content = Encoding.UTF8.GetString(data, 3, data.Length - 3);
-                return dec.Process(content);
-            }}
-        };
+                { "put", (dec, args) => args[0] },
+                { "color-template", (dec, args) => TryReplacingWithColor(args[0], out _) },
+                { "template", (dec, args) => dec._templates.TryGetValue(args[0], out var template) ? template : "" },
+                {
+                    "file", (dec, args) =>
+                    {
+                        var data = Readers.ReadResource(args[0]);
+                        var content = Encoding.UTF8.GetString(data, 3, data.Length - 3);
+                        return dec.Process(content);
+                    }
+                }
+            };
+
+        private readonly Dictionary<string, string> _templates = new Dictionary<string, string>();
 
         public void AddTemplateHandler(string name, Func<BsmlDecorator, string[], string> action)
         {
@@ -34,7 +38,7 @@ namespace SaberFactory.UI.Lib
                 _templateHandlers[name] = action;
                 return;
             }
-            
+
             _templateHandlers.Add(name, action);
         }
 
@@ -45,7 +49,7 @@ namespace SaberFactory.UI.Lib
                 _templates[name] = template;
                 return;
             }
-            
+
             _templates.Add(name, template);
         }
 
@@ -56,7 +60,7 @@ namespace SaberFactory.UI.Lib
             content = Process(content);
             return BSMLParser.instance.Parse(content, parent, host);
         }
-        
+
         public BSMLParserParams ParseFromResource(string resourceName, GameObject parent, object host)
         {
             var data = Readers.ReadResource(resourceName);
@@ -64,39 +68,69 @@ namespace SaberFactory.UI.Lib
             content = Process(content);
             return BSMLParser.instance.Parse(content, parent, host);
         }
+        
+        public BSMLParserParams ParseFromString(string content, GameObject parent, object host)
+        {
+            content = Process(content);
+            return BSMLParser.instance.Parse(content, parent, host);
+        }
 
         public string Process(string content)
         {
+            var varList = new Dictionary<string, string>();
+
             var pos = 0;
             while (pos < content.Length)
             {
                 if (content[pos] == '{')
                 {
-                    string charBuffer = "";
-                    for (int j = pos+1; j < content.Length; j++)
+                    var charBuffer = "";
+                    for (var j = pos + 1; j < content.Length; j++)
                     {
                         if (content[j] == '}') break;
                         charBuffer += content[j];
                     }
 
                     content = content.Remove(pos, charBuffer.Length + 2);
-                    var template = ProcessTemplate(charBuffer);
+                    var template = ProcessTemplate(charBuffer, varList);
                     content = content.Insert(pos, template);
                     pos += template.Length;
                     continue;
                 }
+
                 pos++;
             }
+
             return content;
         }
 
-        private string ProcessTemplate(string template)
+        private string ProcessTemplate(string template, Dictionary<string, string> varList)
         {
             var split = template.Split(';');
-            if (_templateHandlers.TryGetValue(split[0], out var action))
+
+            // Register var
+            if (split[0] == "var")
             {
-                return action(this, split.Skip(1).ToArray());
+                varList.Add(split[1], split[2]);
+                return "";
             }
+
+            // Replace with var
+            if (split.Length > 1)
+                for (var i = 1; i < split.Length; i++)
+                    if (split[i].StartsWith("&"))
+                    {
+                        var varname = split[i].Substring(1);
+                        if (!varList.TryGetValue(varname, out var varValue))
+                        {
+                            Debug.LogError($"Var {varname} not found");
+                            return "";
+                        }
+
+                        split[i] = varValue;
+                    }
+
+            if (_templateHandlers.TryGetValue(split[0], out var action)) return action(this, split.Skip(1).ToArray());
             return "";
         }
 
@@ -107,7 +141,7 @@ namespace SaberFactory.UI.Lib
             if (ThemeManager.GetDefinedColor(input.Substring(1), out var color))
             {
                 replaced = true;
-                return "#"+ColorUtility.ToHtmlStringRGBA(color);
+                return "#" + ColorUtility.ToHtmlStringRGBA(color);
             }
 
             replaced = true;

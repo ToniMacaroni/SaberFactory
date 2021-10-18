@@ -61,7 +61,7 @@ namespace SaberFactory.Configuration
         // List of sabers / parts marked as favorite
         [UseConverter(typeof(ListConverter<string>))]
         public List<string> Favorites { get; set; } = new List<string>();
-        
+
         [Ignore] public bool RuntimeFirstLaunch;
 
         /// <summary>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using SaberFactory.Helpers;
 using SaberFactory.Instances;
 using SaberFactory.Models;
 using UnityEngine;
@@ -21,7 +22,7 @@ namespace SaberFactory
 
         public async Task<SaberInstance> CreateSaber(Transform parent, SaberType saberType, Color color, bool createTrail)
         {
-            if (_saberSet.CurrentLoadingTask != null) await _saberSet.CurrentLoadingTask;
+            await _saberSet.WaitForFinish();
 
             var saberModel = saberType == SaberType.SaberA ? _saberSet.LeftSaber : _saberSet.RightSaber;
 

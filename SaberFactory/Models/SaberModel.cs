@@ -1,4 +1,8 @@
-﻿using SaberFactory.Models.CustomSaber;
+﻿using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using SaberFactory.Helpers;
+using SaberFactory.Models.CustomSaber;
 using SaberFactory.Saving;
 
 namespace SaberFactory.Models
@@ -6,14 +10,15 @@ namespace SaberFactory.Models
     /// <summary>
     ///     Stores information on how to build a saber instance
     /// </summary>
-    internal class SaberModel
+    [JsonObject(MemberSerialization.OptIn)]
+    internal class SaberModel : IFactorySerializable
     {
         public bool IsEmpty => PieceCollection.PieceCount == 0;
         public readonly PieceCollection<BasePieceModel> PieceCollection;
 
         public readonly ESaberSlot SaberSlot;
 
-        [MapSerialize] public float SaberWidth = 1;
+        [JsonProperty] [MapSerialize] public float SaberWidth = 1;
 
         public TrailModel TrailModel;
 
@@ -22,6 +27,35 @@ namespace SaberFactory.Models
             SaberSlot = saberSlot;
 
             PieceCollection = new PieceCollection<BasePieceModel>();
+        }
+
+        public async Task FromJson(JObject obj, Serializer serializer)
+        {
+            obj.Populate(this);
+            var piecesTkn = obj.Property(nameof(PieceCollection));
+            if (piecesTkn != null)
+            {
+                var pieceList = (JArray)piecesTkn.Value;
+                foreach (var pieceTkn in pieceList)
+                {
+                    var piece = await serializer.LoadPiece(pieceTkn["Path"]);
+                    if (piece == null) continue;
+                    PieceCollection.AddPiece(piece.AssetTypeDefinition, piece.GetPiece(SaberSlot));
+                    await piece.GetLeft()?.FromJson((JObject)pieceTkn, serializer);
+                }
+            }
+        }
+
+        public async Task<JToken> ToJson(Serializer serializer)
+        {
+            var obj = JObject.FromObject(this);
+
+            var pieceList = new JArray();
+
+            foreach (BasePieceModel pieceModel in PieceCollection) pieceList.Add(await pieceModel.ToJson(serializer));
+
+            obj.Add(nameof(PieceCollection), pieceList);
+            return obj;
         }
 
         public void SetModelComposition(ModelComposition composition)

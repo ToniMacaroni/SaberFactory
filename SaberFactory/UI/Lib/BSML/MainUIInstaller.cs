@@ -19,12 +19,12 @@ namespace SaberFactory.UI.Lib.BSML
             container
                 .BindFactory<CustomScreen.InitData, CustomScreen, CustomScreen.Factory>()
                 .FromFactory<ScreenFactory>();
-            
+
             container.BindInterfacesAndSelfTo<BsmlDecorator>().AsSingle();
             BindUiFactory<Popup, Popup.Factory>(container);
             BindUiFactory<CustomUiComponent, CustomUiComponent.Factory>(container);
         }
-        
+
         private static FactoryToChoiceIdBinder<GameObject, Type, T> BindUiFactory<T, TFactory>(DiContainer container)
         {
             var bindStatement = container.StartBinding();

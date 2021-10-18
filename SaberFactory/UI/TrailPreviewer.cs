@@ -27,10 +27,7 @@ namespace SaberFactory.UI
 
         public bool OnlyColorVertex
         {
-            set
-            {
-                _sections.Do(x=>x.OnlyColorVertex = value);
-            }
+            set { _sections.Do(x => x.OnlyColorVertex = value); }
         }
 
         private readonly SiraLog _logger;
@@ -60,13 +57,14 @@ namespace SaberFactory.UI
         {
             _sections.Clear();
             var (pointStart, pointEnd) = trailData.GetPoints();
-            _sections.Add(new TrailPreviewSection(0, parent, pointStart, pointEnd, _prefab){OnlyColorVertex = onlyColorVertex});
+            _sections.Add(new TrailPreviewSection(0, parent, pointStart, pointEnd, _prefab) { OnlyColorVertex = onlyColorVertex });
 
             for (var i = 0; i < trailData.SecondaryTrails.Count; i++)
             {
                 var trail = trailData.SecondaryTrails[i];
                 if (trail.Trail.PointStart is null || trail.Trail.PointEnd is null) continue;
-                _sections.Add(new TrailPreviewSection(i + 1, parent, trail.Trail.PointStart, trail.Trail.PointEnd, _prefab, trail){OnlyColorVertex = onlyColorVertex});
+                _sections.Add(new TrailPreviewSection(i + 1, parent, trail.Trail.PointStart, trail.Trail.PointEnd, _prefab, trail)
+                    { OnlyColorVertex = onlyColorVertex });
             }
 
 
@@ -112,11 +110,11 @@ namespace SaberFactory.UI
         {
             public int TrailIdx { get; }
             public bool IsPrimaryTrail => TrailIdx == 0;
+            public bool OnlyColorVertex;
 
             private readonly GameObject _instance;
             private readonly Mesh _mesh;
             private readonly Transform _pointEnd;
-            public bool OnlyColorVertex;
 
             private readonly Transform _pointStart;
             private readonly Renderer _renderer;
@@ -161,7 +159,7 @@ namespace SaberFactory.UI
 
             public void SetColor(Color color)
             {
-                if (_renderer.sharedMaterial is {})
+                if (_renderer.sharedMaterial is { })
                 {
                     var mat = _renderer.sharedMaterial;
                     if (mat.HasCustomColorsEnabled() && !OnlyColorVertex) mat.SetMainColor(color);

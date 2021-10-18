@@ -23,7 +23,7 @@ namespace SaberFactory.UI.Lib.BSML
             { "raycast", new[] { "raycast", "block" } },
             { "skew", new[] { "skew" } },
             { "customColor", new[] { "custom-color" } },
-            { "custom_bg", new[] { "custom_bg" } }
+            { "customBg", new[] { "custom-bg" } }
         };
 
         public override Dictionary<string, Action<Backgroundable, string>> Setters => new Dictionary<string, Action<Backgroundable, string>>();
@@ -50,7 +50,7 @@ namespace SaberFactory.UI.Lib.BSML
             base.HandleType(componentType, parserParams);
             var backgroundable = (Backgroundable)componentType.component;
 
-            if (componentType.data.TryGetValue("custom_bg", out var customBg))
+            if (componentType.data.TryGetValue("customBg", out var customBg))
             {
                 InitSprite();
                 var imageview = GetOrAddImageView(backgroundable);

@@ -55,7 +55,7 @@ namespace SaberFactory.UI.Lib
                 _canvasGroup.alpha = 1;
             }
 
-            if(fadeParents) FadeParentCanvases();
+            if (fadeParents) FadeParentCanvases();
         }
 
         protected async Task Hide(bool animated)

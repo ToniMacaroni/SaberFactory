@@ -12,7 +12,6 @@ using SaberFactory.Models;
 using SiraUtil.Tools;
 using UnityEngine;
 using Zenject;
-using Object = System.Object;
 
 namespace SaberFactory.Instances
 {

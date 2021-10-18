@@ -1,7 +1,6 @@
 ﻿using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components.Settings;
 using SaberFactory.UI.Lib.BSML;
-using UnityEngine;
 using UnityEngine.UI;
 
 namespace SaberFactory.UI.Lib.PropCells

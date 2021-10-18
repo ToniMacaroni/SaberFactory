@@ -14,10 +14,10 @@ namespace SaberFactory.Instances
     internal class BasePieceInstance : IDisposable
     {
         public PropertyBlockSetterHandler PropertyBlockSetterHandler { get; protected set; }
+        public readonly Transform CachedTransform;
+        public readonly GameObject GameObject;
 
         public readonly BasePieceModel Model;
-        public Transform CachedTransform;
-        public GameObject GameObject;
 
         private List<Material> _colorableMaterials;
 
@@ -26,6 +26,7 @@ namespace SaberFactory.Instances
             Model = model;
             GameObject = Instantiate();
             CachedTransform = GameObject.transform;
+            model.ModifyableComponentManager.SetInstance(GameObject);
         }
 
         public virtual void Dispose()

@@ -15,16 +15,13 @@ namespace SaberFactory.DataStore
     /// <summary>
     ///     Class for managing store assets ie. parts and custom sabers
     /// </summary>
-    internal class MainAssetStore : IDisposable
+    internal class MainAssetStore : IDisposable, ILoadingTask
     {
-        public bool IsLoading { get; private set; }
-
         public List<string> AdditionalCustomSaberFolders { get; } = new List<string>();
 
         public Task<ModelComposition> this[string path] => GetCompositionByPath(path);
 
         public Task<ModelComposition> this[PreloadMetaData metaData] => GetCompositionByPath(metaData.AssetMetaPath.RelativePath);
-        public Task CurrentTask;
 
         private readonly PluginConfig _config;
 
@@ -66,6 +63,8 @@ namespace SaberFactory.DataStore
             UnloadAll();
         }
 
+        public Task CurrentTask { get; private set; }
+
         public async Task<ModelComposition> GetCompositionByPath(string relativePath)
         {
             if (_modelCompositions.TryGetValue(relativePath, out var result)) return result;
@@ -85,14 +84,10 @@ namespace SaberFactory.DataStore
 
         public async Task LoadAllCustomSaberMetaDataAsync()
         {
-            if (!IsLoading)
-            {
-                IsLoading = true;
-                CurrentTask = LoadAllMetaDataForLoader(_customSaberAssetLoader, true);
-            }
+            if (CurrentTask == null) CurrentTask = LoadAllMetaDataForLoader(_customSaberAssetLoader, true);
 
             await CurrentTask;
-            IsLoading = false;
+            CurrentTask = null;
         }
 
         public IEnumerable<PreloadMetaData> GetAllMetaData()

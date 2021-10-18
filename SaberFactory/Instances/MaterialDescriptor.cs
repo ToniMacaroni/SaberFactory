@@ -16,8 +16,6 @@ namespace SaberFactory.Instances
 
         public MaterialDescriptor(Material material)
         {
-            if (material == null) return;
-
             Material = material;
             _originalMaterial = new Material(material);
         }

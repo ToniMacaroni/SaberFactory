@@ -35,8 +35,8 @@ namespace SaberFactory.UI.CustomSaber
 
             var navigationInitData = new CustomScreen.InitData(
                 "Navigation Screen",
-                new Vector3(-90, 0, 0),
-                Quaternion.Euler(0, 305, 0),
+                new Vector3(-95, -1.5f, 0),
+                Quaternion.identity,
                 new Vector2(30, 70),
                 true
             );

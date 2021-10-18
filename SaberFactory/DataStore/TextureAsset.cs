@@ -21,12 +21,9 @@ namespace SaberFactory.DataStore
             Name = name;
             Path = path;
             Texture = texture;
-            
-            if (name.ToLower().Contains("_clamp"))
-            {
-                Texture.wrapMode = TextureWrapMode.Clamp;
-            }
-            
+
+            if (name.ToLower().Contains("_clamp")) Texture.wrapMode = TextureWrapMode.Clamp;
+
             Origin = origin;
         }
 
