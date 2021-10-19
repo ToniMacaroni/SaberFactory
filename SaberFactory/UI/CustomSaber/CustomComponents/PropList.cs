@@ -18,18 +18,28 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
         public void SetItems(IEnumerable<PropertyDescriptor> props)
         {
             Clear();
-            foreach (var propertyDescriptor in props) AddCell(propertyDescriptor);
+            foreach (var propertyDescriptor in props)
+            {
+                AddCell(propertyDescriptor);
+            }
         }
 
         public void Clear()
         {
-            foreach (Transform t in _itemContainer.transform) t.gameObject.TryDestroy();
+            foreach (Transform t in _itemContainer.transform)
+            {
+                t.gameObject.TryDestroy();
+            }
+
             _cells.Clear();
         }
 
         public void AddCell(PropertyDescriptor data)
         {
-            if (data.PropObject == null) return;
+            if (data.PropObject == null)
+            {
+                return;
+            }
 
             var go = _itemContainer.CreateGameObject("PropCell");
             go.AddComponent<RectTransform>();

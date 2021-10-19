@@ -68,7 +68,7 @@ namespace SaberFactory.UI.Lib
             content = Process(content);
             return BSMLParser.instance.Parse(content, parent, host);
         }
-        
+
         public BSMLParserParams ParseFromString(string content, GameObject parent, object host)
         {
             content = Process(content);
@@ -87,7 +87,11 @@ namespace SaberFactory.UI.Lib
                     var charBuffer = "";
                     for (var j = pos + 1; j < content.Length; j++)
                     {
-                        if (content[j] == '}') break;
+                        if (content[j] == '}')
+                        {
+                            break;
+                        }
+
                         charBuffer += content[j];
                     }
 
@@ -117,7 +121,9 @@ namespace SaberFactory.UI.Lib
 
             // Replace with var
             if (split.Length > 1)
+            {
                 for (var i = 1; i < split.Length; i++)
+                {
                     if (split[i].StartsWith("&"))
                     {
                         var varname = split[i].Substring(1);
@@ -129,15 +135,25 @@ namespace SaberFactory.UI.Lib
 
                         split[i] = varValue;
                     }
+                }
+            }
 
-            if (_templateHandlers.TryGetValue(split[0], out var action)) return action(this, split.Skip(1).ToArray());
+            if (_templateHandlers.TryGetValue(split[0], out var action))
+            {
+                return action(this, split.Skip(1).ToArray());
+            }
+
             return "";
         }
 
         private static string TryReplacingWithColor(string input, out bool replaced)
         {
             replaced = false;
-            if (input[0] != '$') return input;
+            if (input[0] != '$')
+            {
+                return input;
+            }
+
             if (ThemeManager.GetDefinedColor(input.Substring(1), out var color))
             {
                 replaced = true;

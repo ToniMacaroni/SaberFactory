@@ -7,22 +7,23 @@ using VRUIControls;
 
 namespace SaberFactory.UI.CustomSaber
 {
-    internal class CustomSaberUI : SaberFactoryUI
+    internal class CustomSaberUiComposition : BaseUiComposition
     {
         private readonly SaberSet _saberSet;
 
-        protected CustomSaberUI(
+        protected CustomSaberUiComposition(
             SiraLog logger,
             CustomScreen.Factory screenFactory,
             BaseGameUiHandler baseGameUiHandler,
             PhysicsRaycasterWithCache physicsRaycaster,
+            BsmlDecorator bsmlDecorator,
             SaberSet saberSet)
-            : base(logger, screenFactory, baseGameUiHandler, physicsRaycaster)
+            : base(logger, screenFactory, baseGameUiHandler, physicsRaycaster, bsmlDecorator)
         {
             _saberSet = saberSet;
         }
 
-        public override void SetupUI()
+        protected override void SetupUI()
         {
             var mainScreenInitData = new CustomScreen.InitData
             (
@@ -35,7 +36,7 @@ namespace SaberFactory.UI.CustomSaber
 
             var navigationInitData = new CustomScreen.InitData(
                 "Navigation Screen",
-                new Vector3(-95, -1.5f, 0),
+                new Vector3(-95, 0, 0),
                 Quaternion.identity,
                 new Vector2(30, 70),
                 true

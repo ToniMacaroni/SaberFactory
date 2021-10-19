@@ -28,7 +28,11 @@ namespace SaberFactory.Saving
         public async Task LoadSaber(SaberSet saberSet, string fileName)
         {
             var file = _presetDir.GetFile(fileName);
-            if (!file.Exists) return;
+            if (!file.Exists)
+            {
+                return;
+            }
+
             await saberSet.LoadFromFile(_serializer, file.FullName);
             OnSaberLoaded?.Invoke();
         }

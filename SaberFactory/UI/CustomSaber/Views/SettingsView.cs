@@ -75,7 +75,10 @@ namespace SaberFactory.UI.CustomSaber.Views
         private async void Setup()
         {
             var release = await _pluginManager.GetNewestReleaseAsync(CancellationToken.None);
-            if (release != null && !release.IsLocalNewest) _githubButton.SetActive(true);
+            if (release != null && !release.IsLocalNewest)
+            {
+                _githubButton.SetActive(true);
+            }
         }
 
         [UIAction("profile-clicked")]
@@ -94,7 +97,11 @@ namespace SaberFactory.UI.CustomSaber.Views
         private async void GithubClicked()
         {
             var release = await _pluginManager.GetNewestReleaseAsync(CancellationToken.None);
-            if (release == null) return;
+            if (release == null)
+            {
+                return;
+            }
+
             _changelogPopup.Show(release);
         }
     }

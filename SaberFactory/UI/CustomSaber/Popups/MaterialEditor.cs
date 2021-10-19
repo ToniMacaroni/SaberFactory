@@ -73,7 +73,10 @@ namespace SaberFactory.UI.CustomSaber.Popups
             {
                 EPropertyType type;
 
-                if (prop.HasAttribute(MaterialAttributes.HideInSf)) continue;
+                if (prop.HasAttribute(MaterialAttributes.HideInSf))
+                {
+                    continue;
+                }
 
                 if (prop.Attributes.Contains("MaterialToggle") || prop.Name == "_CustomColors")
                 {
@@ -92,7 +95,10 @@ namespace SaberFactory.UI.CustomSaber.Popups
                 {
                     type = GetTypeFromShaderType(prop.Type);
 
-                    if (type == EPropertyType.Unhandled) continue;
+                    if (type == EPropertyType.Unhandled)
+                    {
+                        continue;
+                    }
 
                     var propObject = GetPropObject(prop.Type, prop.PropId, material);
                     var callback = ConstructCallback(prop.Type, prop.PropId, material);
@@ -100,9 +106,13 @@ namespace SaberFactory.UI.CustomSaber.Popups
                     var propertyDescriptor = new PropertyDescriptor(prop.Description, type, propObject, callback);
 
                     if (prop is ShaderPropertyInfo.ShaderRange range)
+                    {
                         propertyDescriptor.AddtionalData = new Vector2(range.Min, range.Max);
+                    }
                     else if (prop is ShaderPropertyInfo.ShaderTexture)
+                    {
                         propertyDescriptor.AddtionalData = !prop.HasAttribute(MaterialAttributes.SfNoPreview);
+                    }
 
                     props.Add(propertyDescriptor);
                 }

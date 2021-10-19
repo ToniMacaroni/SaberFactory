@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
-using BeatSaberMarkupLanguage.Tags;
 using HarmonyLib;
 using ModestTree;
 using Newtonsoft.Json.Linq;
@@ -13,17 +11,14 @@ namespace SaberFactory.Helpers
 {
     internal class BaseComponentModifier : IFactorySerializable
     {
+        public Type ComponentType { get; }
+
+        public string GoName { get; }
+
+        public string TypeName { get; }
         public readonly int Index;
 
         private readonly List<(ComponentValueAttribute, PropertyInfo)> _updateProps = new List<(ComponentValueAttribute, PropertyInfo)>();
-        
-        public Type ViewType { get; }
-        
-        public Type ComponentType { get; } 
-        
-        public string GoName { get; }
-        
-        public string TypeName { get; }
 
         protected BaseComponentModifier(Component component, int index)
         {
@@ -49,22 +44,35 @@ namespace SaberFactory.Helpers
         public async Task<JToken> ToJson(Serializer serializer)
         {
             var obj = new JObject();
-            foreach (var prop in _updateProps) obj.Add(prop.Item2.Name, JToken.FromObject(prop.Item2.GetValue(this)));
+            foreach (var prop in _updateProps)
+            {
+                obj.Add(prop.Item2.Name, JToken.FromObject(prop.Item2.GetValue(this)));
+            }
 
             return obj;
         }
 
         public virtual void SetInstance(Component instanceComponent)
         {
-            foreach (var prop in _updateProps) if(prop.Item1.AutoInit) prop.Item2.SetValue(this, prop.Item2.GetValue(this));
+            foreach (var prop in _updateProps)
+            {
+                if (prop.Item1.AutoInit)
+                {
+                    prop.Item2.SetValue(this, prop.Item2.GetValue(this));
+                }
+            }
         }
 
         private void GetUpateProps()
         {
             foreach (var property in AccessTools.GetDeclaredProperties(GetType()))
             {
-                if (!property.HasAttribute(typeof(ComponentValueAttribute))) continue;
-                if (property.GetAttribute<ComponentValueAttribute>() is {} attr)
+                if (!property.HasAttribute(typeof(ComponentValueAttribute)))
+                {
+                    continue;
+                }
+
+                if (property.GetAttribute<ComponentValueAttribute>() is { } attr)
                 {
                     _updateProps.Add((attr, property));
                 }
@@ -89,7 +97,7 @@ namespace SaberFactory.Helpers
             public bool AutoInit = true;
         }
     }
-    
+
     internal class BaseComponentModifier<T> : BaseComponentModifier where T : Component
     {
         public T Component { get; private set; }

@@ -113,18 +113,29 @@ namespace SaberFactory.UI.Lib.BSML
                     }
 
                     if (!string.IsNullOrEmpty(cellData.RightText))
+                    {
                         songDurationText.gameObject.SetActive(false);
+                    }
                     else
+                    {
                         songDurationText.text = cellData.RightText;
+                    }
 
                     if (!string.IsNullOrEmpty(cellData.RightBottomText))
+                    {
                         songBpmText.gameObject.SetActive(false);
+                    }
                     else
+                    {
                         songBpmText.text = cellData.RightBottomText;
+                    }
 
                     favoriteImage.enabled = cellData.IsFavorite;
 
-                    if (cellData.IsFavorite) favoriteImage.color = HeartColor;
+                    if (cellData.IsFavorite)
+                    {
+                        favoriteImage.color = HeartColor;
+                    }
 
                     tableCell.transform.Find("BpmIcon").gameObject.SetActive(false);
 
@@ -175,7 +186,9 @@ namespace SaberFactory.UI.Lib.BSML
             if (!tableCell)
             {
                 if (_songListTableCellInstance == null)
+                {
                     _songListTableCellInstance = Resources.FindObjectsOfTypeAll<LevelListTableCell>().First(x => x.name == "LevelListTableCell");
+                }
 
                 tableCell = Instantiate(_songListTableCellInstance);
 
@@ -219,7 +232,9 @@ namespace SaberFactory.UI.Lib.BSML
             if (!tableCell)
             {
                 if (_simpleTextTableCellInstance == null)
+                {
                     _simpleTextTableCellInstance = Resources.FindObjectsOfTypeAll<SimpleTextTableCell>().First(x => x.name == "SimpleTextTableCell");
+                }
 
                 tableCell = Instantiate(_simpleTextTableCellInstance);
             }

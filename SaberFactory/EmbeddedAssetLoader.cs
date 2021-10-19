@@ -23,25 +23,38 @@ namespace SaberFactory
 
         public void Dispose()
         {
-            if (_assetBundle) _assetBundle.Unload(true);
+            if (_assetBundle)
+            {
+                _assetBundle.Unload(true);
+            }
         }
 
         public async Task<T> LoadAsset<T>(string name) where T : Object
         {
-            if (!await CheckLoaded()) return null;
+            if (!await CheckLoaded())
+            {
+                return null;
+            }
+
             return await _assetBundle.LoadAssetFromAssetBundleAsync<T>(name);
         }
 
         public async Task<List<T>> LoadAssets<T>(params string[] names) where T : Object
         {
-            if (!await CheckLoaded()) return null;
+            if (!await CheckLoaded())
+            {
+                return null;
+            }
 
             var assets = new List<T>();
 
             foreach (var name in names)
             {
                 var asset = await _assetBundle.LoadAssetFromAssetBundleAsync<T>(name);
-                if (asset) assets.Add(asset);
+                if (asset)
+                {
+                    assets.Add(asset);
+                }
             }
 
             return assets;
@@ -49,7 +62,10 @@ namespace SaberFactory
 
         private async Task<bool> CheckLoaded()
         {
-            if (_assetBundle) return true;
+            if (_assetBundle)
+            {
+                return true;
+            }
 
             _loadingTask ??= LoadBundle();
 

@@ -44,7 +44,10 @@ namespace SaberFactory.Models
 
         public void SaveToFile()
         {
-            if (AssetMetaPath.HasMetaData) File.Delete(AssetMetaPath.MetaDataPath);
+            if (AssetMetaPath.HasMetaData)
+            {
+                File.Delete(AssetMetaPath.MetaDataPath);
+            }
 
             var ser = new SerializableMeta();
             ser.Name = ListName;

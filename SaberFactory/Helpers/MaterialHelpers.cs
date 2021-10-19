@@ -10,7 +10,11 @@ namespace SaberFactory.Helpers
         public static bool TryGetTexture(this Material material, string propName, out Texture tex)
         {
             tex = null;
-            if (!material.HasProperty(propName)) return false;
+            if (!material.HasProperty(propName))
+            {
+                return false;
+            }
+
             tex = material.GetTexture(propName);
             return tex != null;
         }
@@ -18,7 +22,11 @@ namespace SaberFactory.Helpers
         public static bool TryGetTexture(this Material material, int propId, out Texture tex)
         {
             tex = null;
-            if (!material.HasProperty(propId)) return false;
+            if (!material.HasProperty(propId))
+            {
+                return false;
+            }
+
             tex = material.GetTexture(propId);
             return tex != null;
         }
@@ -31,7 +39,11 @@ namespace SaberFactory.Helpers
         public static bool TryGetFloat(this Material material, string propName, out float val)
         {
             val = 0;
-            if (!material.HasProperty(propName)) return false;
+            if (!material.HasProperty(propName))
+            {
+                return false;
+            }
+
             val = material.GetFloat(propName);
             return true;
         }
@@ -39,14 +51,21 @@ namespace SaberFactory.Helpers
         public static bool TryGetFloat(this Material material, int propId, out float val)
         {
             val = 0;
-            if (!material.HasProperty(propId)) return false;
+            if (!material.HasProperty(propId))
+            {
+                return false;
+            }
+
             val = material.GetFloat(propId);
             return true;
         }
 
         public static void SetMainColor(this Material material, Color color)
         {
-            if (material.HasProperty(MaterialProperties.MainColor)) material.SetColor(MaterialProperties.MainColor, color);
+            if (material.HasProperty(MaterialProperties.MainColor))
+            {
+                material.SetColor(MaterialProperties.MainColor, color);
+            }
         }
 
         public static bool HasCustomColorsEnabled(this Material material)
@@ -62,7 +81,9 @@ namespace SaberFactory.Helpers
             {
                 if (!string.IsNullOrEmpty(ignoredAttribute) &&
                     shader.GetPropertyAttributes(i).Contains(ignoredAttribute))
+                {
                     continue;
+                }
 
                 var nameId = shader.GetPropertyNameId(i);
                 var type = shader.GetPropertyType(i);
@@ -122,7 +143,10 @@ namespace SaberFactory.Helpers
                 return;
             }
 
-            if (type == typeof(Texture)) material.SetTexture(nameId, (Texture)obj);
+            if (type == typeof(Texture))
+            {
+                material.SetTexture(nameId, (Texture)obj);
+            }
         }
 
         public static void SetProperty(this Material material, int nameId, object obj, ShaderPropertyType type)

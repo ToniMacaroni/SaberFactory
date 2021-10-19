@@ -67,7 +67,10 @@ namespace SaberFactory.DataStore
 
         public async Task<ModelComposition> GetCompositionByPath(string relativePath)
         {
-            if (_modelCompositions.TryGetValue(relativePath, out var result)) return result;
+            if (_modelCompositions.TryGetValue(relativePath, out var result))
+            {
+                return result;
+            }
 
             return await LoadComposition(relativePath);
         }
@@ -84,7 +87,10 @@ namespace SaberFactory.DataStore
 
         public async Task LoadAllCustomSaberMetaDataAsync()
         {
-            if (CurrentTask == null) CurrentTask = LoadAllMetaDataForLoader(_customSaberAssetLoader, true);
+            if (CurrentTask == null)
+            {
+                CurrentTask = LoadAllMetaDataForLoader(_customSaberAssetLoader, true);
+            }
 
             await CurrentTask;
             CurrentTask = null;
@@ -103,7 +109,11 @@ namespace SaberFactory.DataStore
         public PreloadMetaData GetMetaDataForComposition(ModelComposition comp)
         {
             var path = comp.GetLeft().StoreAsset.RelativePath + ".meta";
-            if (_metaData.TryGetValue(path, out var preloadMetaData)) return preloadMetaData;
+            if (_metaData.TryGetValue(path, out var preloadMetaData))
+            {
+                return preloadMetaData;
+            }
+
             return null;
         }
 
@@ -114,14 +124,22 @@ namespace SaberFactory.DataStore
 
         public void UnloadAll()
         {
-            foreach (var modelCompositions in _modelCompositions.Values) modelCompositions.Dispose();
+            foreach (var modelCompositions in _modelCompositions.Values)
+            {
+                modelCompositions.Dispose();
+            }
+
             _modelCompositions.Clear();
             _metaData.Clear();
         }
 
         public void Unload(string path)
         {
-            if (!_modelCompositions.TryGetValue(path, out var comp)) return;
+            if (!_modelCompositions.TryGetValue(path, out var comp))
+            {
+                return;
+            }
+
             comp.Dispose();
             _modelCompositions.Remove(path);
             _metaData.Remove(path + ".meta");
@@ -142,7 +160,10 @@ namespace SaberFactory.DataStore
 
         public void Delete(string path)
         {
-            if (_metaData.TryGetValue(path + ".meta", out var meta) && meta.AssetMetaPath.HasMetaData) File.Delete(meta.AssetMetaPath.MetaDataPath);
+            if (_metaData.TryGetValue(path + ".meta", out var meta) && meta.AssetMetaPath.HasMetaData)
+            {
+                File.Delete(meta.AssetMetaPath.MetaDataPath);
+            }
 
             Unload(path);
             var filePath = PathTools.ToFullPath(path);
@@ -156,7 +177,10 @@ namespace SaberFactory.DataStore
             foreach (var assetMetaPath in loader.CollectFiles(_pluginDirs))
             {
                 var relativePath = PathTools.ToRelativePath(assetMetaPath.MetaDataPath);
-                if (_metaData.TryGetValue(relativePath, out _)) continue;
+                if (_metaData.TryGetValue(relativePath, out _))
+                {
+                    continue;
+                }
 
                 if (!assetMetaPath.HasMetaData)
                 {
@@ -164,7 +188,10 @@ namespace SaberFactory.DataStore
                     {
                         var comp = await this[PathTools.ToRelativePath(assetMetaPath.Path)];
 
-                        if (comp == null) continue;
+                        if (comp == null)
+                        {
+                            continue;
+                        }
 
                         var metaData = new PreloadMetaData(assetMetaPath, comp, comp.AssetTypeDefinition);
                         metaData.SaveToFile();
@@ -186,11 +213,17 @@ namespace SaberFactory.DataStore
         public async Task<ModelComposition> CreateMetaData(AssetMetaPath assetMetaPath)
         {
             var relativePath = PathTools.ToRelativePath(assetMetaPath.MetaDataPath);
-            if (_metaData.TryGetValue(relativePath, out _)) return null;
+            if (_metaData.TryGetValue(relativePath, out _))
+            {
+                return null;
+            }
 
             var comp = await this[PathTools.ToRelativePath(assetMetaPath.Path)];
 
-            if (comp == null) return null;
+            if (comp == null)
+            {
+                return null;
+            }
 
             var metaData = new PreloadMetaData(assetMetaPath, comp, comp.AssetTypeDefinition);
             metaData.SaveToFile();
@@ -202,8 +235,15 @@ namespace SaberFactory.DataStore
         private void LoadMetaData(string pieceRelativePath)
         {
             var assetMetaPath = new AssetMetaPath(new FileInfo(PathTools.ToFullPath(pieceRelativePath)));
-            if (_metaData.TryGetValue(assetMetaPath.RelativeMetaDataPath, out _)) return;
-            if (!File.Exists(assetMetaPath.MetaDataPath)) return;
+            if (_metaData.TryGetValue(assetMetaPath.RelativeMetaDataPath, out _))
+            {
+                return;
+            }
+
+            if (!File.Exists(assetMetaPath.MetaDataPath))
+            {
+                return;
+            }
 
             var metaData = new PreloadMetaData(assetMetaPath);
             metaData.IsFavorite = _config.IsFavorite(assetMetaPath.RelativePath);
@@ -213,7 +253,10 @@ namespace SaberFactory.DataStore
 
         private void AddModelComposition(string key, ModelComposition modelComposition)
         {
-            if (!_modelCompositions.ContainsKey(key)) _modelCompositions.Add(key, modelComposition);
+            if (!_modelCompositions.ContainsKey(key))
+            {
+                _modelCompositions.Add(key, modelComposition);
+            }
         }
 
         private async Task<ModelComposition> LoadModelCompositionAsync(string relativeBundlePath)
@@ -224,7 +267,11 @@ namespace SaberFactory.DataStore
             IStoreAssetParser modelCreator = _customSaberModelLoader;
 
             var storeAsset = await loader.LoadStoreAssetAsync(relativeBundlePath);
-            if (storeAsset == null) return null;
+            if (storeAsset == null)
+            {
+                return null;
+            }
+
             var model = modelCreator.GetComposition(storeAsset);
 
             return model;
@@ -233,7 +280,11 @@ namespace SaberFactory.DataStore
         private async Task<ModelComposition> LoadComposition(string relativePath)
         {
             var composition = await LoadModelCompositionAsync(relativePath);
-            if (composition != null) _modelCompositions.Add(relativePath, composition);
+            if (composition != null)
+            {
+                _modelCompositions.Add(relativePath, composition);
+            }
+
             return composition;
         }
     }

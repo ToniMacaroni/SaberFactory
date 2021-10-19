@@ -55,6 +55,8 @@ namespace SaberFactory.UI.CustomSaber.Views
             get => GetSaberWidth();
         }
 
+        public bool IsReloading { get; private set; }
+
         [Inject] private readonly Editor.Editor _editor = null;
         [Inject] private readonly EditorInstanceManager _editorInstanceManager = null;
 
@@ -75,8 +77,6 @@ namespace SaberFactory.UI.CustomSaber.Views
         private ChooseSort.ESortMode _sortMode = ChooseSort.ESortMode.Name;
 
         public ENavigationCategory Category => ENavigationCategory.Saber;
-        
-        public bool IsReloading { get; private set; }
 
         public override void DidOpen()
         {
@@ -117,6 +117,8 @@ namespace SaberFactory.UI.CustomSaber.Views
             {
                 imageView.sprite = Utilities.FindSpriteInAssembly("SaberFactory.Resources.UI.halloween_bg.png");
                 imageView.overrideSprite = imageView.sprite;
+                // ColorUtility.TryParseHtmlString("#c5c5c5", out var newBgColor);
+                // imageView.color = newBgColor;
             }
         }
 
@@ -342,14 +344,18 @@ namespace SaberFactory.UI.CustomSaber.Views
         [UIAction("clicked-reload")]
         private async void ClickedReload()
         {
-            if (IsReloading) return;
+            if (IsReloading)
+            {
+                return;
+            }
+
             IsReloading = true;
-            
+
             if (_currentComposition == null)
             {
                 return;
             }
-            
+
             _loadingPopup.Show();
 
             try
@@ -361,7 +367,8 @@ namespace SaberFactory.UI.CustomSaber.Views
                 await ShowSabers();
             }
             catch (Exception)
-            { }
+            {
+            }
 
             _loadingPopup.Hide();
             IsReloading = false;
@@ -370,9 +377,13 @@ namespace SaberFactory.UI.CustomSaber.Views
         [UIAction("clicked-reloadall")]
         private async void ClickedReloadAll()
         {
-            if (IsReloading) return;
+            if (IsReloading)
+            {
+                return;
+            }
+
             IsReloading = true;
-            
+
             _loadingPopup.Show();
 
             try
@@ -384,10 +395,11 @@ namespace SaberFactory.UI.CustomSaber.Views
                 await ShowSabers();
             }
             catch (Exception)
-            { }
+            {
+            }
 
             _loadingPopup.Hide();
-            
+
             IsReloading = false;
         }
 

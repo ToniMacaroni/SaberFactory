@@ -3,7 +3,7 @@ using System.Collections;
 using System.IO;
 using UnityEngine;
 
-namespace SaberFactory.UI.CustomSaber.Views
+namespace SaberFactory
 {
     public class SaberFileWatcher
     {
@@ -23,11 +23,14 @@ namespace SaberFactory.UI.CustomSaber.Views
 
         public void Watch()
         {
-            if (_watcher is { }) StopWatching();
+            if (_watcher is { })
+            {
+                StopWatching();
+            }
 
             _watcher = new FileSystemWatcher(_dir.FullName, Filter);
 
-            _watcher.NotifyFilter = NotifyFilters.LastWrite;  
+            _watcher.NotifyFilter = NotifyFilters.LastWrite;
 
             _watcher.Changed += WatcherOnCreated;
 
@@ -35,8 +38,6 @@ namespace SaberFactory.UI.CustomSaber.Views
             _watcher.EnableRaisingEvents = true;
 
             IsWatching = true;
-
-            Debug.LogError($"Started watching in {_dir.FullName}");
         }
 
         private void WatcherOnCreated(object sender, FileSystemEventArgs e)
@@ -63,15 +64,16 @@ namespace SaberFactory.UI.CustomSaber.Views
 
         public void StopWatching()
         {
-            if (_watcher is null) return;
+            if (_watcher is null)
+            {
+                return;
+            }
 
             _watcher.Changed -= WatcherOnCreated;
             _watcher.EnableRaisingEvents = false;
             _watcher.Dispose();
             _watcher = null;
             IsWatching = false;
-
-            Debug.LogError("Stopped watching");
         }
     }
 }

@@ -17,7 +17,7 @@ namespace SaberFactory.Installers
 
             BindRemoteSabers();
 
-            Container.Bind<SaberFactoryUI>().To<CustomSaberUI>().AsSingle();
+            Container.Bind<BaseUiComposition>().To<CustomSaberUiComposition>().AsSingle();
             Container.Bind<SaberGrabController>().AsSingle();
             Container.BindInterfacesAndSelfTo<Editor.Editor>().AsSingle();
 

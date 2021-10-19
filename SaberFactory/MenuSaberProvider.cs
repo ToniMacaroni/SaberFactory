@@ -28,7 +28,11 @@ namespace SaberFactory
 
             var saber = _saberInstanceFactory.Create(saberModel);
             saber.SetParent(parent);
-            if (createTrail) saber.CreateTrail(true);
+            if (createTrail)
+            {
+                saber.CreateTrail(true);
+            }
+
             saber.SetColor(color);
 
             return saber;

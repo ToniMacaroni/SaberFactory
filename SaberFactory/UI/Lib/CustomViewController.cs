@@ -34,7 +34,10 @@ namespace SaberFactory.UI.Lib
 
         protected override async void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
         {
-            if (firstActivation) await _bsmlDecorator.ParseFromResourceAsync(_resourceName, gameObject, this);
+            if (firstActivation)
+            {
+                await _bsmlDecorator.ParseFromResourceAsync(_resourceName, gameObject, this);
+            }
 
             didActivate?.Invoke(firstActivation, addedToHierarchy, screenSystemEnabling);
             SubViewSwitcher.NotifyDidOpen();
@@ -55,7 +58,10 @@ namespace SaberFactory.UI.Lib
 
             var view = (T)_viewFactory.Create(typeof(T), initData);
             view.SubViewSwitcher = SubViewSwitcher;
-            if (switchToView) SubViewSwitcher.SwitchView(view, false);
+            if (switchToView)
+            {
+                SubViewSwitcher.SwitchView(view, false);
+            }
 
             return view;
         }

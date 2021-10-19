@@ -12,7 +12,10 @@ namespace SaberFactory.UI.Lib.PropCells
 
         public override void SetData(PropertyDescriptor data)
         {
-            if (!(data.PropObject is bool val)) return;
+            if (!(data.PropObject is bool val))
+            {
+                return;
+            }
 
             OnChangeCallback = data.ChangedCallback;
             _toggleSetting.Value = val;

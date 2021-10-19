@@ -46,7 +46,10 @@ namespace SaberFactory.Helpers
             var result = new JObject();
             var shaderInfo = _shaderPropertyCache[material.shader];
 
-            foreach (var prop in shaderInfo.GetAll()) result.Add(prop.Name, prop.ToJson(material));
+            foreach (var prop in shaderInfo.GetAll())
+            {
+                result.Add(prop.Name, prop.ToJson(material));
+            }
 
             return result;
         }
@@ -57,7 +60,11 @@ namespace SaberFactory.Helpers
             foreach (var prop in shaderInfo.GetAll())
             {
                 var jProp = ser.Property(prop.Name);
-                if (jProp is null) continue;
+                if (jProp is null)
+                {
+                    continue;
+                }
+
                 if (prop is ShaderPropertyInfo.ShaderTexture shaderTex)
                 {
                     prop.FromJson(jProp.Value, material, await ResolveTexture(jProp.Value.ToObject<string>()));

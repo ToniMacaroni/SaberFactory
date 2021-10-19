@@ -18,7 +18,9 @@ namespace SaberFactory.UI.Lib.BSML.Components
         private void OnEnable()
         {
             if (shouldRefresh)
+            {
                 Refresh();
+            }
         }
 
         public event Action<int> OnButtonClicked;

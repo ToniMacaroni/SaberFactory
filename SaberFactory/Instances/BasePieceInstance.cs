@@ -31,7 +31,10 @@ namespace SaberFactory.Instances
 
         public virtual void Dispose()
         {
-            foreach (var material in _colorableMaterials) material.TryDestroy();
+            foreach (var material in _colorableMaterials)
+            {
+                material.TryDestroy();
+            }
         }
 
         public void SetParent(Transform parent)
@@ -57,7 +60,10 @@ namespace SaberFactory.Instances
                 GetColorableMaterials(_colorableMaterials);
             }
 
-            foreach (var material in _colorableMaterials) material.SetColor(MaterialProperties.MainColor, color);
+            foreach (var material in _colorableMaterials)
+            {
+                material.SetColor(MaterialProperties.MainColor, color);
+            }
         }
 
         /// <summary>

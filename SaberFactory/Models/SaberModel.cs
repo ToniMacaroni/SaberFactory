@@ -39,7 +39,11 @@ namespace SaberFactory.Models
                 foreach (var pieceTkn in pieceList)
                 {
                     var piece = await serializer.LoadPiece(pieceTkn["Path"]);
-                    if (piece == null) continue;
+                    if (piece == null)
+                    {
+                        continue;
+                    }
+
                     PieceCollection.AddPiece(piece.AssetTypeDefinition, piece.GetPiece(SaberSlot));
                     await piece.GetLeft()?.FromJson((JObject)pieceTkn, serializer);
                 }
@@ -52,7 +56,10 @@ namespace SaberFactory.Models
 
             var pieceList = new JArray();
 
-            foreach (BasePieceModel pieceModel in PieceCollection) pieceList.Add(await pieceModel.ToJson(serializer));
+            foreach (BasePieceModel pieceModel in PieceCollection)
+            {
+                pieceList.Add(await pieceModel.ToJson(serializer));
+            }
 
             obj.Add(nameof(PieceCollection), pieceList);
             return obj;
@@ -67,14 +74,20 @@ namespace SaberFactory.Models
 
         public TrailModel GetTrailModel()
         {
-            if (GetCustomSaber(out var customsaber)) return customsaber.TrailModel;
+            if (GetCustomSaber(out var customsaber))
+            {
+                return customsaber.TrailModel;
+            }
 
             return TrailModel;
         }
 
         public void Sync()
         {
-            foreach (BasePieceModel piece in PieceCollection) piece.ModelComposition.Sync(piece);
+            foreach (BasePieceModel piece in PieceCollection)
+            {
+                piece.ModelComposition.Sync(piece);
+            }
         }
 
         public bool GetCustomSaber(out CustomSaberModel customsaber)

@@ -65,10 +65,18 @@ namespace SaberFactory.Models
         public async Task FromJson(JObject obj, Serializer serializer)
         {
             obj.Populate(this);
-            if (!string.IsNullOrEmpty(TrailOrigin)) await LoadFromTrailOrigin(serializer, TrailOrigin);
+            if (!string.IsNullOrEmpty(TrailOrigin))
+            {
+                await LoadFromTrailOrigin(serializer, TrailOrigin);
+            }
+
             if (obj.SelectToken("Material") is { } materialToken)
             {
-                if (Material is null) Material = new MaterialDescriptor(null);
+                if (Material is null)
+                {
+                    Material = new MaterialDescriptor(null);
+                }
+
                 await serializer.LoadMaterial((JObject)materialToken, Material.Material);
             }
         }
@@ -76,7 +84,11 @@ namespace SaberFactory.Models
         public async Task<JToken> ToJson(Serializer serializer)
         {
             var obj = JObject.FromObject(this, Serializer.JsonSerializer);
-            if (Material.IsValid) obj.Add("Material", serializer.SerializeMaterial(Material.Material));
+            if (Material.IsValid)
+            {
+                obj.Add("Material", serializer.SerializeMaterial(Material.Material));
+            }
+
             return obj;
         }
 
@@ -97,9 +109,17 @@ namespace SaberFactory.Models
         private async Task LoadFromTrailOrigin(Serializer serializer, JToken trailOrigin)
         {
             var comp = await serializer.LoadPiece(trailOrigin);
-            if (!(comp?.GetLeft() is CustomSaberModel cs)) return;
+            if (!(comp?.GetLeft() is CustomSaberModel cs))
+            {
+                return;
+            }
+
             var originTrailModel = cs.GrabTrail(true);
-            if (originTrailModel == null) return;
+            if (originTrailModel == null)
+            {
+                return;
+            }
+
             Material ??= new MaterialDescriptor(null);
             Material.Material = originTrailModel.Material.Material;
             TrailOriginTrails = SaberHelpers.GetTrails(cs.Prefab);

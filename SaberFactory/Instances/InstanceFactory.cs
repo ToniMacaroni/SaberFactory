@@ -22,7 +22,11 @@ namespace SaberFactory.Instances
 
         public BasePieceInstance Create(BasePieceModel model)
         {
-            if (model.InstanceType is null) throw new ArgumentException($"InstanceType is null on {model.GetType().Name}", nameof(model));
+            if (model.InstanceType is null)
+            {
+                throw new ArgumentException($"InstanceType is null on {model.GetType().Name}", nameof(model));
+            }
+
             return (BasePieceInstance)_container.Instantiate(model.InstanceType, new[] { model });
         }
     }

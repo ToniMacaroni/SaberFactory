@@ -26,16 +26,26 @@ namespace SaberFactory.UI.CustomSaber.Views
         public void ChangeCategory(ENavigationCategory category)
         {
             if (_navViews.TryGetValue(category, out var view))
+            {
                 if (view is SubView subView)
+                {
                     SubViewSwitcher.SwitchView(subView);
+                }
+            }
         }
 
         private T AddView<T>(bool switchToView = false, Transform container = null) where T : SubView
         {
             var view = CreateSubView<T>(container ?? _subViewContainer, switchToView);
-            if (view is INavigationCategoryView navView) _navViews.Add(navView.Category, navView);
+            if (view is INavigationCategoryView navView)
+            {
+                _navViews.Add(navView.Category, navView);
+            }
 
-            if (!switchToView) view.gameObject.SetActive(false);
+            if (!switchToView)
+            {
+                view.gameObject.SetActive(false);
+            }
 
             return view;
         }

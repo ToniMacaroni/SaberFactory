@@ -12,7 +12,10 @@ namespace SaberFactory.Helpers
             set
             {
                 _enabled = value;
-                if (Component != null) Component.enabled = value;
+                if (Component != null)
+                {
+                    Component.enabled = value;
+                }
             }
         }
 

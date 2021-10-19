@@ -45,7 +45,10 @@ namespace SaberFactory.UI.Lib
             }
 
             gameObject.SetActive(true);
-            if (notify) DidOpen();
+            if (notify)
+            {
+                DidOpen();
+            }
         }
 
         public void Close()

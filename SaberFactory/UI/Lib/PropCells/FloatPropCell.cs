@@ -15,7 +15,10 @@ namespace SaberFactory.UI.Lib.PropCells
 
         public override void SetData(PropertyDescriptor data)
         {
-            if (!(data.PropObject is float val)) return;
+            if (!(data.PropObject is float val))
+            {
+                return;
+            }
 
             OnChangeCallback = data.ChangedCallback;
 

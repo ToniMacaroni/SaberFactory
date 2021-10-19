@@ -75,12 +75,17 @@ namespace SaberFactory.Models
             if (
                 _config.AssetType == EAssetTypeConfiguration.CustomSaber ||
                 _config.AssetType == EAssetTypeConfiguration.None)
+            {
                 await RandomizeFrom(_mainAssetStore.GetAllMetaData(AssetTypeDefinition.CustomSaber).ToList());
+            }
         }
 
         public async Task RandomizeFrom(IList<PreloadMetaData> meta)
         {
-            if (_lastSelectedRandoms.Count == meta.Count) _lastSelectedRandoms.Clear();
+            if (_lastSelectedRandoms.Count == meta.Count)
+            {
+                _lastSelectedRandoms.Clear();
+            }
 
             int idx;
             do
@@ -103,7 +108,10 @@ namespace SaberFactory.Models
 
         public async Task SetSaber(PreloadMetaData preloadData)
         {
-            if (preloadData == null) return;
+            if (preloadData == null)
+            {
+                return;
+            }
 
             SetModelComposition(await _mainAssetStore.GetCompositionByMeta(preloadData));
         }

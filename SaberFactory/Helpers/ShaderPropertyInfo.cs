@@ -17,6 +17,7 @@ namespace SaberFactory.Helpers
         public ShaderPropertyInfo(Shader shader)
         {
             for (var i = 0; i < shader.GetPropertyCount(); i++)
+            {
                 switch (shader.GetPropertyType(i))
                 {
                     case ShaderPropertyType.Range:
@@ -35,6 +36,7 @@ namespace SaberFactory.Helpers
                         Colors.Add(new ShaderColor(shader, i));
                         break;
                 }
+            }
         }
 
         public List<BaseProperty> GetAll()
@@ -50,22 +52,44 @@ namespace SaberFactory.Helpers
 
         public BaseProperty FindFromAll(string name)
         {
-            if (Find(Ranges, name, out var prop)) return prop;
-            if (Find(Floats, name, out prop)) return prop;
-            if (Find(Vectors, name, out prop)) return prop;
-            if (Find(Textures, name, out prop)) return prop;
-            if (Find(Colors, name, out prop)) return prop;
+            if (Find(Ranges, name, out var prop))
+            {
+                return prop;
+            }
+
+            if (Find(Floats, name, out prop))
+            {
+                return prop;
+            }
+
+            if (Find(Vectors, name, out prop))
+            {
+                return prop;
+            }
+
+            if (Find(Textures, name, out prop))
+            {
+                return prop;
+            }
+
+            if (Find(Colors, name, out prop))
+            {
+                return prop;
+            }
+
             return null;
         }
 
         public bool Find<T>(List<T> list, string name, out BaseProperty prop) where T : BaseProperty
         {
             foreach (var p in list)
+            {
                 if (p.Name == name)
                 {
                     prop = p;
                     return true;
                 }
+            }
 
             prop = null;
             return false;
@@ -151,7 +175,11 @@ namespace SaberFactory.Helpers
 
             public override void FromJson(JToken token, Material mat, params object[] args)
             {
-                if (args[0] is null) return;
+                if (args[0] is null)
+                {
+                    return;
+                }
+
                 SetValue(mat, args[0]);
             }
 

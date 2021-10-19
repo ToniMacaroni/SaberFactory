@@ -12,7 +12,10 @@ namespace SaberFactory.Helpers
 
         public ShaderPropertyInfo Get(Shader shader)
         {
-            if (_shaderPropertyInfos.TryGetValue(shader.name, out var info)) return info;
+            if (_shaderPropertyInfos.TryGetValue(shader.name, out var info))
+            {
+                return info;
+            }
 
             info = new ShaderPropertyInfo(shader);
             _shaderPropertyInfos.Add(shader.name, info);

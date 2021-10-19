@@ -12,7 +12,11 @@ namespace SaberFactory.Saving
 
         public static T LoadObject<T>(string path)
         {
-            if (!File.Exists(path)) return default;
+            if (!File.Exists(path))
+            {
+                return default;
+            }
+
             return JsonConvert.DeserializeObject<T>(File.ReadAllText(path));
         }
     }

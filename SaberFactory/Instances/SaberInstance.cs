@@ -77,13 +77,20 @@ namespace SaberFactory.Instances
 
         public void SetColor(Color color)
         {
-            foreach (BasePieceInstance piece in PieceCollection) piece.SetColor(color);
+            foreach (BasePieceInstance piece in PieceCollection)
+            {
+                piece.SetColor(color);
+            }
 
             TrailHandler?.SetColor(color);
 
             if (_secondaryTrails is { })
+            {
                 foreach (var trail in _secondaryTrails)
+                {
                     trail.SetColor(color);
+                }
+            }
         }
 
         private void InitializeEvents()
@@ -92,13 +99,19 @@ namespace SaberFactory.Instances
             foreach (BasePieceInstance piece in PieceCollection)
             {
                 var events = piece.GetEvents();
-                if (events != null) Events.Add(events);
+                if (events != null)
+                {
+                    Events.Add(events);
+                }
             }
         }
 
         private void SetupTrailData()
         {
-            if (GetCustomSaber(out var customsaber)) return;
+            if (GetCustomSaber(out var customsaber))
+            {
+                return;
+            }
 
             // TODO: Setup sf trail data
             _instanceTrailData = default;
@@ -139,8 +152,12 @@ namespace SaberFactory.Instances
         {
             TrailHandler?.DestroyTrail(immediate);
             if (_secondaryTrails is { })
+            {
                 foreach (var trail in _secondaryTrails)
+                {
                     trail.DestroyTrail();
+                }
+            }
         }
 
         public void Destroy()
@@ -154,7 +171,10 @@ namespace SaberFactory.Instances
         {
             DestroyTrail();
 
-            foreach (BasePieceInstance piece in PieceCollection) piece.Dispose();
+            foreach (BasePieceInstance piece in PieceCollection)
+            {
+                piece.Dispose();
+            }
         }
 
         private bool GetCustomSaber(out CustomSaberInstance customSaberInstance)

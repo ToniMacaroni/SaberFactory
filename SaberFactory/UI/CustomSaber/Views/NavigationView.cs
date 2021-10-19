@@ -73,12 +73,19 @@ namespace SaberFactory.UI.CustomSaber.Views
 
             var release = await _pluginManager.GetNewestReleaseAsync(CancellationToken.None);
 
-            if (release is { IsLocalNewest: false }) _settingsNotifyText.gameObject.SetActive(true);
+            if (release is { IsLocalNewest: false })
+            {
+                _settingsNotifyText.gameObject.SetActive(true);
+            }
         }
 
         private void ClickedCategory(NavButton button, ENavigationCategory category)
         {
-            if (_currentSelectedNavButton == button) return;
+            if (_currentSelectedNavButton == button)
+            {
+                return;
+            }
+
             _currentSelectedNavButton?.Deselect();
             _currentSelectedNavButton = button;
             CurrentCategory = category;

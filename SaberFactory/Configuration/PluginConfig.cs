@@ -70,7 +70,10 @@ namespace SaberFactory.Configuration
         /// <param name="path"></param>
         public void AddFavorite(string path)
         {
-            if (!IsFavorite(path)) Favorites.Add(path);
+            if (!IsFavorite(path))
+            {
+                Favorites.Add(path);
+            }
         }
 
         /// <summary>

@@ -120,7 +120,9 @@ namespace SaberFactory.Instances.Trail
             if (TrailModel.OriginalTextureWrapMode.HasValue &&
                 TrailModel.Material.IsValid &&
                 TrailModel.Material.Material.TryGetMainTexture(out var tex))
+            {
                 tex.wrapMode = shouldClampTexture ? TextureWrapMode.Clamp : TrailModel.OriginalTextureWrapMode.GetValueOrDefault();
+            }
         }
 
         public void RevertMaterialForCustomSaber(CustomSaberModel saber)
@@ -128,7 +130,10 @@ namespace SaberFactory.Instances.Trail
             TrailModel.Material.Revert();
 
             var saberTrail = saber.StoreAsset.Prefab.GetComponent<CustomTrail>();
-            if (saberTrail == null) return;
+            if (saberTrail == null)
+            {
+                return;
+            }
 
             saberTrail.TrailMaterial = TrailModel.Material.Material;
         }

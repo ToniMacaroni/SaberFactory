@@ -22,7 +22,10 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
         public void SetItems(IEnumerable<ICustomListItem> listItems)
         {
             var content = new List<object>();
-            foreach (var listItem in listItems) content.Add(new ListItem(listItem, listItem.ListName, listItem.ListAuthor, listItem.ListCover));
+            foreach (var listItem in listItems)
+            {
+                content.Add(new ListItem(listItem, listItem.ListName, listItem.ListAuthor, listItem.ListCover));
+            }
 
             _customList.data = content;
             _customList.tableView.ReloadData();
@@ -35,7 +38,11 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
 
         private void SelectItem(ICustomListItem item)
         {
-            if (CurrentSelectedItem == item) return;
+            if (CurrentSelectedItem == item)
+            {
+                return;
+            }
+
             CurrentSelectedItem = item;
             OnItemSelected?.Invoke(item);
         }
@@ -68,7 +75,10 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
             [UIAction("#post-parse")]
             private void Setup()
             {
-                if (_cover) _cover.sprite = _coverSprite;
+                if (_cover)
+                {
+                    _cover.sprite = _coverSprite;
+                }
             }
         }
 

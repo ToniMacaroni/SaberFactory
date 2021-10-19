@@ -18,9 +18,17 @@ namespace SaberFactory.Editor
 
         public async Task Instantiate(Vector3 pos, Quaternion rot)
         {
-            if (_instance) return;
+            if (_instance)
+            {
+                return;
+            }
+
             var prefab = await _embeddedAssetLoader.LoadAsset<GameObject>("SFLogoAnimObject");
-            if (!prefab) return;
+            if (!prefab)
+            {
+                return;
+            }
+
             _instance = Object.Instantiate(prefab, pos, rot);
             _animator = _instance.GetComponent<Animator>();
             _instance.SetActive(false);
@@ -28,7 +36,11 @@ namespace SaberFactory.Editor
 
         public async Task PlayAnim()
         {
-            if (!_instance) return;
+            if (!_instance)
+            {
+                return;
+            }
+
             _instance.SetActive(true);
             _animator.speed = 0.2f;
             _animator.Play("Anim");

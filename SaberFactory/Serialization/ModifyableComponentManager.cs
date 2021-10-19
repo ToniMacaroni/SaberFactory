@@ -35,7 +35,10 @@ namespace SaberFactory.Helpers
         public async Task<JToken> ToJson(Serializer serializer)
         {
             var obj = new JObject();
-            foreach (var mod in GetAllModifiers()) obj.Add(mod.Index.ToString(), await mod.ToJson(serializer));
+            foreach (var mod in GetAllModifiers())
+            {
+                obj.Add(mod.Index.ToString(), await mod.ToJson(serializer));
+            }
 
             return obj;
         }
@@ -61,15 +64,19 @@ namespace SaberFactory.Helpers
         public void SetInstance(GameObject gameObject)
         {
             foreach (var comp in EnumerateComponents(gameObject))
+            {
                 if (ComponentByIndex.TryGetValue(comp.index, out var mod))
+                {
                     mod.SetInstance(comp.component);
+                }
+            }
         }
 
         public void Sync(ModifyableComponentManager otherManager)
         {
             var otherMods = otherManager.GetAllModifiers().ToList();
             var mods = GetAllModifiers().ToList();
-            for (int i = 0; i < mods.Count; i++)
+            for (var i = 0; i < mods.Count; i++)
             {
                 mods[i].Sync(otherMods[i]);
             }
@@ -89,7 +96,11 @@ namespace SaberFactory.Helpers
         {
             foreach (var comp in EnumerateComponents(_prefab))
             {
-                if(comp.index != idx) continue;
+                if (comp.index != idx)
+                {
+                    continue;
+                }
+
                 var mod = (BaseComponentModifier)Activator.CreateInstance(comp.modType, comp.component, comp.index);
                 ComponentByIndex[idx] = mod;
             }
@@ -101,7 +112,10 @@ namespace SaberFactory.Helpers
             for (var i = 0; i < components.Length; i++)
             {
                 var component = components[i];
-                if (ComponentToModifier.TryGetValue(component.GetType(), out var modType)) yield return (i, component, modType);
+                if (ComponentToModifier.TryGetValue(component.GetType(), out var modType))
+                {
+                    yield return (i, component, modType);
+                }
             }
         }
     }

@@ -27,26 +27,41 @@ namespace SaberFactory.Configuration
 
         public void Dispose()
         {
-            if (SaveOnDispose) Save();
+            if (SaveOnDispose)
+            {
+                Save();
+            }
         }
 
         public void Initialize()
         {
             // store original values for reverting feature
             foreach (var propertyInfo in GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public))
+            {
                 _originalValues.Add(propertyInfo, propertyInfo.GetValue(this));
+            }
 
-            if (LoadOnInit) Load();
+            if (LoadOnInit)
+            {
+                Load();
+            }
         }
 
         public void Revert()
         {
-            foreach (var originalValue in _originalValues) originalValue.Key.SetValue(this, originalValue.Value);
+            foreach (var originalValue in _originalValues)
+            {
+                originalValue.Key.SetValue(this, originalValue.Value);
+            }
         }
 
         public void Load()
         {
-            if (!Exists) return;
+            if (!Exists)
+            {
+                return;
+            }
+
             JsonConvert.PopulateObject(ConfigFile.ReadText(), this);
         }
 

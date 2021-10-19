@@ -15,7 +15,11 @@ namespace SaberFactory.Helpers
             go.transform.position = options.Pos;
             go.transform.SetParent(options.Parent, false);
             go.transform.localScale = Vector3.one * (options.Size ?? 0.03f);
-            if (options.Color.HasValue) go.GetComponent<Renderer>().material.color = options.Color.Value.ColorWithAlpha(0);
+            if (options.Color.HasValue)
+            {
+                go.GetComponent<Renderer>().material.color = options.Color.Value.ColorWithAlpha(0);
+            }
+
             return go;
         }
 

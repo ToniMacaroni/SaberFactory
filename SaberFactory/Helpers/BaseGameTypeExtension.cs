@@ -25,13 +25,21 @@ namespace SaberFactory.Helpers
 
         public static void TryDestroy(this Object obj)
         {
-            if (!obj) return;
+            if (!obj)
+            {
+                return;
+            }
+
             Object.Destroy(obj);
         }
 
         public static void TryDestoryImmediate(this Object obj)
         {
-            if (!obj) return;
+            if (!obj)
+            {
+                return;
+            }
+
             Object.DestroyImmediate(obj);
         }
 
@@ -42,18 +50,29 @@ namespace SaberFactory.Helpers
 
         public static void SetCurve(GameObject root, float radius)
         {
-            foreach (var curvedCanvasSettingse in root.GetComponentsInChildren<CurvedCanvasSettings>()) curvedCanvasSettingse.SetRadius(radius);
+            foreach (var curvedCanvasSettingse in root.GetComponentsInChildren<CurvedCanvasSettings>())
+            {
+                curvedCanvasSettingse.SetRadius(radius);
+            }
         }
 
         public static float GetTransfomWidth(Transform t1, Transform t2)
         {
-            if (t1 == null || t2 == null) return 0;
+            if (t1 == null || t2 == null)
+            {
+                return 0;
+            }
+
             return Mathf.Abs(t1.localPosition.z - t2.localPosition.z);
         }
 
         public static float GetWidth(this CustomTrail trail)
         {
-            if (trail == null) return 0;
+            if (trail == null)
+            {
+                return 0;
+            }
+
             return GetTransfomWidth(trail.PointEnd, trail.PointStart);
         }
 

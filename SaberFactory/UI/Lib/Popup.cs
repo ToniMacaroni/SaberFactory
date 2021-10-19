@@ -55,18 +55,27 @@ namespace SaberFactory.UI.Lib
                 _canvasGroup.alpha = 1;
             }
 
-            if (fadeParents) FadeParentCanvases();
+            if (fadeParents)
+            {
+                FadeParentCanvases();
+            }
         }
 
         protected async Task Hide(bool animated)
         {
             ShowParentCanvases();
 
-            if (animated) await AnimateOut();
+            if (animated)
+            {
+                await AnimateOut();
+            }
 
             Unparse();
 
-            if (_originalParent != null) transform.SetParent(_originalParent, false);
+            if (_originalParent != null)
+            {
+                transform.SetParent(_originalParent, false);
+            }
         }
 
         protected void ParentToViewController()
@@ -74,12 +83,18 @@ namespace SaberFactory.UI.Lib
             _originalParent = transform.parent;
 
             var parent = _originalParent;
-            if (parent.GetComponent<CustomViewController>() != null) return;
+            if (parent.GetComponent<CustomViewController>() != null)
+            {
+                return;
+            }
 
             while (parent != null)
             {
                 var vc = parent.GetComponent<CustomViewController>();
-                if (vc != null) break;
+                if (vc != null)
+                {
+                    break;
+                }
 
                 parent = parent.parent;
             }
@@ -107,7 +122,11 @@ namespace SaberFactory.UI.Lib
 
         protected void ShowParentCanvases()
         {
-            if (_parentCanvasGroup == null) return;
+            if (_parentCanvasGroup == null)
+            {
+                return;
+            }
+
             _parentCanvasGroup.alpha = 1;
             _parentCanvasGroup = null;
         }

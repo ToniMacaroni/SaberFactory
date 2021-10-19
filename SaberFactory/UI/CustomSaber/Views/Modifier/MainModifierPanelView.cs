@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components;
-using BeatSaberMarkupLanguage.TypeHandlers;
 using HMUI;
 using SaberFactory.Editor;
 using SaberFactory.Helpers;
@@ -15,17 +13,16 @@ namespace SaberFactory.UI.CustomSaber.Views
 {
     internal class MainModifierPanelView : SubView, INavigationCategoryView
     {
-        [Inject] private readonly EditorInstanceManager _instanceManager = null;
-        [Inject] private readonly BsmlDecorator _decorator = null;
-        
         [UIObject("container")] private readonly GameObject _container = null;
         [UIComponent("component-list")] private readonly CustomListTableData _componentList = null;
-
-        public ENavigationCategory Category => ENavigationCategory.Modifier;
+        [Inject] private readonly BsmlDecorator _decorator = null;
+        [Inject] private readonly EditorInstanceManager _instanceManager = null;
 
         private ModifyableComponentManager _modifyableComponentManager;
         private List<BaseComponentModifier> _mods;
         private BaseComponentModifier _selectedMod;
+
+        public ENavigationCategory Category => ENavigationCategory.Modifier;
 
         private void Awake()
         {
@@ -55,7 +52,7 @@ namespace SaberFactory.UI.CustomSaber.Views
         {
             var list = new List<CustomListTableData.CustomCellInfo>();
             _mods = _modifyableComponentManager.GetAllModifiers().ToList();
-            
+
             foreach (var mod in _mods)
             {
                 list.Add(new CustomListTableData.CustomCellInfo(mod.GoName, mod.TypeName));
@@ -72,7 +69,7 @@ namespace SaberFactory.UI.CustomSaber.Views
 
         private void ClearCurrentView()
         {
-            for (int i = 0; i < _container.transform.childCount; i++)
+            for (var i = 0; i < _container.transform.childCount; i++)
             {
                 Destroy(_container.transform.GetChild(0).gameObject);
             }

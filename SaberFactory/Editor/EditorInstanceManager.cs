@@ -31,7 +31,10 @@ namespace SaberFactory.Editor
 
             presetSaveManager.OnSaberLoaded += delegate
             {
-                if (saberSet.LeftSaber.GetCustomSaber(out var customsaber)) SetModelComposition(customsaber.ModelComposition, false);
+                if (saberSet.LeftSaber.GetCustomSaber(out var customsaber))
+                {
+                    SetModelComposition(customsaber.ModelComposition, false);
+                }
             };
         }
 
@@ -47,7 +50,10 @@ namespace SaberFactory.Editor
                 CurrentModelComposition.DestroyAdditionalInstances();
             }
 
-            if (lazyInit && CurrentModelComposition != composition) composition?.LazyInit();
+            if (lazyInit && CurrentModelComposition != composition)
+            {
+                composition?.LazyInit();
+            }
 
             CurrentModelComposition = composition;
             _saberSet.SetModelComposition(CurrentModelComposition);
@@ -57,7 +63,11 @@ namespace SaberFactory.Editor
 
         public void Refresh()
         {
-            if (CurrentModelComposition == null) return;
+            if (CurrentModelComposition == null)
+            {
+                return;
+            }
+
             SetModelComposition(CurrentModelComposition);
         }
 
@@ -66,7 +76,10 @@ namespace SaberFactory.Editor
         /// </summary>
         public void SyncSabers()
         {
-            if (CurrentSaber == null) return;
+            if (CurrentSaber == null)
+            {
+                return;
+            }
 
             _saberSet.Sync(CurrentSaber.Model);
         }
@@ -74,26 +87,43 @@ namespace SaberFactory.Editor
         public SaberInstance CreateSaber(SaberModel model, Transform parent, bool raiseSaberEvent = false, bool raisePieceEvent = false)
         {
             CurrentSaber = _saberFactory.Create(model);
-            if (parent is { }) CurrentSaber.SetParent(parent);
+            if (parent is { })
+            {
+                CurrentSaber.SetParent(parent);
+            }
 
-            if (raiseSaberEvent) RaiseSaberCreatedEvent();
+            if (raiseSaberEvent)
+            {
+                RaiseSaberCreatedEvent();
+            }
 
             CurrentPiece = GetPiece(SelectedDefinition);
 
-            if (raisePieceEvent) RaisePieceCreatedEvent();
+            if (raisePieceEvent)
+            {
+                RaisePieceCreatedEvent();
+            }
 
             return CurrentSaber;
         }
 
         public void RaiseSaberCreatedEvent()
         {
-            if (CurrentSaber is null) return;
+            if (CurrentSaber is null)
+            {
+                return;
+            }
+
             OnSaberInstanceCreated?.Invoke(CurrentSaber);
         }
 
         public void RaisePieceCreatedEvent()
         {
-            if (CurrentPiece is null) return;
+            if (CurrentPiece is null)
+            {
+                return;
+            }
+
             OnPieceInstanceCreated?.Invoke(CurrentPiece);
         }
 
@@ -123,8 +153,16 @@ namespace SaberFactory.Editor
         /// <returns></returns>
         public BasePieceInstance GetPiece(AssetTypeDefinition definition)
         {
-            if (CurrentSaber == null) return null;
-            if (CurrentSaber.PieceCollection.TryGetPiece(definition, out var piece)) return piece;
+            if (CurrentSaber == null)
+            {
+                return null;
+            }
+
+            if (CurrentSaber.PieceCollection.TryGetPiece(definition, out var piece))
+            {
+                return piece;
+            }
+
             return null;
         }
     }

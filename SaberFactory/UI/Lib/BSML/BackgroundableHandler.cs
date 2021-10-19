@@ -61,17 +61,31 @@ namespace SaberFactory.UI.Lib.BSML
                 }
             }
 
-            if (componentType.data.TryGetValue("customColor", out var customColor)) TrySetBackgroundColor(backgroundable, customColor);
+            if (componentType.data.TryGetValue("customColor", out var customColor))
+            {
+                TrySetBackgroundColor(backgroundable, customColor);
+            }
 
-            if (componentType.data.TryGetValue("border", out var borderAttr)) AddBorder(backgroundable.gameObject, borderAttr == "square");
+            if (componentType.data.TryGetValue("border", out var borderAttr))
+            {
+                AddBorder(backgroundable.gameObject, borderAttr == "square");
+            }
 
             if (componentType.data.TryGetValue("raycast", out var raycastAttr))
+            {
                 if (backgroundable.background != null)
+                {
                     backgroundable.background.raycastTarget = bool.Parse(raycastAttr);
+                }
+            }
 
             if (componentType.data.TryGetValue("skew", out var skew))
+            {
                 if (backgroundable.background is ImageView imageView)
+                {
                     imageView.SetSkew(float.Parse(skew));
+                }
+            }
         }
 
         private void AddBorder(GameObject go, bool squareSprite = false)
@@ -80,7 +94,11 @@ namespace SaberFactory.UI.Lib.BSML
             {
                 var button = Resources.FindObjectsOfTypeAll<Button>().FirstOrDefault(x => x.name == "ActionButton");
                 var borderTransform = button?.transform.Find("Border");
-                if (borderTransform is null) return;
+                if (borderTransform is null)
+                {
+                    return;
+                }
+
                 _borderTemplate = borderTransform.gameObject;
             }
 
@@ -120,7 +138,11 @@ namespace SaberFactory.UI.Lib.BSML
 
         private void InitSprite()
         {
-            if (_bgSprite != null) return;
+            if (_bgSprite != null)
+            {
+                return;
+            }
+
             var image = Resources.FindObjectsOfTypeAll<GameObject>()
                 .FirstOrDefault(x => x.name == "MiddleHorizontalTextSegmentedControlCell")?
                 .transform.Find("BG")?
@@ -138,13 +160,20 @@ namespace SaberFactory.UI.Lib.BSML
         private ImageView GetOrAddImageView(Backgroundable backgroundable)
         {
             var imageView = backgroundable.GetComponent<ImageView>();
-            if (imageView != null) return imageView;
+            if (imageView != null)
+            {
+                return imageView;
+            }
+
             if (_imageViewPrefab == null)
             {
                 _imageViewPrefab = Resources.FindObjectsOfTypeAll<ImageView>().First(x =>
                     x.gameObject?.name == "KeyboardWrapper" && x.sprite?.name == "RoundRect10" &&
                     x.transform.parent?.name == "Wrapper");
-                if (_imageViewPrefab == null) return null;
+                if (_imageViewPrefab == null)
+                {
+                    return null;
+                }
             }
 
             return backgroundable.gameObject.AddComponent(_imageViewPrefab);
@@ -152,7 +181,11 @@ namespace SaberFactory.UI.Lib.BSML
 
         public static void TrySetBackgroundColor(Backgroundable background, string colorStr)
         {
-            if (!ThemeManager.GetColor(colorStr, out var color)) return;
+            if (!ThemeManager.GetColor(colorStr, out var color))
+            {
+                return;
+            }
+
             background.background.color = color;
         }
     }

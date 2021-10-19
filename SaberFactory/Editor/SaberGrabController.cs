@@ -27,14 +27,22 @@ namespace SaberFactory.Editor
 
         public void ShowHandle()
         {
-            if (_isHandleVisisble) return;
+            if (_isHandleVisisble)
+            {
+                return;
+            }
+
             _isHandleVisisble = true;
             _menuPlayerController.leftController?.transform.Find("MenuHandle")?.gameObject.SetActive(_isHandleVisisble);
         }
 
         public void HideHandle()
         {
-            if (!_isHandleVisisble) return;
+            if (!_isHandleVisisble)
+            {
+                return;
+            }
+
             _isHandleVisisble = false;
             _menuPlayerController.leftController?.transform.Find("MenuHandle")?.gameObject.SetActive(_isHandleVisisble);
         }

@@ -34,7 +34,10 @@ namespace SaberFactory.Misc
         {
             var cp = NextControlPoint;
             if (cp != null)
+            {
                 return cp.NextPosition;
+            }
+
             return NextPosition;
         }
 
@@ -43,7 +46,9 @@ namespace SaberFactory.Misc
         {
             var cp = NextControlPoint;
             if (cp != null)
+            {
                 return cp.NextNormal;
+            }
 
 
             return Normal;

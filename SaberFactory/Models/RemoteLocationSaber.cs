@@ -48,7 +48,10 @@ namespace SaberFactory.Models
             try
             {
                 var response = await _webClient.GetAsync(RemoteLocation, token);
-                if (!response.IsSuccessStatusCode) return default;
+                if (!response.IsSuccessStatusCode)
+                {
+                    return default;
+                }
 
                 var filename = GetFilename();
                 File.WriteAllBytes(_customSaberDir.GetFile(filename).FullName, response.ContentToBytes());

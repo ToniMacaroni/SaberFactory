@@ -23,14 +23,26 @@ namespace SaberFactory.UI.Lib.BSML
 
         public static bool GetColor(string colorString, out Color color)
         {
-            if (colorString[0] == '$' && GetDefinedColor(colorString.Substring(1), out color)) return true;
-            if (ColorUtility.TryParseHtmlString(colorString, out color)) return true;
+            if (colorString[0] == '$' && GetDefinedColor(colorString.Substring(1), out color))
+            {
+                return true;
+            }
+
+            if (ColorUtility.TryParseHtmlString(colorString, out color))
+            {
+                return true;
+            }
+
             return false;
         }
 
         private static Color GetColor(string hex)
         {
-            if (ColorUtility.TryParseHtmlString(hex, out var color)) return color;
+            if (ColorUtility.TryParseHtmlString(hex, out var color))
+            {
+                return color;
+            }
+
             return Color.white;
         }
     }

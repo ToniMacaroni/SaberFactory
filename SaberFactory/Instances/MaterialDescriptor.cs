@@ -22,7 +22,11 @@ namespace SaberFactory.Instances
 
         public virtual void Revert()
         {
-            if (_originalMaterial is null) return;
+            if (_originalMaterial is null)
+            {
+                return;
+            }
+
             DestroyUsedMaterial();
             Material = new Material(_originalMaterial);
         }
