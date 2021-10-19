@@ -1,14 +1,13 @@
 ﻿<horizontal xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
             xsi:noNamespaceSchemaLocation='file:///C:/CustomBSMLSchema.xsd'
             spacing="1"
-            pref-height="72">
+            pref-height="{template;NavHeight}">
 
-    <vertical pref-width='14' bg='round-rect-panel' custom-color='$navbar' pad-left='2' pad-right='1' pad-top='1'
-              pad-bottom='1' vertical-fit='PreferredSize' child-align="UpperCenter">
+    <vertical pref-width='14' bg='round-rect-panel' custom-color='$navbar' pad-left='2' pad-right='1' vertical-fit='PreferredSize' child-align="UpperCenter">
         <sui.icon-button
                 id='exit_btn'
                 pref-width='15'
-                pref-height='70'
+                pref-height='{template;NavHeight}'
                 icon-pad="3"
                 on-click='clicked-exit'
                 icon='#HorizontalArrowIcon'

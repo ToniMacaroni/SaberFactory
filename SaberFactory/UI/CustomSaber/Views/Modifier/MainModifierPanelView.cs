@@ -24,10 +24,6 @@ namespace SaberFactory.UI.CustomSaber.Views
 
         public ENavigationCategory Category => ENavigationCategory.Modifier;
 
-        private void Awake()
-        {
-        }
-
         [UIAction("#post-parse")]
         private void Setup()
         {
@@ -81,6 +77,44 @@ namespace SaberFactory.UI.CustomSaber.Views
             _selectedMod = _mods[idx];
             ClearCurrentView();
             _decorator.ParseFromString(_selectedMod.DrawUi(), _container, _selectedMod);
+        }
+
+        [UIAction("reset-click")]
+        private void ResetClick()
+        {
+            if (_modifyableComponentManager is null)
+            {
+                return;
+            }
+            
+            Debug.LogWarning($"Resetting {_selectedMod.Index}");
+
+            _modifyableComponentManager.Reset(_selectedMod.Index);
+            
+            ReloadSaber();
+        }
+
+        [UIAction("reset-all-click")]
+        private void ResetAllClick()
+        {
+            if (_modifyableComponentManager is null)
+            {
+                return;
+            }
+            
+            Debug.LogWarning("Resetting all");
+
+            _modifyableComponentManager.ResetAll();
+            
+            ReloadSaber();
+        }
+
+        private void ReloadSaber()
+        {
+            _instanceManager.Refresh();
+            DidClose();
+            ClearCurrentView();
+            DidOpen();
         }
     }
 }

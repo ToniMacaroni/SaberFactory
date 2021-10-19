@@ -25,7 +25,7 @@ namespace SaberFactory.UI
 
         private readonly SiraLog _logger;
         private readonly PhysicsRaycasterWithCache _physicsRaycaster;
-        private readonly BsmlDecorator _bsmlDecorator;
+        protected readonly BsmlDecorator BsmlDecorator;
         private readonly CustomScreen.Factory _screenFactory;
 
         protected BaseUiComposition(
@@ -39,7 +39,7 @@ namespace SaberFactory.UI
             _screenFactory = screenFactory;
             _baseGameUiHandler = baseGameUiHandler;
             _physicsRaycaster = physicsRaycaster;
-            _bsmlDecorator = bsmlDecorator;
+            BsmlDecorator = bsmlDecorator;
         }
 
         public event Action OnClosePressed;
@@ -117,7 +117,7 @@ namespace SaberFactory.UI
 
         protected virtual void SetupTemplates()
         {
-            _bsmlDecorator.AddTemplate("DefaultButtonColors", "normal-color=\"#7A7A7A35\" hovered-color=\"#7A7A7A60\"");
+            BsmlDecorator.AddTemplate("DefaultButtonColors", "normal-color=\"#7A7A7A35\" hovered-color=\"#7A7A7A60\"");
         }
 
         protected CustomScreen AddScreen(CustomScreen.InitData initData)

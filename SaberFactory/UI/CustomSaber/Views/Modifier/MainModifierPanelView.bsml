@@ -1,17 +1,21 @@
 ﻿<horizontal xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
             xsi:noNamespaceSchemaLocation='file:///C:/CustomBSMLSchema.xsd'
-            spacing="38" anchor-min-x="0.2">
+            spacing="38" anchor-min-x="0.18" pref-height="{template;NavHeight}">
 
     <vertical bg="round-rect-panel" custom-color="$default-panel" pad="3" pref-height="70" pref-width="70" vertical-fit="PreferredSize">
         <horizontal>
-            <sui.button text="Reset" pref-width="25" {template;DefaultButtonColors}/>
-            <sui.button text="Reset All" pref-width="25" {template;DefaultButtonColors}/>
+            <sui.button text="Reset" pref-width="25" on-click="reset-click" {template;DefaultButtonColors}/>
+            <sui.button text="Reset All" pref-width="25" on-click="reset-all-click" {template;DefaultButtonColors}/>
         </horizontal>
         <div id="container"></div>
     </vertical>
 
     <vertical bg="round-rect-panel" custom-color="$default-panel" pad="3" pref-height="70" pref-width="50">
         <list id="component-list" list-style="List" select-cell="component-selected"/>
+        <horizontal preferred-height='8'>
+            <page-button event-click='component-list#PageDown' direction='Down' pref-width='8'/>
+            <page-button event-click='component-list#PageUp' direction='Up' pref-width='8'/>
+        </horizontal>
     </vertical>
 
 </horizontal>

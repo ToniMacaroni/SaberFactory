@@ -62,6 +62,12 @@ namespace SaberFactory.UI.CustomSaber
             _saberSet.Save();
         }
 
+        protected override void SetupTemplates()
+        {
+            base.SetupTemplates();
+            BsmlDecorator.AddTemplate("NavHeight", "70");
+        }
+
         #region Views
 
         private MainView _mainView;

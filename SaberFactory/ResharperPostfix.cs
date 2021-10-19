@@ -32,6 +32,7 @@ namespace SaberFactory
         {
             if (obj is null)
             {
+                return;
             }
             //$ $END$
         }
