@@ -56,6 +56,13 @@ namespace SaberFactory.UI.CustomSaber.Views
         }
 
         public bool IsReloading { get; private set; }
+        
+        [UIValue("saber-length")]
+        private float SaberLength
+        {
+            set => SetSaberLength(value);
+            get => GetSaberLength();
+        }
 
         [Inject] private readonly Editor.Editor _editor = null;
         [Inject] private readonly EditorInstanceManager _editorInstanceManager = null;
@@ -300,6 +307,16 @@ namespace SaberFactory.UI.CustomSaber.Views
         private float GetSaberWidth()
         {
             return _editorInstanceManager.CurrentSaber?.Model.SaberWidth ?? 1;
+        }
+
+        private void SetSaberLength(float width)
+        {
+            _editorInstanceManager.CurrentSaber?.SetSaberLength(width);
+        }
+
+        private float GetSaberLength()
+        {
+            return _editorInstanceManager.CurrentSaber?.Model.SaberLength ?? 1;
         }
 
         [UIAction("toggled-favorite")]
