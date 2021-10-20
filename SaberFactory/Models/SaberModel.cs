@@ -14,6 +14,7 @@ namespace SaberFactory.Models
         public readonly ESaberSlot SaberSlot;
 
         [MapSerialize] public float SaberWidth = 1;
+        [MapSerialize] public float SaberLength = 1;
 
         public TrailModel TrailModel;
 
