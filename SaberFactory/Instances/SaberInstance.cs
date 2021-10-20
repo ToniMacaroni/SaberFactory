@@ -60,7 +60,7 @@ namespace SaberFactory.Instances
             var sectionInstantiator = new SectionInstantiator(this, pieceFactory, PieceCollection);
             sectionInstantiator.InstantiateSections();
 
-            GameObject.transform.localScale = new Vector3(model.SaberWidth, model.SaberWidth, 1);
+            GameObject.transform.localScale = new Vector3(model.SaberWidth, model.SaberWidth, model.SaberLength);
 
             saberMiddlewares.Do(x => x.ProcessSaber(GameObject));
 
@@ -185,7 +185,13 @@ namespace SaberFactory.Instances
         public void SetSaberWidth(float width)
         {
             Model.SaberWidth = width;
-            GameObject.transform.localScale = new Vector3(width, width, 1);
+            GameObject.transform.localScale = new Vector3(width, width, Model.SaberLength);
+        }
+
+        public void SetSaberLength(float length)
+        {
+            Model.SaberLength = length;
+            GameObject.transform.localScale = new Vector3(Model.SaberWidth, Model.SaberWidth, length);
         }
 
         internal class Factory : PlaceholderFactory<SaberModel, SaberInstance>

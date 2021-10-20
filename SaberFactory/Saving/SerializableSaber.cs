@@ -7,6 +7,7 @@ namespace SaberFactory.Saving
         public List<SerializablePiece> Pieces;
 
         public float SaberWidth;
+        public float SaberLength;
         public SerializableTrail Trail;
     }
 }

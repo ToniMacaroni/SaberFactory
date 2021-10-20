@@ -116,6 +116,7 @@ namespace SaberFactory.Models
             fromModel.Sync();
             var otherSaber = fromModel == LeftSaber ? RightSaber : LeftSaber;
             otherSaber.SaberWidth = fromModel.SaberWidth;
+            otherSaber.SaberLength = fromModel.SaberLength;
         }
 
         private int RandomNumber(int count)
