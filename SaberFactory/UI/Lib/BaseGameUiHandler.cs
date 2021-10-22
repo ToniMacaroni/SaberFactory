@@ -46,7 +46,10 @@ namespace SaberFactory.UI.Lib
 
         public void PresentGameUI()
         {
-            foreach (var screenObj in _deactivatedScreens) screenObj.SetActive(true);
+            foreach (var screenObj in _deactivatedScreens)
+            {
+                screenObj.SetActive(true);
+            }
         }
 
         public Transform GetUIParent()
@@ -67,13 +70,19 @@ namespace SaberFactory.UI.Lib
         private void HideViewControllers(IEnumerable<ViewController> vcs)
         {
             var cgs = vcs.NonNull().Select(x => x.GetComponent<CanvasGroup>());
-            foreach (var cg in cgs) cg.gameObject.SetActive(false);
+            foreach (var cg in cgs)
+            {
+                cg.gameObject.SetActive(false);
+            }
         }
 
         private void ShowViewControllers(IEnumerable<ViewController> vcs)
         {
             var cgs = vcs.NonNull().Select(x => x.GetComponent<CanvasGroup>());
-            foreach (var cg in cgs) cg.gameObject.SetActive(true);
+            foreach (var cg in cgs)
+            {
+                cg.gameObject.SetActive(true);
+            }
         }
 
         private void GetChildViewControllers(ViewController vc, List<ViewController> list)

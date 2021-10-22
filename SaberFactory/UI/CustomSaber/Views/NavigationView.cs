@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading;
 using BeatSaberMarkupLanguage.Attributes;
-using HMUI;
 using SaberFactory.UI.CustomSaber.CustomComponents;
 using SaberFactory.UI.Lib;
 using TMPro;
@@ -48,9 +47,16 @@ namespace SaberFactory.UI.CustomSaber.Views
                 ClickedCategory,
                 "Transform settings");
 
+            var propButton = new NavButtonWrapper(
+                ENavigationCategory.Modifier,
+                "SaberFactory.Resources.Icons.wrench.png",
+                ClickedCategory,
+                "Saber modifier");
+
             _navButtons.Add(saberButton);
             _navButtons.Add(trailButton);
             _navButtons.Add(transformButton);
+            _navButtons.Add(propButton);
         }
 
         public event Action<ENavigationCategory> OnCategoryChanged;
@@ -59,9 +65,6 @@ namespace SaberFactory.UI.CustomSaber.Views
         [UIAction("#post-parse")]
         private async void Setup()
         {
-            // why is this icon so fucking big
-            _exitBtn.transform.Find("Content").GetComponent<StackLayoutGroup>().padding = new RectOffset(3, 3, 3, 3);
-
             if (_navButtons is { } && _navButtons.Count > 0)
             {
                 _currentSelectedNavButton = ((NavButtonWrapper)_navButtons[0]).NavButton;
@@ -70,12 +73,19 @@ namespace SaberFactory.UI.CustomSaber.Views
 
             var release = await _pluginManager.GetNewestReleaseAsync(CancellationToken.None);
 
-            if (release is { IsLocalNewest: false }) _settingsNotifyText.gameObject.SetActive(true);
+            if (release is { IsLocalNewest: false })
+            {
+                _settingsNotifyText.gameObject.SetActive(true);
+            }
         }
 
         private void ClickedCategory(NavButton button, ENavigationCategory category)
         {
-            if (_currentSelectedNavButton == button) return;
+            if (_currentSelectedNavButton == button)
+            {
+                return;
+            }
+
             _currentSelectedNavButton?.Deselect();
             _currentSelectedNavButton = button;
             CurrentCategory = category;

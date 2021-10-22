@@ -16,7 +16,7 @@ namespace SaberFactory.UI.Lib.BSML
 {
     public class CustomListTag : BSMLTag
     {
-        public override string[] Aliases => new[] { "sui.list" };
+        public override string[] Aliases => new[] { CustomComponentHandler.ComponentPrefix+".list" };
 
         public override GameObject CreateObject(Transform parent)
         {
@@ -95,34 +95,51 @@ namespace SaberFactory.UI.Lib.BSML
         {
             var tableData = componentType.component as CustomListTableData;
             if (componentType.data.TryGetValue("selectCell", out var selectCell))
+            {
                 tableData.TableView.didSelectCellWithIdxEvent += delegate(TableView table, int index)
                 {
                     if (!parserParams.actions.TryGetValue(selectCell, out var action))
+                    {
                         throw new Exception("select-cell action '" + componentType.data["onClick"] + "' not found");
+                    }
 
                     action.Invoke(table, index);
                 };
+            }
 
             if (componentType.data.TryGetValue("listDirection", out var listDirection))
+            {
                 tableData.TableView.SetField("_tableType", (TableView.TableType)Enum.Parse(typeof(TableView.TableType), listDirection));
+            }
 
             if (componentType.data.TryGetValue("listStyle", out var listStyle))
+            {
                 tableData.Style = (CustomListTableData.ListStyle)Enum.Parse(typeof(CustomListTableData.ListStyle), listStyle);
+            }
 
             if (componentType.data.TryGetValue("cellSize", out var cellSize))
+            {
                 tableData.cellSize = Parse.Float(cellSize);
+            }
 
             if (componentType.data.TryGetValue("expandCell", out var expandCell))
+            {
                 tableData.ExpandCell = Parse.Bool(expandCell);
+            }
 
             if (componentType.data.TryGetValue("alignCenter", out var alignCenter))
+            {
                 tableData.TableView.SetField("_alignToCenter", Parse.Bool(alignCenter));
+            }
 
 
             if (componentType.data.TryGetValue("data", out var value))
             {
                 if (!parserParams.values.TryGetValue(value, out var contents))
+                {
                     throw new Exception("value '" + value + "' not found");
+                }
+
                 tableData.Data = contents.GetValue() as List<CustomListTableData.CustomCellInfo>;
                 tableData.TableView.ReloadData();
             }

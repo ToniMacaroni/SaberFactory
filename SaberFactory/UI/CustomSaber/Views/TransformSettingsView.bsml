@@ -4,6 +4,6 @@
         <!--<slider-setting text='Width' get-event='update-props' apply-on-change='true' min='0' max='30' increment='0.1' />-->
         <slider-setting value="RotationAmount" text='Rotation' get-event='update-props' apply-on-change='true' min='0' max='360' increment='1'/>
         <slider-setting value='OffsetAmount' text='Z Offset' get-event='update-props' apply-on-change='true' min='-0.2' max='0.2' increment='0.01'/>
-
+        <slider-setting value='SaberLength' text="Saber Length (doesn't modify hitbox)" get-event='update-props' apply-on-change='true' min='0.1' max='2' increment='0.05'/>
     </vertical>
 </bg>

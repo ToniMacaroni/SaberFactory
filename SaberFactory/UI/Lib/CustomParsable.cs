@@ -23,7 +23,10 @@ namespace SaberFactory.UI.Lib
 
         public void Unparse()
         {
-            foreach (Transform t in transform) t.gameObject.TryDestroy();
+            foreach (Transform t in transform)
+            {
+                t.gameObject.TryDestroy();
+            }
         }
     }
 }

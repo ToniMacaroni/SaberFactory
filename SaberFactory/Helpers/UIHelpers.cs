@@ -63,7 +63,10 @@ namespace SaberFactory.Helpers
 
         public static async Task AnimateIn(this IAnimatableUi animatable, CancellationToken cancelToken)
         {
-            if (!(animatable is MonoBehaviour comp)) return;
+            if (!(animatable is MonoBehaviour comp))
+            {
+                return;
+            }
 
             switch (animatable.AnimationType)
             {

@@ -28,7 +28,10 @@ namespace SaberFactory.UI.CustomSaber.Popups
             _onSelectionChanged = onSelectionChanged;
 
             var modes = new List<SortModeItem>();
-            foreach (var mode in (ESortMode[])Enum.GetValues(typeof(ESortMode))) modes.Add(new SortModeItem(mode));
+            foreach (var mode in (ESortMode[])Enum.GetValues(typeof(ESortMode)))
+            {
+                modes.Add(new SortModeItem(mode));
+            }
 
             _ = Create(true);
             _sortList.OnItemSelected += SortSelected;

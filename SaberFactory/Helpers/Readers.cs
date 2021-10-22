@@ -33,14 +33,22 @@ namespace SaberFactory.Helpers
         public static async Task<byte[]> ReadResourceAsync(string path)
         {
             using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(path);
-            if (stream == null) return null;
+            if (stream == null)
+            {
+                return null;
+            }
+
             return await ReadStreamAsync(stream);
         }
 
         public static byte[] ReadResource(string path)
         {
             using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(path);
-            if (stream == null) return null;
+            if (stream == null)
+            {
+                return null;
+            }
+
             return ReadStream(stream);
         }
 
@@ -88,11 +96,17 @@ namespace SaberFactory.Helpers
         public static async Task<Tuple<T, AssetBundle>> LoadAssetFromAssetBundleAsync<T>(byte[] bundleData, string assetName) where T : Object
         {
             var assetBundle = await LoadAssetBundleAsync(bundleData);
-            if (assetBundle == null) return null;
+            if (assetBundle == null)
+            {
+                return null;
+            }
 
             var asset = await assetBundle.LoadAssetFromAssetBundleAsync<T>(assetName);
 
-            if (asset == null) assetBundle.Unload(true);
+            if (asset == null)
+            {
+                assetBundle.Unload(true);
+            }
 
             return new Tuple<T, AssetBundle>(asset, assetBundle);
         }

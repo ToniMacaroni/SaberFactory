@@ -16,7 +16,10 @@ namespace SaberFactory.UI.Lib.PropCells
 
         public override void SetData(PropertyDescriptor data)
         {
-            if (!(data.PropObject is Color color)) return;
+            if (!(data.PropObject is Color color))
+            {
+                return;
+            }
 
             OnChangeCallback = data.ChangedCallback;
             _propName.text = data.Text;

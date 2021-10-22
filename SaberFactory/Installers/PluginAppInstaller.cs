@@ -4,6 +4,7 @@ using IPA.Loader;
 using IPA.Logging;
 using SaberFactory.Configuration;
 using SaberFactory.DataStore;
+using SaberFactory.Helpers;
 using SaberFactory.Instances;
 using SaberFactory.Instances.PostProcessors;
 using SaberFactory.Instances.Trail;
@@ -11,8 +12,6 @@ using SaberFactory.Models;
 using SaberFactory.Models.CustomSaber;
 using SaberFactory.Saving;
 using SaberFactory.UI.CustomSaber.Views;
-using SaberFactory.UI.Lib;
-using SaberFactory.UI.Lib.BSML;
 using SiraUtil;
 using Zenject;
 
@@ -21,8 +20,8 @@ namespace SaberFactory.Installers
     internal class PluginAppInstaller : Installer
     {
         private readonly PluginConfig _config;
-        private readonly PluginMetadata _metadata;
         private readonly Logger _logger;
+        private readonly PluginMetadata _metadata;
 
         private PluginAppInstaller(Logger logger, PluginConfig config, PluginMetadata metadata)
         {
@@ -56,6 +55,8 @@ namespace SaberFactory.Installers
             Container.BindInstance(_config).AsSingle();
             Container.Bind<PluginManager>().AsSingle();
 
+            Serializer.Install(Container);
+            Container.Bind<ShaderPropertyCache>().AsSingle();
             Container.Bind<PresetSaveManager>().AsSingle();
             Container.BindInterfacesAndSelfTo<TrailConfig>().AsSingle();
 

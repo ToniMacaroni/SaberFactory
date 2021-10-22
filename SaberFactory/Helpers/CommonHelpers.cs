@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Threading.Tasks;
 using IPA.Utilities;
+using SaberFactory.DataStore;
 using UnityEngine;
 
 namespace SaberFactory.Helpers
@@ -13,22 +15,35 @@ namespace SaberFactory.Helpers
 
         public static void SetLayer(this GameObject obj, int layer)
         {
-            if (obj == null) return;
+            if (obj == null)
+            {
+                return;
+            }
 
             obj.layer = layer;
 
             foreach (Transform child in obj.transform)
             {
-                if (child == null) continue;
+                if (child == null)
+                {
+                    continue;
+                }
+
                 SetLayer(child.gameObject, layer);
             }
         }
 
         public static void SetLayer<T>(this GameObject obj, int layer) where T : Component
         {
-            if (obj == null) return;
+            if (obj == null)
+            {
+                return;
+            }
 
-            foreach (var comp in obj.GetComponentsInChildren<T>()) comp.gameObject.layer = layer;
+            foreach (var comp in obj.GetComponentsInChildren<T>())
+            {
+                comp.gameObject.layer = layer;
+            }
         }
 
         public static T Cast<T>(this object obj)
@@ -38,7 +53,11 @@ namespace SaberFactory.Helpers
 
         public static T CastChecked<T>(this object obj)
         {
-            if (obj is T ret) return ret;
+            if (obj is T ret)
+            {
+                return ret;
+            }
+
             return default;
         }
 
@@ -46,6 +65,16 @@ namespace SaberFactory.Helpers
         {
             var time = Utils.CanUseDateTimeNowSafely ? DateTime.Now : DateTime.UtcNow;
             return (!day.HasValue || time.Day == day) && (!month.HasValue || time.Month == month);
+        }
+
+        public static async Task WaitForFinish(this ILoadingTask loadingTask)
+        {
+            if (loadingTask.CurrentTask == null)
+            {
+                return;
+            }
+
+            await loadingTask.CurrentTask;
         }
     }
 }

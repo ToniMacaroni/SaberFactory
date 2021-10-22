@@ -11,7 +11,7 @@ namespace SaberFactory.UI.Lib.BSML.Tags
 {
     public class ButtonWithIconTag : BSMLTag
     {
-        public override string[] Aliases => new[] { "sui.icon-button" };
+        public override string[] Aliases => new[] { CustomComponentHandler.ComponentPrefix+".icon-button" };
 
         public override GameObject CreateObject(Transform parent)
         {
@@ -52,7 +52,10 @@ namespace SaberFactory.UI.Lib.BSML.Tags
             buttonStateColors.UnderlineImage = btnImageController.LineImage;
             noTransitionsButton.selectionStateDidChangeEvent += buttonStateColors.SelectionDidChange;
 
-            if (!button.gameObject.activeSelf) button.gameObject.SetActive(true);
+            if (!button.gameObject.activeSelf)
+            {
+                button.gameObject.SetActive(true);
+            }
 
             return button.gameObject;
         }

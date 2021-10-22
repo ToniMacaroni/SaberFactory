@@ -13,7 +13,10 @@ namespace SaberFactory.Helpers
             var cutoff = speedDivision - 0.1f;
             while (elapsedTime < cutoff)
             {
-                if (cancelToken.IsCancellationRequested) break;
+                if (cancelToken.IsCancellationRequested)
+                {
+                    break;
+                }
 
                 var num = Easing.OutQuart(elapsedTime / speedDivision);
                 transitionAnimation?.Invoke(num);

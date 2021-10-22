@@ -25,7 +25,10 @@ namespace SaberFactory.Instances.Trail
                 return;
             }
 
-            if (_customTrail.Length < 1) return;
+            if (_customTrail.Length < 1)
+            {
+                return;
+            }
 
             var trailInitData = new TrailInitData
             {
@@ -50,11 +53,17 @@ namespace SaberFactory.Instances.Trail
 
         private bool IsMaterialColorable(Material material)
         {
-            if (material is null || !material.HasProperty(MaterialProperties.MainColor)) return false;
+            if (material is null || !material.HasProperty(MaterialProperties.MainColor))
+            {
+                return false;
+            }
 
             if (material.TryGetFloat(MaterialProperties.CustomColors, out var val))
             {
-                if (val > 0) return true;
+                if (val > 0)
+                {
+                    return true;
+                }
             }
             else if (material.TryGetFloat(MaterialProperties.Glow, out val) && val > 0)
             {
@@ -75,9 +84,15 @@ namespace SaberFactory.Instances.Trail
 
         public void SetColor(Color color)
         {
-            if (TrailInstance is { }) TrailInstance.Color = color;
+            if (TrailInstance is { })
+            {
+                TrailInstance.Color = color;
+            }
 
-            if (_canColorMaterial) _customTrail.TrailMaterial.SetMainColor(color);
+            if (_canColorMaterial)
+            {
+                _customTrail.TrailMaterial.SetMainColor(color);
+            }
         }
     }
 }

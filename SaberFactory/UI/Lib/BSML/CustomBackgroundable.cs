@@ -61,7 +61,10 @@ namespace SaberFactory.UI.Components
         public static void TrySetBackgroundColor(CustomBackgroundable background, string colorStr)
         {
             if (colorStr == "none")
+            {
                 return;
+            }
+
             ColorUtility.TryParseHtmlString(colorStr, out var color);
             background.background.color = color;
         }
@@ -133,10 +136,14 @@ namespace SaberFactory.UI.Components
         public void ApplyBackground(string name)
         {
             if (background != null)
+            {
                 throw new Exception("Cannot add multiple backgrounds");
+            }
 
             if (!Backgrounds.TryGetValue(name, out var backgroundName))
+            {
                 throw new Exception($"Background type '{name}' not found");
+            }
 
             try
             {

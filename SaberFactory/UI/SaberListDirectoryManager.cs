@@ -23,9 +23,13 @@ namespace SaberFactory.UI.CustomSaber.Views
         public void GoBack()
         {
             if (!_currentDirectory.Contains("\\"))
+            {
                 _currentDirectory = "";
+            }
             else
+            {
                 _currentDirectory = _currentDirectory.Substring(0, _currentDirectory.LastIndexOf('\\'));
+            }
         }
 
         public void Navigate(string path)
@@ -49,16 +53,30 @@ namespace SaberFactory.UI.CustomSaber.Views
 
             foreach (var folder in _additionalFolderPool)
             {
-                if (!folder.StartsWith(_currentDirectory)) continue;
+                if (!folder.StartsWith(_currentDirectory))
+                {
+                    continue;
+                }
+
                 var d = _currentDirectory == string.Empty ? folder : folder.Replace(_currentDirectory, "");
-                if (d.Length > 0 && d[0] == '\\') d = d.Substring(1);
+                if (d.Length > 0 && d[0] == '\\')
+                {
+                    d = d.Substring(1);
+                }
+
                 d = d.Contains('\\') ? d.Substring(0, d.IndexOf('\\')) : d;
-                if (d != string.Empty) addedFolders.Add(d);
+                if (d != string.Empty)
+                {
+                    addedFolders.Add(d);
+                }
             }
 
             itemsList.InsertRange(0, addedFolders.Select(x => new CustomList.ListDirectory(x)));
 
-            if (!IsInRoot) itemsList.Insert(0, new CustomList.ListDirectory(UpDirIndicator));
+            if (!IsInRoot)
+            {
+                itemsList.Insert(0, new CustomList.ListDirectory(UpDirIndicator));
+            }
 
             return itemsList;
         }
@@ -66,18 +84,26 @@ namespace SaberFactory.UI.CustomSaber.Views
         public IEnumerable<ICustomListItem> FilterForDir(IEnumerable<ICustomListItem> items, string dir)
         {
             foreach (var item in items)
+            {
                 if (item is PreloadMetaData preloadMetaData)
                 {
-                    if (preloadMetaData.AssetMetaPath.SubDirName == dir) yield return item;
+                    if (preloadMetaData.AssetMetaPath.SubDirName == dir)
+                    {
+                        yield return item;
+                    }
                 }
                 else if (item is ModelComposition comp)
                 {
-                    if (comp.GetLeft().StoreAsset.SubDirName == dir) yield return item;
+                    if (comp.GetLeft().StoreAsset.SubDirName == dir)
+                    {
+                        yield return item;
+                    }
                 }
                 else
                 {
                     yield return item;
                 }
+            }
         }
 
         private void RefreshDirectoryString()

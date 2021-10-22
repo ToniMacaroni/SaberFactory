@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using CustomSaber;
+using Newtonsoft.Json.Linq;
 using SaberFactory.DataStore;
 using SaberFactory.Helpers;
 using SaberFactory.Instances;
@@ -60,19 +62,31 @@ namespace SaberFactory.Models.CustomSaber
 
         public override void OnLazyInit()
         {
-            if (!HasTrail) return;
+            if (!HasTrail)
+            {
+                return;
+            }
+
             var trailModel = TrailModel;
 
             var path = PathTools.ToFullPath(StoreAsset.RelativePath) + ".trail";
             var trail = QuickSave.LoadObject<TrailProportions>(path);
-            if (trail == null) return;
+            if (trail == null)
+            {
+                return;
+            }
+
             trailModel.Length = trail.Length;
             trailModel.Width = trail.Width;
         }
 
         public override void SaveAdditionalData()
         {
-            if (!HasTrail) return;
+            if (!HasTrail)
+            {
+                return;
+            }
+
             var trailModel = TrailModel;
 
             var path = PathTools.ToFullPath(StoreAsset.RelativePath) + ".trail";
@@ -114,7 +128,10 @@ namespace SaberFactory.Models.CustomSaber
                 if (mat != null && (string.IsNullOrWhiteSpace(TrailModel.TrailOrigin) ||
                                     mat.shader.name == otherMat.shader.name))
                 {
-                    foreach (var prop in otherMat.GetProperties(MaterialAttributes.HideInSf)) mat.SetProperty(prop.Item2, prop.Item1, prop.Item3);
+                    foreach (var prop in otherMat.GetProperties(MaterialAttributes.HideInSf))
+                    {
+                        mat.SetProperty(prop.Item2, prop.Item1, prop.Item3);
+                    }
 
                     TrailModel.Material.Material = mat;
                 }
@@ -129,10 +146,16 @@ namespace SaberFactory.Models.CustomSaber
         {
             var trail = SaberHelpers.GetTrails(Prefab).FirstOrDefault();
 
-            if (trail == null) return null;
+            if (trail == null)
+            {
+                return null;
+            }
 
             TextureWrapMode wrapMode = default;
-            if (trail.TrailMaterial != null && trail.TrailMaterial.TryGetMainTexture(out var tex)) wrapMode = tex.wrapMode;
+            if (trail.TrailMaterial != null && trail.TrailMaterial.TryGetMainTexture(out var tex))
+            {
+                wrapMode = tex.wrapMode;
+            }
 
             FixTrailParents();
 
@@ -161,15 +184,42 @@ namespace SaberFactory.Models.CustomSaber
         /// <param name="trail"></param>
         public void FixTrailParents()
         {
-            if (_didReparentTrail) return;
+            if (_didReparentTrail)
+            {
+                return;
+            }
+
             _didReparentTrail = true;
 
             var trail = Prefab.GetComponent<CustomTrail>();
 
-            if (trail is null) return;
+            if (trail is null)
+            {
+                return;
+            }
 
             trail.PointStart.SetParent(Prefab.transform, true);
             trail.PointEnd.SetParent(Prefab.transform, true);
+        }
+
+        public override async Task FromJson(JObject obj, Serializer serializer)
+        {
+            await base.FromJson(obj, serializer);
+            if (HasTrail)
+            {
+                await TrailModel.FromJson((JObject)obj[nameof(TrailModel)], serializer);
+            }
+        }
+
+        public override async Task<JToken> ToJson(Serializer serializer)
+        {
+            var obj = (JObject)await base.ToJson(serializer);
+            if (HasTrail)
+            {
+                obj.Add(nameof(TrailModel), await TrailModel.ToJson(serializer));
+            }
+
+            return obj;
         }
 
         internal class Factory : PlaceholderFactory<StoreAsset, CustomSaberModel>

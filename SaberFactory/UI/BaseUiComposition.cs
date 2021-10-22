@@ -14,34 +14,40 @@ namespace SaberFactory.UI
     /// <summary>
     ///     Base class to build ui configurations upon
     /// </summary>
-    internal class SaberFactoryUI
+    internal class BaseUiComposition
     {
         public GameObject GameObject { get; private set; }
+
+        protected readonly List<CustomScreen> _screens = new List<CustomScreen>();
         protected CurvedCanvasSettings _curvedCanvasSettings;
         protected GameObject _curvedGO;
-
-        protected List<CustomScreen> _screens;
         private readonly BaseGameUiHandler _baseGameUiHandler;
 
         private readonly SiraLog _logger;
         private readonly PhysicsRaycasterWithCache _physicsRaycaster;
+        protected readonly BsmlDecorator BsmlDecorator;
         private readonly CustomScreen.Factory _screenFactory;
 
-        protected SaberFactoryUI(SiraLog logger, CustomScreen.Factory screenFactory, BaseGameUiHandler baseGameUiHandler,
-            PhysicsRaycasterWithCache physicsRaycaster)
+        protected BaseUiComposition(
+            SiraLog logger,
+            CustomScreen.Factory screenFactory,
+            BaseGameUiHandler baseGameUiHandler,
+            PhysicsRaycasterWithCache physicsRaycaster,
+            BsmlDecorator bsmlDecorator)
         {
             _logger = logger;
             _screenFactory = screenFactory;
             _baseGameUiHandler = baseGameUiHandler;
             _physicsRaycaster = physicsRaycaster;
-
-            _screens = new List<CustomScreen>();
+            BsmlDecorator = bsmlDecorator;
         }
 
         public event Action OnClosePressed;
 
         public void Initialize()
         {
+            SetupTemplates();
+            
             GameObject = new GameObject("Saber Factory UI");
             GameObject.transform.SetParent(_baseGameUiHandler.GetUIParent(), false);
             GameObject.transform.localPosition = new Vector3(0, 1.1f, 2.6f);
@@ -63,7 +69,7 @@ namespace SaberFactory.UI
             SetupUI();
         }
 
-        public virtual void SetupUI()
+        protected virtual void SetupUI()
         {
         }
 
@@ -71,14 +77,20 @@ namespace SaberFactory.UI
         {
             _baseGameUiHandler.DismissGameUI();
 
-            foreach (var screen in _screens) screen.Open();
+            foreach (var screen in _screens)
+            {
+                screen.Open();
+            }
 
             DidOpen();
         }
 
         public void Close(bool instant = false)
         {
-            foreach (var screen in _screens) screen.Close(instant);
+            foreach (var screen in _screens)
+            {
+                screen.Close(instant);
+            }
 
             DidClose();
 
@@ -101,6 +113,11 @@ namespace SaberFactory.UI
         public void SetRadius(float radius)
         {
             _curvedCanvasSettings.SetRadius(radius);
+        }
+
+        protected virtual void SetupTemplates()
+        {
+            BsmlDecorator.AddTemplate("DefaultButtonColors", "normal-color=\"#7A7A7A35\" hovered-color=\"#7A7A7A60\"");
         }
 
         protected CustomScreen AddScreen(CustomScreen.InitData initData)

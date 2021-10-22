@@ -13,7 +13,11 @@ namespace SaberFactory.HarmonyPatches
 
         public static void Postfix(TextSegmentedControl ____selectionSegmentedControl)
         {
-            if (!EntryEnabled) return;
+            if (!EntryEnabled)
+            {
+                return;
+            }
+
             var texts = ____selectionSegmentedControl.GetField<IReadOnlyList<string>, TextSegmentedControl>("_texts");
             var list = new List<string>(texts);
             list.Add("Sabers");

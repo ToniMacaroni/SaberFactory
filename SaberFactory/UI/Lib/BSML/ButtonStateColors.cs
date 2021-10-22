@@ -42,11 +42,19 @@ namespace SaberFactory.UI.Lib.BSML
             {
                 case NoTransitionsButton.SelectionState.Normal:
                     Image.color = NormalColor;
-                    if (UnderlineImage is { }) UnderlineImage.enabled = false;
+                    if (UnderlineImage is { })
+                    {
+                        UnderlineImage.enabled = false;
+                    }
+
                     break;
                 case NoTransitionsButton.SelectionState.Highlighted:
                     Image.color = HoveredColor;
-                    if (UnderlineImage is { }) UnderlineImage.enabled = true;
+                    if (UnderlineImage is { })
+                    {
+                        UnderlineImage.enabled = true;
+                    }
+
                     break;
                 case NoTransitionsButton.SelectionState.Pressed:
                     Image.color = SelectedColor;

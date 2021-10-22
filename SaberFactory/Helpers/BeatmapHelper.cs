@@ -13,8 +13,12 @@
                 {
                     var beatmapObjectData = beatmapObjectsData[i];
                     if (beatmapObjectData.beatmapObjectType == BeatmapObjectType.Note && ((NoteData)beatmapObjectData).colorType != ColorType.None)
+                    {
                         if (beatmapObjectData.time > lastTime)
+                        {
                             lastTime = beatmapObjectData.time;
+                        }
+                    }
                 }
             }
 

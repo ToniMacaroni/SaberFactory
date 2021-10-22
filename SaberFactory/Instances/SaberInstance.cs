@@ -12,7 +12,6 @@ using SaberFactory.Models;
 using SiraUtil.Tools;
 using UnityEngine;
 using Zenject;
-using Object = System.Object;
 
 namespace SaberFactory.Instances
 {
@@ -61,7 +60,7 @@ namespace SaberFactory.Instances
             var sectionInstantiator = new SectionInstantiator(this, pieceFactory, PieceCollection);
             sectionInstantiator.InstantiateSections();
 
-            GameObject.transform.localScale = new Vector3(model.SaberWidth, model.SaberWidth, 1);
+            GameObject.transform.localScale = new Vector3(model.SaberWidth, model.SaberWidth, model.SaberLength);
 
             saberMiddlewares.Do(x => x.ProcessSaber(GameObject));
 
@@ -78,13 +77,20 @@ namespace SaberFactory.Instances
 
         public void SetColor(Color color)
         {
-            foreach (BasePieceInstance piece in PieceCollection) piece.SetColor(color);
+            foreach (BasePieceInstance piece in PieceCollection)
+            {
+                piece.SetColor(color);
+            }
 
             TrailHandler?.SetColor(color);
 
             if (_secondaryTrails is { })
+            {
                 foreach (var trail in _secondaryTrails)
+                {
                     trail.SetColor(color);
+                }
+            }
         }
 
         private void InitializeEvents()
@@ -93,13 +99,19 @@ namespace SaberFactory.Instances
             foreach (BasePieceInstance piece in PieceCollection)
             {
                 var events = piece.GetEvents();
-                if (events != null) Events.Add(events);
+                if (events != null)
+                {
+                    Events.Add(events);
+                }
             }
         }
 
         private void SetupTrailData()
         {
-            if (GetCustomSaber(out var customsaber)) return;
+            if (GetCustomSaber(out var customsaber))
+            {
+                return;
+            }
 
             // TODO: Setup sf trail data
             _instanceTrailData = default;
@@ -140,8 +152,12 @@ namespace SaberFactory.Instances
         {
             TrailHandler?.DestroyTrail(immediate);
             if (_secondaryTrails is { })
+            {
                 foreach (var trail in _secondaryTrails)
+                {
                     trail.DestroyTrail();
+                }
+            }
         }
 
         public void Destroy()
@@ -155,7 +171,10 @@ namespace SaberFactory.Instances
         {
             DestroyTrail();
 
-            foreach (BasePieceInstance piece in PieceCollection) piece.Dispose();
+            foreach (BasePieceInstance piece in PieceCollection)
+            {
+                piece.Dispose();
+            }
         }
 
         private bool GetCustomSaber(out CustomSaberInstance customSaberInstance)
@@ -186,7 +205,13 @@ namespace SaberFactory.Instances
         public void SetSaberWidth(float width)
         {
             Model.SaberWidth = width;
-            GameObject.transform.localScale = new Vector3(width, width, 1);
+            GameObject.transform.localScale = new Vector3(width, width, Model.SaberLength);
+        }
+
+        public void SetSaberLength(float length)
+        {
+            Model.SaberLength = length;
+            GameObject.transform.localScale = new Vector3(Model.SaberWidth, Model.SaberWidth, length);
         }
 
         internal class Factory : PlaceholderFactory<SaberModel, SaberInstance>

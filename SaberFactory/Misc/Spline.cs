@@ -10,7 +10,10 @@ namespace SaberFactory.Misc
             get
             {
                 if (index > -1 && index < mSegments.Count)
+                {
                     return mSegments[index];
+                }
+
                 return null;
             }
         }
@@ -23,22 +26,34 @@ namespace SaberFactory.Misc
 
         public SplineControlPoint NextControlPoint(SplineControlPoint controlpoint)
         {
-            if (ControlPoints.Count == 0) return null;
+            if (ControlPoints.Count == 0)
+            {
+                return null;
+            }
 
             var i = controlpoint.ControlPointIndex + 1;
             if (i >= ControlPoints.Count)
+            {
                 return null;
+            }
+
             return ControlPoints[i];
         }
 
 
         public SplineControlPoint PreviousControlPoint(SplineControlPoint controlpoint)
         {
-            if (ControlPoints.Count == 0) return null;
+            if (ControlPoints.Count == 0)
+            {
+                return null;
+            }
 
             var i = controlpoint.ControlPointIndex - 1;
             if (i < 0)
+            {
                 return null;
+            }
+
             return ControlPoints[i];
         }
 
@@ -46,7 +61,10 @@ namespace SaberFactory.Misc
         {
             var seg = NextControlPoint(controlpoint);
             if (seg != null)
+            {
                 return seg.Position;
+            }
+
             return controlpoint.Position;
         }
 
@@ -55,7 +73,10 @@ namespace SaberFactory.Misc
         {
             var seg = PreviousControlPoint(controlpoint);
             if (seg != null)
+            {
                 return seg.Position;
+            }
+
             return controlpoint.Position;
         }
 
@@ -64,7 +85,10 @@ namespace SaberFactory.Misc
         {
             var seg = PreviousControlPoint(controlpoint);
             if (seg != null)
+            {
                 return seg.Normal;
+            }
+
             return controlpoint.Normal;
         }
 
@@ -72,7 +96,10 @@ namespace SaberFactory.Misc
         {
             var seg = NextControlPoint(controlpoint);
             if (seg != null)
+            {
                 return seg.Normal;
+            }
+
             return controlpoint.Normal;
         }
 
@@ -87,11 +114,13 @@ namespace SaberFactory.Misc
 
             var index = 0;
             for (index = 0; index < mSegments.Count; index++)
+            {
                 if (mSegments[index].Dist >= len)
                 {
                     seg = mSegments[index];
                     break;
                 }
+            }
 
             if (index == 0)
             {
@@ -184,7 +213,9 @@ namespace SaberFactory.Misc
         private void RefreshDistance()
         {
             if (mSegments.Count < 1)
+            {
                 return;
+            }
 
             mSegments[0].Dist = 0f;
 
@@ -201,11 +232,13 @@ namespace SaberFactory.Misc
             mSegments.Clear();
 
             for (var i = 0; i < ControlPoints.Count; i++)
+            {
                 if (ControlPoints[i].IsValid)
                 {
                     mSegments.Add(ControlPoints[i]);
                     ControlPoints[i].SegmentIndex = mSegments.Count - 1;
                 }
+            }
 
             RefreshDistance();
         }

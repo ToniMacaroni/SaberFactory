@@ -24,12 +24,19 @@ namespace SaberFactory.Helpers
             relPath = CorrectRelativePath(relPath);
 
             var split = relPath.Split(Path.DirectorySeparatorChar);
-            if (split.Length < 3) return "";
+            if (split.Length < 3)
+            {
+                return "";
+            }
+
             var output = "";
             for (var i = 1; i < split.Length - 1; i++)
             {
                 output += split[i];
-                if (i != split.Length - 2) output += "\\";
+                if (i != split.Length - 2)
+                {
+                    output += "\\";
+                }
             }
 
             return output;
@@ -37,7 +44,10 @@ namespace SaberFactory.Helpers
 
         public static string CorrectRelativePath(string path)
         {
-            if (!string.IsNullOrEmpty(RelativeExtension) && path.StartsWith(RelativeExtension)) return path.Substring(RelativeExtension.Length);
+            if (!string.IsNullOrEmpty(RelativeExtension) && path.StartsWith(RelativeExtension))
+            {
+                return path.Substring(RelativeExtension.Length);
+            }
 
             return path;
         }
@@ -49,7 +59,10 @@ namespace SaberFactory.Helpers
 
         public static DirectoryInfo GetDirectory(this DirectoryInfo dir, string dirName, bool create = false)
         {
-            if (create) return dir.CreateSubdirectory(dirName);
+            if (create)
+            {
+                return dir.CreateSubdirectory(dirName);
+            }
 
             return new DirectoryInfo(Path.Combine(dir.FullName, dirName));
         }

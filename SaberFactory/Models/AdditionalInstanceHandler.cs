@@ -24,7 +24,10 @@ namespace SaberFactory.Models
 
         public GameObject GetInstance()
         {
-            if (!_instance) Instantiate();
+            if (!_instance)
+            {
+                Instantiate();
+            }
 
             return _instance;
         }
@@ -41,7 +44,11 @@ namespace SaberFactory.Models
             {
                 var saber = FindInInstance(saberSlot == ESaberSlot.Left ? "LeftSaber" : "RightSaber");
 
-                if (saber) return saber.gameObject;
+                if (saber)
+                {
+                    return saber.gameObject;
+                }
+
                 return null;
             }
 

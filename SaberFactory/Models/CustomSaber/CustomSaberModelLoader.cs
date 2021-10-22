@@ -41,9 +41,19 @@ namespace SaberFactory.Models.CustomSaber
             GameObject rightSaber = null;
             foreach (Transform t in root)
             {
-                if (t.name == "LeftSaber") leftSaber = t.gameObject;
-                else if (t.name == "RightSaber") rightSaber = t.gameObject;
-                if (leftSaber != null && rightSaber != null) break;
+                if (t.name == "LeftSaber")
+                {
+                    leftSaber = t.gameObject;
+                }
+                else if (t.name == "RightSaber")
+                {
+                    rightSaber = t.gameObject;
+                }
+
+                if (leftSaber != null && rightSaber != null)
+                {
+                    break;
+                }
             }
 
             return (leftSaber, rightSaber);

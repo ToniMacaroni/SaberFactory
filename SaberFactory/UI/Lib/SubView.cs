@@ -4,7 +4,6 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using BeatSaberMarkupLanguage.Parser;
 using JetBrains.Annotations;
-using SaberFactory.Helpers;
 using SiraUtil.Tools;
 using UnityEngine;
 using Zenject;
@@ -22,8 +21,8 @@ namespace SaberFactory.UI.Lib
         public SubViewSwitcher SubViewSwitcher;
 
         protected SiraLog Logger;
-        private bool _firstActivation = true;
         private BsmlDecorator _bsmlDecorator;
+        private bool _firstActivation = true;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -46,7 +45,10 @@ namespace SaberFactory.UI.Lib
             }
 
             gameObject.SetActive(true);
-            if (notify) DidOpen();
+            if (notify)
+            {
+                DidOpen();
+            }
         }
 
         public void Close()

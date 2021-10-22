@@ -32,7 +32,10 @@ namespace SaberFactory.UI
                 .parent
                 .parent
                 .GetComponent<Canvas>();
-            if (!canvas) return;
+            if (!canvas)
+            {
+                return;
+            }
 
             var buttonObj = new ButtonTag().CreateObject(canvas.transform);
 

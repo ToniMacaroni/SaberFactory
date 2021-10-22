@@ -11,7 +11,10 @@ namespace SaberFactory.Game
 
         public static bool GetField(this BeatmapData beatmap, string field, out object obj)
         {
-            if (!_initialized) Init();
+            if (!_initialized)
+            {
+                Init();
+            }
 
             if (_cjdHandler == null)
             {
@@ -27,12 +30,19 @@ namespace SaberFactory.Game
             _initialized = true;
 
             var pluginMetadata = IPA.Loader.PluginManager.GetPluginFromId("CustomJSONData");
-            if (pluginMetadata == null) return;
+            if (pluginMetadata == null)
+            {
+                return;
+            }
 
             if (pluginMetadata.HVersion.Major > 1)
+            {
                 _cjdHandler = new CJD2Handler();
+            }
             else
+            {
                 _cjdHandler = new CJD1Handler();
+            }
 
             _cjdHandler.Setup(pluginMetadata.Assembly);
         }
@@ -61,7 +71,11 @@ namespace SaberFactory.Game
                     }
 
                     obj = _cjdAtMethod?.Invoke(null, new[] { _cjdLevelCustomDataType?.GetValue(beatmap), field });
-                    if (obj == null) return false;
+                    if (obj == null)
+                    {
+                        return false;
+                    }
+
                     return true;
                 }
                 catch (Exception)
@@ -107,7 +121,11 @@ namespace SaberFactory.Game
                         return false;
                     }
 
-                    if (obj == null) return false;
+                    if (obj == null)
+                    {
+                        return false;
+                    }
+
                     return true;
                 }
                 catch (Exception)

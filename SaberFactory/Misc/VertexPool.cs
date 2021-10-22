@@ -58,7 +58,10 @@ namespace SaberFactory.Misc
 
         public void SetMeshObjectActive(bool flag)
         {
-            if (_meshFilter == null) return;
+            if (_meshFilter == null)
+            {
+                return;
+            }
 
             _meshFilter.gameObject.SetActive(flag);
         }
@@ -91,8 +94,16 @@ namespace SaberFactory.Misc
         {
             var vertNeed = 0;
             var indexNeed = 0;
-            if (_vertexUsed + vcount >= _vertexTotal) vertNeed = (vcount / BlockSize + 1) * BlockSize;
-            if (_indexUsed + icount >= _indexTotal) indexNeed = (icount / BlockSize + 1) * BlockSize;
+            if (_vertexUsed + vcount >= _vertexTotal)
+            {
+                vertNeed = (vcount / BlockSize + 1) * BlockSize;
+            }
+
+            if (_indexUsed + icount >= _indexTotal)
+            {
+                indexNeed = (icount / BlockSize + 1) * BlockSize;
+            }
+
             _vertexUsed += vcount;
             _indexUsed += icount;
             if (vertNeed != 0 || indexNeed != 0)
@@ -147,15 +158,31 @@ namespace SaberFactory.Misc
 
         public void LateUpdate()
         {
-            if (MyMesh == null) return;
-            if (_vertCountChanged) MyMesh.Clear();
+            if (MyMesh == null)
+            {
+                return;
+            }
+
+            if (_vertCountChanged)
+            {
+                MyMesh.Clear();
+            }
 
             MyMesh.vertices = Vertices;
-            if (UVChanged) MyMesh.uv = UVs;
+            if (UVChanged)
+            {
+                MyMesh.uv = UVs;
+            }
 
-            if (ColorChanged) MyMesh.colors = Colors;
+            if (ColorChanged)
+            {
+                MyMesh.colors = Colors;
+            }
 
-            if (IndiceChanged) MyMesh.triangles = Indices;
+            if (IndiceChanged)
+            {
+                MyMesh.triangles = Indices;
+            }
 
             ElapsedTime += Time.deltaTime;
             if (ElapsedTime > BoundsScheduleTime || FirstUpdate)
@@ -165,7 +192,9 @@ namespace SaberFactory.Misc
             }
 
             if (ElapsedTime > BoundsScheduleTime)
+            {
                 FirstUpdate = false;
+            }
 
             _vertCountChanged = false;
             IndiceChanged = false;

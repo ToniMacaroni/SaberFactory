@@ -32,7 +32,10 @@ namespace SaberFactory.Instances.Trail
         {
             if (_instanceTrailData is null)
             {
-                if (_backupTrail is null) return;
+                if (_backupTrail is null)
+                {
+                    return;
+                }
 
                 var trailStart = TrailInstance.gameObject.CreateGameObject("Trail StartNew");
                 var trailEnd = TrailInstance.gameObject.CreateGameObject("TrailEnd");
@@ -85,8 +88,14 @@ namespace SaberFactory.Instances.Trail
 
         public void DestroyTrail(bool immediate = false)
         {
-            if (immediate) TrailInstance.TryDestoryImmediate();
-            else TrailInstance.TryDestroy();
+            if (immediate)
+            {
+                TrailInstance.TryDestoryImmediate();
+            }
+            else
+            {
+                TrailInstance.TryDestroy();
+            }
         }
 
         public void SetTrailData(InstanceTrailData instanceTrailData)
@@ -96,18 +105,30 @@ namespace SaberFactory.Instances.Trail
 
         public void SetColor(Color color)
         {
-            if (TrailInstance is { }) TrailInstance.Color = color;
+            if (TrailInstance is { })
+            {
+                TrailInstance.Color = color;
+            }
 
-            if (_canColorMaterial) _instanceTrailData.Material.Material.color = color;
+            if (_canColorMaterial)
+            {
+                _instanceTrailData.Material.Material.color = color;
+            }
         }
 
         private bool IsMaterialColorable(Material material)
         {
-            if (material is null || !material.HasProperty(MaterialProperties.MainColor)) return false;
+            if (material is null || !material.HasProperty(MaterialProperties.MainColor))
+            {
+                return false;
+            }
 
             if (material.TryGetFloat(MaterialProperties.CustomColors, out var val))
             {
-                if (val > 0) return true;
+                if (val > 0)
+                {
+                    return true;
+                }
             }
             else if (material.TryGetFloat(MaterialProperties.Glow, out val) && val > 0)
             {

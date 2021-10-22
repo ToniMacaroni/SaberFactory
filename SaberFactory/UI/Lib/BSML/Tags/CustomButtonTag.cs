@@ -17,7 +17,7 @@ namespace SaberFactory.UI.Lib.BSML.Tags
         //private static readonly Color _defaultHoveredColor = new Color(0.086f, 0.090f, 0.101f);
         private static readonly Color _defaultHoveredColor = new Color(0.2f, 0.2f, 0.2f, 0.8f);
 
-        public override string[] Aliases => new[] { "sui.button" };
+        public override string[] Aliases => new[] { CustomComponentHandler.ComponentPrefix+".button" };
         public virtual string PrefabButton => "PracticeButton";
 
         private Button buttonPrefab;
@@ -25,7 +25,9 @@ namespace SaberFactory.UI.Lib.BSML.Tags
         public override GameObject CreateObject(Transform parent)
         {
             if (buttonPrefab == null)
+            {
                 buttonPrefab = Resources.FindObjectsOfTypeAll<Button>().Last(x => x.name == PrefabButton);
+            }
 
             var button = Object.Instantiate(buttonPrefab, parent, false);
             button.name = "BSMLButton";
@@ -67,9 +69,14 @@ namespace SaberFactory.UI.Lib.BSML.Tags
 
             var stackLayoutGroup = button.GetComponentInChildren<LayoutGroup>();
             if (stackLayoutGroup != null)
+            {
                 externalComponents.components.Add(stackLayoutGroup);
+            }
 
-            if (!button.gameObject.activeSelf) button.gameObject.SetActive(true);
+            if (!button.gameObject.activeSelf)
+            {
+                button.gameObject.SetActive(true);
+            }
 
             return button.gameObject;
         }

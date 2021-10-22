@@ -17,35 +17,70 @@ namespace SaberFactory.UI.Lib.BSML
         public void SetIcon(string path)
         {
             if (ForegroundImage == null)
+            {
                 return;
+            }
+
             ForegroundImage.SetImage(path);
         }
 
         public void SetIconColor(string colorString)
         {
-            if (ForegroundImage is null) return;
-            if (ColorUtility.TryParseHtmlString(colorString, out var color)) ForegroundImage.color = color;
+            if (ForegroundImage is null)
+            {
+                return;
+            }
+
+            if (ColorUtility.TryParseHtmlString(colorString, out var color))
+            {
+                ForegroundImage.color = color;
+            }
         }
 
         public void SetBackgroundIcon(string path)
         {
             if (BackgroundImage == null)
+            {
                 return;
+            }
+
             BackgroundImage.SetImage(path);
         }
 
         public void ShowLine(bool show)
         {
-            if (LineImage == null) return;
+            if (LineImage == null)
+            {
+                return;
+            }
 
             LineImage.gameObject.SetActive(show);
         }
 
         public void SetLineColor(string colorString)
         {
-            if (LineImage is null) return;
-            if (!ColorUtility.TryParseHtmlString(colorString, out var color)) return;
+            if (LineImage is null)
+            {
+                return;
+            }
+
+            if (!ColorUtility.TryParseHtmlString(colorString, out var color))
+            {
+                return;
+            }
+
             LineImage.color = color;
+        }
+
+        public void SetIconPad(string sizeStr)
+        {
+            if (ForegroundImage is null)
+            {
+                return;
+            }
+
+            var size = int.Parse(sizeStr);
+            ForegroundImage.transform.parent.GetComponent<StackLayoutGroup>().padding = new RectOffset(size, size, size, size);
         }
     }
 
@@ -56,6 +91,7 @@ namespace SaberFactory.UI.Lib.BSML
         {
             { "icon", new[] { "icon" } },
             { "iconColor", new[] { "icon-color" } },
+            { "iconPad", new[] { "icon-pad" } },
             { "bgIcon", new[] { "bg-icon" } },
             { "showLine", new[] { "show-line" } },
             { "lineColor", new[] { "line-color" } },
@@ -71,6 +107,7 @@ namespace SaberFactory.UI.Lib.BSML
             {
                 { "icon", (images, iconPath) => images.SetIcon(iconPath) },
                 { "iconColor", (images, color) => images.SetIconColor(color) },
+                { "iconPad", (images, size) => images.SetIconPad(size) },
                 { "bgIcon", (images, iconPath) => images.SetBackgroundIcon(iconPath) },
                 { "showLine", (images, stringBool) => images.ShowLine(bool.Parse(stringBool)) },
                 { "lineColor", (images, color) => images.SetLineColor(color) },

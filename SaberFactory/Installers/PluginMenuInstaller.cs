@@ -1,11 +1,8 @@
-﻿using System;
-using SaberFactory.Editor;
+﻿using SaberFactory.Editor;
 using SaberFactory.Models;
 using SaberFactory.UI;
 using SaberFactory.UI.CustomSaber;
-using SaberFactory.UI.Lib;
 using SaberFactory.UI.Lib.BSML;
-using UnityEngine;
 using Zenject;
 
 namespace SaberFactory.Installers
@@ -20,7 +17,7 @@ namespace SaberFactory.Installers
 
             BindRemoteSabers();
 
-            Container.Bind<SaberFactoryUI>().To<CustomSaberUI>().AsSingle();
+            Container.Bind<BaseUiComposition>().To<CustomSaberUiComposition>().AsSingle();
             Container.Bind<SaberGrabController>().AsSingle();
             Container.BindInterfacesAndSelfTo<Editor.Editor>().AsSingle();
 
