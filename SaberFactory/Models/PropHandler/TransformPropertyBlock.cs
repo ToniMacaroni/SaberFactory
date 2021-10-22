@@ -15,14 +15,15 @@ namespace SaberFactory.Models.PropHandler
 
         public float Rotation { get; set; }
 
-        public async Task FromJson(JObject obj, Serializer serializer)
+        public Task FromJson(JObject obj, Serializer serializer)
         {
             obj.Populate(this);
+            return Task.CompletedTask;
         }
 
-        public async Task<JToken> ToJson(Serializer serializer)
+        public Task<JToken> ToJson(Serializer serializer)
         {
-            return JObject.FromObject(this, Serializer.JsonSerializer);
+            return Task.FromResult<JToken>(JObject.FromObject(this, Serializer.JsonSerializer));
         }
     }
 }

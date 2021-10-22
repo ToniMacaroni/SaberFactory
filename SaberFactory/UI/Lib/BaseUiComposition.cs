@@ -48,7 +48,7 @@ namespace SaberFactory.UI
         {
             SetupTemplates();
             
-            GameObject = new GameObject("Saber Factory UI");
+            GameObject = new GameObject(GetType().Namespace+" UI");
             GameObject.transform.SetParent(_baseGameUiHandler.GetUIParent(), false);
             GameObject.transform.localPosition = new Vector3(0, 1.1f, 2.6f);
             GameObject.transform.localScale = new Vector3(0.02f, 0.02f, 0.02f);

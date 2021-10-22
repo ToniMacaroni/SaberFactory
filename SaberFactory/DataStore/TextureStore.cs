@@ -12,7 +12,6 @@ namespace SaberFactory.DataStore
 
         private readonly Dictionary<string, TextureAsset> _textureAssets;
         private readonly DirectoryInfo _textureDirectory;
-        private Task _currentLoadingTask;
 
         private TextureStore(PluginDirectories pluginDirs)
         {

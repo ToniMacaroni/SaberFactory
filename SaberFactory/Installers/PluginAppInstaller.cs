@@ -77,6 +77,7 @@ namespace SaberFactory.Installers
             Container.Bind<SaberSet>().AsSingle();
 
             Container.Bind<SaberFileWatcher>().AsSingle();
+            Container.Bind<RandomUtil>().AsSingle();
 
             InstallFactories();
             InstallMiddlewares();

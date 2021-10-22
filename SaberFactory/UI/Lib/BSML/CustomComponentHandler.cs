@@ -85,7 +85,7 @@ namespace SaberFactory.UI.Lib.BSML
                 _schema = schema;
             }
 
-            public void Write(string filename)
+            public override void Write(string filename)
             {
                 _schema.Write(this);
                 File.WriteAllText(filename, ToString());
@@ -140,8 +140,9 @@ namespace SaberFactory.UI.Lib.BSML
                                 }
                             }
                         }
-                        catch (Exception e)
+                        catch (Exception)
                         {
+                            // ignored
                         }
                     }
                 }

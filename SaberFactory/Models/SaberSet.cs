@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using SaberFactory.Configuration;
@@ -16,16 +14,12 @@ namespace SaberFactory.Models
     /// </summary>
     internal class SaberSet : IFactorySerializable, ILoadingTask
     {
-        private static readonly Random RNG = new Random();
-
         public SaberModel LeftSaber { get; set; }
 
         public SaberModel RightSaber { get; set; }
 
         public bool IsEmpty => LeftSaber.IsEmpty && RightSaber.IsEmpty;
-        private readonly PluginConfig _config;
 
-        private readonly List<int> _lastSelectedRandoms = new List<int> { 1 };
         private readonly MainAssetStore _mainAssetStore;
 
         private readonly PresetSaveManager _presetSaveManager;
@@ -34,16 +28,14 @@ namespace SaberFactory.Models
             [Inject(Id = ESaberSlot.Left)] SaberModel leftSaber,
             [Inject(Id = ESaberSlot.Right)] SaberModel rightSaber,
             PresetSaveManager presetSaveManager,
-            PluginConfig config,
             MainAssetStore mainAssetStore)
         {
             _presetSaveManager = presetSaveManager;
-            _config = config;
             _mainAssetStore = mainAssetStore;
             LeftSaber = leftSaber;
             RightSaber = rightSaber;
 
-            Load();
+            _ = Load();
         }
 
         public async Task FromJson(JObject obj, Serializer serializer)
@@ -70,35 +62,6 @@ namespace SaberFactory.Models
             RightSaber.SetModelComposition(modelComposition);
         }
 
-        public async Task Randomize()
-        {
-            if (
-                _config.AssetType == EAssetTypeConfiguration.CustomSaber ||
-                _config.AssetType == EAssetTypeConfiguration.None)
-            {
-                await RandomizeFrom(_mainAssetStore.GetAllMetaData(AssetTypeDefinition.CustomSaber).ToList());
-            }
-        }
-
-        public async Task RandomizeFrom(IList<PreloadMetaData> meta)
-        {
-            if (_lastSelectedRandoms.Count == meta.Count)
-            {
-                _lastSelectedRandoms.Clear();
-            }
-
-            int idx;
-            do
-            {
-                idx = RandomNumber(meta.Count);
-            } while (_lastSelectedRandoms.Contains(idx));
-
-            _lastSelectedRandoms.Add(idx);
-
-            var comp = meta[idx];
-            SetModelComposition(await _mainAssetStore.GetCompositionByMeta(comp));
-        }
-
         public async Task SetSaber(string saberName)
         {
             var metaData = _mainAssetStore.GetAllMetaData(AssetTypeDefinition.CustomSaber);
@@ -116,22 +79,12 @@ namespace SaberFactory.Models
             SetModelComposition(await _mainAssetStore.GetCompositionByMeta(preloadData));
         }
 
-        public async void Load()
-        {
-            await Load("default");
-        }
-
-        public void Save()
-        {
-            Save("default");
-        }
-
-        public void Save(string fileName)
+        public void Save(string fileName = "default")
         {
             _presetSaveManager.SaveSaber(this, fileName);
         }
 
-        public async Task Load(string fileName)
+        public async Task Load(string fileName = "default")
         {
             CurrentTask = _presetSaveManager.LoadSaber(this, fileName);
             await CurrentTask;
@@ -144,14 +97,6 @@ namespace SaberFactory.Models
             var otherSaber = fromModel == LeftSaber ? RightSaber : LeftSaber;
             otherSaber.SaberWidth = fromModel.SaberWidth;
             otherSaber.SaberLength = fromModel.SaberLength;
-        }
-
-        private int RandomNumber(int count)
-        {
-            lock (RNG)
-            {
-                return RNG.Next(count);
-            }
         }
     }
 }

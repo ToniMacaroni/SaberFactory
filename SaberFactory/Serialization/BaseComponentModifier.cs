@@ -29,7 +29,7 @@ namespace SaberFactory.Helpers
             GetUpateProps();
         }
 
-        public async Task FromJson(JObject obj, Serializer serializer)
+        public Task FromJson(JObject obj, Serializer serializer)
         {
             foreach (var prop in _updateProps)
             {
@@ -39,9 +39,11 @@ namespace SaberFactory.Helpers
                     prop.Item2.SetValue(this, objTkn.ToObject(prop.Item2.PropertyType));
                 }
             }
+
+            return Task.CompletedTask;
         }
 
-        public async Task<JToken> ToJson(Serializer serializer)
+        public Task<JToken> ToJson(Serializer serializer)
         {
             var obj = new JObject();
             foreach (var prop in _updateProps)
@@ -49,7 +51,7 @@ namespace SaberFactory.Helpers
                 obj.Add(prop.Item2.Name, JToken.FromObject(prop.Item2.GetValue(this)));
             }
 
-            return obj;
+            return Task.FromResult<JToken>(obj);
         }
 
         public virtual void SetInstance(Component instanceComponent)

@@ -81,7 +81,7 @@ namespace SaberFactory.Models
             }
         }
 
-        public async Task<JToken> ToJson(Serializer serializer)
+        public Task<JToken> ToJson(Serializer serializer)
         {
             var obj = JObject.FromObject(this, Serializer.JsonSerializer);
             if (Material.IsValid)
@@ -89,7 +89,7 @@ namespace SaberFactory.Models
                 obj.Add("Material", serializer.SerializeMaterial(Material.Material));
             }
 
-            return obj;
+            return Task.FromResult<JToken>(obj);
         }
 
         public void CopyFrom(TrailModel other)

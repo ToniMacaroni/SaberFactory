@@ -22,7 +22,7 @@ namespace SaberFactory.Saving
         public void SaveSaber(SaberSet saberSet, string fileName)
         {
             var file = _presetDir.GetFile(fileName);
-            saberSet.SaveToFile(_serializer, file.FullName);
+            _ = saberSet.SaveToFile(_serializer, file.FullName);
         }
 
         public async Task LoadSaber(SaberSet saberSet, string fileName)
