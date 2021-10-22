@@ -75,7 +75,7 @@ namespace SaberFactory.UI.CustomSaber.Views
         private async void Setup()
         {
             var release = await _pluginManager.GetNewestReleaseAsync(CancellationToken.None);
-            if (release != null && !release.IsLocalNewest)
+            if (release is { IsLocalNewest: false })
             {
                 _githubButton.SetActive(true);
             }

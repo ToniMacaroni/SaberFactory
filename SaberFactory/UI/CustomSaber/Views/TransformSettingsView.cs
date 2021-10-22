@@ -53,6 +53,12 @@ namespace SaberFactory.UI.CustomSaber.Views
             }
         }
 
+        public float SaberLength
+        {
+            get => _editorInstanceManager.CurrentSaber?.Model.SaberLength ?? 1;
+            set => _editorInstanceManager.CurrentSaber?.SetSaberLength(value);
+        }
+
         [Inject] private readonly EditorInstanceManager _editorInstanceManager = null;
 
         private TransformDataSetter _transformDataSetter;
