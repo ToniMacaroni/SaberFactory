@@ -14,13 +14,13 @@ namespace SaberFactory.Game
     {
         public Task SetupTask { get; private set; }
         private readonly BeatmapData _beatmapData;
-        private readonly RandomUtil _randomUtil;
 
         private readonly PluginConfig _config;
         private readonly MainAssetStore _mainAssetStore;
 
         private readonly SaberModel _oldLeftSaberModel;
         private readonly SaberModel _oldRightSaberModel;
+        private readonly RandomUtil _randomUtil;
         private readonly SaberSet _saberSet;
 
         private GameSaberSetup(PluginConfig config, SaberSet saberSet, MainAssetStore mainAssetStore,
@@ -45,8 +45,7 @@ namespace SaberFactory.Game
         }
 
         public void Initialize()
-        {
-        }
+        { }
 
         public async void Setup()
         {

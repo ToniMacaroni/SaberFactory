@@ -28,7 +28,6 @@ namespace SaberFactory.UI
         }
 
         protected virtual void OnClick()
-        {
-        }
+        { }
     }
 }

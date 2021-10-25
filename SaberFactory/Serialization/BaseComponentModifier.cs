@@ -110,8 +110,7 @@ namespace SaberFactory.Helpers
         }
 
         protected virtual void Init(T component)
-        {
-        }
+        { }
 
         public override void SetInstance(Component instanceComponent)
         {

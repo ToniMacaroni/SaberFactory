@@ -11,7 +11,7 @@ namespace SaberFactory.UI.Lib.BSML.Tags
 {
     public class ButtonWithIconTag : BSMLTag
     {
-        public override string[] Aliases => new[] { CustomComponentHandler.ComponentPrefix+".icon-button" };
+        public override string[] Aliases => new[] { CustomComponentHandler.ComponentPrefix + ".icon-button" };
 
         public override GameObject CreateObject(Transform parent)
         {

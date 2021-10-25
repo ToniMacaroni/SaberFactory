@@ -5,7 +5,6 @@ using BeatSaberMarkupLanguage.Attributes;
 using SaberFactory.UI.CustomSaber.CustomComponents;
 using SaberFactory.UI.Lib;
 using TMPro;
-using UnityEngine;
 using Zenject;
 
 namespace SaberFactory.UI.CustomSaber.Views
@@ -86,7 +85,7 @@ namespace SaberFactory.UI.CustomSaber.Views
             {
                 _currentSelectedNavButton.Deselect();
             }
-            
+
             _currentSelectedNavButton = button;
             OnCategoryChanged?.Invoke(category);
         }

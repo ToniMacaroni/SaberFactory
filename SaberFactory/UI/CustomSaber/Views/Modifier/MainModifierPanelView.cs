@@ -26,8 +26,7 @@ namespace SaberFactory.UI.CustomSaber.Views
 
         [UIAction("#post-parse")]
         private void Setup()
-        {
-        }
+        { }
 
         public override void DidOpen()
         {
@@ -86,11 +85,11 @@ namespace SaberFactory.UI.CustomSaber.Views
             {
                 return;
             }
-            
+
             Debug.LogWarning($"Resetting {_selectedMod.Index}");
 
             _modifyableComponentManager.Reset(_selectedMod.Index);
-            
+
             ReloadSaber();
         }
 
@@ -101,11 +100,11 @@ namespace SaberFactory.UI.CustomSaber.Views
             {
                 return;
             }
-            
+
             Debug.LogWarning("Resetting all");
 
             _modifyableComponentManager.ResetAll();
-            
+
             ReloadSaber();
         }
 

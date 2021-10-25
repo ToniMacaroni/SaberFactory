@@ -22,8 +22,7 @@ namespace SaberFactory.Helpers
         private bool _enabled;
 
         public MeshRendererModifier(Component component, int index) : base(component, index)
-        {
-        }
+        { }
 
         protected override void Init(MeshRenderer component)
         {

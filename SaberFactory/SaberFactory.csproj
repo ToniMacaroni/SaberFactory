@@ -39,9 +39,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <None Remove="Resources\Icons\folder.png" />
-        <None Remove="Resources\Icons\transform-icon.png" />
-        <None Remove="Resources\UI\border.png" />
+        <None Remove="Resources\Icons\folder.png"/>
+        <None Remove="Resources\Icons\transform-icon.png"/>
+        <None Remove="Resources\UI\border.png"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -212,23 +212,23 @@
     </ItemGroup>
 
     <ItemGroup>
-        <EmbeddedResource Include="manifest.json" />
-        <EmbeddedResource Include="Resources\CustomSaberComponents.dll" />
-        <EmbeddedResource Include="Resources\assets" />
-        <EmbeddedResource Include="Resources\Icons\folder.png" />
-        <EmbeddedResource Include="Resources\Icons\transform-icon.png" />
-        <EmbeddedResource Include="Resources\UI\border.png" />
-        <None Remove="Resources\UI\halloween_bg.png" />
-        <EmbeddedResource Include="Resources\UI\halloween_bg.png" />
-        <None Remove="Resources\Icons\wrench.png" />
-        <EmbeddedResource Include="Resources\Icons\wrench.png" />
-        <None Remove="Serialization\MeshRendererModifierView.bsml" />
+        <EmbeddedResource Include="manifest.json"/>
+        <EmbeddedResource Include="Resources\CustomSaberComponents.dll"/>
+        <EmbeddedResource Include="Resources\assets"/>
+        <EmbeddedResource Include="Resources\Icons\folder.png"/>
+        <EmbeddedResource Include="Resources\Icons\transform-icon.png"/>
+        <EmbeddedResource Include="Resources\UI\border.png"/>
+        <None Remove="Resources\UI\halloween_bg.png"/>
+        <EmbeddedResource Include="Resources\UI\halloween_bg.png"/>
+        <None Remove="Resources\Icons\wrench.png"/>
+        <EmbeddedResource Include="Resources\Icons\wrench.png"/>
+        <None Remove="Serialization\MeshRendererModifierView.bsml"/>
     </ItemGroup>
 
     <ItemGroup>
-        <None Include="Directory.Build.props" Condition="Exists('Directory.Build.props')" />
-        <None Include="Directory.Build.targets" Condition="Exists('Directory.Build.targets')" />
-        <None Include="SaberFactory.csproj.user" Condition="Exists('SaberFactory.csproj.user')" />
+        <None Include="Directory.Build.props" Condition="Exists('Directory.Build.props')"/>
+        <None Include="Directory.Build.targets" Condition="Exists('Directory.Build.targets')"/>
+        <None Include="SaberFactory.csproj.user" Condition="Exists('SaberFactory.csproj.user')"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -268,10 +268,10 @@
         <EmbeddedResource Include="UI\CustomSaber\CustomComponents\PropList.bsml">
             <DependentUpon>PropList.cs</DependentUpon>
         </EmbeddedResource>
-        <EmbeddedResource Include="UI\Lib\PropCells\FloatPropCell.bsml" />
-        <EmbeddedResource Include="UI\Lib\PropCells\BoolPropCell.bsml" />
-        <EmbeddedResource Include="UI\Lib\PropCells\ColorPropCell.bsml" />
-        <EmbeddedResource Include="UI\Lib\PropCells\TexturePropCell.bsml" />
+        <EmbeddedResource Include="UI\Lib\PropCells\FloatPropCell.bsml"/>
+        <EmbeddedResource Include="UI\Lib\PropCells\BoolPropCell.bsml"/>
+        <EmbeddedResource Include="UI\Lib\PropCells\ColorPropCell.bsml"/>
+        <EmbeddedResource Include="UI\Lib\PropCells\TexturePropCell.bsml"/>
         <EmbeddedResource Include="UI\CustomSaber\Views\SettingsView.bsml">
             <DependentUpon>SettingsView.cs</DependentUpon>
         </EmbeddedResource>
@@ -296,20 +296,20 @@
     </ItemGroup>
 
     <ItemGroup>
-        <EmbeddedResource Include="Resources\Icons\blade-icon.png" />
-        <EmbeddedResource Include="Resources\Icons\customsaber-icon.png" />
-        <EmbeddedResource Include="Resources\Icons\emitter-icon.png" />
-        <EmbeddedResource Include="Resources\Icons\halo-icon.png" />
-        <EmbeddedResource Include="Resources\Icons\hilt-icon.png" />
-        <EmbeddedResource Include="Resources\Icons\model-icon.png" />
-        <EmbeddedResource Include="Resources\Icons\pommel-icon.png" />
-        <EmbeddedResource Include="Resources\Icons\trail-icon.png" />
-        <EmbeddedResource Include="Resources\Icons\heart.png" />
-        <EmbeddedResource Include="Resources\Icons\cog.png" />
-        <EmbeddedResource Include="Resources\Icons\discord.png" />
-        <EmbeddedResource Include="Resources\Icons\profile.png" />
-        <EmbeddedResource Include="Resources\Icons\update.png" />
-        <EmbeddedResource Include="Resources\Icons\SFSaber_Icon.png" />
+        <EmbeddedResource Include="Resources\Icons\blade-icon.png"/>
+        <EmbeddedResource Include="Resources\Icons\customsaber-icon.png"/>
+        <EmbeddedResource Include="Resources\Icons\emitter-icon.png"/>
+        <EmbeddedResource Include="Resources\Icons\halo-icon.png"/>
+        <EmbeddedResource Include="Resources\Icons\hilt-icon.png"/>
+        <EmbeddedResource Include="Resources\Icons\model-icon.png"/>
+        <EmbeddedResource Include="Resources\Icons\pommel-icon.png"/>
+        <EmbeddedResource Include="Resources\Icons\trail-icon.png"/>
+        <EmbeddedResource Include="Resources\Icons\heart.png"/>
+        <EmbeddedResource Include="Resources\Icons\cog.png"/>
+        <EmbeddedResource Include="Resources\Icons\discord.png"/>
+        <EmbeddedResource Include="Resources\Icons\profile.png"/>
+        <EmbeddedResource Include="Resources\Icons\update.png"/>
+        <EmbeddedResource Include="Resources\Icons\SFSaber_Icon.png"/>
     </ItemGroup>
 
     <ItemGroup>

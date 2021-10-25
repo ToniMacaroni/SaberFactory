@@ -17,7 +17,7 @@ namespace SaberFactory.UI.Lib.BSML.Tags
         //private static readonly Color _defaultHoveredColor = new Color(0.086f, 0.090f, 0.101f);
         private static readonly Color _defaultHoveredColor = new Color(0.2f, 0.2f, 0.2f, 0.8f);
 
-        public override string[] Aliases => new[] { CustomComponentHandler.ComponentPrefix+".button" };
+        public override string[] Aliases => new[] { CustomComponentHandler.ComponentPrefix + ".button" };
         public virtual string PrefabButton => "PracticeButton";
 
         private Button buttonPrefab;

@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
-using SaberFactory.Configuration;
 using SaberFactory.DataStore;
 using SaberFactory.Helpers;
 using SaberFactory.Saving;

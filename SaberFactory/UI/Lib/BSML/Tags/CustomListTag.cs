@@ -16,7 +16,7 @@ namespace SaberFactory.UI.Lib.BSML
 {
     public class CustomListTag : BSMLTag
     {
-        public override string[] Aliases => new[] { CustomComponentHandler.ComponentPrefix+".list" };
+        public override string[] Aliases => new[] { CustomComponentHandler.ComponentPrefix + ".list" };
 
         public override GameObject CreateObject(Transform parent)
         {

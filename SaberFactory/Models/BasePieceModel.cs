@@ -41,8 +41,7 @@ namespace SaberFactory.Models
         }
 
         public virtual void Dispose()
-        {
-        }
+        { }
 
         public virtual async Task FromJson(JObject obj, Serializer serializer)
         {
@@ -62,16 +61,13 @@ namespace SaberFactory.Models
         }
 
         public virtual void Init()
-        {
-        }
+        { }
 
         public virtual void OnLazyInit()
-        {
-        }
+        { }
 
         public virtual void SaveAdditionalData()
-        {
-        }
+        { }
 
         public virtual ModelMetaData GetMetaData()
         {

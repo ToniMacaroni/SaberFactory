@@ -5,9 +5,12 @@
             <vertical pref-width='80' bg="round-rect-panel" custom-color='$saber-selector-sec' pad-left='2' pad-right='2' pad-top='1'
                       pad-bottom='1'>
                 <horizontal>
-                    <sui.button text='Reload' pref-width='25' on-click='clicked-reload' {template;DefaultButtonColors}/>
-                    <sui.button text='Reload All' pref-width='25' on-click='clicked-reloadall' {template;DefaultButtonColors}/>
-                    <sui.button text='Delete' pref-width='25' on-click='clicked-delete' {template;DefaultButtonColors}/>
+                    <sui.button text='Reload' pref-width='25' on-click='clicked-reload'
+                    {template;DefaultButtonColors}/>
+                    <sui.button text='Reload All' pref-width='25' on-click='clicked-reloadall'
+                    {template;DefaultButtonColors}/>
+                    <sui.button text='Delete' pref-width='25' on-click='clicked-delete'
+                    {template;DefaultButtonColors}/>
                 </horizontal>
             </vertical>
             <sui.custom-list id='saber-list' title='' height='79' width='80' bg-color='$saber-selector'/>

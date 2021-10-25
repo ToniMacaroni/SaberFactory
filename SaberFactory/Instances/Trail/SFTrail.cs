@@ -28,8 +28,7 @@ namespace SaberFactory.Instances.Trail
 
         // Don't let the SaberTrail class instantiate from the renderer prefab (since it's null at this point)
         public override void Awake()
-        {
-        }
+        { }
 
         public override void LateUpdate()
         {

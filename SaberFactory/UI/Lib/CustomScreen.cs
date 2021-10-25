@@ -75,8 +75,7 @@ namespace SaberFactory.UI.Lib
         }
 
         internal class Factory : PlaceholderFactory<InitData, CustomScreen>
-        {
-        }
+        { }
 
         internal struct InitData
         {

@@ -10,7 +10,7 @@ namespace SaberFactory.UI.Lib.BSML.Tags
 {
     internal class ButtonCollectionTag : BSMLTag
     {
-        public override string[] Aliases => new[] { CustomComponentHandler.ComponentPrefix+".button-collection" };
+        public override string[] Aliases => new[] { CustomComponentHandler.ComponentPrefix + ".button-collection" };
 
         private TextSegmentedControl segmentControlTemplate;
 

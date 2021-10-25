@@ -19,13 +19,13 @@ namespace SaberFactory.UI
         public GameObject GameObject { get; private set; }
 
         protected readonly List<CustomScreen> _screens = new List<CustomScreen>();
+        protected readonly BsmlDecorator BsmlDecorator;
         protected CurvedCanvasSettings _curvedCanvasSettings;
         protected GameObject _curvedGO;
         private readonly BaseGameUiHandler _baseGameUiHandler;
 
         private readonly SiraLog _logger;
         private readonly PhysicsRaycasterWithCache _physicsRaycaster;
-        protected readonly BsmlDecorator BsmlDecorator;
         private readonly CustomScreen.Factory _screenFactory;
 
         protected BaseUiComposition(
@@ -47,8 +47,8 @@ namespace SaberFactory.UI
         public void Initialize()
         {
             SetupTemplates();
-            
-            GameObject = new GameObject(GetType().Namespace+" UI");
+
+            GameObject = new GameObject(GetType().Namespace + " UI");
             GameObject.transform.SetParent(_baseGameUiHandler.GetUIParent(), false);
             GameObject.transform.localPosition = new Vector3(0, 1.1f, 2.6f);
             GameObject.transform.localScale = new Vector3(0.02f, 0.02f, 0.02f);
@@ -70,8 +70,7 @@ namespace SaberFactory.UI
         }
 
         protected virtual void SetupUI()
-        {
-        }
+        { }
 
         public void Open()
         {
@@ -103,12 +102,10 @@ namespace SaberFactory.UI
         }
 
         protected virtual void DidOpen()
-        {
-        }
+        { }
 
         protected virtual void DidClose()
-        {
-        }
+        { }
 
         public void SetRadius(float radius)
         {

@@ -223,8 +223,7 @@ namespace SaberFactory.Models.CustomSaber
         }
 
         internal class Factory : PlaceholderFactory<StoreAsset, CustomSaberModel>
-        {
-        }
+        { }
 
         internal class TrailProportions
         {

@@ -257,8 +257,7 @@ namespace SaberFactory.Instances.Trail
             }
 
             public Element()
-            {
-            }
+            { }
         }
 
         public class ElementPool

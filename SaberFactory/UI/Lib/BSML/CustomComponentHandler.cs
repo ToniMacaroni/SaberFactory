@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -11,19 +12,19 @@ using BeatSaberMarkupLanguage;
 using BeatSaberMarkupLanguage.Macros;
 using BeatSaberMarkupLanguage.Tags;
 using BeatSaberMarkupLanguage.TypeHandlers;
-using HarmonyLib;
 using IPA.Utilities;
 using SaberFactory.UI.Lib.BSML.Tags;
 using SiraUtil.Tools;
 using UnityEngine;
 using Zenject;
+using Debug = UnityEngine.Debug;
 
 namespace SaberFactory.UI.Lib.BSML
 {
     internal class CustomComponentHandler : IInitializable
     {
         public const string ComponentPrefix = "sui";
-        
+
         public static bool Registered { get; private set; }
         private readonly SiraLog _logger;
 
@@ -35,12 +36,12 @@ namespace SaberFactory.UI.Lib.BSML
             _logger = logger;
             _popupFactory = popupFactory;
             _customUiComponentFactory = customUiComponentFactory;
+            _bsmlParser = BSMLParser.instance;
             RegisterAll(BSMLParser.instance);
         }
 
         public void Initialize()
-        {
-        }
+        { }
 
         private void RegisterAll(BSMLParser parser)
         {
@@ -75,31 +76,15 @@ namespace SaberFactory.UI.Lib.BSML
             Registered = true;
         }
         
-        private sealed class SchemaWriter : StringWriter
-        {
-            private readonly XmlSchema _schema;
-            public override Encoding Encoding => Encoding.UTF8;
-
-            public SchemaWriter(XmlSchema schema)
-            {
-                _schema = schema;
-            }
-
-            public override void Write(string filename)
-            {
-                _schema.Write(this);
-                File.WriteAllText(filename, ToString());
-            }
-        }
-
+        [Conditional("DEBUG")]
         private void DocCustoms(BSMLParser parser)
         {
             var thisAsm = Assembly.GetExecutingAssembly();
             var tags = parser.GetField<Dictionary<string, BSMLTag>, BSMLParser>("tags");
             var typeHandlers = parser.GetField<List<TypeHandler>, BSMLParser>("typeHandlers");
-            
+
             var schemaTemplate = new WebClient().DownloadString("https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd");
-            var schema = XmlSchema.Read(XmlReader.Create(new StringReader(schemaTemplate)), (sender, args) => {});
+            var schema = XmlSchema.Read(XmlReader.Create(new StringReader(schemaTemplate)), (sender, args) => { });
 
             var attrDict = new Dictionary<string, XmlSchemaAttribute>();
 
@@ -121,7 +106,7 @@ namespace SaberFactory.UI.Lib.BSML
                         try
                         {
                             var node = tag.CreateObject(parser.transform);
-                            foreach (var typeHandler in typeHandlers.Where(x=>x.GetType().Assembly == thisAsm))
+                            foreach (var typeHandler in typeHandlers.Where(x => x.GetType().Assembly == thisAsm))
                             {
                                 var type = typeHandler.GetType().GetCustomAttribute<ComponentHandler>().type;
                                 if (parser.InvokeMethod<Component, BSMLParser>("GetExternalComponent", node, type) != null)
@@ -151,7 +136,10 @@ namespace SaberFactory.UI.Lib.BSML
             foreach (var tag in tags.Values)
             {
                 var tagType = tag.GetType();
-                if (tag.GetType().Assembly != thisAsm) continue;
+                if (tag.GetType().Assembly != thisAsm)
+                {
+                    continue;
+                }
 
                 var complexType = new XmlSchemaComplexType
                 {
@@ -189,7 +177,7 @@ namespace SaberFactory.UI.Lib.BSML
                     Debug.LogError($"Couldn't instantiate {tag.Aliases[0]}");
                     Debug.LogWarning(e);
                 }
-                
+
                 foreach (var alias in tag.Aliases)
                 {
                     schema.Items.Add(new XmlSchemaElement
@@ -200,10 +188,16 @@ namespace SaberFactory.UI.Lib.BSML
                 }
             }
 
-            using var writer = new SchemaWriter(schema);
-            writer.Write("C:\\Users\\Julian\\CustomBSMLSchema.xsd");
+            var writer = new Utf8Writer();
+            schema.Write(writer);
+            File.WriteAllText("CustomBSMLSchema.xsd", writer.ToString());
             
             Debug.LogWarning("Written new doc");
+        }
+
+        private class Utf8Writer : StringWriter
+        {
+            public override Encoding Encoding => Encoding.UTF8;
         }
 
         private void RegisterCustomComponents(BSMLParser parser)
@@ -248,6 +242,7 @@ namespace SaberFactory.UI.Lib.BSML
 
         private readonly Popup.Factory _popupFactory;
         private readonly CustomUiComponent.Factory _customUiComponentFactory;
+        private readonly BSMLParser _bsmlParser;
 
         #endregion
     }

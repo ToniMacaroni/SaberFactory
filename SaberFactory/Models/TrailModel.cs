@@ -59,8 +59,7 @@ namespace SaberFactory.Models
         }
 
         public TrailModel()
-        {
-        }
+        { }
 
         public async Task FromJson(JObject obj, Serializer serializer)
         {

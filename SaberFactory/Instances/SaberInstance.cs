@@ -215,8 +215,7 @@ namespace SaberFactory.Instances
         }
 
         internal class Factory : PlaceholderFactory<SaberModel, SaberInstance>
-        {
-        }
+        { }
 
         internal class SaberMonoBehaviour : MonoBehaviour
         {

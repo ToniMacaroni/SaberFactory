@@ -111,8 +111,7 @@ namespace SaberFactory.Helpers
         internal class ShaderFloat : BaseProperty
         {
             public ShaderFloat(Shader shader, int idx) : base(shader, idx)
-            {
-            }
+            { }
 
             public override object GetValue(Material mat)
             {
@@ -133,8 +132,7 @@ namespace SaberFactory.Helpers
         internal class ShaderVector : BaseProperty
         {
             public ShaderVector(Shader shader, int idx) : base(shader, idx)
-            {
-            }
+            { }
 
             public override object GetValue(Material mat)
             {
@@ -160,8 +158,7 @@ namespace SaberFactory.Helpers
         internal class ShaderTexture : BaseProperty
         {
             public ShaderTexture(Shader shader, int idx) : base(shader, idx)
-            {
-            }
+            { }
 
             public override object GetValue(Material mat)
             {
@@ -193,8 +190,7 @@ namespace SaberFactory.Helpers
         internal class ShaderColor : BaseProperty
         {
             public ShaderColor(Shader shader, int idx) : base(shader, idx)
-            {
-            }
+            { }
 
             public override object GetValue(Material mat)
             {

@@ -39,7 +39,7 @@ namespace SaberFactory.Instances.CustomSaber
             }
 
             var trails = SaberHelpers.GetTrails(saberObject).ToArray();
-
+            
             CustomTrail SetupTrail(int length, float startPos, float endPos, Material material)
             {
                 var newTrail = saberObject.AddComponent<CustomTrail>();

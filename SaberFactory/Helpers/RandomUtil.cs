@@ -1,14 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using SaberFactory.Models;
 
 namespace SaberFactory.Helpers
 {
     internal class RandomUtil
     {
-        private readonly Random RNG = new Random();
         private readonly List<int> _lastSelectedRandoms = new List<int> { 1 };
+        private readonly Random RNG = new Random();
 
         public int RandomNumber(int count)
         {
@@ -17,7 +15,7 @@ namespace SaberFactory.Helpers
                 return RNG.Next(count);
             }
         }
-        
+
         public T RandomizeFrom<T>(IList<T> meta)
         {
             if (_lastSelectedRandoms.Count == meta.Count)

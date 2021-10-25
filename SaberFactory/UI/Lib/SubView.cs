@@ -57,12 +57,10 @@ namespace SaberFactory.UI.Lib
         }
 
         public virtual void DidOpen()
-        {
-        }
+        { }
 
         public virtual void DidClose()
-        {
-        }
+        { }
 
         public void GoBack()
         {
@@ -75,8 +73,7 @@ namespace SaberFactory.UI.Lib
         }
 
         protected virtual void Init()
-        {
-        }
+        { }
 
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
@@ -85,8 +82,7 @@ namespace SaberFactory.UI.Lib
         }
 
         internal class Factory : PlaceholderFactory<Type, InitData, SubView>
-        {
-        }
+        { }
 
         internal struct InitData
         {

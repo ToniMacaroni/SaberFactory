@@ -79,8 +79,7 @@ namespace SaberFactory.UI.Lib
         }
 
         internal class Factory : PlaceholderFactory<Type, InitData, CustomViewController>
-        {
-        }
+        { }
 
         internal struct InitData
         {

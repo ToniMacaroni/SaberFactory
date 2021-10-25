@@ -1,5 +1,5 @@
 ﻿<bg xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
-            xsi:noNamespaceSchemaLocation='file:///C:/CustomBSMLSchema.xsd'>
+    xsi:noNamespaceSchemaLocation='file:///C:/CustomBSMLSchema.xsd'>
     <vertical id='main-container' bg="round-rect-panel" custom-color='$default-panel' child-align='MiddleCenter'
               child-expand-height='false' child-control-height='false' spacing='2' pad='3'>
 
@@ -47,9 +47,12 @@
 
         <!--<button text='Edit Material' on-click='edit-material' />-->
         <horizontal>
-            <sui.button text='Revert' on-click='revert-trail' hover-hint='Revert changes to Trail' {template;DefaultButtonColors}/>
-            <sui.button text='Edit Material' on-click='edit-material' hover-hint='Edit the material of the trail' {template;DefaultButtonColors}/>
-            <sui.button text='Choose Trail' on-click='choose-trail' hover-hint='Use the Trail of another saber' {template;DefaultButtonColors}/>
+            <sui.button text='Revert' on-click='revert-trail' hover-hint='Revert changes to Trail'
+            {template;DefaultButtonColors}/>
+            <sui.button text='Edit Material' on-click='edit-material' hover-hint='Edit the material of the trail'
+            {template;DefaultButtonColors}/>
+            <sui.button text='Choose Trail' on-click='choose-trail' hover-hint='Use the Trail of another saber'
+            {template;DefaultButtonColors}/>
             <!--<sui.button text='Refresh Hand' active='~refresh-button-active' on-click='refresh-trail' hover-hint='Refresh the trail in your hand' />-->
         </horizontal>
     </vertical>
@@ -59,7 +62,8 @@
             <text align='Center' font-size='7' text='This saber has no trail'/>
             <horizontal spacing='3'>
                 <text align='Center' font-size='5' text='But you can '/>
-                <sui.button text='choose a trail from another saber' on-click='choose-trail' hover-hint='Use the Trail of another saber' {template;DefaultButtonColors}/>
+                <sui.button text='choose a trail from another saber' on-click='choose-trail' hover-hint='Use the Trail of another saber'
+                {template;DefaultButtonColors}/>
             </horizontal>
         </vertical>
     </div>

@@ -32,7 +32,10 @@ namespace SaberFactory.Editor
                 needsFixing = true;
             }
 
-            if (!needsFixing) Close();
+            if (!needsFixing)
+            {
+                Close();
+            }
         }
 
         [MenuItem("Window/Setup Saber Factory")]
@@ -45,7 +48,11 @@ namespace SaberFactory.Editor
         {
             GUILayout.BeginHorizontal();
             GUILayout.Label(text);
-            if (GUILayout.Button("Fix")) callback?.Invoke();
+            if (GUILayout.Button("Fix"))
+            {
+                callback?.Invoke();
+            }
+
             GUILayout.EndHorizontal();
         }
 

@@ -1,6 +1,4 @@
-using SaberFactory.ProjectComponents;
 using UnityEditor;
-using UnityEngine;
 
 namespace SaberFactory.Editor
 {

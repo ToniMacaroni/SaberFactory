@@ -9,7 +9,7 @@ namespace SaberFactory.UI.Lib.BSML.Tags
 {
     internal class CustomUiComponentTag : BSMLTag
     {
-        public override string[] Aliases => new[] { CustomComponentHandler.ComponentPrefix+"." + BSMLTools.GetKebabCaseName(_type) };
+        public override string[] Aliases => new[] { CustomComponentHandler.ComponentPrefix + "." + BSMLTools.GetKebabCaseName(_type) };
         private readonly CustomUiComponent.Factory _factory;
 
         private readonly Type _type;

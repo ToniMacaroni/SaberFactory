@@ -3,7 +3,6 @@
     internal class CustomUiComponent : CustomParsable
     {
         internal class Factory : ComponentPlaceholderFactory<CustomUiComponent>
-        {
-        }
+        { }
     }
 }

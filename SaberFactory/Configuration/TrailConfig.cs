@@ -9,7 +9,6 @@
         public bool OnlyUseVertexColor { get; set; } = true;
 
         public TrailConfig(PluginDirectories pluginDirs) : base(pluginDirs, "TrailConfig.json")
-        {
-        }
+        { }
     }
 }

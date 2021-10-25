@@ -4,8 +4,10 @@
             <text-page text='~text' font-size='4' rich-text='true'/>
         </vertical>
         <horizontal>
-            <sui.button text='Close' pref-width='30' on-click='clicked-close' {template;DefaultButtonColors}/>
-            <sui.button text='Open on Github' pref-width='30' on-click='clicked-open' {template;DefaultButtonColors}/>
+            <sui.button text='Close' pref-width='30' on-click='clicked-close'
+            {template;DefaultButtonColors}/>
+            <sui.button text='Open on Github' pref-width='30' on-click='clicked-open'
+            {template;DefaultButtonColors}/>
         </horizontal>
     </vertical>
 </bg>

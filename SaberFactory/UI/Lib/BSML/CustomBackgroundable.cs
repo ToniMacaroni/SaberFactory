@@ -153,8 +153,7 @@ namespace SaberFactory.UI.Components
                 background.enabled = true;
             }
             catch
-            {
-            }
+            { }
         }
     }
 }

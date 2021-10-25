@@ -363,12 +363,11 @@ namespace SaberFactory.UI.CustomSaber.Views
                 _saberSet.Save();
                 _editorInstanceManager.DestroySaber();
                 await _mainAssetStore.Reload(_currentComposition.GetLeft().StoreAsset.RelativePath);
-                await _saberSet.Load("default");
+                await _saberSet.Load();
                 await ShowSabers();
             }
             catch (Exception)
-            {
-            }
+            { }
 
             _loadingPopup.Hide();
             IsReloading = false;
@@ -391,12 +390,11 @@ namespace SaberFactory.UI.CustomSaber.Views
                 _saberSet.Save();
                 _editorInstanceManager.DestroySaber();
                 await _mainAssetStore.ReloadAll();
-                await _saberSet.Load("default");
+                await _saberSet.Load();
                 await ShowSabers();
             }
             catch (Exception)
-            {
-            }
+            { }
 
             _loadingPopup.Hide();
 
