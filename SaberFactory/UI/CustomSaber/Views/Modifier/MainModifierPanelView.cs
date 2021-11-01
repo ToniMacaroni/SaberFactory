@@ -3,10 +3,14 @@ using System.Linq;
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components;
 using HMUI;
+using ModestTree;
 using SaberFactory.Editor;
 using SaberFactory.Helpers;
 using SaberFactory.UI.Lib;
+using SiraUtil;
 using UnityEngine;
+using UnityEngine.UI;
+using VRUIControls;
 using Zenject;
 
 namespace SaberFactory.UI.CustomSaber.Views
@@ -17,6 +21,7 @@ namespace SaberFactory.UI.CustomSaber.Views
         [UIComponent("component-list")] private readonly CustomListTableData _componentList = null;
         [Inject] private readonly BsmlDecorator _decorator = null;
         [Inject] private readonly EditorInstanceManager _instanceManager = null;
+        [Inject] private readonly DiContainer _diContainer = null;
 
         private ModifyableComponentManager _modifyableComponentManager;
         private List<BaseComponentModifier> _mods;
@@ -24,9 +29,27 @@ namespace SaberFactory.UI.CustomSaber.Views
 
         public ENavigationCategory Category => ENavigationCategory.Modifier;
 
-        [UIAction("#post-parse")]
-        private void Setup()
-        { }
+        protected override void Init()
+        {
+            Assert.That(ParserParams!=null, "ParserParams!=null");
+            foreach (var obj in ParserParams.GetObjectsWithTag("canvas"))
+            {
+                obj.GetOrAdd<VerticalLayoutGroup>();
+
+                var contentSizeFitter = obj.GetOrAdd<ContentSizeFitter>();
+                contentSizeFitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
+                
+                obj.GetOrAdd<LayoutElement>();
+                
+                obj.AddComponent<Canvas>();
+                var canvasScaler = obj.AddComponent<CanvasScaler>();
+                canvasScaler.referencePixelsPerUnit = 10;
+                canvasScaler.scaleFactor = 3.44f;
+
+                obj.AddComponent<CurvedCanvasSettings>();
+                _diContainer.InstantiateComponent<VRGraphicRaycaster>(obj);
+            }
+        }
 
         public override void DidOpen()
         {
