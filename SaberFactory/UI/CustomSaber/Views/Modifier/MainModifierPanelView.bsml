@@ -13,13 +13,15 @@
             <div id="container"></div>
         </vertical>
     </vertical>
-
-    <vertical bg="round-rect-panel" custom-color="$default-panel" pad="3" pref-height="70" pref-width="50">
-        <list id="component-list" list-style="List" select-cell="component-selected"/>
-        <horizontal preferred-height='8'>
-            <page-button event-click='component-list#PageDown' direction='Down' pref-width='8'/>
-            <page-button event-click='component-list#PageUp' direction='Up' pref-width='8'/>
-        </horizontal>
-    </vertical>
+    
+    <bg tags="canvas">
+        <vertical pad="3" pref-height="70" pref-width="50" bg="round-rect-panel" custom-color="$default-panel">
+            <list id="component-list" list-style="List" select-cell="component-selected"/>
+            <horizontal preferred-height='8'>
+                <page-button event-click='component-list#PageDown' direction='Down' pref-width='8'/>
+                <page-button event-click='component-list#PageUp' direction='Up' pref-width='8'/>
+            </horizontal>
+        </vertical>
+    </bg>
 
 </horizontal>

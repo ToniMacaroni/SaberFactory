@@ -46,6 +46,12 @@ namespace SaberFactory.Helpers
             }
         }
 
+        public static T GetOrAdd<T>(this GameObject obj) where T : Component
+        {
+            if (obj.GetComponent<T>() is { } comp) return comp;
+            return obj.AddComponent<T>();
+        }
+
         public static T Cast<T>(this object obj)
         {
             return (T)obj;

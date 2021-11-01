@@ -6,4 +6,7 @@
 - Fixed compatibility issues with mods that bind `PluginMetadata`
 - Many internal code changes
 
+__**!!Presets aren't compatible with previous version!!**__  
+__**!!Make sure to delete the `Beat Saber\UserData\Saber Factory\Presets\default` file!!**__
+
 *Needs `BeatSaberMarkupLanguage` and `SiraUtil` (available on ModAssistant)*
