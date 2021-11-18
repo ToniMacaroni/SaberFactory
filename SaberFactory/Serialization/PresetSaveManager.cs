@@ -3,8 +3,9 @@ using System.IO;
 using System.Threading.Tasks;
 using SaberFactory.Helpers;
 using SaberFactory.Models;
+using UnityEngine;
 
-namespace SaberFactory.Saving
+namespace SaberFactory.Serialization
 {
     internal class PresetSaveManager
     {
@@ -19,10 +20,10 @@ namespace SaberFactory.Saving
 
         public event Action OnSaberLoaded;
 
-        public void SaveSaber(SaberSet saberSet, string fileName)
+        public async Task SaveSaber(SaberSet saberSet, string fileName)
         {
             var file = _presetDir.GetFile(fileName);
-            _ = saberSet.SaveToFile(_serializer, file.FullName);
+            await saberSet.SaveToFile(_serializer, file.FullName);
         }
 
         public async Task LoadSaber(SaberSet saberSet, string fileName)

@@ -20,6 +20,7 @@ namespace SaberFactory.UI.Lib.BSML
                 .BindFactory<CustomScreen.InitData, CustomScreen, CustomScreen.Factory>()
                 .FromFactory<ScreenFactory>();
 
+            container.Bind<StyleSheetHandler>().AsSingle();
             container.BindInterfacesAndSelfTo<BsmlDecorator>().AsSingle();
             BindUiFactory<Popup, Popup.Factory>(container);
             BindUiFactory<CustomUiComponent, CustomUiComponent.Factory>(container);

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace SaberFactory.UI
+namespace SaberFactory.UI.Lib
 {
     /// <summary>
     ///     Interface to provide information shown in a custom list

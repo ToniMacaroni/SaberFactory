@@ -13,6 +13,7 @@ using BeatSaberMarkupLanguage.Macros;
 using BeatSaberMarkupLanguage.Tags;
 using BeatSaberMarkupLanguage.TypeHandlers;
 using IPA.Utilities;
+using Newtonsoft.Json.Linq;
 using SaberFactory.UI.Lib.BSML.Tags;
 using SiraUtil.Tools;
 using UnityEngine;
@@ -83,6 +84,13 @@ namespace SaberFactory.UI.Lib.BSML
             var tags = parser.GetField<Dictionary<string, BSMLTag>, BSMLParser>("tags");
             var typeHandlers = parser.GetField<List<TypeHandler>, BSMLParser>("typeHandlers");
 
+            var additionalCssProps = new HashSet<string>{"style"};
+
+            var cssDataObject = new JObject();
+            cssDataObject.Add("version", 1.1);
+            var propArray = new JArray();
+            cssDataObject.Add("properties", propArray);
+
             var schemaTemplate = new WebClient().DownloadString("https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd");
             var schema = XmlSchema.Read(XmlReader.Create(new StringReader(schemaTemplate)), (sender, args) => { });
 
@@ -98,7 +106,11 @@ namespace SaberFactory.UI.Lib.BSML
                         {
                             attrDict.Add(attribute.Name, attribute);
                         }
+
+                        additionalCssProps.Add(attribute.Name);
                     }
+                    
+                    complexType.Attributes.Add(new XmlSchemaAttribute { Name = "style" });
 
                     var tag = tags.Values.FirstOrDefault(x => x.GetType().Name == complexType.Name);
                     if (tag is { })
@@ -120,6 +132,8 @@ namespace SaberFactory.UI.Lib.BSML
                                             {
                                                 Name = attrAlias
                                             });
+                                            
+                                            additionalCssProps.Add(attrAlias);
                                         }
                                     }
                                 }
@@ -145,6 +159,8 @@ namespace SaberFactory.UI.Lib.BSML
                 {
                     Name = tagType.Name
                 };
+                
+                complexType.Attributes.Add(new XmlSchemaAttribute { Name = "style" });
 
                 try
                 {
@@ -167,6 +183,7 @@ namespace SaberFactory.UI.Lib.BSML
                                     }
 
                                     complexType.Attributes.Add(attr);
+                                    additionalCssProps.Add(attrAlias);
                                 }
                             }
                         }
@@ -188,9 +205,15 @@ namespace SaberFactory.UI.Lib.BSML
                 }
             }
 
+            foreach (var prop in additionalCssProps)
+            {
+                propArray.Add(new JObject { { "name", prop } });
+            }
+
             var writer = new Utf8Writer();
             schema.Write(writer);
             File.WriteAllText("CustomBSMLSchema.xsd", writer.ToString());
+            File.WriteAllText("css.css-data.json", cssDataObject.ToString());
             
             Debug.LogWarning("Written new doc");
         }

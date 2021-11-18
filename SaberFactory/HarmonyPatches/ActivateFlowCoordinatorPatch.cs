@@ -13,13 +13,4 @@ namespace SaberFactory.HarmonyPatches
             Editor.Editor.Instance?.Close(true);
         }
     }
-
-    [HarmonyPatch(typeof(FlowCoordinator), "Deactivate")]
-    public class DeactivateFlowCoordinatorPatch
-    {
-        public static void Prefix()
-        {
-            Editor.Editor.Instance?.Close(true);
-        }
-    }
 }

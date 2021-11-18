@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace SaberFactory.Saving
+namespace SaberFactory.Serialization
 {
     internal static class SerMapper
     {

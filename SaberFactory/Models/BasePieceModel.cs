@@ -4,6 +4,7 @@ using Newtonsoft.Json.Linq;
 using SaberFactory.DataStore;
 using SaberFactory.Helpers;
 using SaberFactory.Models.PropHandler;
+using SaberFactory.Serialization;
 using UnityEngine;
 
 namespace SaberFactory.Models

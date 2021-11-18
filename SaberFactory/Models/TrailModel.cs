@@ -6,7 +6,7 @@ using Newtonsoft.Json.Linq;
 using SaberFactory.Helpers;
 using SaberFactory.Instances;
 using SaberFactory.Models.CustomSaber;
-using SaberFactory.Saving;
+using SaberFactory.Serialization;
 using UnityEngine;
 
 namespace SaberFactory.Models
@@ -83,6 +83,7 @@ namespace SaberFactory.Models
         public Task<JToken> ToJson(Serializer serializer)
         {
             var obj = JObject.FromObject(this, Serializer.JsonSerializer);
+            
             if (Material.IsValid)
             {
                 obj.Add("Material", serializer.SerializeMaterial(Material.Material));

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using BeatSaberMarkupLanguage.Attributes;
+using SaberFactory.UI.CustomSaber.Views.Modifiers;
 using SaberFactory.UI.Lib;
 using UnityEngine;
 

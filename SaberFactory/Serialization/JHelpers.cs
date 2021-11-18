@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace SaberFactory.Helpers
+namespace SaberFactory.Serialization
 {
     internal static class JHelpers
     {

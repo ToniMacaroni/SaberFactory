@@ -2,8 +2,9 @@
 using System.Linq;
 using SaberFactory.Models;
 using SaberFactory.UI.CustomSaber.CustomComponents;
+using SaberFactory.UI.Lib;
 
-namespace SaberFactory.UI.CustomSaber.Views
+namespace SaberFactory.UI
 {
     internal class SaberListDirectoryManager
     {

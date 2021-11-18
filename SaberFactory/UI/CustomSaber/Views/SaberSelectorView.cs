@@ -16,6 +16,7 @@ using SaberFactory.Editor;
 using SaberFactory.Helpers;
 using SaberFactory.Loaders;
 using SaberFactory.Models;
+using SaberFactory.Serialization;
 using SaberFactory.UI.CustomSaber.CustomComponents;
 using SaberFactory.UI.CustomSaber.Popups;
 using SaberFactory.UI.Lib;
@@ -360,7 +361,7 @@ namespace SaberFactory.UI.CustomSaber.Views
 
             try
             {
-                _saberSet.Save();
+                await _saberSet.Save();
                 _editorInstanceManager.DestroySaber();
                 await _mainAssetStore.Reload(_currentComposition.GetLeft().StoreAsset.RelativePath);
                 await _saberSet.Load();
@@ -387,7 +388,7 @@ namespace SaberFactory.UI.CustomSaber.Views
 
             try
             {
-                _saberSet.Save();
+                await _saberSet.Save();
                 _editorInstanceManager.DestroySaber();
                 await _mainAssetStore.ReloadAll();
                 await _saberSet.Load();

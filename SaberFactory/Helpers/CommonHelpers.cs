@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using IPA.Utilities;
 using SaberFactory.DataStore;
+using SaberFactory.Models;
 using UnityEngine;
 
 namespace SaberFactory.Helpers

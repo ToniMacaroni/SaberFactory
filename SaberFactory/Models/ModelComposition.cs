@@ -1,5 +1,6 @@
 ﻿using System;
 using SaberFactory.UI;
+using SaberFactory.UI.Lib;
 using UnityEngine;
 
 namespace SaberFactory.Models

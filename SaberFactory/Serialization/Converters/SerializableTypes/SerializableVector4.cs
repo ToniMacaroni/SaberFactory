@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace SaberFactory.Saving.Converters.SerializableTypes
+namespace SaberFactory.Serialization.Converters.SerializableTypes
 {
     internal class SerializableVector4
     {

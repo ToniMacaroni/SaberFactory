@@ -1,3 +1,5 @@
+using SaberFactory.UI.Lib;
+
 namespace SaberFactory.UI
 {
     internal class SaberFactoryMenuButton : MenuButtonRegistrar

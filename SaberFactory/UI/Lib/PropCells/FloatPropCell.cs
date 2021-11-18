@@ -22,7 +22,7 @@ namespace SaberFactory.UI.Lib.PropCells
 
             OnChangeCallback = data.ChangedCallback;
 
-            if (data.AddtionalData is Vector2 minMax)
+            if (data.AddtionalData is Vector2 minMax && val > minMax.x && val < minMax.y)
             {
                 _sliderSetting.slider.minValue = minMax.x;
                 _sliderSetting.slider.maxValue = minMax.y;

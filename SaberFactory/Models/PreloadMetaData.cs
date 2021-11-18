@@ -4,6 +4,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using BeatSaberMarkupLanguage;
 using SaberFactory.Loaders;
 using SaberFactory.UI;
+using SaberFactory.UI.Lib;
 using UnityEngine;
 
 namespace SaberFactory.Models

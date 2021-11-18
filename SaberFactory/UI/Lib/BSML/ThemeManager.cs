@@ -45,5 +45,23 @@ namespace SaberFactory.UI.Lib.BSML
 
             return Color.white;
         }
+        
+        public static string TryReplacingWithColor(string input, out bool replaced)
+        {
+            replaced = false;
+            if (input[0] != '$')
+            {
+                return input;
+            }
+
+            if (GetDefinedColor(input.Substring(1), out var color))
+            {
+                replaced = true;
+                return "#" + ColorUtility.ToHtmlStringRGBA(color);
+            }
+
+            replaced = true;
+            return "#000";
+        }
     }
 }

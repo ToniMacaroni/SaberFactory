@@ -1,0 +1,9 @@
+<vertical xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+          xsi:noNamespaceSchemaLocation='file:///C:/CustomBSMLSchema.xsd' pref-height="{template;NavHeight}" bg="round-rect-panel"
+          custom-color="$default-panel" vertical-fit="PreferredSize" pref-width="70" pad="5">
+    <vertical vertical-fit="PreferredSize" spacing="5">
+        <text text="This is a patreon feature" font-size="5" color="#a1944a" align="Center"/>
+        <sui.button text="" run="https://www.patreon.com/tonimacaroni" pref-width="38" bg-icon="{ui-icon;patreon-button}"
+                    normal-color="#eee" hovered-color="#999"/>
+    </vertical>
+</vertical>

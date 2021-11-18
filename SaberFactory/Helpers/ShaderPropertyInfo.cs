@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json.Linq;
+using SaberFactory.Serialization;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -183,7 +184,7 @@ namespace SaberFactory.Helpers
             public override JToken ToJson(Material mat)
             {
                 var tex = (Texture)GetValue(mat);
-                return JToken.FromObject(tex.name);
+                return JToken.FromObject(tex?.name??"");
             }
         }
 

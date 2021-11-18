@@ -1,9 +1,12 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using SaberFactory.DataStore;
 using SaberFactory.Helpers;
-using SaberFactory.Saving;
+using SaberFactory.Serialization;
+using SiraUtil.Tools;
+using UnityEngine;
 using Zenject;
 
 namespace SaberFactory.Models
@@ -23,6 +26,8 @@ namespace SaberFactory.Models
 
         private readonly PresetSaveManager _presetSaveManager;
 
+        [Inject] private readonly SiraLog _logger = null;
+
         private SaberSet(
             [Inject(Id = ESaberSlot.Left)] SaberModel leftSaber,
             [Inject(Id = ESaberSlot.Right)] SaberModel rightSaber,
@@ -39,8 +44,16 @@ namespace SaberFactory.Models
 
         public async Task FromJson(JObject obj, Serializer serializer)
         {
-            await LeftSaber.FromJson((JObject)obj[nameof(LeftSaber)], serializer);
-            await RightSaber.FromJson((JObject)obj[nameof(RightSaber)], serializer);
+            try
+            {
+                await LeftSaber.FromJson((JObject)obj[nameof(LeftSaber)], serializer);
+                await RightSaber.FromJson((JObject)obj[nameof(RightSaber)], serializer);
+            }
+            catch (Exception e)
+            {
+                _logger.Error("Saber loading error:\n"+e);
+                throw;
+            }
         }
 
         public async Task<JToken> ToJson(Serializer serializer)
@@ -78,9 +91,9 @@ namespace SaberFactory.Models
             SetModelComposition(await _mainAssetStore.GetCompositionByMeta(preloadData));
         }
 
-        public void Save(string fileName = "default")
+        public async Task Save(string fileName = "default")
         {
-            _presetSaveManager.SaveSaber(this, fileName);
+            await _presetSaveManager.SaveSaber(this, fileName);
         }
 
         public async Task Load(string fileName = "default")

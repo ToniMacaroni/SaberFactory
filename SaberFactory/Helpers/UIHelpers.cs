@@ -7,6 +7,7 @@ using HMUI;
 using IPA.Utilities;
 using SaberFactory.UI.Lib;
 using UnityEngine;
+using VRUIControls;
 
 namespace SaberFactory.Helpers
 {
@@ -41,6 +42,21 @@ namespace SaberFactory.Helpers
         {
             GradientAcc(ref image) = gradient;
             image.SetVerticesDirty();
+        }
+
+        public static void AddVrRaycaster(GameObject go, PhysicsRaycasterWithCache raycasterWithCache)
+        {
+            var isActive = go.activeSelf;
+            if (isActive)
+            {
+                go.SetActive(false);
+            }
+            var raycaster = go.AddComponent<VRGraphicRaycaster>();
+            RaycasterWithCacheAcc(ref raycaster) = raycasterWithCache;
+            if (isActive)
+            {
+                go.SetActive(true);
+            }
         }
 
         public static async Task DoHorizontalTransition(this Transform transform, CancellationToken cancelToken)
@@ -91,5 +107,8 @@ namespace SaberFactory.Helpers
         {
             return go.transform.Cast<RectTransform>();
         }
+
+        private static readonly FieldAccessor<VRGraphicRaycaster, PhysicsRaycasterWithCache>.Accessor RaycasterWithCacheAcc =
+            FieldAccessor<VRGraphicRaycaster, PhysicsRaycasterWithCache>.GetAccessor("_physicsRaycaster");
     }
 }

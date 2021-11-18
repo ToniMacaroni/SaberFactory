@@ -3,7 +3,8 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SaberFactory.Helpers;
 using SaberFactory.Models.CustomSaber;
-using SaberFactory.Saving;
+using SaberFactory.Serialization;
+using UnityEngine;
 
 namespace SaberFactory.Models
 {
@@ -54,14 +55,14 @@ namespace SaberFactory.Models
         public async Task<JToken> ToJson(Serializer serializer)
         {
             var obj = JObject.FromObject(this);
-
+            
             var pieceList = new JArray();
 
             foreach (BasePieceModel pieceModel in PieceCollection)
             {
                 pieceList.Add(await pieceModel.ToJson(serializer));
             }
-
+            
             obj.Add(nameof(PieceCollection), pieceList);
             return obj;
         }

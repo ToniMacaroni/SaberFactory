@@ -3,7 +3,7 @@ using BeatSaberMarkupLanguage;
 using BeatSaberMarkupLanguage.MenuButtons;
 using Zenject;
 
-namespace SaberFactory.UI
+namespace SaberFactory.UI.Lib
 {
     internal class MenuButtonRegistrar : IInitializable, IDisposable
     {

@@ -144,7 +144,7 @@ namespace SaberFactory.Instances.CustomSaber
                 materials.Add(rendererMaterials[index]);
             }
 
-            foreach (var renderer in GameObject.GetComponentsInChildren<Renderer>())
+            foreach (var renderer in GameObject.GetComponentsInChildren<Renderer>(true))
             {
                 if (renderer is null)
                 {

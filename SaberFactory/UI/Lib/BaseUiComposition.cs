@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using HMUI;
 using IPA.Utilities;
 using SaberFactory.Helpers;
-using SaberFactory.UI.Lib;
 using SiraUtil.Tools;
 using UnityEngine;
 using UnityEngine.UI;
 using VRUIControls;
 
-namespace SaberFactory.UI
+namespace SaberFactory.UI.Lib
 {
     /// <summary>
     ///     Base class to build ui configurations upon
@@ -114,7 +113,9 @@ namespace SaberFactory.UI
 
         protected virtual void SetupTemplates()
         {
-            BsmlDecorator.AddTemplate("DefaultButtonColors", "normal-color=\"#7A7A7A35\" hovered-color=\"#7A7A7A60\"");
+            BsmlDecorator.StyleSheetHandler.LoadStyleSheet("SaberFactory.UI.CustomSaber.BaseUiComposition.css");
+            BsmlDecorator.AddTemplateHandler("ui-icon", (decorator, args) => "SaberFactory.Resources.UI."+args[0]+".png");
+            BsmlDecorator.AddTemplateHandler("icon", (decorator, args) => "SaberFactory.Resources.Icons."+args[0]+".png");
         }
 
         protected CustomScreen AddScreen(CustomScreen.InitData initData)

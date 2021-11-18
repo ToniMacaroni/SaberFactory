@@ -92,6 +92,14 @@ namespace SaberFactory
                 return false;
             }
 
+#if false
+            foreach (var assetName in _assetBundle.GetAllAssetNames())
+            {
+                var obj = _assetBundle.LoadAsset(assetName);
+                Debug.LogWarning($"{assetName}: {obj.GetType().Name}");
+            }
+#endif
+
             return true;
         }
     }
