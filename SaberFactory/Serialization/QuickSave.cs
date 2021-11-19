@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using Newtonsoft.Json;
 
-namespace SaberFactory.Saving
+namespace SaberFactory.Serialization
 {
     internal static class QuickSave
     {

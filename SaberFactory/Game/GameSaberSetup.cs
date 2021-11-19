@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using SaberFactory.Configuration;
 using SaberFactory.DataStore;
+using SaberFactory.Helpers;
 using SaberFactory.Models;
 using UnityEngine;
 using Zenject;
@@ -19,15 +20,17 @@ namespace SaberFactory.Game
 
         private readonly SaberModel _oldLeftSaberModel;
         private readonly SaberModel _oldRightSaberModel;
+        private readonly RandomUtil _randomUtil;
         private readonly SaberSet _saberSet;
 
         private GameSaberSetup(PluginConfig config, SaberSet saberSet, MainAssetStore mainAssetStore,
-            [Inject(Id = "beatmapdata")] BeatmapData beatmapData)
+            [Inject(Id = "beatmapdata")] BeatmapData beatmapData, RandomUtil randomUtil)
         {
             _config = config;
             _saberSet = saberSet;
             _mainAssetStore = mainAssetStore;
             _beatmapData = beatmapData;
+            _randomUtil = randomUtil;
 
             _oldLeftSaberModel = _saberSet.LeftSaber;
             _oldRightSaberModel = _saberSet.RightSaber;
@@ -42,8 +45,7 @@ namespace SaberFactory.Game
         }
 
         public void Initialize()
-        {
-        }
+        { }
 
         public async void Setup()
         {
@@ -55,13 +57,24 @@ namespace SaberFactory.Game
         {
             if (_config.RandomSaber)
             {
-                await _saberSet.Randomize();
+                await RandomSaber();
                 return;
             }
 
             if (!_config.OverrideSongSaber)
             {
                 await SetupSongSaber();
+            }
+        }
+
+        private async Task RandomSaber()
+        {
+            if (
+                _config.AssetType == EAssetTypeConfiguration.CustomSaber ||
+                _config.AssetType == EAssetTypeConfiguration.None)
+            {
+                var randomComp = _randomUtil.RandomizeFrom(_mainAssetStore.GetAllMetaData(AssetTypeDefinition.CustomSaber).ToList());
+                _saberSet.SetModelComposition(await _mainAssetStore.GetCompositionByMeta(randomComp));
             }
         }
 

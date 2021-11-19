@@ -10,6 +10,7 @@ namespace SaberFactory
         public DirectoryInfo CustomSaberDir;
         public DirectoryInfo PresetDir;
         public DirectoryInfo SaberFactoryDir;
+        public DirectoryInfo Cache;
 
         public PluginDirectories()
         {
@@ -17,6 +18,7 @@ namespace SaberFactory
             var userDataDir = new DirectoryInfo(UnityGame.UserDataPath);
             SaberFactoryDir = userDataDir.CreateSubdirectory("Saber Factory");
             PresetDir = SaberFactoryDir.CreateSubdirectory("Presets");
+            Cache = SaberFactoryDir.CreateSubdirectory("Cache");
             CustomSaberDir = baseDir.GetDirectory(CustomSabersDirName);
 
             if (!CustomSaberDir.Exists)

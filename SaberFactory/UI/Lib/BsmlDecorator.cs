@@ -1,35 +1,43 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 using BeatSaberMarkupLanguage;
 using BeatSaberMarkupLanguage.Parser;
 using SaberFactory.Helpers;
 using SaberFactory.UI.Lib.BSML;
 using UnityEngine;
+using Zenject;
 
 namespace SaberFactory.UI.Lib
 {
     internal class BsmlDecorator
     {
+        [Inject] public readonly StyleSheetHandler StyleSheetHandler = null;
+        
         private readonly Dictionary<string, Func<BsmlDecorator, string[], string>> _templateHandlers =
             new Dictionary<string, Func<BsmlDecorator, string[], string>>
             {
                 { "put", (dec, args) => args[0] },
-                { "color-template", (dec, args) => TryReplacingWithColor(args[0], out _) },
+                { "color-template", (dec, args) => ThemeManager.TryReplacingWithColor(args[0], out _) },
                 { "template", (dec, args) => dec._templates.TryGetValue(args[0], out var template) ? template : "" },
                 {
                     "file", (dec, args) =>
                     {
                         var data = Readers.ReadResource(args[0]);
-                        var content = Encoding.UTF8.GetString(data, 3, data.Length - 3);
+                        var content = Readers.BytesToString(data);
                         return dec.Process(content);
                     }
                 }
             };
 
         private readonly Dictionary<string, string> _templates = new Dictionary<string, string>();
+
+        private readonly Dictionary<string, XmlNode> _bsmlCache = new Dictionary<string, XmlNode>();
+        private readonly XmlReaderSettings _readerSettings = new XmlReaderSettings { IgnoreComments = true };
 
         public void AddTemplateHandler(string name, Func<BsmlDecorator, string[], string> action)
         {
@@ -55,24 +63,69 @@ namespace SaberFactory.UI.Lib
 
         public async Task<BSMLParserParams> ParseFromResourceAsync(string resourceName, GameObject parent, object host)
         {
-            var data = await Readers.ReadResourceAsync(resourceName);
-            var content = Encoding.UTF8.GetString(data, 3, data.Length - 3);
-            content = Process(content);
-            return BSMLParser.instance.Parse(content, parent, host);
+            if (!_bsmlCache.TryGetValue(resourceName, out var node))
+            {
+                var data = await Readers.ReadResourceAsync(resourceName);
+                var content = Readers.BytesToString(data);
+                content = Process(content);
+                var doc = new XmlDocument();
+                doc.Load(XmlReader.Create(new StringReader(content), _readerSettings));
+                ProcessDoc(doc);
+                node = doc;
+                _bsmlCache.Add(resourceName, node);
+            }
+
+            return BSMLParser.instance.Parse(node, parent, host);
         }
 
         public BSMLParserParams ParseFromResource(string resourceName, GameObject parent, object host)
         {
-            var data = Readers.ReadResource(resourceName);
-            var content = Encoding.UTF8.GetString(data, 3, data.Length - 3);
-            content = Process(content);
-            return BSMLParser.instance.Parse(content, parent, host);
+            if (!_bsmlCache.TryGetValue(resourceName, out var node))
+            {
+                var data = Readers.ReadResource(resourceName);
+                var content = Readers.BytesToString(data);
+                content = Process(content);
+                var doc = new XmlDocument();
+                doc.Load(XmlReader.Create(new StringReader(content), _readerSettings));
+                ProcessDoc(doc);
+                node = doc;
+                _bsmlCache.Add(resourceName, node);
+            }
+
+            return BSMLParser.instance.Parse(node, parent, host);
         }
 
         public BSMLParserParams ParseFromString(string content, GameObject parent, object host)
         {
             content = Process(content);
             return BSMLParser.instance.Parse(content, parent, host);
+        }
+        
+        public void ProcessDoc(XmlDocument doc)
+        {
+            var vars = new Dictionary<string, string>();
+            
+            ProcessNode(doc, vars);
+        }
+
+        private void ProcessNode(XmlNode rootNode, Dictionary<string, string> vars)
+        {
+            foreach (XmlElement node in rootNode)
+            {
+                if (node.Name == "var")
+                {
+                    vars.Add(node.Attributes["name"].Value, ThemeManager.TryReplacingWithColor(node.Attributes["value"].Value, out _));
+                }
+                else if (node.Attributes["style"] is { } styleAttr)
+                {
+                    foreach (var rule in StyleSheetHandler.CollectRules(styleAttr.Value.Split(' ')))
+                    {
+                        node.SetAttribute(rule.Name, rule.Value);
+                    }
+                }
+                
+                ProcessNode(node, vars);
+            }
         }
 
         public string Process(string content)
@@ -144,24 +197,6 @@ namespace SaberFactory.UI.Lib
             }
 
             return "";
-        }
-
-        private static string TryReplacingWithColor(string input, out bool replaced)
-        {
-            replaced = false;
-            if (input[0] != '$')
-            {
-                return input;
-            }
-
-            if (ThemeManager.GetDefinedColor(input.Substring(1), out var color))
-            {
-                replaced = true;
-                return "#" + ColorUtility.ToHtmlStringRGBA(color);
-            }
-
-            replaced = true;
-            return "#000";
         }
     }
 }

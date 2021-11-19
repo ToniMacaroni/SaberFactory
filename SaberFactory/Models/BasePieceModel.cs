@@ -4,6 +4,7 @@ using Newtonsoft.Json.Linq;
 using SaberFactory.DataStore;
 using SaberFactory.Helpers;
 using SaberFactory.Models.PropHandler;
+using SaberFactory.Serialization;
 using UnityEngine;
 
 namespace SaberFactory.Models
@@ -41,8 +42,7 @@ namespace SaberFactory.Models
         }
 
         public virtual void Dispose()
-        {
-        }
+        { }
 
         public virtual async Task FromJson(JObject obj, Serializer serializer)
         {
@@ -62,16 +62,13 @@ namespace SaberFactory.Models
         }
 
         public virtual void Init()
-        {
-        }
+        { }
 
         public virtual void OnLazyInit()
-        {
-        }
+        { }
 
         public virtual void SaveAdditionalData()
-        {
-        }
+        { }
 
         public virtual ModelMetaData GetMetaData()
         {

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json.Linq;
+using SaberFactory.Serialization;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -111,8 +112,7 @@ namespace SaberFactory.Helpers
         internal class ShaderFloat : BaseProperty
         {
             public ShaderFloat(Shader shader, int idx) : base(shader, idx)
-            {
-            }
+            { }
 
             public override object GetValue(Material mat)
             {
@@ -133,8 +133,7 @@ namespace SaberFactory.Helpers
         internal class ShaderVector : BaseProperty
         {
             public ShaderVector(Shader shader, int idx) : base(shader, idx)
-            {
-            }
+            { }
 
             public override object GetValue(Material mat)
             {
@@ -160,8 +159,7 @@ namespace SaberFactory.Helpers
         internal class ShaderTexture : BaseProperty
         {
             public ShaderTexture(Shader shader, int idx) : base(shader, idx)
-            {
-            }
+            { }
 
             public override object GetValue(Material mat)
             {
@@ -186,15 +184,14 @@ namespace SaberFactory.Helpers
             public override JToken ToJson(Material mat)
             {
                 var tex = (Texture)GetValue(mat);
-                return JToken.FromObject(tex.name);
+                return JToken.FromObject(tex?.name??"");
             }
         }
 
         internal class ShaderColor : BaseProperty
         {
             public ShaderColor(Shader shader, int idx) : base(shader, idx)
-            {
-            }
+            { }
 
             public override object GetValue(Material mat)
             {

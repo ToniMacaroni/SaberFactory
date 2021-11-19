@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace SaberFactory.Saving
+namespace SaberFactory.Serialization
 {
     internal static class SerMapper
     {
@@ -12,7 +12,7 @@ namespace SaberFactory.Saving
         {
             if (from == null)
             {
-                throw new ArgumentNullException(nameof(@from), "Mapper needs a valid from object");
+                throw new ArgumentNullException(nameof(from), "Mapper needs a valid from object");
             }
 
             if (to == null)
@@ -25,7 +25,7 @@ namespace SaberFactory.Saving
 
             if (fromMap == null)
             {
-                throw new ArgumentNullException(nameof(@from.GetType), "FieldMap needs to be registered first");
+                throw new ArgumentNullException(nameof(from.GetType), "FieldMap needs to be registered first");
             }
 
             if (toMap == null)
@@ -107,8 +107,7 @@ namespace SaberFactory.Saving
         }
 
         internal class FieldMapCollection : Dictionary<Type, FieldMap>
-        {
-        }
+        { }
 
         internal class FieldMap : Dictionary<string, FieldInfo>
         {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SaberFactory.Saving
+namespace SaberFactory.Serialization
 {
     public class MapSerializeAttribute : Attribute
     {

@@ -72,11 +72,9 @@ namespace SaberFactory.Instances
         /// </summary>
         /// <param name="materials"></param>
         protected virtual void GetColorableMaterials(List<Material> materials)
-        {
-        }
+        { }
 
         internal class Factory : PlaceholderFactory<BasePieceModel, BasePieceInstance>
-        {
-        }
+        { }
     }
 }

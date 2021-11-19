@@ -5,19 +5,14 @@ using BeatSaberMarkupLanguage.Attributes;
 using SaberFactory.UI.CustomSaber.CustomComponents;
 using SaberFactory.UI.Lib;
 using TMPro;
-using UnityEngine;
 using Zenject;
 
 namespace SaberFactory.UI.CustomSaber.Views
 {
     internal class NavigationView : CustomViewController
     {
-        [UIObject("exit_btn")] private readonly GameObject _exitBtn = null;
-
         [UIComponent("settings-notify-text")] private readonly TextMeshProUGUI _settingsNotifyText = null;
         [UIValue("nav-buttons")] private List<object> _navButtons;
-
-        public ENavigationCategory CurrentCategory { get; private set; }
 
         public override IAnimatableUi.EAnimationType AnimationType => IAnimatableUi.EAnimationType.Vertical;
 
@@ -86,9 +81,12 @@ namespace SaberFactory.UI.CustomSaber.Views
                 return;
             }
 
-            _currentSelectedNavButton?.Deselect();
+            if (_currentSelectedNavButton != null)
+            {
+                _currentSelectedNavButton.Deselect();
+            }
+
             _currentSelectedNavButton = button;
-            CurrentCategory = category;
             OnCategoryChanged?.Invoke(category);
         }
 

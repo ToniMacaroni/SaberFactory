@@ -19,7 +19,7 @@
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
         <Optimize>false</Optimize>
         <OutputPath>bin\Debug\</OutputPath>
-        <DefineConstants>TRACE;DEBUG;RESHARPER</DefineConstants>
+        <DefineConstants>TRACE;RESHARPER;</DefineConstants>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
@@ -77,11 +77,6 @@
         <Reference Include="Hive.Versioning">
             <HintPath>$(BeatSaberDir)\Libs\Hive.Versioning.dll</HintPath>
             <Private>False</Private>
-        </Reference>
-        <Reference Include="MediaLoader">
-            <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\MediaLoader.dll</HintPath>
-            <Private>False</Private>
-            <SpecificVersion>False</SpecificVersion>
         </Reference>
         <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
             <SpecificVersion>False</SpecificVersion>
@@ -144,6 +139,12 @@
             <Private>False</Private>
             <SpecificVersion>False</SpecificVersion>
         </Reference>
+        <Reference Include="UnityEngine.JSONSerializeModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+          <HintPath>..\..\..\Program Files (x86)\Steam\steamapps\common\Beat Saber\Beat Saber_Data\Managed\UnityEngine.JSONSerializeModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.ParticleSystemModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+          <HintPath>..\..\..\Program Files (x86)\Steam\steamapps\common\Beat Saber\Beat Saber_Data\Managed\UnityEngine.ParticleSystemModule.dll</HintPath>
+        </Reference>
         <Reference Include="UnityEngine.PhysicsModule">
             <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
             <Private>False</Private>
@@ -162,36 +163,8 @@
             <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
             <Private>False</Private>
         </Reference>
-        <Reference Include="UnityEngine.UIElementsModule">
-            <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.UIElementsModule.dll</HintPath>
-            <Private>False</Private>
-        </Reference>
         <Reference Include="UnityEngine.UIModule">
             <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.UIModule.dll</HintPath>
-            <Private>False</Private>
-        </Reference>
-        <Reference Include="UnityEngine.UnityWebRequestAssetBundleModule">
-            <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.UnityWebRequestAssetBundleModule.dll</HintPath>
-            <Private>False</Private>
-            <SpecificVersion>False</SpecificVersion>
-        </Reference>
-        <Reference Include="UnityEngine.UnityWebRequestModule">
-            <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.UnityWebRequestModule.dll</HintPath>
-            <Private>False</Private>
-            <SpecificVersion>False</SpecificVersion>
-        </Reference>
-        <Reference Include="UnityEngine.UnityWebRequestTextureModule">
-            <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.UnityWebRequestTextureModule.dll</HintPath>
-            <Private>False</Private>
-            <SpecificVersion>False</SpecificVersion>
-        </Reference>
-        <Reference Include="UnityEngine.UnityWebRequestWWWModule">
-            <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.UnityWebRequestWWWModule.dll</HintPath>
-            <Private>False</Private>
-            <SpecificVersion>False</SpecificVersion>
-        </Reference>
-        <Reference Include="UnityEngine.VRModule">
-            <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.VRModule.dll</HintPath>
             <Private>False</Private>
         </Reference>
         <Reference Include="VRUI">
@@ -223,6 +196,12 @@
         <None Remove="Resources\Icons\wrench.png" />
         <EmbeddedResource Include="Resources\Icons\wrench.png" />
         <None Remove="Serialization\MeshRendererModifierView.bsml" />
+        <None Remove="UI\CustomSaber\CustomSaberUiComposition.css" />
+        <EmbeddedResource Include="UI\CustomSaber\BaseUiComposition.css" />
+        <None Remove="UI\PatreonView.bsml" />
+        <EmbeddedResource Include="UI\PatreonView.bsml" />
+        <None Remove="Resources\UI\patreon-medium-button.png" />
+        <EmbeddedResource Include="Resources\UI\patreon-button.png" />
     </ItemGroup>
 
     <ItemGroup>

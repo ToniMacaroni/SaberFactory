@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using IPA.Utilities;
 using SaberFactory.DataStore;
+using SaberFactory.Models;
 using UnityEngine;
 
 namespace SaberFactory.Helpers
@@ -44,6 +45,12 @@ namespace SaberFactory.Helpers
             {
                 comp.gameObject.layer = layer;
             }
+        }
+
+        public static T GetOrAdd<T>(this GameObject obj) where T : Component
+        {
+            if (obj.GetComponent<T>() is { } comp) return comp;
+            return obj.AddComponent<T>();
         }
 
         public static T Cast<T>(this object obj)

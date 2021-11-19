@@ -21,8 +21,7 @@ namespace SaberFactory.UI
                 CreateCheckbox();
             }
             catch (Exception)
-            {
-            }
+            { }
         }
 
         public void CreateCheckbox()

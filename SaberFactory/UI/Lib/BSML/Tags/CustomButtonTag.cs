@@ -17,8 +17,8 @@ namespace SaberFactory.UI.Lib.BSML.Tags
         //private static readonly Color _defaultHoveredColor = new Color(0.086f, 0.090f, 0.101f);
         private static readonly Color _defaultHoveredColor = new Color(0.2f, 0.2f, 0.2f, 0.8f);
 
-        public override string[] Aliases => new[] { CustomComponentHandler.ComponentPrefix+".button" };
-        public virtual string PrefabButton => "PracticeButton";
+        public override string[] Aliases => new[] { CustomComponentHandler.ComponentPrefix + ".button" };
+        protected virtual string PrefabButton => "PracticeButton";
 
         private Button buttonPrefab;
 
@@ -46,6 +46,7 @@ namespace SaberFactory.UI.Lib.BSML.Tags
 
             button.gameObject.GetComponent<ButtonStaticAnimations>().TryDestroy();
             var buttonStateColors = button.gameObject.AddComponent<ButtonStateColors>();
+            externalComponents.components.Add(buttonStateColors);
             buttonStateColors.Image = bgImage;
             buttonStateColors.NormalColor = _defaultNormalColor;
             buttonStateColors.HoveredColor = _defaultHoveredColor;
@@ -55,6 +56,7 @@ namespace SaberFactory.UI.Lib.BSML.Tags
                 buttonStateColors.SelectionDidChange;
 
             var buttonImageController = button.gameObject.AddComponent<ButtonImageController>();
+            externalComponents.components.Add(buttonImageController);
             buttonImageController.BackgroundImage = bgImage;
             buttonImageController.LineImage = button.transform.Find("Underline").gameObject.GetComponent<ImageView>();
             buttonImageController.ShowLine(false);

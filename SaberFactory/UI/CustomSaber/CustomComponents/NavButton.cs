@@ -148,8 +148,7 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
                     base.HandleType(componentType, parserParams);
                 }
                 catch (Exception)
-                {
-                }
+                { }
             }
 
             private void SetOnColor(NavButton button, string hexString)

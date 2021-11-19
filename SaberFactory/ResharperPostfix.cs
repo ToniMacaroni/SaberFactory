@@ -31,9 +31,7 @@ namespace SaberFactory
         public static void retnull(this object obj)
         {
             if (obj is null)
-            {
-                return;
-            }
+            { }
             //$ $END$
         }
     }

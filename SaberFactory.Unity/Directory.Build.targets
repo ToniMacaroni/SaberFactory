@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project>
+
+    <PropertyGroup>
+        <OutputAssemblyName>$(OutputPath)$(AssemblyName)</OutputAssemblyName>
+    </PropertyGroup>
+
+    <!--Copies the assembly and pdb to the Beat Saber folder.-->
+    <Target Name="CopyToProject" AfterTargets="Build" Condition="'$(DisableCopyToProject)' != 'True' AND '$(ContinuousIntegrationBuild)' != 'True'">
+<!--        <MakeDir Directories="$(UnityProjectDir)/Assets/Editor"/>-->
+        <PropertyGroup>
+            <ProjectAssemblyDir>$(UnityProjectDir)/Assets</ProjectAssemblyDir>
+            <CanCopyToProject>True</CanCopyToProject>
+            <CopyToProjectError Condition="!Exists('$(ProjectAssemblyDir)')">Unable to copy assembly to project folder, make sure it exists.</CopyToProjectError>
+            <CanCopyToProject Condition="'$(CopyToProjectError)' != ''">False</CanCopyToProject>
+        </PropertyGroup>
+        <Warning Text="$(CopyToProjectError)" Condition="'$(CopyToProjectError)' != ''"/>
+        <Message Text="Copying '$(OutputAssemblyName).dll' to '$(ProjectAssemblyDir)'." Importance="high" Condition="$(CanCopyToProject)"/>
+        <Copy SourceFiles="$(OutputAssemblyName).dll" DestinationFiles="$(ProjectAssemblyDir)\$(AssemblyName).dll" Condition="$(CanCopyToProject)"/>
+    </Target>
+</Project>

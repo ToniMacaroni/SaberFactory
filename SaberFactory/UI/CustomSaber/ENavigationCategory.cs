@@ -1,4 +1,4 @@
-﻿namespace SaberFactory.UI.CustomSaber.Views
+﻿namespace SaberFactory.UI.CustomSaber
 {
     internal enum ENavigationCategory
     {

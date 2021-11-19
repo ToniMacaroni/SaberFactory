@@ -10,8 +10,7 @@ using SaberFactory.Instances.PostProcessors;
 using SaberFactory.Instances.Trail;
 using SaberFactory.Models;
 using SaberFactory.Models.CustomSaber;
-using SaberFactory.Saving;
-using SaberFactory.UI.CustomSaber.Views;
+using SaberFactory.Serialization;
 using SiraUtil;
 using Zenject;
 
@@ -77,6 +76,7 @@ namespace SaberFactory.Installers
             Container.Bind<SaberSet>().AsSingle();
 
             Container.Bind<SaberFileWatcher>().AsSingle();
+            Container.Bind<RandomUtil>().AsSingle();
 
             InstallFactories();
             InstallMiddlewares();

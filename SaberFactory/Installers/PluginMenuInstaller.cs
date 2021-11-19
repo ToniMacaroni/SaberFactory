@@ -1,7 +1,9 @@
 ﻿using SaberFactory.Editor;
+using SaberFactory.Helpers;
 using SaberFactory.Models;
 using SaberFactory.UI;
 using SaberFactory.UI.CustomSaber;
+using SaberFactory.UI.Lib;
 using SaberFactory.UI.Lib.BSML;
 using Zenject;
 
@@ -26,6 +28,8 @@ namespace SaberFactory.Installers
             Container.Bind<TrailPreviewer>().AsSingle();
 
             Container.Bind<MenuSaberProvider>().AsSingle();
+
+            Container.BindInterfacesAndSelfTo<GizmoAssets>().AsSingle();
         }
 
         private void BindRemoteSabers()

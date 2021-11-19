@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 
-namespace SaberFactory.Helpers
+namespace SaberFactory.Serialization
 {
     internal interface IFactorySerializable
     {

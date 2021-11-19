@@ -52,9 +52,9 @@ namespace SaberFactory.Helpers
             return ReadStream(stream);
         }
 
-        public static async Task<string> BytesToString(byte[] data)
+        public static string BytesToString(byte[] data)
         {
-            return await Task.Run(() => Encoding.UTF8.GetString(data));
+            return Encoding.UTF8.GetString(data, data[0] == 0xef?3:0, data.Length-(data[0] == 0xef?3:0));
         }
 
         public static async Task<Texture2D> ReadTexture(string path)

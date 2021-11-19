@@ -132,7 +132,6 @@ namespace SaberFactory.UI.Lib
         }
 
         internal class Factory : ComponentPlaceholderFactory<Popup>
-        {
-        }
+        { }
     }
 }

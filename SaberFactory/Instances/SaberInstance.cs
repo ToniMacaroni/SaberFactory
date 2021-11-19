@@ -51,7 +51,7 @@ namespace SaberFactory.Instances
             Model = model;
 
             GameObject = new GameObject(SaberName);
-            GameObject.AddComponent<SaberMonoBehaviour>().Init(OnSaberGameObjectDestroyed);
+            GameObject.AddComponent<SaberMonoBehaviour>().Init(this, OnSaberGameObjectDestroyed);
 
             CachedTransform = GameObject.transform;
 
@@ -215,11 +215,11 @@ namespace SaberFactory.Instances
         }
 
         internal class Factory : PlaceholderFactory<SaberModel, SaberInstance>
-        {
-        }
+        { }
 
         internal class SaberMonoBehaviour : MonoBehaviour
         {
+            public SaberInstance SaberInstance { get; private set; }
             private Action _onDestroyed;
 
             private void OnDestroy()
@@ -227,8 +227,9 @@ namespace SaberFactory.Instances
                 _onDestroyed?.Invoke();
             }
 
-            public void Init(Action onDestroyedCallback)
+            public void Init(SaberInstance saberInstance, Action onDestroyedCallback)
             {
+                SaberInstance = saberInstance;
                 _onDestroyed = onDestroyedCallback;
             }
         }

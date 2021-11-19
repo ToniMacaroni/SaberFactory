@@ -39,7 +39,8 @@ namespace SaberFactory.Instances.CustomSaber
             }
 
             var trails = SaberHelpers.GetTrails(saberObject).ToArray();
-
+            
+            // Add new CustomTrail component with given data (creating position transforms for given position)
             CustomTrail SetupTrail(int length, float startPos, float endPos, Material material)
             {
                 var newTrail = saberObject.AddComponent<CustomTrail>();
@@ -52,6 +53,7 @@ namespace SaberFactory.Instances.CustomSaber
                 return newTrail;
             }
 
+            // if saber has no trial set up a generic one
             if (trails is null || trails.Length < 1)
             {
                 trails = new[] { SetupTrail(12, 0, 1, null) };
@@ -61,24 +63,35 @@ namespace SaberFactory.Instances.CustomSaber
 
             List<CustomTrail> secondaryTrails = null;
 
+            // set up secondary trails from other saber
             if (trailModel.TrailOriginTrails is { } && trailModel.TrailOriginTrails.Count > 1)
             {
                 secondaryTrails = new List<CustomTrail>();
+                // first remove all existing CustomTrail components
                 for (var i = 1; i < trails.Length; i++)
                 {
                     Object.DestroyImmediate(trails[i]);
                 }
 
+                // set up new components from other sabers secondary trails
                 for (var i = 1; i < trailModel.TrailOriginTrails.Count; i++)
                 {
                     var otherTrail = trailModel.TrailOriginTrails[i];
-                    secondaryTrails.Add(SetupTrail(
+                    if (otherTrail.PointStart is null || otherTrail.PointEnd is null)
+                    {
+                        continue;
+                    }
+                    
+                    var newTrail = SetupTrail(
                         otherTrail.Length,
-                        otherTrail.PointStart?.localPosition.z ?? 0,
-                        otherTrail.PointEnd?.localPosition.z ?? 0,
-                        otherTrail.TrailMaterial));
+                        otherTrail.PointStart.localPosition.z,
+                        otherTrail.PointEnd.localPosition.z,
+                        otherTrail.TrailMaterial);
+                    
+                    secondaryTrails.Add(newTrail);
                 }
             }
+            // set up secondary trails from this saber
             else if (trails.Length > 1)
             {
                 secondaryTrails = new List<CustomTrail>();
@@ -131,7 +144,7 @@ namespace SaberFactory.Instances.CustomSaber
                 materials.Add(rendererMaterials[index]);
             }
 
-            foreach (var renderer in GameObject.GetComponentsInChildren<Renderer>())
+            foreach (var renderer in GameObject.GetComponentsInChildren<Renderer>(true))
             {
                 if (renderer is null)
                 {
