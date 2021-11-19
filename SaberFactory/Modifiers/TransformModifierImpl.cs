@@ -163,6 +163,9 @@ namespace SaberFactory.Modifiers
         private void UpdateButtonColors()
         {
             _posButton.NormalColor = _rotButton.NormalColor = _scaleButton.NormalColor = _defaultButtonColor;
+            _posButton.UpdateSelectionState();
+            _rotButton.UpdateSelectionState();
+            _scaleButton.UpdateSelectionState();
 
             var btn = TransformMode switch
             {
