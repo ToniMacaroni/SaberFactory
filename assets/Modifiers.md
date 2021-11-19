@@ -1,6 +1,6 @@
 Modifiers allow you to transform and enable/disable gameobjects in Saber Factory.
 
-Start by downloading and installing [this package](https://raw.githubusercontent.com/ToniMacaroni/SaberFactory/main/assets/PedestalExporter.unitypackage) into your unity project.  
+Start by downloading and installing [this package](https://raw.githubusercontent.com/ToniMacaroni/SaberFactory/main/assets/SaberFactoryEditor.unitypackage) into your unity project.  
 After that add the `SaberModifierCollection` script to one of your sabers.  
 Within the script you can either add visibility or transform modifiers.  
 Within the specific modifiers you can add any amount of objects.  
