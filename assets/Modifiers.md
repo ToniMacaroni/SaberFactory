@@ -10,6 +10,8 @@ To scale objects around the center make sure to attach them to a parent gameobje
 **Make sure to click the `Save` button everytime you make changes to the modifier**.  
 Changes to the gameobjects don't need the save button to be clicked again.
 
+**In order for modifiers to copy from the left saber to the right make sure they have the same name**
+
 [Showcase Video](https://raw.githubusercontent.com/ToniMacaroni/SaberFactory/main/assets/ModifiersVideo.mp4)  
 
 *Disclaimer: Component modifiers aren't implemented yet but are coming soon*
