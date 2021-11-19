@@ -52,6 +52,10 @@ namespace SaberFactory.UI.CustomSaber.Views.Modifiers
 
         public override void DidOpen()
         {
+#if !PAT
+            return;
+#endif
+            
             _modifyableComponentManager = _instanceManager.CurrentPiece?.Model.ModifyableComponentManager;
             if (IsAvailable)
             {
