@@ -30,7 +30,8 @@ namespace SaberFactory
         [SourceTemplate]
         public static void retnull(this object obj)
         {
-            if (obj is null) return;
+            if (obj is null)
+            { }
             //$ $END$
         }
     }

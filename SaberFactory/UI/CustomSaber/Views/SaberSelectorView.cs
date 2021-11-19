@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -15,9 +16,11 @@ using SaberFactory.Editor;
 using SaberFactory.Helpers;
 using SaberFactory.Loaders;
 using SaberFactory.Models;
+using SaberFactory.Serialization;
 using SaberFactory.UI.CustomSaber.CustomComponents;
 using SaberFactory.UI.CustomSaber.Popups;
 using SaberFactory.UI.Lib;
+using UnityEngine;
 using Zenject;
 using Debug = UnityEngine.Debug;
 
@@ -53,12 +56,7 @@ namespace SaberFactory.UI.CustomSaber.Views
             get => GetSaberWidth();
         }
 
-        [UIValue("saber-length")]
-        private float SaberLength
-        {
-            set => SetSaberLength(value);
-            get => GetSaberLength();
-        }
+        public bool IsReloading { get; private set; }
 
         [Inject] private readonly Editor.Editor _editor = null;
         [Inject] private readonly EditorInstanceManager _editorInstanceManager = null;
@@ -69,6 +67,7 @@ namespace SaberFactory.UI.CustomSaber.Views
         [Inject] private readonly List<RemoteLocationPart> _remoteParts = null;
         [Inject] private readonly SaberFileWatcher _saberFileWatcher = null;
         [Inject] private readonly SaberSet _saberSet = null;
+        [Inject] private readonly Serializer _serializer = null;
         private ModelComposition _currentComposition;
         private PreloadMetaData _currentPreloadMetaData;
         private SaberListDirectoryManager _dirManager;
@@ -82,14 +81,25 @@ namespace SaberFactory.UI.CustomSaber.Views
 
         public override void DidOpen()
         {
-            base.DidOpen();
             _editorInstanceManager.OnModelCompositionSet += CompositionDidChange;
+
+            if (_pluginConfig.ReloadOnSaberUpdate)
+            {
+                _saberFileWatcher.OnSaberUpdate += OnSaberFileUpdate;
+                _saberFileWatcher.Watch();
+            }
         }
 
         public override void DidClose()
         {
-            base.DidClose();
             _editorInstanceManager.OnModelCompositionSet -= CompositionDidChange;
+
+            if (_pluginConfig.ReloadOnSaberUpdate)
+            {
+                _saberFileWatcher.OnSaberUpdate -= OnSaberFileUpdate;
+            }
+
+            _saberFileWatcher.StopWatching();
         }
 
         [UIAction("#post-parse")]
@@ -108,6 +118,17 @@ namespace SaberFactory.UI.CustomSaber.Views
             {
                 imageView.sprite = Utilities.FindSpriteInAssembly("SaberFactory.Resources.UI.halloween_bg.png");
                 imageView.overrideSprite = imageView.sprite;
+                // ColorUtility.TryParseHtmlString("#c5c5c5", out var newBgColor);
+                // imageView.color = newBgColor;
+            }
+        }
+
+        private async void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.N))
+            {
+                File.WriteAllText("Serialized.txt", (await _saberSet.ToJson(_serializer)).ToString());
+                Debug.LogWarning("Serialized");
             }
         }
 
@@ -150,7 +171,10 @@ namespace SaberFactory.UI.CustomSaber.Views
                     break;
             }
 
-            if (delay > 0) await Task.Delay(delay);
+            if (delay > 0)
+            {
+                await Task.Delay(delay);
+            }
 
             var items = new List<ICustomListItem>(metaEnumerable);
             var loadedNames = items.Select(x => x.ListName).ToList();
@@ -164,11 +188,13 @@ namespace SaberFactory.UI.CustomSaber.Views
                 // if the saber isn't aleady present
                 // add the downloadable option
                 foreach (var remotePart in _remoteParts)
+                {
                     if (!loadedNames.Contains(remotePart.ListName))
                     {
                         items.Insert(idx, remotePart);
                         addedDownloadables++;
                     }
+                }
             }
 
             ShowDownloadSabersPopup = items.Count() <= addedDownloadables;
@@ -178,9 +204,14 @@ namespace SaberFactory.UI.CustomSaber.Views
             _currentComposition = _editorInstanceManager.CurrentModelComposition;
 
             if (_currentComposition != null)
+            {
                 _saberList.Select(_mainAssetStore.GetMetaDataForComposition(_currentComposition)?.ListName, !scrollToTop);
+            }
 
-            if (scrollToTop) _saberList.ScrollTo(0);
+            if (scrollToTop)
+            {
+                _saberList.ScrollTo(0);
+            }
 
             UpdateUi();
         }
@@ -188,9 +219,16 @@ namespace SaberFactory.UI.CustomSaber.Views
         public void OnSaberFileUpdate(string filename)
         {
             var currentSaberPath = _currentComposition.GetLeft().StoreAsset.RelativePath;
-            if (!filename.Contains(currentSaberPath)) return;
-            Debug.LogError("Saber got updated\n"+filename);
-            if(File.Exists(filename)) ClickedReload();
+            if (!filename.Contains(currentSaberPath))
+            {
+                return;
+            }
+
+            Debug.Log("Saber got updated\n" + filename);
+            if (File.Exists(filename))
+            {
+                ClickedReload();
+            }
         }
 
         private async void SaberSelected(object item)
@@ -233,7 +271,10 @@ namespace SaberFactory.UI.CustomSaber.Views
 
             _editorInstanceManager.SetModelComposition(_currentComposition);
             UpdateUi();
-            if (reloadList) await ShowSabers();
+            if (reloadList)
+            {
+                await ShowSabers();
+            }
         }
 
         private void CompositionDidChange(ModelComposition comp)
@@ -244,7 +285,11 @@ namespace SaberFactory.UI.CustomSaber.Views
 
         private void UpdateUi()
         {
-            if (_currentComposition == null) return;
+            if (_currentComposition == null)
+            {
+                return;
+            }
+
             _toggleButtonFavorite.SetState(_currentComposition.IsFavorite, false);
         }
 
@@ -258,27 +303,25 @@ namespace SaberFactory.UI.CustomSaber.Views
             return _editorInstanceManager.CurrentSaber?.Model.SaberWidth ?? 1;
         }
 
-        private void SetSaberLength(float width)
-        {
-            _editorInstanceManager.CurrentSaber?.SetSaberLength(width);
-        }
-
-        private float GetSaberLength()
-        {
-            return _editorInstanceManager.CurrentSaber?.Model.SaberLength ?? 1;
-        }
-
         [UIAction("toggled-favorite")]
         private async void ToggledFavorite(bool isOn)
         {
-            if (_currentComposition == null) return;
+            if (_currentComposition == null)
+            {
+                return;
+            }
+
             _currentComposition.SetFavorite(isOn);
             _currentPreloadMetaData?.SetFavorite(isOn);
 
             if (isOn)
+            {
                 _pluginConfig.AddFavorite(_currentComposition.GetLeft().StoreAsset.RelativePath);
+            }
             else
+            {
                 _pluginConfig.RemoveFavorite(_currentComposition.GetLeft().StoreAsset.RelativePath);
+            }
 
             await ShowSabers();
         }
@@ -302,36 +345,76 @@ namespace SaberFactory.UI.CustomSaber.Views
         [UIAction("clicked-reload")]
         private async void ClickedReload()
         {
-            if (_currentComposition == null) return;
+            if (IsReloading)
+            {
+                return;
+            }
+
+            IsReloading = true;
+
+            if (_currentComposition == null)
+            {
+                return;
+            }
 
             _loadingPopup.Show();
-            _saberSet.Save();
-            _editorInstanceManager.DestroySaber();
-            await _mainAssetStore.Reload(_currentComposition.GetLeft().StoreAsset.RelativePath);
-            await _saberSet.Load("default");
-            await ShowSabers();
+
+            try
+            {
+                await _saberSet.Save();
+                _editorInstanceManager.DestroySaber();
+                await _mainAssetStore.Reload(_currentComposition.GetLeft().StoreAsset.RelativePath);
+                await _saberSet.Load();
+                await ShowSabers();
+            }
+            catch (Exception)
+            { }
+
             _loadingPopup.Hide();
+            IsReloading = false;
         }
 
         [UIAction("clicked-reloadall")]
         private async void ClickedReloadAll()
         {
+            if (IsReloading)
+            {
+                return;
+            }
+
+            IsReloading = true;
+
             _loadingPopup.Show();
-            _saberSet.Save();
-            _editorInstanceManager.DestroySaber();
-            await _mainAssetStore.ReloadAll();
-            await _saberSet.Load("default");
-            await ShowSabers();
+
+            try
+            {
+                await _saberSet.Save();
+                _editorInstanceManager.DestroySaber();
+                await _mainAssetStore.ReloadAll();
+                await _saberSet.Load();
+                await ShowSabers();
+            }
+            catch (Exception)
+            { }
+
             _loadingPopup.Hide();
+
+            IsReloading = false;
         }
 
         [UIAction("clicked-delete")]
         private async void ClickedDelete()
         {
-            if (_currentComposition == null) return;
+            if (_currentComposition == null)
+            {
+                return;
+            }
 
             var result = await _messagePopup.Show("Do you really want to delete this saber?", true);
-            if (!result) return;
+            if (!result)
+            {
+                return;
+            }
 
             _editorInstanceManager.DestroySaber();
             _mainAssetStore.Delete(_currentComposition.GetLeft().StoreAsset.RelativePath);

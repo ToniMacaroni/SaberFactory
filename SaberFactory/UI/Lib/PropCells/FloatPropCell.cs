@@ -15,11 +15,14 @@ namespace SaberFactory.UI.Lib.PropCells
 
         public override void SetData(PropertyDescriptor data)
         {
-            if (!(data.PropObject is float val)) return;
+            if (!(data.PropObject is float val))
+            {
+                return;
+            }
 
             OnChangeCallback = data.ChangedCallback;
 
-            if (data.AddtionalData is Vector2 minMax)
+            if (data.AddtionalData is Vector2 minMax && val > minMax.x && val < minMax.y)
             {
                 _sliderSetting.slider.minValue = minMax.x;
                 _sliderSetting.slider.maxValue = minMax.y;

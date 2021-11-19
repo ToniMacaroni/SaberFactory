@@ -1,10 +1,11 @@
-﻿namespace SaberFactory.UI.CustomSaber.Views
+﻿namespace SaberFactory.UI.CustomSaber
 {
     internal enum ENavigationCategory
     {
         Saber,
         Trail,
         Settings,
-        Transform
+        Transform,
+        Modifier
     }
 }

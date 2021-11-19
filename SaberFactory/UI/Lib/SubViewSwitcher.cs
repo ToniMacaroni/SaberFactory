@@ -15,7 +15,10 @@ namespace SaberFactory.UI.Lib
 
         public async void SwitchView(SubView newSubView, bool notify = true)
         {
-            if (CurrentSubView == newSubView) return;
+            if (CurrentSubView == newSubView)
+            {
+                return;
+            }
 
             CurrentSubView?.Close();
             _previousSubView = CurrentSubView;
@@ -48,7 +51,10 @@ namespace SaberFactory.UI.Lib
             bool notify,
             CancellationToken cancellationToken)
         {
-            if (CurrentSubView is null) return;
+            if (CurrentSubView is null)
+            {
+                return;
+            }
 
             var toPresentCG = CurrentSubView.GetComponent<CanvasGroup>();
             toPresentCG.alpha = 0;
@@ -84,7 +90,10 @@ namespace SaberFactory.UI.Lib
             var elapsedTime = 0.0f;
             while (elapsedTime < 0.200000005960464)
             {
-                if (cancellationToken.IsCancellationRequested) return;
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    return;
+                }
 
                 var num = Easing.OutQuart(elapsedTime / 0.2f);
                 transitionAnimation?.Invoke(num);

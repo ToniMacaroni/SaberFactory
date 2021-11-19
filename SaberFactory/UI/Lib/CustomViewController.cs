@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using HMUI;
-using SaberFactory.Helpers;
 using SiraUtil.Tools;
 using UnityEngine;
 using Zenject;
@@ -17,23 +16,28 @@ namespace SaberFactory.UI.Lib
         protected SubView.Factory _viewFactory;
 
         protected SubViewSwitcher SubViewSwitcher;
+        private BsmlDecorator _bsmlDecorator;
 
         public new virtual IAnimatableUi.EAnimationType AnimationType => IAnimatableUi.EAnimationType.Horizontal;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         [Inject]
-        private void Construct(SiraLog logger, SubView.Factory viewFactory)
+        private void Construct(SiraLog logger, SubView.Factory viewFactory, BsmlDecorator bsmlDecorator)
         {
             _logger = logger;
             _viewFactory = viewFactory;
+            _bsmlDecorator = bsmlDecorator;
 
             SubViewSwitcher = new SubViewSwitcher();
         }
 
         protected override async void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
         {
-            if (firstActivation) await UIHelpers.ParseFromResourceAsync(_resourceName, gameObject, this);
+            if (firstActivation)
+            {
+                await _bsmlDecorator.ParseFromResourceAsync(_resourceName, gameObject, this);
+            }
 
             didActivate?.Invoke(firstActivation, addedToHierarchy, screenSystemEnabling);
             SubViewSwitcher.NotifyDidOpen();
@@ -54,7 +58,10 @@ namespace SaberFactory.UI.Lib
 
             var view = (T)_viewFactory.Create(typeof(T), initData);
             view.SubViewSwitcher = SubViewSwitcher;
-            if (switchToView) SubViewSwitcher.SwitchView(view, false);
+            if (switchToView)
+            {
+                SubViewSwitcher.SwitchView(view, false);
+            }
 
             return view;
         }
@@ -72,8 +79,7 @@ namespace SaberFactory.UI.Lib
         }
 
         internal class Factory : PlaceholderFactory<Type, InitData, CustomViewController>
-        {
-        }
+        { }
 
         internal struct InitData
         {

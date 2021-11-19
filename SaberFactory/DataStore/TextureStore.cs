@@ -6,22 +6,20 @@ using SaberFactory.Helpers;
 
 namespace SaberFactory.DataStore
 {
-    internal class TextureStore
+    internal class TextureStore : ILoadingTask
     {
-        public Task CurrentLoadingTask => _currentLoadingTask ?? Task.CompletedTask;
-        public bool IsLoading { get; private set; }
-
         public Task<TextureAsset> this[string path] => GetTexture(path);
 
         private readonly Dictionary<string, TextureAsset> _textureAssets;
         private readonly DirectoryInfo _textureDirectory;
-        private Task _currentLoadingTask;
 
         private TextureStore(PluginDirectories pluginDirs)
         {
             _textureAssets = new Dictionary<string, TextureAsset>();
             _textureDirectory = pluginDirs.SaberFactoryDir.CreateSubdirectory("Textures");
         }
+
+        public Task CurrentTask { get; private set; }
 
         public async Task<TextureAsset> GetTexture(string path)
         {
@@ -45,14 +43,13 @@ namespace SaberFactory.DataStore
 
         public async Task LoadAllTexturesAsync()
         {
-            if (!IsLoading)
+            if (CurrentTask is null)
             {
-                IsLoading = true;
-                _currentLoadingTask = LoadAllTexturesAsyncInternal();
+                CurrentTask = LoadAllTexturesAsyncInternal();
             }
 
-            await _currentLoadingTask;
-            IsLoading = false;
+            await CurrentTask;
+            CurrentTask = null;
         }
 
         public void UnloadAll()
@@ -62,13 +59,22 @@ namespace SaberFactory.DataStore
 
         private async Task<TextureAsset> LoadTexture(string path)
         {
-            if (HasTexture(path)) return _textureAssets[path];
+            if (HasTexture(path))
+            {
+                return _textureAssets[path];
+            }
 
             var fullPath = PathTools.ToFullPath(path);
-            if (!File.Exists(fullPath)) return null;
+            if (!File.Exists(fullPath))
+            {
+                return null;
+            }
 
             var tex = await Readers.ReadTexture(path);
-            if (!tex) return null;
+            if (!tex)
+            {
+                return null;
+            }
 
             tex.name = path;
 
@@ -81,7 +87,9 @@ namespace SaberFactory.DataStore
         private async Task LoadAllTexturesAsyncInternal()
         {
             foreach (var texFile in _textureDirectory.EnumerateFiles("*.png", SearchOption.AllDirectories))
+            {
                 await LoadTexture(PathTools.ToRelativePath(texFile.FullName));
+            }
         }
     }
 }

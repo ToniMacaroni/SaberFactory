@@ -1,4 +1,4 @@
-﻿namespace SaberFactory.Installers
+﻿namespace SaberFactory
 {
     internal class LaunchOptions
     {

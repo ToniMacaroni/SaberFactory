@@ -28,7 +28,10 @@ namespace SaberFactory.Game
 
             _audioController.Pause();
 
-            if (!_initData.CreateTestingSaber) return;
+            if (!_initData.CreateTestingSaber)
+            {
+                return;
+            }
 
             _movementContainer = new GameObject("SaberTester").transform;
             _movementContainer.localPosition = new Vector3(0, 1.5f, 0);

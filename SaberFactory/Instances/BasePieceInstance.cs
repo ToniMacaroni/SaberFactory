@@ -14,10 +14,10 @@ namespace SaberFactory.Instances
     internal class BasePieceInstance : IDisposable
     {
         public PropertyBlockSetterHandler PropertyBlockSetterHandler { get; protected set; }
+        public readonly Transform CachedTransform;
+        public readonly GameObject GameObject;
 
         public readonly BasePieceModel Model;
-        public Transform CachedTransform;
-        public GameObject GameObject;
 
         private List<Material> _colorableMaterials;
 
@@ -26,11 +26,15 @@ namespace SaberFactory.Instances
             Model = model;
             GameObject = Instantiate();
             CachedTransform = GameObject.transform;
+            model.ModifyableComponentManager.SetInstance(GameObject);
         }
 
         public virtual void Dispose()
         {
-            foreach (var material in _colorableMaterials) material.TryDestroy();
+            foreach (var material in _colorableMaterials)
+            {
+                material.TryDestroy();
+            }
         }
 
         public void SetParent(Transform parent)
@@ -56,7 +60,10 @@ namespace SaberFactory.Instances
                 GetColorableMaterials(_colorableMaterials);
             }
 
-            foreach (var material in _colorableMaterials) material.SetColor(MaterialProperties.MainColor, color);
+            foreach (var material in _colorableMaterials)
+            {
+                material.SetColor(MaterialProperties.MainColor, color);
+            }
         }
 
         /// <summary>
@@ -65,11 +72,9 @@ namespace SaberFactory.Instances
         /// </summary>
         /// <param name="materials"></param>
         protected virtual void GetColorableMaterials(List<Material> materials)
-        {
-        }
+        { }
 
         internal class Factory : PlaceholderFactory<BasePieceModel, BasePieceInstance>
-        {
-        }
+        { }
     }
 }

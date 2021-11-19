@@ -61,25 +61,44 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
 
         public void Select(ICustomListItem item, bool scroll = true)
         {
-            if (item == null || _listObjects == null) return;
+            if (item == null || _listObjects == null)
+            {
+                return;
+            }
+
             var idx = _listObjects.IndexOf(item);
             Select(idx, scroll);
         }
 
         public void Select(string listName, bool scroll = true)
         {
-            if (string.IsNullOrEmpty(listName)) return;
+            if (string.IsNullOrEmpty(listName))
+            {
+                return;
+            }
+
             var item = _listObjects.FirstOrDefault(x => x.ListName == listName);
-            if (item == null) return;
+            if (item == null)
+            {
+                return;
+            }
+
             Select(item, scroll);
         }
 
         public void Select(int idx, bool scroll = true)
         {
-            if (idx == -1 || idx == _currentIdx) return;
+            if (idx == -1 || idx == _currentIdx)
+            {
+                return;
+            }
+
             _list.TableView.SelectCellWithIdx(idx);
             _currentIdx = idx;
-            if (scroll) _list.TableView.ScrollToCellWithIdx(idx, TableView.ScrollPositionType.Beginning, false);
+            if (scroll)
+            {
+                _list.TableView.ScrollToCellWithIdx(idx, TableView.ScrollPositionType.Beginning, false);
+            }
         }
 
         public void Deselect()
@@ -90,7 +109,11 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
 
         public void ScrollTo(int idx)
         {
-            if (idx == -1) return;
+            if (idx == -1)
+            {
+                return;
+            }
+
             _list.TableView.ScrollToCellWithIdx(idx, TableView.ScrollPositionType.Beginning, false);
         }
 
@@ -177,7 +200,11 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
 
             private void SetBgColor(CustomList list, string hex)
             {
-                if (!ThemeManager.GetColor(hex, out var color)) return;
+                if (!ThemeManager.GetColor(hex, out var color))
+                {
+                    return;
+                }
+
                 list.SetBgColor(color);
             }
         }

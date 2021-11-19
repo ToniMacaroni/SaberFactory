@@ -15,7 +15,10 @@ namespace SaberFactory.Installers
         public override void InstallBindings()
         {
             var config = Container.Resolve<PluginConfig>();
-            if (!config.Enabled || Container.Resolve<SaberSet>().IsEmpty) return;
+            if (!config.Enabled || Container.Resolve<SaberSet>().IsEmpty)
+            {
+                return;
+            }
 
             if (Container.HasBinding<GameplayCoreSceneSetupData>())
             {

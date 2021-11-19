@@ -35,14 +35,22 @@ namespace SaberFactory.UI.Lib
 
         public void AddEvent(Action<RangeValuesTextSlider, float> action)
         {
-            if (_currentEvent is { }) return;
+            if (_currentEvent is { })
+            {
+                return;
+            }
+
             _currentEvent = action;
             Slider.slider.valueDidChangeEvent += _currentEvent;
         }
 
         public override void RemoveEvent()
         {
-            if (_currentEvent is null) return;
+            if (_currentEvent is null)
+            {
+                return;
+            }
+
             Slider.slider.valueDidChangeEvent -= _currentEvent;
             _currentEvent = null;
         }

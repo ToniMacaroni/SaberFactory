@@ -27,10 +27,7 @@ namespace SaberFactory.UI
 
         public bool OnlyColorVertex
         {
-            set
-            {
-                _sections.Do(x=>x.OnlyColorVertex = value);
-            }
+            set { _sections.Do(x => x.OnlyColorVertex = value); }
         }
 
         private readonly SiraLog _logger;
@@ -60,13 +57,18 @@ namespace SaberFactory.UI
         {
             _sections.Clear();
             var (pointStart, pointEnd) = trailData.GetPoints();
-            _sections.Add(new TrailPreviewSection(0, parent, pointStart, pointEnd, _prefab){OnlyColorVertex = onlyColorVertex});
+            _sections.Add(new TrailPreviewSection(0, parent, pointStart, pointEnd, _prefab) { OnlyColorVertex = onlyColorVertex });
 
             for (var i = 0; i < trailData.SecondaryTrails.Count; i++)
             {
                 var trail = trailData.SecondaryTrails[i];
-                if (trail.Trail.PointStart is null || trail.Trail.PointEnd is null) continue;
-                _sections.Add(new TrailPreviewSection(i + 1, parent, trail.Trail.PointStart, trail.Trail.PointEnd, _prefab, trail){OnlyColorVertex = onlyColorVertex});
+                if (trail.Trail.PointStart is null || trail.Trail.PointEnd is null)
+                {
+                    continue;
+                }
+
+                _sections.Add(new TrailPreviewSection(i + 1, parent, trail.Trail.PointStart, trail.Trail.PointEnd, _prefab, trail)
+                    { OnlyColorVertex = onlyColorVertex });
             }
 
 
@@ -77,7 +79,11 @@ namespace SaberFactory.UI
 
         public void SetMaterial(Material mat)
         {
-            if (_sections.Count < 1) return;
+            if (_sections.Count < 1)
+            {
+                return;
+            }
+
             _sections[0].SetMaterial(mat);
         }
 
@@ -93,7 +99,11 @@ namespace SaberFactory.UI
 
         public Material GetMaterial()
         {
-            if (_sections.Count < 1) return null;
+            if (_sections.Count < 1)
+            {
+                return null;
+            }
+
             return _sections[0].GetMaterial();
         }
 
@@ -112,11 +122,11 @@ namespace SaberFactory.UI
         {
             public int TrailIdx { get; }
             public bool IsPrimaryTrail => TrailIdx == 0;
+            public bool OnlyColorVertex;
 
             private readonly GameObject _instance;
             private readonly Mesh _mesh;
             private readonly Transform _pointEnd;
-            public bool OnlyColorVertex;
 
             private readonly Transform _pointStart;
             private readonly Renderer _renderer;
@@ -145,12 +155,19 @@ namespace SaberFactory.UI
                 _mesh = _instance.GetComponentInChildren<MeshFilter>().sharedMesh;
                 _renderer.sortingOrder = 3;
 
-                if (trailHandler is { }) SetMaterial(trailHandler.Trail.TrailMaterial);
+                if (trailHandler is { })
+                {
+                    SetMaterial(trailHandler.Trail.TrailMaterial);
+                }
             }
 
             public void SetMaterial(Material mat)
             {
-                if (_renderer is null) return;
+                if (_renderer is null)
+                {
+                    return;
+                }
+
                 _renderer.sharedMaterial = mat;
             }
 
@@ -161,14 +178,20 @@ namespace SaberFactory.UI
 
             public void SetColor(Color color)
             {
-                if (_renderer.sharedMaterial is {})
+                if (_renderer.sharedMaterial is { })
                 {
                     var mat = _renderer.sharedMaterial;
-                    if (mat.HasCustomColorsEnabled() && !OnlyColorVertex) mat.SetMainColor(color);
+                    if (mat.HasCustomColorsEnabled() && !OnlyColorVertex)
+                    {
+                        mat.SetMainColor(color);
+                    }
                 }
 
                 var newColors = new Color[4];
-                for (var i = 0; i < newColors.Length; i++) newColors[i] = color;
+                for (var i = 0; i < newColors.Length; i++)
+                {
+                    newColors[i] = color;
+                }
 
                 _mesh.colors = newColors;
             }

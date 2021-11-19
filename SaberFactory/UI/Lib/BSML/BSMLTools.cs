@@ -12,6 +12,7 @@ namespace SaberFactory.UI.Lib.BSML
             var builder = new StringBuilder();
 
             for (var i = 0; i < name.Length; i++)
+            {
                 if (char.IsLower(name[i]))
                 {
                     builder.Append(name[i]);
@@ -43,6 +44,7 @@ namespace SaberFactory.UI.Lib.BSML
                     builder.Append('-');
                     builder.Append(char.ToLowerInvariant(name[i]));
                 }
+            }
 
             return builder.ToString();
         }

@@ -13,7 +13,10 @@ namespace SaberFactory.Editor
         {
             set
             {
-                if (_rootTransform) _rootTransform.gameObject.SetActive(value);
+                if (_rootTransform)
+                {
+                    _rootTransform.gameObject.SetActive(value);
+                }
             }
         }
 
@@ -38,11 +41,19 @@ namespace SaberFactory.Editor
 
         public async Task Instantiate(Vector3 pos, Quaternion rot)
         {
-            if (_rootTransform) return;
+            if (_rootTransform)
+            {
+                return;
+            }
+
             _rootTransform = new GameObject("Pedestal Container").transform;
 
             var prefab = await GetPedestalAsset();
-            if (!prefab) return;
+            if (!prefab)
+            {
+                return;
+            }
+
             Object.Instantiate(prefab, _rootTransform, false);
 
             SaberContainerTransform = _rootTransform.CreateGameObject("SaberContainer").transform;
@@ -58,6 +69,7 @@ namespace SaberFactory.Editor
         private async Task<GameObject> GetPedestalAsset()
         {
             if (_customPedestalFile.Exists)
+            {
                 try
                 {
                     var customPedestal = await Readers.LoadAssetFromAssetBundleAsync<GameObject>(_customPedestalFile.FullName, "Pedestal");
@@ -68,13 +80,17 @@ namespace SaberFactory.Editor
                 {
                     Debug.LogError("Couldn't load custom pedestal: \n" + e);
                 }
+            }
 
             return await _embeddedAssetLoader.LoadAsset<GameObject>("Pedestal");
         }
 
         public void Destroy()
         {
-            if (_rootTransform != null) _rootTransform.gameObject.TryDestroy();
+            if (_rootTransform != null)
+            {
+                _rootTransform.gameObject.TryDestroy();
+            }
         }
     }
 }

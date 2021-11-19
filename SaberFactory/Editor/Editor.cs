@@ -7,6 +7,7 @@ using SaberFactory.Helpers;
 using SaberFactory.Instances;
 using SaberFactory.Models;
 using SaberFactory.UI;
+using SaberFactory.UI.Lib;
 using SiraUtil.Tools;
 using UnityEngine;
 using Zenject;
@@ -31,6 +32,8 @@ namespace SaberFactory.Editor
             }
         }
 
+        private readonly BaseUiComposition _baseUiComposition;
+
         private readonly EditorInstanceManager _editorInstanceManager;
 
         private readonly SiraLog _logger;
@@ -39,7 +42,6 @@ namespace SaberFactory.Editor
         private readonly Pedestal _pedestal;
         private readonly PlayerDataModel _playerDataModel;
         private readonly PluginConfig _pluginConfig;
-        private readonly SaberFactoryUI _saberFactoryUi;
         private readonly SaberGrabController _saberGrabController;
         private readonly SaberSet _saberSet;
         private readonly SFLogoAnim _sfLogoAnim;
@@ -50,7 +52,7 @@ namespace SaberFactory.Editor
         private Editor(
             SiraLog logger,
             PluginConfig pluginConfig,
-            SaberFactoryUI saberFactoryUi,
+            BaseUiComposition baseUiComposition,
             EditorInstanceManager editorInstanceManager,
             EmbeddedAssetLoader embeddedAssetLoader,
             SaberSet saberSet,
@@ -61,7 +63,7 @@ namespace SaberFactory.Editor
         {
             _logger = logger;
             _pluginConfig = pluginConfig;
-            _saberFactoryUi = saberFactoryUi;
+            _baseUiComposition = baseUiComposition;
             _editorInstanceManager = editorInstanceManager;
             _saberSet = saberSet;
             _playerDataModel = playerDataModel;
@@ -78,14 +80,14 @@ namespace SaberFactory.Editor
         public void Dispose()
         {
             Instance = null;
-            _saberFactoryUi.OnClosePressed -= Close;
+            _baseUiComposition.OnClosePressed -= Close;
 
             _pedestal.Destroy();
         }
 
         public async void Initialize()
         {
-            _saberFactoryUi.Initialize();
+            _baseUiComposition.Initialize();
 
             // Create Pedestal
             var pos = new Vector3(0.3f, 0, 0.9f);
@@ -94,7 +96,11 @@ namespace SaberFactory.Editor
 
         public async void Open()
         {
-            if (IsActive) return;
+            if (IsActive)
+            {
+                return;
+            }
+
             IsActive = true;
 
             _editorInstanceManager.OnModelCompositionSet += OnModelCompositionSet;
@@ -103,7 +109,7 @@ namespace SaberFactory.Editor
 
             _editorInstanceManager.Refresh();
 
-            _saberFactoryUi.Open();
+            _baseUiComposition.Open();
 
             if (_isFirstActivation && _pluginConfig.RuntimeFirstLaunch)
             {
@@ -111,7 +117,7 @@ namespace SaberFactory.Editor
                 await _sfLogoAnim.PlayAnim();
             }
 
-            _saberFactoryUi.OnClosePressed += Close;
+            _baseUiComposition.OnClosePressed += Close;
 
             _menuSaberProvider.RequestSaberVisiblity(false);
 
@@ -125,7 +131,11 @@ namespace SaberFactory.Editor
 
         public void Close(bool instant)
         {
-            if (!IsActive) return;
+            if (!IsActive)
+            {
+                return;
+            }
+
             IsActive = false;
 
             _editorInstanceManager.SyncSabers();
@@ -135,8 +145,8 @@ namespace SaberFactory.Editor
 
             _pedestal.IsVisible = false;
 
-            _saberFactoryUi.Close(instant);
-            _saberFactoryUi.OnClosePressed -= Close;
+            _baseUiComposition.Close(instant);
+            _baseUiComposition.OnClosePressed -= Close;
 
             _saberGrabController.ShowHandle();
 
@@ -169,7 +179,9 @@ namespace SaberFactory.Editor
             await Task.Yield();
 
             if (_pluginConfig.AnimateSaberSelection)
+            {
                 await AnimationHelper.AsyncAnimation(0.3f, CancellationToken.None, t => { parent.localScale = new Vector3(t, t, t); });
+            }
         }
     }
 }

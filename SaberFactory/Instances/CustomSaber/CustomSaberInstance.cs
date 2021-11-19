@@ -33,10 +33,14 @@ namespace SaberFactory.Instances.CustomSaber
         /// <param name="trailModel">The <see cref="TrailModel" /> to use</param>
         public void InitializeTrailData(GameObject saberObject, TrailModel trailModel)
         {
-            if (saberObject is null || trailModel is null) return;
+            if (saberObject is null || trailModel is null)
+            {
+                return;
+            }
 
             var trails = SaberHelpers.GetTrails(saberObject).ToArray();
-
+            
+            // Add new CustomTrail component with given data (creating position transforms for given position)
             CustomTrail SetupTrail(int length, float startPos, float endPos, Material material)
             {
                 var newTrail = saberObject.AddComponent<CustomTrail>();
@@ -49,31 +53,52 @@ namespace SaberFactory.Instances.CustomSaber
                 return newTrail;
             }
 
-            if (trails is null || trails.Length < 1) trails = new[] { SetupTrail(12, 0, 1, null) };
+            // if saber has no trial set up a generic one
+            if (trails is null || trails.Length < 1)
+            {
+                trails = new[] { SetupTrail(12, 0, 1, null) };
+            }
 
             var saberTrail = trails[0];
 
             List<CustomTrail> secondaryTrails = null;
 
+            // set up secondary trails from other saber
             if (trailModel.TrailOriginTrails is { } && trailModel.TrailOriginTrails.Count > 1)
             {
                 secondaryTrails = new List<CustomTrail>();
-                for (var i = 1; i < trails.Length; i++) Object.DestroyImmediate(trails[i]);
+                // first remove all existing CustomTrail components
+                for (var i = 1; i < trails.Length; i++)
+                {
+                    Object.DestroyImmediate(trails[i]);
+                }
 
+                // set up new components from other sabers secondary trails
                 for (var i = 1; i < trailModel.TrailOriginTrails.Count; i++)
                 {
                     var otherTrail = trailModel.TrailOriginTrails[i];
-                    secondaryTrails.Add(SetupTrail(
+                    if (otherTrail.PointStart is null || otherTrail.PointEnd is null)
+                    {
+                        continue;
+                    }
+                    
+                    var newTrail = SetupTrail(
                         otherTrail.Length,
-                        otherTrail.PointStart?.localPosition.z ?? 0,
-                        otherTrail.PointEnd?.localPosition.z ?? 0,
-                        otherTrail.TrailMaterial));
+                        otherTrail.PointStart.localPosition.z,
+                        otherTrail.PointEnd.localPosition.z,
+                        otherTrail.TrailMaterial);
+                    
+                    secondaryTrails.Add(newTrail);
                 }
             }
+            // set up secondary trails from this saber
             else if (trails.Length > 1)
             {
                 secondaryTrails = new List<CustomTrail>();
-                for (var i = 1; i < trails.Length; i++) secondaryTrails.Add(trails[i]);
+                for (var i = 1; i < trails.Length; i++)
+                {
+                    secondaryTrails.Add(trails[i]);
+                }
             }
 
             // if trail comes from the preset save system
@@ -85,7 +110,9 @@ namespace SaberFactory.Instances.CustomSaber
 
                 // set texture wrap mode
                 if (trailModel.Material != null && trailModel.Material.Material.TryGetMainTexture(out var tex))
+                {
                     trailModel.OriginalTextureWrapMode = tex.wrapMode;
+                }
             }
 
             var pointStart = saberTrail.PointStart;
@@ -117,9 +144,12 @@ namespace SaberFactory.Instances.CustomSaber
                 materials.Add(rendererMaterials[index]);
             }
 
-            foreach (var renderer in GameObject.GetComponentsInChildren<Renderer>())
+            foreach (var renderer in GameObject.GetComponentsInChildren<Renderer>(true))
             {
-                if (renderer is null) continue;
+                if (renderer is null)
+                {
+                    continue;
+                }
 
                 var rendererMaterials = renderer.sharedMaterials;
                 var materialCount = rendererMaterials.Length;
@@ -130,13 +160,18 @@ namespace SaberFactory.Instances.CustomSaber
 
                     if (material is null ||
                         !material.HasProperty(MaterialProperties.MainColor))
+                    {
                         continue;
+                    }
 
                     // always color materials if "_CustomColors" is 1
                     // if "_CustomColors" is present but != 1 don't color the material at all
                     if (material.TryGetFloat(MaterialProperties.CustomColors, out var val))
                     {
-                        if (val > 0) AddMaterial(renderer, rendererMaterials, i);
+                        if (val > 0)
+                        {
+                            AddMaterial(renderer, rendererMaterials, i);
+                        }
                     }
                     //if "_CustomColors" isn't present check for glow > 1 and bloom > 1
                     else if (material.TryGetFloat(MaterialProperties.Glow, out val) && val > 0)

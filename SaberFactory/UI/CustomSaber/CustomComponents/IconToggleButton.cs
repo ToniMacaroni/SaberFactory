@@ -31,7 +31,10 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
         {
             IsOn = state;
             UpdateColor();
-            if (fireEvent) OnStateChanged?.Invoke(state);
+            if (fireEvent)
+            {
+                OnStateChanged?.Invoke(state);
+            }
         }
 
         public void SetHoverHint(string text)
@@ -42,7 +45,11 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
         private void UpdateColor()
         {
             var image = _iconButtonImageController.ForegroundImage;
-            if (!image) return;
+            if (!image)
+            {
+                return;
+            }
+
             image.color = IsOn ? OnColor : OffColor;
         }
 
@@ -80,19 +87,26 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
                     var button = componentType.component as IconToggleButton;
 
                     if (componentType.data.TryGetValue("onToggle", out var onToggle))
+                    {
                         if (parserParams.actions.TryGetValue(onToggle, out var onToggleAction))
+                        {
                             button.OnStateChanged += val => { onToggleAction.Invoke(val); };
+                        }
+                    }
+
                     base.HandleType(componentType, parserParams);
                 }
                 catch (Exception)
-                {
-                }
+                { }
             }
 
             private void SetOnColor(IconToggleButton button, string hexString)
             {
                 if (hexString == "none")
+                {
                     return;
+                }
+
                 ColorUtility.TryParseHtmlString(hexString, out var color);
                 button.OnColor = color;
             }
@@ -100,7 +114,10 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
             private void SetOffColor(IconToggleButton button, string hexString)
             {
                 if (hexString == "none")
+                {
                     return;
+                }
+
                 ColorUtility.TryParseHtmlString(hexString, out var color);
                 button.OffColor = color;
             }

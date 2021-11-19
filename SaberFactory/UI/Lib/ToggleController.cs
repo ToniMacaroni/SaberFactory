@@ -32,7 +32,10 @@ namespace SaberFactory.UI.Lib
 
         public override void RemoveEvent()
         {
-            if (_event != null) Toggle.toggle.onValueChanged.RemoveListener(_event);
+            if (_event != null)
+            {
+                Toggle.toggle.onValueChanged.RemoveListener(_event);
+            }
         }
 
         public override string GetId()

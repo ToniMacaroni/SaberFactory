@@ -61,7 +61,7 @@ namespace SaberFactory.Configuration
         // List of sabers / parts marked as favorite
         [UseConverter(typeof(ListConverter<string>))]
         public List<string> Favorites { get; set; } = new List<string>();
-        
+
         [Ignore] public bool RuntimeFirstLaunch;
 
         /// <summary>
@@ -70,7 +70,10 @@ namespace SaberFactory.Configuration
         /// <param name="path"></param>
         public void AddFavorite(string path)
         {
-            if (!IsFavorite(path)) Favorites.Add(path);
+            if (!IsFavorite(path))
+            {
+                Favorites.Add(path);
+            }
         }
 
         /// <summary>

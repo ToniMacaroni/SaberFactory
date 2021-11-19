@@ -17,12 +17,18 @@ namespace SaberFactory.UI.Lib.PropCells
 
         public override void SetData(PropertyDescriptor data)
         {
-            if (!(data.PropObject is Texture2D tex)) return;
+            if (!(data.PropObject is Texture2D tex))
+            {
+                return;
+            }
 
             OnChangeCallback = data.ChangedCallback;
             _propName.text = ShortenText(data.Text, 14);
 
-            if (data.AddtionalData is bool showPreview && showPreview) _propTexture.sprite = Utilities.LoadSpriteFromTexture(tex);
+            if (data.AddtionalData is bool showPreview && showPreview)
+            {
+                _propTexture.sprite = Utilities.LoadSpriteFromTexture(tex);
+            }
 
             if (ThemeManager.GetDefinedColor("prop-cell", out var bgColor))
             {
@@ -33,7 +39,10 @@ namespace SaberFactory.UI.Lib.PropCells
 
         private string ShortenText(string text, int length)
         {
-            if (text.Length < length) return text;
+            if (text.Length < length)
+            {
+                return text;
+            }
 
             return text.Substring(0, length) + "...";
         }

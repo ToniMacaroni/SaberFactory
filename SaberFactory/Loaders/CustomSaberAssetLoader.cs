@@ -15,7 +15,10 @@ namespace SaberFactory.Loaders
         {
             var paths = new HashSet<AssetMetaPath>();
 
-            foreach (var path in dirs.CustomSaberDir.EnumerateFiles("*.saber", SearchOption.AllDirectories)) paths.Add(new AssetMetaPath(path));
+            foreach (var path in dirs.CustomSaberDir.EnumerateFiles("*.saber", SearchOption.AllDirectories))
+            {
+                paths.Add(new AssetMetaPath(path, dirs.Cache.GetFile(path.Name+".meta").FullName));
+            }
 
             return paths;
         }
@@ -23,10 +26,16 @@ namespace SaberFactory.Loaders
         public override async Task<StoreAsset> LoadStoreAssetAsync(string relativePath)
         {
             var fullPath = PathTools.ToFullPath(relativePath);
-            if (!File.Exists(fullPath)) return null;
+            if (!File.Exists(fullPath))
+            {
+                return null;
+            }
 
             var result = await Readers.LoadAssetFromAssetBundleAsync<GameObject>(fullPath, "_CustomSaber");
-            if (result == null) return null;
+            if (result == null)
+            {
+                return null;
+            }
 
             return new StoreAsset(relativePath, result.Item1, result.Item2);
         }

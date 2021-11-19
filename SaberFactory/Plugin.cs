@@ -31,7 +31,10 @@ namespace SaberFactory
 
             var pluginConfig = conf.Generated<PluginConfig>();
 
-            if (!await LoadCsDescriptors()) return;
+            if (!await LoadCsDescriptors())
+            {
+                return;
+            }
 
             zenjector.OnApp<PluginAppInstaller>().WithParameters(logger, pluginConfig, metadata);
             zenjector.OnMenu<PluginMenuInstaller>();

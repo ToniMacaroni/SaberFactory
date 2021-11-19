@@ -64,7 +64,7 @@ namespace SaberFactory.UI.CustomSaber.Views
             {
                 _trailConfig.OnlyUseVertexColor = value;
                 _trailPreviewer.OnlyColorVertex = value;
-            } 
+            }
         }
 
         private bool NoTrailViewActive
@@ -72,8 +72,15 @@ namespace SaberFactory.UI.CustomSaber.Views
             get => _noTrailContainer.activeSelf;
             set
             {
-                if (_noTrailContainer.activeSelf == !value) _noTrailContainer.SetActive(value);
-                if (_mainContainer.activeSelf == value) _mainContainer.SetActive(!value);
+                if (_noTrailContainer.activeSelf == !value)
+                {
+                    _noTrailContainer.SetActive(value);
+                }
+
+                if (_mainContainer.activeSelf == value)
+                {
+                    _mainContainer.SetActive(!value);
+                }
             }
         }
 
@@ -107,7 +114,11 @@ namespace SaberFactory.UI.CustomSaber.Views
 
             _time = 0;
 
-            if (!_dirty || _instanceTrailData == null || !_refreshButtonActive) return;
+            if (!_dirty || _instanceTrailData == null || !_refreshButtonActive)
+            {
+                return;
+            }
+
             _dirty = false;
 
             RefreshTrail();
@@ -137,7 +148,9 @@ namespace SaberFactory.UI.CustomSaber.Views
         public override void DidClose()
         {
             if (_instanceTrailData != null && _pluginConfig.ControlTrailWithThumbstick)
+            {
                 _vrPlatformHelper.joystickWasNotCenteredThisFrameEvent -= OnjoystickWasNotCenteredThisFrameEvent;
+            }
 
             _editorInstanceManager.OnSaberInstanceCreated -= CreateTrail;
 
@@ -151,7 +164,7 @@ namespace SaberFactory.UI.CustomSaber.Views
             WidthValue = Mathf.Clamp(_instanceTrailData.Width + deltaPos.y * -0.005f, 0, _trailWidthMax);
 
             LengthValue = Mathf.Clamp(_trailFloatLength + deltaPos.x * 0.1f, 0, 30);
-            
+
             ParserParams.EmitEvent("update-proportions");
         }
 
@@ -205,7 +218,10 @@ namespace SaberFactory.UI.CustomSaber.Views
             {
                 _instanceTrailData.RevertMaterialForCustomSaber(cs.Model as CustomSaberModel);
                 var tm = _editorInstanceManager.CurrentModelComposition?.GetLeft().CastChecked<CustomSaberModel>()?.GrabTrail(false);
-                if (tm is { }) SetTrailModel(tm);
+                if (tm is { })
+                {
+                    SetTrailModel(tm);
+                }
             }
         }
 
@@ -245,9 +261,13 @@ namespace SaberFactory.UI.CustomSaber.Views
         private void TrailPopupSelectionChanged(TrailModel trailModel, List<CustomTrail> trailList)
         {
             if (trailModel is null)
+            {
                 ResetTrail();
+            }
             else
+            {
                 CopyFromTrailModel(trailModel, trailList);
+            }
 
             _editorInstanceManager.Refresh();
         }
@@ -299,10 +319,18 @@ namespace SaberFactory.UI.CustomSaber.Views
             set
             {
                 _trailFloatLength = value;
-                if (_instanceTrailData is null) return;
+                if (_instanceTrailData is null)
+                {
+                    return;
+                }
+
                 _instanceTrailData.Length = (int)value;
                 _dirty = true;
-                if (_refreshButtonActive) return;
+                if (_refreshButtonActive)
+                {
+                    return;
+                }
+
                 _trailPreviewer.SetLength(value);
                 OnPropertyChanged();
             }
@@ -313,9 +341,17 @@ namespace SaberFactory.UI.CustomSaber.Views
             get => _instanceTrailData?.Width ?? 1;
             set
             {
-                if (_instanceTrailData is null) return;
+                if (_instanceTrailData is null)
+                {
+                    return;
+                }
+
                 _instanceTrailData.Width = value;
-                if (_refreshButtonActive) return;
+                if (_refreshButtonActive)
+                {
+                    return;
+                }
+
                 _trailPreviewer.UpdateWidth();
                 OnPropertyChanged();
             }
@@ -326,9 +362,17 @@ namespace SaberFactory.UI.CustomSaber.Views
             get => _instanceTrailData?.Offset ?? 0;
             set
             {
-                if (_instanceTrailData is null) return;
+                if (_instanceTrailData is null)
+                {
+                    return;
+                }
+
                 _instanceTrailData.Offset = value;
-                if (_refreshButtonActive) return;
+                if (_refreshButtonActive)
+                {
+                    return;
+                }
+
                 _trailPreviewer.UpdateWidth();
                 OnPropertyChanged();
             }
@@ -339,7 +383,11 @@ namespace SaberFactory.UI.CustomSaber.Views
             get => _instanceTrailData?.WhiteStep ?? 0;
             set
             {
-                if (_instanceTrailData is null) return;
+                if (_instanceTrailData is null)
+                {
+                    return;
+                }
+
                 _instanceTrailData.WhiteStep = value;
                 OnPropertyChanged();
             }
@@ -350,7 +398,11 @@ namespace SaberFactory.UI.CustomSaber.Views
             get => _instanceTrailData?.ClampTexture ?? false;
             set
             {
-                if (_instanceTrailData is null) return;
+                if (_instanceTrailData is null)
+                {
+                    return;
+                }
+
                 _instanceTrailData.ClampTexture = value;
                 OnPropertyChanged();
             }
@@ -361,10 +413,21 @@ namespace SaberFactory.UI.CustomSaber.Views
             get => _instanceTrailData?.Flip ?? false;
             set
             {
-                if (_instanceTrailData is null) return;
+                if (_instanceTrailData is null)
+                {
+                    return;
+                }
+
                 _instanceTrailData.Flip = value;
-                if (_refreshButtonActive) RefreshTrail();
-                else CreateTrail(_editorInstanceManager.CurrentSaber);
+                if (_refreshButtonActive)
+                {
+                    RefreshTrail();
+                }
+                else
+                {
+                    CreateTrail(_editorInstanceManager.CurrentSaber);
+                }
+
                 OnPropertyChanged();
             }
         }

@@ -28,14 +28,16 @@ namespace SaberFactory.Instances.Trail
 
         // Don't let the SaberTrail class instantiate from the renderer prefab (since it's null at this point)
         public override void Awake()
-        {
-        }
+        { }
 
         public override void LateUpdate()
         {
             if (_framesPassed <= 4)
             {
-                if (_framesPassed == 4) Init();
+                if (_framesPassed == 4)
+                {
+                    Init();
+                }
 
                 _framesPassed++;
                 return;
@@ -58,8 +60,15 @@ namespace SaberFactory.Instances.Trail
 
         public override void OnEnable()
         {
-            if (_inited) _trailRenderer.UpdateMesh(_trailElementCollection, _color);
-            if (_trailRenderer) _trailRenderer.enabled = true;
+            if (_inited)
+            {
+                _trailRenderer.UpdateMesh(_trailElementCollection, _color);
+            }
+
+            if (_trailRenderer)
+            {
+                _trailRenderer.enabled = true;
+            }
         }
 
         public void Setup(TrailInitData initData, Material trailMaterial, Transform start, Transform end)

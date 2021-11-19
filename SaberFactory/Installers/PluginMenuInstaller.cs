@@ -1,11 +1,10 @@
-﻿using System;
-using SaberFactory.Editor;
+﻿using SaberFactory.Editor;
+using SaberFactory.Helpers;
 using SaberFactory.Models;
 using SaberFactory.UI;
 using SaberFactory.UI.CustomSaber;
 using SaberFactory.UI.Lib;
 using SaberFactory.UI.Lib.BSML;
-using UnityEngine;
 using Zenject;
 
 namespace SaberFactory.Installers
@@ -14,26 +13,13 @@ namespace SaberFactory.Installers
     {
         public override void InstallBindings()
         {
-            Container.BindInterfacesAndSelfTo<CustomComponentHandler>().AsSingle();
-
-            Container.Bind<BaseGameUiHandler>().AsSingle();
             Container.Bind<EditorInstanceManager>().AsSingle();
 
-            BindUiStuff();
+            MainUIInstaller.Install(Container);
 
             BindRemoteSabers();
 
-            Container
-                .BindFactory<Type, SubView.InitData, SubView, SubView.Factory>()
-                .FromFactory<SubViewFactory>();
-            Container
-                .BindFactory<Type, CustomViewController.InitData, CustomViewController, CustomViewController.Factory>()
-                .FromFactory<ViewControllerFactory>();
-            Container
-                .BindFactory<CustomScreen.InitData, CustomScreen, CustomScreen.Factory>()
-                .FromFactory<ScreenFactory>();
-
-            Container.Bind<SaberFactoryUI>().To<CustomSaberUI>().AsSingle();
+            Container.Bind<BaseUiComposition>().To<CustomSaberUiComposition>().AsSingle();
             Container.Bind<SaberGrabController>().AsSingle();
             Container.BindInterfacesAndSelfTo<Editor.Editor>().AsSingle();
 
@@ -42,6 +28,8 @@ namespace SaberFactory.Installers
             Container.Bind<TrailPreviewer>().AsSingle();
 
             Container.Bind<MenuSaberProvider>().AsSingle();
+
+            Container.BindInterfacesAndSelfTo<GizmoAssets>().AsSingle();
         }
 
         private void BindRemoteSabers()
@@ -77,22 +65,6 @@ namespace SaberFactory.Installers
         private void BindSaber(RemoteLocationPart.InitData data)
         {
             Container.Bind<RemoteLocationPart>().To<RemoteLocationPart>().AsCached().WithArguments(data);
-        }
-
-        private void BindUiStuff()
-        {
-            BindUiFactory<Popup, Popup.Factory>();
-            BindUiFactory<CustomUiComponent, CustomUiComponent.Factory>();
-        }
-
-        private FactoryToChoiceIdBinder<GameObject, Type, T> BindUiFactory<T, TFactory>()
-        {
-            var bindStatement = Container.StartBinding();
-            var bindInfo = bindStatement.SpawnBindInfo();
-            bindInfo.ContractTypes.Add(typeof(TFactory));
-            var factoryBindInfo = new FactoryBindInfo(typeof(TFactory));
-            bindStatement.SetFinalizer(new PlaceholderFactoryBindingFinalizer<T>(bindInfo, factoryBindInfo));
-            return new FactoryToChoiceIdBinder<GameObject, Type, T>(Container, bindInfo, factoryBindInfo);
         }
     }
 }

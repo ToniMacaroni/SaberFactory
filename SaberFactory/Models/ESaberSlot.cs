@@ -1,4 +1,4 @@
-﻿namespace SaberFactory
+﻿namespace SaberFactory.Models
 {
     internal enum ESaberSlot
     {

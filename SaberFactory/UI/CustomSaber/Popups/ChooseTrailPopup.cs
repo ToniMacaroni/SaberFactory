@@ -54,11 +54,17 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
 
         private async Task<(TrailModel, List<CustomTrail>)> GetTrail(PreloadMetaData metaData)
         {
-            if (metaData is null) return default;
+            if (metaData is null)
+            {
+                return default;
+            }
 
             var comp = await _mainAssetStore[metaData];
 
-            if (comp?.GetLeft() is CustomSaberModel cs) return (cs.GrabTrail(true), SaberHelpers.GetTrails(cs.Prefab));
+            if (comp?.GetLeft() is CustomSaberModel cs)
+            {
+                return (cs.GrabTrail(true), SaberHelpers.GetTrails(cs.Prefab));
+            }
 
             return default;
         }

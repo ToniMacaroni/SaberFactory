@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29709.97
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SaberFactory", "SaberFactory\SaberFactory.csproj", "{C287398D-B333-4DFE-9C7E-9518D9D09745}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SaberFactory.Editor", "SaberFactory.Editor\SaberFactory.Editor.csproj", "{42D12C91-86D3-4006-8D15-0291488970B6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SaberFactory.Unity", "SaberFactory.Unity\SaberFactory.Unity.csproj", "{42D12C91-86D3-4006-8D15-0291488970B6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

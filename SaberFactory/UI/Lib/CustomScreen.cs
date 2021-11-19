@@ -68,12 +68,14 @@ namespace SaberFactory.UI.Lib
         public virtual void Close(bool instant = false)
         {
             SetRootViewController(null, ViewController.AnimationType.Out);
-            if (instant) gameObject.SetActive(false);
+            if (instant)
+            {
+                gameObject.SetActive(false);
+            }
         }
 
         internal class Factory : PlaceholderFactory<InitData, CustomScreen>
-        {
-        }
+        { }
 
         internal struct InitData
         {

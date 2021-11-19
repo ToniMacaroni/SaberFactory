@@ -21,12 +21,12 @@ namespace SaberFactory.DataStore
             Name = name;
             Path = path;
             Texture = texture;
-            
+
             if (name.ToLower().Contains("_clamp"))
             {
                 Texture.wrapMode = TextureWrapMode.Clamp;
             }
-            
+
             Origin = origin;
         }
 
@@ -49,7 +49,10 @@ namespace SaberFactory.DataStore
             }
             else
             {
-                if (!IsInUse) Dispose();
+                if (!IsInUse)
+                {
+                    Dispose();
+                }
             }
         }
     }

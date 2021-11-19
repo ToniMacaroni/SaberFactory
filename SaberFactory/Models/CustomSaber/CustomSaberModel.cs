@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using CustomSaber;
+using Newtonsoft.Json.Linq;
 using SaberFactory.DataStore;
 using SaberFactory.Helpers;
 using SaberFactory.Instances;
 using SaberFactory.Instances.CustomSaber;
 using SaberFactory.Models.PropHandler;
-using SaberFactory.Saving;
+using SaberFactory.Serialization;
 using UnityEngine;
 using Zenject;
 
@@ -53,6 +55,8 @@ namespace SaberFactory.Models.CustomSaber
 
         private TrailModel _trailModel;
 
+        [Inject] private readonly PluginDirectories _pluginDirectories = null;
+
         public CustomSaberModel(StoreAsset storeAsset) : base(storeAsset)
         {
             PropertyBlock = new CustomSaberPropertyBlock();
@@ -60,22 +64,34 @@ namespace SaberFactory.Models.CustomSaber
 
         public override void OnLazyInit()
         {
-            if (!HasTrail) return;
+            if (!HasTrail)
+            {
+                return;
+            }
+
             var trailModel = TrailModel;
 
-            var path = PathTools.ToFullPath(StoreAsset.RelativePath) + ".trail";
+            var path = _pluginDirectories.Cache.GetFile(StoreAsset.NameWithoutExtension+".trail").FullName;
             var trail = QuickSave.LoadObject<TrailProportions>(path);
-            if (trail == null) return;
+            if (trail == null)
+            {
+                return;
+            }
+
             trailModel.Length = trail.Length;
             trailModel.Width = trail.Width;
         }
 
         public override void SaveAdditionalData()
         {
-            if (!HasTrail) return;
+            if (!HasTrail)
+            {
+                return;
+            }
+
             var trailModel = TrailModel;
 
-            var path = PathTools.ToFullPath(StoreAsset.RelativePath) + ".trail";
+            var path = _pluginDirectories.Cache.GetFile(StoreAsset.NameWithoutExtension+".trail").FullName;
             var trail = new TrailProportions
             {
                 Length = trailModel.Length,
@@ -102,25 +118,28 @@ namespace SaberFactory.Models.CustomSaber
                 TrailModel.TrailOriginTrails = otherCs.TrailModel.TrailOriginTrails;
 
                 // backup current material
-                var mat = TrailModel.Material?.Material;
+                var originalMaterial = TrailModel.Material?.Material;
 
                 TrailModel.CopyFrom(otherCs.TrailModel);
 
                 var otherMat = TrailModel.Material.Material;
 
-                // if trail isn't from other saber just copy props
-                // if trail IS from other saber but shares the same shader just copy props
+                // if trail isn't from different saber just copy props
+                // if trail IS from different saber but shares the same shader just copy props
                 // otherwise (trail is from other saber and shaders are different) copy the whole material
-                if (mat != null && (string.IsNullOrWhiteSpace(TrailModel.TrailOrigin) ||
-                                    mat.shader.name == otherMat.shader.name))
+                if (originalMaterial != null && (string.IsNullOrWhiteSpace(TrailModel.TrailOrigin) ||
+                                    originalMaterial.shader.name == otherMat.shader.name))
                 {
-                    foreach (var prop in otherMat.GetProperties(MaterialAttributes.HideInSf)) mat.SetProperty(prop.Item2, prop.Item1, prop.Item3);
+                    foreach (var prop in otherMat.GetProperties(MaterialAttributes.HideInSf))
+                    {
+                        originalMaterial.SetProperty(prop.Item2, prop.Item1, prop.Item3);
+                    }
 
-                    TrailModel.Material.Material = mat;
+                    TrailModel.Material.Material = originalMaterial;
                 }
                 else
                 {
-                    mat.TryDestoryImmediate();
+                    originalMaterial.TryDestoryImmediate();
                 }
             }
         }
@@ -129,10 +148,16 @@ namespace SaberFactory.Models.CustomSaber
         {
             var trail = SaberHelpers.GetTrails(Prefab).FirstOrDefault();
 
-            if (trail == null) return null;
+            if (trail == null)
+            {
+                return null;
+            }
 
             TextureWrapMode wrapMode = default;
-            if (trail.TrailMaterial != null && trail.TrailMaterial.TryGetMainTexture(out var tex)) wrapMode = tex.wrapMode;
+            if (trail.TrailMaterial != null && trail.TrailMaterial.TryGetMainTexture(out var tex))
+            {
+                wrapMode = tex.wrapMode;
+            }
 
             FixTrailParents();
 
@@ -161,20 +186,47 @@ namespace SaberFactory.Models.CustomSaber
         /// <param name="trail"></param>
         public void FixTrailParents()
         {
-            if (_didReparentTrail) return;
+            if (_didReparentTrail)
+            {
+                return;
+            }
+
             _didReparentTrail = true;
 
             var trail = Prefab.GetComponent<CustomTrail>();
 
-            if (trail is null) return;
+            if (trail is null)
+            {
+                return;
+            }
 
             trail.PointStart.SetParent(Prefab.transform, true);
             trail.PointEnd.SetParent(Prefab.transform, true);
         }
 
-        internal class Factory : PlaceholderFactory<StoreAsset, CustomSaberModel>
+        public override async Task FromJson(JObject obj, Serializer serializer)
         {
+            await base.FromJson(obj, serializer);
+            if (HasTrail)
+            {
+                await TrailModel.FromJson((JObject)obj[nameof(TrailModel)], serializer);
+            }
         }
+
+        public override async Task<JToken> ToJson(Serializer serializer)
+        {
+            var obj = (JObject)await base.ToJson(serializer);
+            
+            if (HasTrail)
+            {
+                obj.Add(nameof(TrailModel), await TrailModel.ToJson(serializer));
+            }
+
+            return obj;
+        }
+
+        internal class Factory : PlaceholderFactory<StoreAsset, CustomSaberModel>
+        { }
 
         internal class TrailProportions
         {

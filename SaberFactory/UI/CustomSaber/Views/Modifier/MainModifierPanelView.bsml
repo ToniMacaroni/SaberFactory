@@ -1,0 +1,24 @@
+﻿<horizontal xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+            xsi:noNamespaceSchemaLocation='file:///C:/CustomBSMLSchema.xsd'
+            spacing="38" anchor-min-x="0.18" pref-height="{template;NavHeight}">
+
+    <vertical pivot-y="0" vertical-fit="PreferredSize" spacing="1">
+        <horizontal bg="round-rect-panel" custom-color="$default-panel" pad-top="1" pad-bottom="1">
+            <sui.button text="Reset" pref-width="25" on-click="reset-click" style="default-button"/>
+            <sui.button text="Reset All" pref-width="25" on-click="reset-all-click" style="default-button"/>
+        </horizontal>
+        <vertical bg="round-rect-panel" custom-color="$default-panel" pad="3" pref-height="70" pref-width="70" vertical-fit="PreferredSize">
+            <div id="container"></div>
+            <text text="This saber isn't customizable" align="Center" active="~IsNotCustomizable"/>
+        </vertical>
+    </vertical>
+
+    <vertical tags="canvas" pad="3" pref-height="70" pref-width="50" bg="round-rect-panel" custom-color="$default-panel">
+        <list id="component-list" list-style="List" select-cell="component-selected"/>
+        <horizontal preferred-height='8'>
+            <page-button event-click='component-list#PageDown' direction='Down' pref-width='8'/>
+            <page-button event-click='component-list#PageUp' direction='Up' pref-width='8'/>
+        </horizontal>
+    </vertical>
+
+</horizontal>

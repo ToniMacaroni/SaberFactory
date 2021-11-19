@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using SaberFactory.Helpers;
 using SaberFactory.Instances;
 using SaberFactory.Models;
@@ -10,12 +9,6 @@ using Zenject;
 
 namespace SaberFactory.Game
 {
-    public class SFSaberProvider : IModelProvider
-    {
-        public Type Type => typeof(SfSaberModelController);
-        public int Priority => 300;
-    }
-
     internal class SfSaberModelController : SaberModelController, IColorable
     {
         [InjectOptional] private readonly AFHandler _afHandler = null;

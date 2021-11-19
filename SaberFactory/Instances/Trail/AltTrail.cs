@@ -36,12 +36,17 @@ namespace SaberFactory.Instances.Trail
         private void LateUpdate()
         {
             if (!_inited)
+            {
                 return;
+            }
 
             if (CapFps)
             {
                 _time += Time.deltaTime;
-                if (_time < 1f / 90) return;
+                if (_time < 1f / 90)
+                {
+                    return;
+                }
 
                 _time = 0;
             }
@@ -54,7 +59,11 @@ namespace SaberFactory.Instances.Trail
 
                 _spline.Granularity = Granularity;
                 _spline.Clear();
-                for (var i = 0; i < TrailLength; i++) _spline.AddControlPoint(CurHeadPos, PointStart.position - PointEnd.position);
+                for (var i = 0; i < TrailLength; i++)
+                {
+                    _spline.AddControlPoint(CurHeadPos, PointStart.position - PointEnd.position);
+                }
+
                 _snapshotList.Clear();
                 _snapshotList.Add(new Element(PointStart.position, PointEnd.position));
                 _snapshotList.Add(new Element(PointStart.position, PointEnd.position));
@@ -83,7 +92,10 @@ namespace SaberFactory.Instances.Trail
 
         private void OnDestroy()
         {
-            if (!_inited || _vertexPool == null) return;
+            if (!_inited || _vertexPool == null)
+            {
+                return;
+            }
 
             _vertexPool.Destroy();
         }
@@ -98,7 +110,10 @@ namespace SaberFactory.Instances.Trail
             Whitestep = initData.Whitestep;
 
             gameObject.layer = 12;
-            if (editor) SortingOrder = 3;
+            if (editor)
+            {
+                SortingOrder = 3;
+            }
 
             _elemPool = new ElementPool(TrailLength);
             _vertexPool = new VertexPool(Material, this);
@@ -141,7 +156,10 @@ namespace SaberFactory.Instances.Trail
 
                 var color = Color;
 
-                if (uvSegment < Whitestep) color = Color.LerpUnclamped(Color.white, Color, uvSegment / Whitestep);
+                if (uvSegment < Whitestep)
+                {
+                    color = Color.LerpUnclamped(Color.white, Color, uvSegment / Whitestep);
+                }
 
 
                 // pos0
@@ -239,8 +257,7 @@ namespace SaberFactory.Instances.Trail
             }
 
             public Element()
-            {
-            }
+            { }
         }
 
         public class ElementPool
@@ -277,7 +294,9 @@ namespace SaberFactory.Instances.Trail
             public void Release(Element element)
             {
                 if (_stack.Count > 0 && ReferenceEquals(_stack.Peek(), element))
+                {
                     Debug.LogError("Internal error. Trying to destroy object that is already released to pool.");
+                }
 
                 _stack.Push(element);
             }

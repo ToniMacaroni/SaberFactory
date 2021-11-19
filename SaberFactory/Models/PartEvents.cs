@@ -25,7 +25,10 @@ namespace SaberFactory.Models
         {
             var eventManager = saberObject.GetComponent<EventManager>();
 
-            if (!eventManager) return null;
+            if (!eventManager)
+            {
+                return null;
+            }
 
             var partEvents = new PartEvents
             {

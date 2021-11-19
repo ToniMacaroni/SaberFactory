@@ -4,6 +4,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using BeatSaberMarkupLanguage;
 using SaberFactory.Loaders;
 using SaberFactory.UI;
+using SaberFactory.UI.Lib;
 using UnityEngine;
 
 namespace SaberFactory.Models
@@ -44,7 +45,10 @@ namespace SaberFactory.Models
 
         public void SaveToFile()
         {
-            if (AssetMetaPath.HasMetaData) File.Delete(AssetMetaPath.MetaDataPath);
+            if (AssetMetaPath.HasMetaData)
+            {
+                File.Delete(AssetMetaPath.MetaDataPath);
+            }
 
             var ser = new SerializableMeta();
             ser.Name = ListName;

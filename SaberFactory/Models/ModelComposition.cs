@@ -1,5 +1,6 @@
 ﻿using System;
 using SaberFactory.UI;
+using SaberFactory.UI.Lib;
 using UnityEngine;
 
 namespace SaberFactory.Models
@@ -26,7 +27,10 @@ namespace SaberFactory.Models
             _modelRight = modelRight;
             AdditionalInstanceHandler = new AdditionalInstanceHandler(additionalData);
 
-            if (_modelLeft == null && _modelRight == null) return;
+            if (_modelLeft == null && _modelRight == null)
+            {
+                return;
+            }
 
             if (_modelLeft != null)
             {
@@ -63,14 +67,22 @@ namespace SaberFactory.Models
 
         public void LazyInit()
         {
-            if (_didLazyInit || _modelLeft == null) return;
+            if (_didLazyInit || _modelLeft == null)
+            {
+                return;
+            }
+
             _didLazyInit = true;
             _modelLeft.OnLazyInit();
         }
 
         public void SaveAdditionalData()
         {
-            if (_modelLeft == null) return;
+            if (_modelLeft == null)
+            {
+                return;
+            }
+
             _modelLeft.SaveAdditionalData();
         }
 
@@ -91,7 +103,11 @@ namespace SaberFactory.Models
 
         public BasePieceModel GetRight()
         {
-            if (_modelRight == null) return _modelLeft;
+            if (_modelRight == null)
+            {
+                return _modelLeft;
+            }
+
             return _modelRight;
         }
 

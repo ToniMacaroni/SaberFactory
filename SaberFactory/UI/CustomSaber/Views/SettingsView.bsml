@@ -1,6 +1,7 @@
-﻿<bg>
+﻿<bg xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xsi:noNamespaceSchemaLocation='file:///C:/CustomBSMLSchema.xsd'>
 
-    <vertical bg="round-rect-panel" custom-color="$default-panel" pad="2" vertical-fit="PreferredSize">
+    <vertical bg="round-rect-panel" custom-color="$default-panel" pref-height="{template;NavHeight}" pad="2" vertical-fit="PreferredSize">
 
         <horizontal pad='2' bg='panel-top' skew='0' bg-color='#00b6ff40'>
             <checkbox text='Saber Factory Enabled' value='mod-enabled' apply-on-change='true'/>
