@@ -6,6 +6,7 @@ using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components;
 using HMUI;
 using SaberFactory.Gizmo;
+using SaberFactory.Helpers;
 using SaberFactory.ProjectComponents;
 using SaberFactory.Serialization;
 using SaberFactory.UI.Lib.BSML;
@@ -23,11 +24,11 @@ namespace SaberFactory.Modifiers
             Scaling,
             Rotating
         }
-        
+
         public static ETransformMode TransformMode { get; set; }
 
         public FactoryDragGizmoBase CurrentGizmo { get; set; } = new PositionGizmo();
-        
+
         public override string Name { get; }
 
         public override string TypeName => "Transform Modifier";
@@ -61,7 +62,7 @@ namespace SaberFactory.Modifiers
                 }
             }
         }
-        
+
         [HandledValue]
         public float RotationOffset
         {
@@ -86,7 +87,7 @@ namespace SaberFactory.Modifiers
         [UIComponent("scale-btn")] private readonly ButtonStateColors _scaleButton = null;
 
         private static readonly Color _defaultButtonColor = new Color(0.086f, 0.090f, 0.101f, 0.8f);
-        
+
         public static bool LockX { get; set; }
         public static bool LockY { get; set; }
         public static bool LockZ { get; set; }
@@ -105,6 +106,8 @@ namespace SaberFactory.Modifiers
         private float _rotationOffset;
 
         private ControllerInteractionHandler _currentController;
+
+        private string _cachedBsml;
 
         public TransformModifierImpl(TransformModifier transformModifier) : base(transformModifier.Id)
         {
@@ -134,30 +137,7 @@ namespace SaberFactory.Modifiers
 
         public override string DrawUi()
         {
-            var str = new StringBuilder();
-            str.AppendLine("<vertical pad='2' spacing='0'>");
-            
-            str.AppendLine("<vertical bg='round-rect-panel' bg-color='#00000090' horizontal-fit='Unconstrained' pad-top='1' pad-bottom='1' pad-left='15'>");
-            str.AppendLine("<text id='position-text' align='MidlineLeft' color='#ffffff90'/>");
-            str.AppendLine("<text id='rotation-text' align='MidlineLeft' color='#ffffff90'/>");
-            str.AppendLine("<text id='scale-text' align='MidlineLeft' color='#ffffff90'/>");
-            str.AppendLine("</vertical>");
-            
-            str.AppendLine("<checkbox text='Lock X' value='LockX' pref-width='25' apply-on-change='true' hover-hint='Dont affect the x axis'/>");
-            str.AppendLine("<checkbox text='Lock Y' value='LockY' pref-width='25' apply-on-change='true' hover-hint='Dont affect the y axis'/>");
-            str.AppendLine("<checkbox text='Lock Z' value='LockZ' pref-width='25' apply-on-change='true' hover-hint='Dont affect the z axis'/>");
-            str.AppendLine("<checkbox text='Uniform Scaling' value='UniformScaling' pref-width='25' apply-on-change='true' hover-hint='Scale uniformly on all axis'/>");
-
-            str.AppendLine("<slider-setting text='Sensitivity' value='Sensitivity' pref-width='25' max='4' increment='0.05' apply-on-change='true'/>");
-            
-            str.AppendLine("<horizontal>");
-            str.AppendLine("<sui.button id='pos-btn' text='Position' pref-width='20' on-click='positioning-mode' style='default-button'/>");
-            str.AppendLine("<sui.button id='rot-btn' text='Rotation' pref-width='20' on-click='rotation-mode' style='default-button'/>");
-            str.AppendLine("<sui.button id='scale-btn' text='Scale' pref-width='20' on-click='scaling-mode' style='default-button'/>");
-            str.AppendLine("</horizontal>");
-            
-            str.AppendLine("</vertical>");
-            return str.ToString();
+            return _cachedBsml ??= Readers.ReadResource("SaberFactory.Modifiers.TransformModifierImpl").BytesToString();
         }
 
         private void UpdateButtonColors()
@@ -189,7 +169,7 @@ namespace SaberFactory.Modifiers
         {
             TransformMode = ETransformMode.Positioning;
             UpdateButtonColors();
-            
+
             var controller = Object.FindObjectsOfType<VRController>().FirstOrDefault();
             if (!controller)
             {
@@ -197,22 +177,22 @@ namespace SaberFactory.Modifiers
             }
 
             _currentController = new ControllerInteractionHandler(controller);
-            
+
             var gizmo = new PositionGizmo();
             gizmo.SetPollFunction(delta =>
             {
                 var t = _transforms[0].transform;
-                PositionOffset += TransformVector(t, GetVectorWithLockedValues(delta))*Sensitivity;
+                PositionOffset += TransformVector(t, GetVectorWithLockedValues(delta)) * Sensitivity;
             });
             CurrentGizmo = gizmo;
         }
-        
+
         [UIAction("rotation-mode")]
         private void SetRotationMode()
         {
             TransformMode = ETransformMode.Rotating;
             UpdateButtonColors();
-            
+
             var controller = Object.FindObjectsOfType<VRController>().FirstOrDefault();
             if (!controller)
             {
@@ -220,21 +200,18 @@ namespace SaberFactory.Modifiers
             }
 
             _currentController = new ControllerInteractionHandler(controller);
-            
+
             var gizmo = new RotationGizmo();
-            gizmo.SetPollFunction(delta =>
-            {
-                RotationOffset += delta.x*200*Sensitivity;
-            });
+            gizmo.SetPollFunction(delta => { RotationOffset += delta.x * 200 * Sensitivity; });
             CurrentGizmo = gizmo;
         }
-        
+
         [UIAction("scaling-mode")]
         private void SetScalingMode()
         {
             TransformMode = ETransformMode.Scaling;
             UpdateButtonColors();
-            
+
             var controller = Object.FindObjectsOfType<VRController>().FirstOrDefault();
             if (!controller)
             {
@@ -242,21 +219,41 @@ namespace SaberFactory.Modifiers
             }
 
             _currentController = new ControllerInteractionHandler(controller);
-            
+
             var gizmo = new ScaleGizmo();
             gizmo.SetPollFunction(delta =>
             {
                 var t = _transforms[0].transform;
                 if (UniformScaling)
                 {
-                    ScaleOffset += Vector3.Scale(t.parent.worldToLocalMatrix.lossyScale, GetVectorWithLockedValues(Vector3.one*delta.x))*Sensitivity;
+                    ScaleOffset += Vector3.Scale(t.parent.worldToLocalMatrix.lossyScale, GetVectorWithLockedValues(Vector3.one * delta.x)) *
+                                   Sensitivity;
                 }
                 else
                 {
-                    ScaleOffset += TransformVector(t, GetVectorWithLockedValues(delta))*Sensitivity;
+                    ScaleOffset += t.localToWorldMatrix.rotation * GetVectorWithLockedValues(delta) * Sensitivity;
+                    //ScaleOffset += TransformVector(t, GetVectorWithLockedValues(delta)) * Sensitivity;
                 }
             });
             CurrentGizmo = gizmo;
+        }
+
+        [UIAction("reset-pos")]
+        private void ResetPos()
+        {
+            PositionOffset = Vector3.zero;
+        }
+
+        [UIAction("reset-rot")]
+        private void ResetRot()
+        {
+            RotationOffset = 0;
+        }
+
+        [UIAction("reset-scale")]
+        private void ResetScale()
+        {
+            ScaleOffset = Vector3.zero;
         }
 
         private Vector3 GetVectorWithLockedValues(Vector3 vec)
@@ -266,7 +263,8 @@ namespace SaberFactory.Modifiers
 
         private Vector3 TransformVector(Transform t, Vector3 vec)
         {
-            return Vector3.Scale(t.parent.InverseTransformDirection(vec), t.parent.worldToLocalMatrix.lossyScale);
+            //return Vector3.Scale(t.parent.InverseTransformDirection(vec), t.parent.worldToLocalMatrix.lossyScale);
+            return t.parent.InverseTransformDirection(Vector3.Scale(vec, t.parent.worldToLocalMatrix.lossyScale));
         }
 
         private void SetPositionOffset(Vector3 offset)
@@ -281,7 +279,7 @@ namespace SaberFactory.Modifiers
                 t.transform.localPosition = t.ogPos + offset;
             }
         }
-        
+
         private void SetScaleOffset(Vector3 offset)
         {
             if (_transforms == null)
@@ -294,7 +292,7 @@ namespace SaberFactory.Modifiers
                 t.transform.localScale = t.ogScale + offset;
             }
         }
-        
+
         private void SetRotationOffset(float offset)
         {
             if (_transforms == null)
@@ -304,7 +302,7 @@ namespace SaberFactory.Modifiers
 
             foreach (var t in _transforms)
             {
-                t.transform.localRotation = t.ogRotation*Quaternion.Euler(Vector3.up*offset);
+                t.transform.localRotation = t.ogRotation * Quaternion.Euler(Vector3.forward * offset);
             }
         }
 
@@ -327,12 +325,12 @@ namespace SaberFactory.Modifiers
             {
                 _positionText.text = PositionText;
             }
-            
+
             if (_rotationText != null)
             {
                 _rotationText.text = RotationText;
             }
-            
+
             if (_scaleText != null)
             {
                 _scaleText.text = ScaleText;
@@ -352,10 +350,10 @@ namespace SaberFactory.Modifiers
             {
                 return;
             }
-            
+
             var pos = transform.position;
             var trs = Matrix4x4.TRS(pos, transform.parent.rotation, Vector3.one);
-            pos = trs.MultiplyPoint(-new Vector3(0.15f,0,0));
+            pos = trs.MultiplyPoint(-new Vector3(0.15f, 0, 0));
 
             if (_currentController != null)
             {
@@ -388,7 +386,7 @@ namespace SaberFactory.Modifiers
                 }
             }
 
-            CurrentGizmo.Draw(pos, transform.parent.rotation*Quaternion.Euler(90, 0, 0));
+            CurrentGizmo.Draw(pos, transform.parent.rotation * Quaternion.Euler(90, 0, 0));
         }
     }
 }

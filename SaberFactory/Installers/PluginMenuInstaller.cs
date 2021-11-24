@@ -5,6 +5,7 @@ using SaberFactory.UI;
 using SaberFactory.UI.CustomSaber;
 using SaberFactory.UI.Lib;
 using SaberFactory.UI.Lib.BSML;
+using SiraUtil;
 using Zenject;
 
 namespace SaberFactory.Installers
@@ -30,6 +31,10 @@ namespace SaberFactory.Installers
             Container.Bind<MenuSaberProvider>().AsSingle();
 
             Container.BindInterfacesAndSelfTo<GizmoAssets>().AsSingle();
+
+#if DEBUG
+            //Container.Bind<DebugMenu>().FromNewComponentOnNewGameObject().AsSingle().NonLazy();
+#endif
         }
 
         private void BindRemoteSabers()
