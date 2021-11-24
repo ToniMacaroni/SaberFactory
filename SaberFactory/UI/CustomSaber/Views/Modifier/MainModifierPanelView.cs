@@ -24,8 +24,10 @@ namespace SaberFactory.UI.CustomSaber.Views.Modifiers
 
 #if !PAT
         protected override string _resourceName => PatViewPath;
+        [UIValue("pat-preview")] private string PatPreview => "https://www.youtube.com/watch?v=xI-YFoPilxU";
+        [UIValue("has-pat-preview")] private bool HasPatPreview => true;
 #endif
-        
+
         [UIObject("container")] private readonly GameObject _container = null;
         [UIComponent("component-list")] private readonly CustomListTableData _componentList = null;
         [Inject] private readonly BsmlDecorator _decorator = null;

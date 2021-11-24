@@ -3,7 +3,10 @@
           custom-color="$default-panel" vertical-fit="PreferredSize" pref-width="70" pad="5">
     <vertical vertical-fit="PreferredSize" spacing="5">
         <text text="This is a patreon feature" font-size="5" color="#a1944a" align="Center"/>
-        <sui.button text="" run="https://www.patreon.com/tonimacaroni" pref-width="38" bg-icon="{ui-icon;patreon-button}"
+		<vertical>
+			<sui.button text="" run="https://www.patreon.com/tonimacaroni" pref-width="38" bg-icon="{ui-icon;patreon-button}"
                     normal-color="#eee" hovered-color="#999"/>
+			<sui.button text="Preview" run="~pat-preview" active="~has-pat-preview" pref-width="38" style="default-button" hover-hint="this will open the feature preview in your browser" />
+		</vertical>
     </vertical>
 </vertical>

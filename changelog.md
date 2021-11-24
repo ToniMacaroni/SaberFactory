@@ -5,6 +5,7 @@
 - Added option to modify saber length (added by @9cxndy)
 - Moved .meta and .trail files to seperate folder (`UserData\Saber Factory\Cache`) to not fill up the CustomSabers folder
 - Fixed compatibility issues with mods that bind `PluginMetadata`
+- Fixed particle systems sometimes hiding behind ui
 - Many internal code changes
 
 __**!!Presets aren't compatible with previous version!!**__  
