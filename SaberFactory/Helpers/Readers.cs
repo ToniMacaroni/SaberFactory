@@ -52,7 +52,7 @@ namespace SaberFactory.Helpers
             return ReadStream(stream);
         }
 
-        public static string BytesToString(byte[] data)
+        public static string BytesToString(this byte[] data)
         {
             return Encoding.UTF8.GetString(data, data[0] == 0xef?3:0, data.Length-(data[0] == 0xef?3:0));
         }

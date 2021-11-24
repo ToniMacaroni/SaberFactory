@@ -6,7 +6,7 @@ namespace SaberFactory.Gizmo
 {
     internal abstract class FactoryDragGizmoBase : IFactoryGizmo
     {
-        public Color Color => IsHovered ? (CustomColor??GizmoColor).ColorWithAlpha(0.7f) : CustomColor??GizmoColor;
+        public Color Color => IsHovered || IsActive ? (CustomColor??GizmoColor).ColorWithAlpha(0.7f) : CustomColor??GizmoColor;
 
         protected abstract Color GizmoColor { get; }
         

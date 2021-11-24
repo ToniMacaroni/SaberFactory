@@ -9,7 +9,6 @@ using ModestTree;
 using SaberFactory.Editor;
 using SaberFactory.Helpers;
 using SaberFactory.Modifiers;
-using SaberFactory.Serialization;
 using SaberFactory.UI.Lib;
 using SiraUtil;
 using UnityEngine;

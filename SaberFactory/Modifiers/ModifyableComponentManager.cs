@@ -7,19 +7,19 @@ using SaberFactory.ProjectComponents;
 using HarmonyLib;
 using ModestTree;
 using Newtonsoft.Json.Linq;
-using SaberFactory.Modifiers;
 using UnityEngine;
+using SaberFactory.Serialization;
 
-namespace SaberFactory.Serialization
+namespace SaberFactory.Modifiers
 {
     internal class ModifyableComponentManager : IFactorySerializable
     {
         public readonly Dictionary<int, BaseModifierImpl> Mods = new Dictionary<int, BaseModifierImpl>();
-        
+
         public readonly SaberModifierCollection SaberModifierCollection;
 
         public bool IsAvailable => SaberModifierCollection != null;
-        
+
         public ModifyableComponentManager(GameObject prefab)
         {
             SaberModifierCollection = prefab.GetComponent<SaberModifierCollection>();
@@ -51,7 +51,7 @@ namespace SaberFactory.Serialization
             }
 
             var obj = new JObject();
-            
+
             obj.Add("valid", true);
 
             var modsToken = new JObject();
@@ -83,13 +83,13 @@ namespace SaberFactory.Serialization
                 var mod = new VisibilityModifierImpl(vizMod);
                 Mods.Add(mod.Id, mod);
             }
-            
+
             // for (var index = 0; index < SaberModifierCollection.ComponentModifiers.Length; index++)
             // {
             //     var mod = new VisibilityModifierImpl(SaberModifierCollection.VisibilityModifiers[index]);
             //     VisibilityModifiers.Add(index, mod);
             // }
-            
+
             foreach (var tMod in SaberModifierCollection.TransformModifiers)
             {
                 var mod = new TransformModifierImpl(tMod);
@@ -127,7 +127,7 @@ namespace SaberFactory.Serialization
                     mod.SetInstance(vizMod);
                 }
             }
-            
+
             foreach (var tMod in saberModifierCollection.TransformModifiers)
             {
                 if (Mods.TryGetValue(tMod.Id, out var mod))
@@ -143,10 +143,10 @@ namespace SaberFactory.Serialization
             {
                 return;
             }
-            
+
             var thisMods = GetAllMods();
             var otherMods = otherManager.GetAllMods();
-            
+
             foreach (var otherMod in otherMods)
             {
                 var thisMod = thisMods.FirstOrDefault(x => x.Name == otherMod.Name);

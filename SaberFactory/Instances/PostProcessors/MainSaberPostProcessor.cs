@@ -19,6 +19,7 @@ namespace SaberFactory.Instances.PostProcessors
             saberObject.SetLayer<Renderer>(12);
             saberObject.GetComponentsInChildren<Collider>().Do(x => x.enabled = false);
             saberObject.GetComponentsInChildren<AudioSource>(true).Do(x => x.volume = x.volume * _config.SaberAudioVolumeMultiplier);
+            saberObject.GetComponentsInChildren<Renderer>(true).Do(x => { x.sortingOrder = 3; });
         }
     }
 }

@@ -42,6 +42,10 @@
         <None Remove="Resources\Icons\folder.png" />
         <None Remove="Resources\Icons\transform-icon.png" />
         <None Remove="Resources\UI\border.png" />
+        <Reference Include="UnityEngine.IMGUIModule">
+            <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
     </ItemGroup>
 
     <ItemGroup>
@@ -272,6 +276,9 @@
         <EmbeddedResource Include="UI\CustomSaber\Views\Modifier\MainModifierPanelView.bsml">
             <DependentUpon>MainModifierPanelView.cs</DependentUpon>
         </EmbeddedResource>
+		<EmbeddedResource Include="Modifiers\TransformModifierView.bsml">
+			<DependentUpon>TransformModifierImpl.cs</DependentUpon>
+		</EmbeddedResource>
     </ItemGroup>
 
     <ItemGroup>
