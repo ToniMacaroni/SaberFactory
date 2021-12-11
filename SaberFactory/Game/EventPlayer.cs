@@ -18,11 +18,14 @@ namespace SaberFactory.Game
 
         [Inject] private readonly GameEnergyCounter _energyCounter = null;
 
-        [Inject] private readonly ObstacleSaberSparkleEffectManager _obstacleSaberSparkleEffectManager = null;
+        [InjectOptional] private ObstacleSaberSparkleEffectManager _obstacleSaberSparkleEffectManager = null;
 
         [Inject] private readonly PluginConfig _pluginConfig = null;
 
         [Inject] private readonly ScoreController _scoreController = null;
+
+        [Inject] private readonly MonoKernel _monoKernel;
+
         private bool _didInit;
 
         [Inject(Id = "LastNoteId")] private float _lastNoteTime;
@@ -59,6 +62,12 @@ namespace SaberFactory.Game
             // OnSlice LevelEnded Combobreak
             _beatmapObjectManager.noteWasCutEvent += OnNoteCut;
             _beatmapObjectManager.noteWasMissedEvent += OnNoteMiss;
+
+            if (_obstacleSaberSparkleEffectManager == null)
+            {
+                // For multiplayer
+                _obstacleSaberSparkleEffectManager = _monoKernel.GetComponentInChildren<ObstacleSaberSparkleEffectManager>();
+            }
 
             // Sabers clashing
             _obstacleSaberSparkleEffectManager.sparkleEffectDidStartEvent += SaberStartCollide;
