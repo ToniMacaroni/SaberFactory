@@ -6,6 +6,7 @@ using BeatSaberMarkupLanguage.Parser;
 using HMUI;
 using JetBrains.Annotations;
 using SaberFactory.Helpers;
+using SiraUtil.Logging;
 using SiraUtil.Tools;
 using UnityEngine;
 using UnityEngine.UI;
