@@ -5,6 +5,7 @@ using Newtonsoft.Json.Linq;
 using SaberFactory.DataStore;
 using SaberFactory.Helpers;
 using SaberFactory.Serialization;
+using SiraUtil.Logging;
 using SiraUtil.Tools;
 using UnityEngine;
 using Zenject;

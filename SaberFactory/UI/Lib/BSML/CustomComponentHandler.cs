@@ -15,6 +15,7 @@ using BeatSaberMarkupLanguage.TypeHandlers;
 using IPA.Utilities;
 using Newtonsoft.Json.Linq;
 using SaberFactory.UI.Lib.BSML.Tags;
+using SiraUtil.Logging;
 using SiraUtil.Tools;
 using UnityEngine;
 using Zenject;

@@ -8,6 +8,7 @@ using SaberFactory.Helpers;
 using SaberFactory.Loaders;
 using SaberFactory.Models;
 using SaberFactory.Models.CustomSaber;
+using SiraUtil.Logging;
 using SiraUtil.Tools;
 
 namespace SaberFactory.DataStore

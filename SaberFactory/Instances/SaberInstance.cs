@@ -9,6 +9,7 @@ using SaberFactory.Instances.CustomSaber;
 using SaberFactory.Instances.PostProcessors;
 using SaberFactory.Instances.Trail;
 using SaberFactory.Models;
+using SiraUtil.Logging;
 using SiraUtil.Tools;
 using UnityEngine;
 using Zenject;

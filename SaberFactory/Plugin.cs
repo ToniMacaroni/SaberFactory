@@ -36,9 +36,11 @@ namespace SaberFactory
                 return;
             }
 
-            zenjector.OnApp<PluginAppInstaller>().WithParameters(logger, pluginConfig, metadata);
-            zenjector.OnMenu<PluginMenuInstaller>();
-            zenjector.OnGame<PluginGameInstaller>(false);
+            zenjector.UseLogger();
+            zenjector.UseHttpService();
+            zenjector.Install<PluginAppInstaller>(Location.App, logger, pluginConfig, metadata);
+            zenjector.Install<PluginMenuInstaller>(Location.Menu);
+            zenjector.Install<PluginGameInstaller>(Location.Player | Location.MultiPlayer);
         }
 
         [OnEnable]

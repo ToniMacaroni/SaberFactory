@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using SaberFactory.Helpers;
+using SiraUtil.Logging;
 using SiraUtil.Tools;
 using UnityEngine;
 using Object = UnityEngine.Object;
