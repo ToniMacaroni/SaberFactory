@@ -93,7 +93,7 @@ namespace SaberFactory.UI.Lib.BSML
             if (_borderTemplate == null)
             {
                 var button = Resources.FindObjectsOfTypeAll<Button>().FirstOrDefault(x => x.name == "ActionButton");
-                var borderTransform = button?.transform.Find("Border");
+                var borderTransform = button != null ? button.transform.Find("Border") : null;
                 if (borderTransform is null)
                 {
                     return;
@@ -144,8 +144,8 @@ namespace SaberFactory.UI.Lib.BSML
             }
 
             var image = Resources.FindObjectsOfTypeAll<GameObject>()
-                .FirstOrDefault(x => x.name == "MiddleHorizontalTextSegmentedControlCell")?
-                .transform.Find("BG")?
+                .FirstOrDefault(x => x.name == "MiddleHorizontalTextSegmentedControlCell")!
+                .transform.Find("BG")
                 .GetComponent<ImageView>();
             if (image == null)
             {
@@ -168,8 +168,8 @@ namespace SaberFactory.UI.Lib.BSML
             if (_imageViewPrefab == null)
             {
                 _imageViewPrefab = Resources.FindObjectsOfTypeAll<ImageView>().First(x =>
-                    x.gameObject?.name == "KeyboardWrapper" && x.sprite?.name == "RoundRect10" &&
-                    x.transform.parent?.name == "Wrapper");
+                    (x.gameObject != null ? x.gameObject.name : null) == "KeyboardWrapper" && (x.sprite != null ? x.sprite.name : null) == "RoundRect10" &&
+                    (x.transform.parent != null ? x.transform.parent.name : null) == "Wrapper");
                 if (_imageViewPrefab == null)
                 {
                     return null;

@@ -114,7 +114,7 @@ namespace SaberFactory.UI.CustomSaber.Views
 
             if (CommonHelpers.IsDate(null, 10) &&
                 _pluginConfig.SpecialBackground &&
-                _saberList.transform.GetChild(0)?.GetComponent<ImageView>() is { } imageView)
+                _saberList.transform.GetChild(0) is {} child && child.GetComponent<ImageView>() is { } imageView)
             {
                 imageView.sprite = Utilities.FindSpriteInAssembly("SaberFactory.Resources.UI.halloween_bg.png");
                 imageView.overrideSprite = imageView.sprite;

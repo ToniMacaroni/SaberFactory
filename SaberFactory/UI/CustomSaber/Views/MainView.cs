@@ -37,7 +37,7 @@ namespace SaberFactory.UI.CustomSaber.Views
 
         private T AddView<T>(bool switchToView = false, Transform container = null) where T : SubView
         {
-            var view = CreateSubView<T>(container ?? _subViewContainer, switchToView);
+            var view = CreateSubView<T>(container != null ? container : _subViewContainer, switchToView);
             if (view is INavigationCategoryView navView)
             {
                 _navViews.Add(navView.Category, navView);

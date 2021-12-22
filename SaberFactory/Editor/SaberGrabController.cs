@@ -33,7 +33,11 @@ namespace SaberFactory.Editor
             }
 
             _isHandleVisisble = true;
-            _menuPlayerController.leftController?.transform.Find("MenuHandle")?.gameObject.SetActive(_isHandleVisisble);
+
+            if (_menuPlayerController.leftController != null && _menuPlayerController.leftController.transform.Find("MenuHandle") is { } handle)
+            {
+                handle.gameObject.SetActive(_isHandleVisisble);
+            }
         }
 
         public void HideHandle()
@@ -44,7 +48,11 @@ namespace SaberFactory.Editor
             }
 
             _isHandleVisisble = false;
-            _menuPlayerController.leftController?.transform.Find("MenuHandle")?.gameObject.SetActive(_isHandleVisisble);
+
+            if (_menuPlayerController != null && _menuPlayerController.leftController.transform.Find("MenuHandle") is { } handle)
+            {
+                handle.gameObject.SetActive(_isHandleVisisble);
+            }
         }
     }
 }

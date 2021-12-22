@@ -11,7 +11,6 @@ namespace SaberFactory.Helpers
         
         private void Start()
         {
-            Debug.LogWarning("Hello");
         }
 
         private void OnGUI()

@@ -68,11 +68,17 @@ namespace SaberFactory.UI.Lib.BSML
         {
             imageController.BackgroundImage.SetField("_skew", float.Parse(skew));
             imageController.LineImage.SetField("_skew", float.Parse(skew));
-            imageController.ForegroundImage?.SetField("_skew", float.Parse(skew));
+            if (imageController.ForegroundImage != null)
+            {
+                imageController.ForegroundImage.SetField("_skew", float.Parse(skew));
+            }
 
             imageController.BackgroundImage.SetVerticesDirty();
             imageController.LineImage.SetVerticesDirty();
-            imageController.ForegroundImage?.SetVerticesDirty();
+            if (imageController.ForegroundImage != null)
+            {
+                imageController.ForegroundImage.SetVerticesDirty();
+            }
         }
     }
 }

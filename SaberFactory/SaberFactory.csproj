@@ -209,6 +209,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <None Include="..\.editorconfig" Link=".editorconfig" />
         <None Include="Directory.Build.props" Condition="Exists('Directory.Build.props')" />
         <None Include="Directory.Build.targets" Condition="Exists('Directory.Build.targets')" />
         <None Include="SaberFactory.csproj.user" Condition="Exists('SaberFactory.csproj.user')" />
@@ -302,6 +303,10 @@
         <PackageReference Include="BeatSaberModdingTools.Tasks" Version="1.4.3">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.Unity.Analyzers" Version="1.11.2">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
     </ItemGroup>
 
