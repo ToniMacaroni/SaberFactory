@@ -9,7 +9,7 @@ namespace SaberFactory.Misc
     {
         public const int BlockSize = 108;
 
-        public Mesh MyMesh => _meshFilter?.sharedMesh;
+        public Mesh MyMesh => _meshFilter != null ? _meshFilter.sharedMesh : null;
 
         public float BoundsScheduleTime = 1f;
         public bool ColorChanged;
@@ -73,8 +73,7 @@ namespace SaberFactory.Misc
             _meshFilter = _gameObject.AddComponent<MeshFilter>();
             var meshrenderer = _gameObject.AddComponent<MeshRenderer>();
 
-            _gameObject.transform.position = Vector3.zero;
-            _gameObject.transform.rotation = Quaternion.identity;
+            _gameObject.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
 
             meshrenderer.shadowCastingMode = ShadowCastingMode.Off;
             meshrenderer.receiveShadows = false;

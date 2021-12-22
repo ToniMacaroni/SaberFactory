@@ -3,6 +3,7 @@ using SaberFactory.Helpers;
 using SaberFactory.Instances;
 using SaberFactory.Models;
 using SiraUtil.Interfaces;
+using SiraUtil.Logging;
 using SiraUtil.Tools;
 using UnityEngine;
 using Zenject;
@@ -27,7 +28,11 @@ namespace SaberFactory.Game
             _saberInstance.SetColor(color);
         }
 
-        public Color Color => _saberColor.GetValueOrDefault();
+        public Color Color
+        {
+            get => _saberColor.GetValueOrDefault();
+            set => SetColor(value);
+        }
 
         public override async void Init(Transform parent, Saber saber)
         {

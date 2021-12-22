@@ -78,7 +78,12 @@ namespace SaberFactory.Game
 
         private async Task<GameObject> GetThruster()
         {
-            return _thruster ??= await _assetLoader.LoadAsset<GameObject>("Thruster");
+            if (_thruster == null)
+            {
+                _thruster = await _assetLoader.LoadAsset<GameObject>("Thruster");
+            }
+
+            return _thruster;
         }
     }
 }

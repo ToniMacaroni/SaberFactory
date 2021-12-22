@@ -4,6 +4,7 @@
 - Added option to automatically reload the saber when the file changes (`ReloadOnSaberUpdate` in config)
 - Added option to modify saber length (added by @9cxndy)
 - Moved .meta and .trail files to seperate folder (`UserData\Saber Factory\Cache`) to not fill up the CustomSabers folder
+- Added `_UserColorLeft` and `_UserColorRight` global shader variables that will be assigned to left saber/right saber color
 - Fixed compatibility issues with mods that bind `PluginMetadata`
 - Fixed particle systems sometimes hiding behind ui
 - Many internal code changes

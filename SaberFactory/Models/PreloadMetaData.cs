@@ -5,6 +5,7 @@ using BeatSaberMarkupLanguage;
 using SaberFactory.Loaders;
 using SaberFactory.UI;
 using SaberFactory.UI.Lib;
+using TMPro;
 using UnityEngine;
 
 namespace SaberFactory.Models
@@ -13,8 +14,32 @@ namespace SaberFactory.Models
     {
         public AssetTypeDefinition AssetTypeDefinition { get; private set; }
 
-        public Texture2D CoverTex => _coverTex ??= LoadTexture();
-        public Sprite CoverSprite => _coverSprite ??= LoadSprite();
+        public Texture2D CoverTex
+        {
+            get
+            {
+                if (_coverTex == null)
+                {
+                    _coverTex = LoadTexture();
+                }
+
+                return _coverTex;
+            }
+        }
+
+        public Sprite CoverSprite
+        {
+            get
+            {
+                if (_coverSprite == null)
+                {
+                    _coverSprite = LoadSprite();
+                }
+
+                return _coverSprite;
+            }
+        }
+
         public readonly AssetMetaPath AssetMetaPath;
 
         private byte[] _coverData;

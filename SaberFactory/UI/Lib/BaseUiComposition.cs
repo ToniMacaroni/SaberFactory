@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using HMUI;
 using IPA.Utilities;
 using SaberFactory.Helpers;
+using SiraUtil.Logging;
 using SiraUtil.Tools;
 using UnityEngine;
 using UnityEngine.UI;

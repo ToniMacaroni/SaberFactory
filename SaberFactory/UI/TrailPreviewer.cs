@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using HarmonyLib;
 using SaberFactory.Helpers;
 using SaberFactory.Instances.Trail;
+using SiraUtil.Logging;
 using SiraUtil.Tools;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -173,7 +174,7 @@ namespace SaberFactory.UI
 
             public Material GetMaterial()
             {
-                return _renderer?.sharedMaterial;
+                return _renderer != null ? _renderer.sharedMaterial : null;
             }
 
             public void SetColor(Color color)

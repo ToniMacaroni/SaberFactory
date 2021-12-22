@@ -3,10 +3,12 @@ using System.IO;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using BeatSaberMarkupLanguage;
 using SaberFactory.Helpers;
 using SaberFactory.UI;
 using SaberFactory.UI.Lib;
 using SiraUtil;
+using SiraUtil.Web;
 using UnityEngine;
 
 namespace SaberFactory.Models
@@ -17,9 +19,9 @@ namespace SaberFactory.Models
         private readonly DirectoryInfo _customSaberDir;
         private readonly string _filename;
 
-        private readonly WebClient _webClient;
+        private readonly IHttpService _webClient;
 
-        private RemoteLocationPart(InitData initData, WebClient webClient, PluginDirectories pluginDirs)
+        private RemoteLocationPart(InitData initData, IHttpService webClient, PluginDirectories pluginDirs)
         {
             _webClient = webClient;
             _customSaberDir = pluginDirs.CustomSaberDir;
@@ -48,14 +50,14 @@ namespace SaberFactory.Models
         {
             try
             {
-                var response = await _webClient.GetAsync(RemoteLocation, token);
-                if (!response.IsSuccessStatusCode)
+                var response = await _webClient.GetAsync(RemoteLocation, null, token);
+                if (!response.Successful)
                 {
                     return default;
                 }
 
                 var filename = GetFilename();
-                File.WriteAllBytes(_customSaberDir.GetFile(filename).FullName, response.ContentToBytes());
+                File.WriteAllBytes(_customSaberDir.GetFile(filename).FullName, await response.ReadAsByteArrayAsync());
                 return new Tuple<bool, string>(true, "CustomSabers\\" + filename);
             }
             catch (Exception)

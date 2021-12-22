@@ -1,0 +1,13 @@
+﻿[*.cs]
+
+# UNT0023: Coalescing assignment on Unity objects
+dotnet_diagnostic.UNT0023.severity = error
+
+# UNT0022: Inefficient position/rotation assignment
+dotnet_diagnostic.UNT0022.severity = error
+
+# UNT0007: Null coalescing on Unity objects
+dotnet_diagnostic.UNT0007.severity = error
+
+# UNT0008: Null propagation on Unity objects
+dotnet_diagnostic.UNT0008.severity = error
