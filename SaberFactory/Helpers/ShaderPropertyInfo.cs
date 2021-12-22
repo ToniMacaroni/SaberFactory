@@ -184,7 +184,7 @@ namespace SaberFactory.Helpers
             public override JToken ToJson(Material mat)
             {
                 var tex = (Texture)GetValue(mat);
-                return JToken.FromObject(tex?.name??"");
+                return JToken.FromObject(tex != null ? tex.name : "");
             }
         }
 

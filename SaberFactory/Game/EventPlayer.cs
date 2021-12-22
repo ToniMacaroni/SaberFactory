@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using IPA.Utilities;
+using ModestTree;
 using SaberFactory.Configuration;
 using SaberFactory.Models;
 using UnityEngine;
@@ -18,11 +19,14 @@ namespace SaberFactory.Game
 
         [Inject] private readonly GameEnergyCounter _energyCounter = null;
 
-        //[Inject] private readonly ObstacleSaberSparkleEffectManager _obstacleSaberSparkleEffectManager = null;
+        [InjectOptional] private ObstacleSaberSparkleEffectManager _obstacleSaberSparkleEffectManager;
 
         [Inject] private readonly PluginConfig _pluginConfig = null;
 
         [Inject] private readonly ScoreController _scoreController = null;
+
+        [Inject] private readonly MonoKernel _monoKernel = null;
+
         private bool _didInit;
 
         [Inject(Id = "LastNoteId")] private float _lastNoteTime;
@@ -36,8 +40,8 @@ namespace SaberFactory.Game
                 _beatmapObjectManager.noteWasCutEvent -= OnNoteCut;
                 _beatmapObjectManager.noteWasMissedEvent -= OnNoteMiss;
 
-                //_obstacleSaberSparkleEffectManager.sparkleEffectDidStartEvent -= SaberStartCollide;
-                //_obstacleSaberSparkleEffectManager.sparkleEffectDidEndEvent -= SaberEndCollide;
+                _obstacleSaberSparkleEffectManager.sparkleEffectDidStartEvent -= SaberStartCollide;
+                _obstacleSaberSparkleEffectManager.sparkleEffectDidEndEvent -= SaberEndCollide;
 
                 _energyCounter.gameEnergyDidReach0Event -= InvokeOnLevelFail;
 
@@ -64,8 +68,12 @@ namespace SaberFactory.Game
             _beatmapObjectManager.noteWasMissedEvent += OnNoteMiss;
 
             // Sabers clashing
-            //_obstacleSaberSparkleEffectManager.sparkleEffectDidStartEvent += SaberStartCollide;
-            //_obstacleSaberSparkleEffectManager.sparkleEffectDidEndEvent += SaberEndCollide;
+            if (_obstacleSaberSparkleEffectManager == null)
+            {
+                _obstacleSaberSparkleEffectManager = _monoKernel.GetComponentInChildren<ObstacleSaberSparkleEffectManager>();
+            }
+            _obstacleSaberSparkleEffectManager.sparkleEffectDidStartEvent += SaberStartCollide;
+            _obstacleSaberSparkleEffectManager.sparkleEffectDidEndEvent += SaberEndCollide;
 
             // OnLevelFail
             _energyCounter.gameEnergyDidReach0Event += InvokeOnLevelFail;

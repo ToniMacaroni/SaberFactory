@@ -60,8 +60,8 @@ namespace SaberFactory.Editor
             SaberContainerTransform.localPosition += new Vector3(0, 1, 0);
             SaberContainerTransform.localEulerAngles = new Vector3(-90, 0, 0);
 
-            _rootTransform.position = pos;
-            _rootTransform.rotation = rot;
+            _rootTransform.SetPositionAndRotation(pos, rot);
+
 
             IsVisible = false;
         }

@@ -174,7 +174,7 @@ namespace SaberFactory.UI
 
             public Material GetMaterial()
             {
-                return _renderer?.sharedMaterial;
+                return _renderer != null ? _renderer.sharedMaterial : null;
             }
 
             public void SetColor(Color color)

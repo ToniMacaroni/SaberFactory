@@ -1,5 +1,6 @@
 ﻿using System;
 using SaberFactory.Helpers;
+using TMPro;
 using UnityEngine;
 
 namespace SaberFactory.Instances.Trail
@@ -115,7 +116,11 @@ namespace SaberFactory.Instances.Trail
         public void SetMaterial(Material newMaterial)
         {
             _customMaterial = newMaterial;
-            _trailRenderer?.Cast<SFTrailRenderer>().SetMaterial(_customMaterial);
+
+            if (_trailRenderer != null)
+            {
+                _trailRenderer.Cast<SFTrailRenderer>().SetMaterial(_customMaterial);
+            }
         }
     }
 }

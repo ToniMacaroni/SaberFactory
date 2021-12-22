@@ -20,7 +20,10 @@ namespace SaberFactory.UI.Lib
                 return;
             }
 
-            CurrentSubView?.Close();
+            if (CurrentSubView != null)
+            {
+                CurrentSubView.Close();
+            }
             _previousSubView = CurrentSubView;
             CurrentSubView = newSubView;
 
@@ -34,12 +37,18 @@ namespace SaberFactory.UI.Lib
 
         public void NotifyDidOpen()
         {
-            CurrentSubView?.DidOpen();
+            if (CurrentSubView != null)
+            {
+                CurrentSubView.DidOpen();
+            }
         }
 
         public void NotifyDidClose()
         {
-            CurrentSubView?.DidClose();
+            if (CurrentSubView != null)
+            {
+                CurrentSubView.DidClose();
+            }
         }
 
         public void GoBack()
@@ -81,7 +90,10 @@ namespace SaberFactory.UI.Lib
                 toPresentCG.transform.localEulerAngles = new Vector3(0, moveOffset * 4 * (1f - t), 0);
             }, cancellationToken);
 
-            _previousSubView?.gameObject.SetActive(false);
+            if (_previousSubView != null)
+            {
+                _previousSubView.gameObject.SetActive(false);
+            }
             //ViewControllerTransitionHelpers.ImmediateTransition(toPresentViewController, toDismissViewController);
         }
 

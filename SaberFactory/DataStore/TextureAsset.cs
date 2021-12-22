@@ -7,7 +7,18 @@ namespace SaberFactory.DataStore
 {
     internal class TextureAsset : IDisposable
     {
-        public Sprite Sprite => _cachedSprite ??= CreateSprite();
+        public Sprite Sprite
+        {
+            get
+            {
+                if (_cachedSprite == null)
+                {
+                    _cachedSprite = CreateSprite();
+                }
+                return _cachedSprite;
+            }
+        }
+
         public bool IsInUse;
         public string Name;
         public EAssetOrigin Origin;
