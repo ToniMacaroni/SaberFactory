@@ -19,7 +19,7 @@
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
         <Optimize>false</Optimize>
         <OutputPath>bin\Debug\</OutputPath>
-        <DefineConstants>TRACE;RESHARPER;</DefineConstants>
+        <DefineConstants>TRACE;RESHARPER;ENABLE_PROFILER;</DefineConstants>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
@@ -36,6 +36,10 @@
     <PropertyGroup Condition="'$(NCrunch)' == '1'">
         <DisableCopyToPlugins>True</DisableCopyToPlugins>
         <DisableZipRelease>True</DisableZipRelease>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+      <DefineConstants>$(DefineConstants)TRACE;ENABLE_PROFILER</DefineConstants>
     </PropertyGroup>
 
     <ItemGroup>

@@ -68,6 +68,39 @@ namespace SaberFactory.Helpers
             }
         }
 
+        public static bool IsMaterialColorable(Material material)
+        {
+            if (material is null || !material.HasProperty(MaterialProperties.MainColor))
+            {
+                return false;
+            }
+
+            if (material.TryGetFloat(MaterialProperties.CustomColors, out var val))
+            {
+                if (val > 0)
+                {
+                    return true;
+                }
+            }
+            else if (material.TryGetFloat(MaterialProperties.Glow, out val) && val > 0)
+            {
+                return true;
+            }
+            else if (material.TryGetFloat(MaterialProperties.Bloom, out val) && val > 0)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public static MaterialPropertyBlock ColorBlock(Color color)
+        {
+            var block = new MaterialPropertyBlock();
+            block.SetColor(MaterialProperties.MainColor, color);
+            return block;
+        }
+
         public static bool HasCustomColorsEnabled(this Material material)
         {
             return material.TryGetFloat(MaterialProperties.CustomColors, out var customColors) && customColors > 0.5f;

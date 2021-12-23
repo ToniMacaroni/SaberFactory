@@ -10,6 +10,7 @@ namespace SaberFactory.Misc
         public const int BlockSize = 108;
 
         public Mesh MyMesh => _meshFilter != null ? _meshFilter.sharedMesh : null;
+        public MeshRenderer MeshRenderer;
 
         public float BoundsScheduleTime = 1f;
         public bool ColorChanged;
@@ -32,14 +33,14 @@ namespace SaberFactory.Misc
         protected Material _material;
         protected MeshFilter _meshFilter;
 
-        protected AltTrail _owner;
+        protected SFTrail _owner;
 
         protected bool _vertCountChanged;
 
         protected int _vertexTotal;
         protected int _vertexUsed;
 
-        public VertexPool(Material material, AltTrail owner)
+        public VertexPool(Material material, SFTrail owner)
         {
             _vertexTotal = _vertexUsed = 0;
             _vertCountChanged = false;
@@ -66,20 +67,20 @@ namespace SaberFactory.Misc
             _meshFilter.gameObject.SetActive(flag);
         }
 
-        private void CreateMeshObj(AltTrail owner, Material material)
+        private void CreateMeshObj(SFTrail owner, Material material)
         {
             _gameObject = new GameObject("SaberTrail");
             _gameObject.layer = owner.gameObject.layer;
             _meshFilter = _gameObject.AddComponent<MeshFilter>();
-            var meshrenderer = _gameObject.AddComponent<MeshRenderer>();
+            MeshRenderer = _gameObject.AddComponent<MeshRenderer>();
 
             _gameObject.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
 
-            meshrenderer.shadowCastingMode = ShadowCastingMode.Off;
-            meshrenderer.receiveShadows = false;
-            meshrenderer.sharedMaterial = material;
-            meshrenderer.sortingLayerName = _owner.SortingLayerName;
-            meshrenderer.sortingOrder = _owner.SortingOrder;
+            MeshRenderer.shadowCastingMode = ShadowCastingMode.Off;
+            MeshRenderer.receiveShadows = false;
+            MeshRenderer.sharedMaterial = material;
+            MeshRenderer.sortingLayerName = _owner.SortingLayerName;
+            MeshRenderer.sortingOrder = _owner.SortingOrder;
             _meshFilter.sharedMesh = new Mesh();
         }
 

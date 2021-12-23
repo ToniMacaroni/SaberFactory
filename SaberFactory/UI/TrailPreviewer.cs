@@ -156,7 +156,7 @@ namespace SaberFactory.UI
                 _mesh = _instance.GetComponentInChildren<MeshFilter>().sharedMesh;
                 _renderer.sortingOrder = 3;
 
-                if (trailHandler is { })
+                if (trailHandler != null)
                 {
                     SetMaterial(trailHandler.Trail.TrailMaterial);
                 }
@@ -164,7 +164,7 @@ namespace SaberFactory.UI
 
             public void SetMaterial(Material mat)
             {
-                if (_renderer is null)
+                if (_renderer == null)
                 {
                     return;
                 }
@@ -179,13 +179,10 @@ namespace SaberFactory.UI
 
             public void SetColor(Color color)
             {
-                if (_renderer.sharedMaterial is { })
+                var mat = _renderer.sharedMaterial;
+                if (mat != null && !OnlyColorVertex && MaterialHelpers.IsMaterialColorable(mat))
                 {
-                    var mat = _renderer.sharedMaterial;
-                    if (mat.HasCustomColorsEnabled() && !OnlyColorVertex)
-                    {
-                        mat.SetMainColor(color);
-                    }
+                    _renderer.SetPropertyBlock(MaterialHelpers.ColorBlock(color));
                 }
 
                 var newColors = new Color[4];
