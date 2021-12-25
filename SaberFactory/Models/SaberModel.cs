@@ -47,7 +47,7 @@ namespace SaberFactory.Models
                     }
 
                     PieceCollection.AddPiece(piece.AssetTypeDefinition, piece.GetPiece(SaberSlot));
-                    await piece.GetLeft()?.FromJson((JObject)pieceTkn, serializer);
+                    await piece.GetPiece(SaberSlot)?.FromJson((JObject)pieceTkn, serializer);
                 }
             }
         }

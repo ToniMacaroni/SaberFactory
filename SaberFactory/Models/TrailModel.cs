@@ -98,7 +98,7 @@ namespace SaberFactory.Models
             Width = other.Width;
             Length = other.Length;
             Material ??= new MaterialDescriptor(null);
-            Material.Material = other.Material.Material;
+            Material.Material = new Material(other.Material.Material);
             Whitestep = other.Whitestep;
             TrailOrigin = other.TrailOrigin;
             ClampTexture = other.ClampTexture;

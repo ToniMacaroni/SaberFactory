@@ -19,7 +19,7 @@ namespace SaberFactory.Game
 
         [Inject] private readonly GameEnergyCounter _energyCounter = null;
 
-        [InjectOptional] private ObstacleSaberSparkleEffectManager _obstacleSaberSparkleEffectManager;
+        //[InjectOptional] private ObstacleSaberSparkleEffectManager _obstacleSaberSparkleEffectManager;
 
         [Inject] private readonly PluginConfig _pluginConfig = null;
 
@@ -40,8 +40,8 @@ namespace SaberFactory.Game
                 _beatmapObjectManager.noteWasCutEvent -= OnNoteCut;
                 _beatmapObjectManager.noteWasMissedEvent -= OnNoteMiss;
 
-                _obstacleSaberSparkleEffectManager.sparkleEffectDidStartEvent -= SaberStartCollide;
-                _obstacleSaberSparkleEffectManager.sparkleEffectDidEndEvent -= SaberEndCollide;
+                //_obstacleSaberSparkleEffectManager.sparkleEffectDidStartEvent -= SaberStartCollide;
+                //_obstacleSaberSparkleEffectManager.sparkleEffectDidEndEvent -= SaberEndCollide;
 
                 _energyCounter.gameEnergyDidReach0Event -= InvokeOnLevelFail;
 
@@ -68,12 +68,12 @@ namespace SaberFactory.Game
             _beatmapObjectManager.noteWasMissedEvent += OnNoteMiss;
 
             // Sabers clashing
-            if (_obstacleSaberSparkleEffectManager == null)
-            {
-                _obstacleSaberSparkleEffectManager = _monoKernel.GetComponentInChildren<ObstacleSaberSparkleEffectManager>();
-            }
-            _obstacleSaberSparkleEffectManager.sparkleEffectDidStartEvent += SaberStartCollide;
-            _obstacleSaberSparkleEffectManager.sparkleEffectDidEndEvent += SaberEndCollide;
+            //if (_obstacleSaberSparkleEffectManager == null)
+            //{
+            //    _obstacleSaberSparkleEffectManager = _monoKernel.GetComponentInChildren<ObstacleSaberSparkleEffectManager>();
+            //}
+            //_obstacleSaberSparkleEffectManager.sparkleEffectDidStartEvent += SaberStartCollide;
+            //_obstacleSaberSparkleEffectManager.sparkleEffectDidEndEvent += SaberEndCollide;
 
             // OnLevelFail
             _energyCounter.gameEnergyDidReach0Event += InvokeOnLevelFail;

@@ -27,11 +27,11 @@ namespace SaberFactory.Instances
                 return;
             }
 
-            DestroyUsedMaterial();
+            DestroyCurrentMaterial();
             Material = new Material(_originalMaterial);
         }
 
-        public void DestroyUsedMaterial()
+        public void DestroyCurrentMaterial()
         {
             Material.TryDestoryImmediate();
         }
@@ -41,10 +41,15 @@ namespace SaberFactory.Instances
             _originalMaterial.TryDestoryImmediate();
         }
 
-        public void DestroyMaterials()
+        public void Destroy()
         {
-            DestroyUsedMaterial();
+            DestroyCurrentMaterial();
             DestroyBackupMaterial();
+        }
+
+        public MaterialDescriptor CreateCopy()
+        {
+            return new MaterialDescriptor(new Material(Material));
         }
     }
 }
