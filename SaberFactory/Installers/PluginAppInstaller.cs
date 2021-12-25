@@ -42,7 +42,7 @@ namespace SaberFactory.Installers
             if (Environment.GetCommandLineArgs().Any(x => x.ToLower() == "fpfc"))
             {
                 rtOptions.FPFC = true;
-                AltTrail.CapFps = true;
+                SFTrail.CapFps = true;
             }
 
             Container.BindInstance(rtOptions).AsSingle();

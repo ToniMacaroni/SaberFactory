@@ -84,12 +84,6 @@ namespace SaberFactory.Modifiers
                 Mods.Add(mod.Id, mod);
             }
 
-            // for (var index = 0; index < SaberModifierCollection.ComponentModifiers.Length; index++)
-            // {
-            //     var mod = new VisibilityModifierImpl(SaberModifierCollection.VisibilityModifiers[index]);
-            //     VisibilityModifiers.Add(index, mod);
-            // }
-
             foreach (var tMod in SaberModifierCollection.TransformModifiers)
             {
                 var mod = new TransformModifierImpl(tMod);

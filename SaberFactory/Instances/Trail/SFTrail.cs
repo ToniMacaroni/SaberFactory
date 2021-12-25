@@ -1,125 +1,314 @@
-﻿using System;
-using SaberFactory.Helpers;
-using TMPro;
+﻿using System.Collections.Generic;
+using SaberFactory.Misc;
 using UnityEngine;
 
 namespace SaberFactory.Instances.Trail
 {
-    /// <summary>
-    ///     Class used for rendering the trail on the saber
-    /// </summary>
-    internal class SFTrail : SaberTrail
+    internal class SFTrail : MonoBehaviour
     {
-        public Color Color
+        public static bool CapFps;
+        protected float TrailWidth => (PointStart.position - PointEnd.position).magnitude;
+
+        public Vector3 CurHeadPos => (PointStart.position + PointEnd.position) / 2f;
+        public Color Color = Color.white;
+        public int Granularity = 60;
+        public Material Material;
+        public Transform PointEnd;
+        public Transform PointStart;
+
+        public string SortingLayerName;
+        public int SortingOrder;
+
+        public int TrailLength = 30;
+        public float Whitestep;
+        protected ElementPool _elemPool;
+        protected bool _inited;
+
+        protected List<Element> _snapshotList = new List<Element>();
+        protected Spline _spline = new Spline();
+        protected VertexPool _vertexPool;
+        protected VertexPool.VertexSegment _vertexSegment;
+
+        private readonly int _skipFirstFrames = 4;
+        private int _frameNum;
+        private float _time;
+
+        private void LateUpdate()
         {
-            get => _color;
-            set => _color = value;
-        }
-
-        [SerializeField] private Material _customMaterial;
-
-        [SerializeField] private Transform _end;
-
-        [SerializeField] private Transform _start;
-
-        [SerializeField] private int _trailLength;
-
-        [SerializeField] private float _trailWidth;
-        [SerializeField] private float _whitestep;
-
-        // Don't let the SaberTrail class instantiate from the renderer prefab (since it's null at this point)
-        public override void Awake()
-        { }
-
-        public override void LateUpdate()
-        {
-            if (_framesPassed <= 4)
+            if (!_inited)
             {
-                if (_framesPassed == 4)
-                {
-                    Init();
-                }
-
-                _framesPassed++;
                 return;
             }
 
-            var start = _start.position;
-            var end = _end.position;
-
-            var num = Mathf.RoundToInt((TimeHelper.time - _lastTrailElementTime) / _sampleStep);
-            for (var i = 0; i < num; i++)
+            if (CapFps)
             {
-                _lastTrailElementTime = TimeHelper.time;
-                _trailElementCollection.MoveTailToHead();
-                _trailElementCollection.head.SetData(start, end, _lastTrailElementTime);
+                _time += Time.deltaTime;
+                if (_time < 1f / 90)
+                {
+                    return;
+                }
+
+                _time = 0;
             }
 
-            _trailElementCollection.UpdateDistances();
-            _trailRenderer.UpdateMesh(_trailElementCollection, _color);
-        }
+            _frameNum++;
 
-        public override void OnEnable()
-        {
-            if (_inited)
+            if (_frameNum == _skipFirstFrames + 1)
             {
-                _trailRenderer.UpdateMesh(_trailElementCollection, _color);
+                _vertexPool.SetMeshObjectActive(true);
+
+                _spline.Granularity = Granularity;
+                _spline.Clear();
+                for (var i = 0; i < TrailLength; i++)
+                {
+                    _spline.AddControlPoint(CurHeadPos, PointStart.position - PointEnd.position);
+                }
+
+                _snapshotList.Clear();
+                _snapshotList.Add(new Element(PointStart.position, PointEnd.position));
+                _snapshotList.Add(new Element(PointStart.position, PointEnd.position));
+            }
+            else if (_frameNum < _skipFirstFrames + 1)
+            {
+                return;
             }
 
-            if (_trailRenderer)
+            UpdateHeadElem();
+            RecordCurElem();
+            RefreshSpline();
+            UpdateVertex();
+            _vertexPool.LateUpdate();
+        }
+
+        private void OnEnable()
+        {
+            _vertexPool?.SetMeshObjectActive(true);
+        }
+
+        private void OnDisable()
+        {
+            _vertexPool?.SetMeshObjectActive(false);
+        }
+
+        private void OnDestroy()
+        {
+            if (!_inited || _vertexPool == null)
             {
-                _trailRenderer.enabled = true;
+                return;
             }
+
+            _vertexPool.Destroy();
         }
 
-        public void Setup(TrailInitData initData, Material trailMaterial, Transform start, Transform end)
+        public void Setup(TrailInitData initData, Transform pointStart, Transform pointEnd, Material material, bool editor)
         {
-            Color = initData.TrailColor;
-            _customMaterial = trailMaterial;
-            _trailWidth = (end.position - start.position).magnitude;
-            _start = start;
-            _end = end;
+            PointStart = pointStart;
+            PointEnd = pointEnd;
+            Material = material;
+            Granularity = initData.Granularity;
+            TrailLength = initData.TrailLength;
+            Whitestep = initData.Whitestep;
 
-            _trailLength = initData.TrailLength;
-            _whitestep = initData.Whitestep;
+            gameObject.layer = 12;
+            if (editor)
+            {
+                SortingOrder = 3;
+            }
 
-            _trailDuration = _trailLength * 0.01f;
-            _whiteSectionMaxDuration = _whitestep;
+            _elemPool = new ElementPool(TrailLength);
+            _vertexPool = new VertexPool(Material, this);
+            _vertexSegment = _vertexPool.GetVertices(Granularity * 3, (Granularity - 1) * 12);
+            UpdateIndices();
 
-            _granularity = initData.Granularity;
-            _samplingFrequency = initData.SamplingFrequency;
+            _vertexPool.SetMeshObjectActive(false);
 
-            _trailRenderer = SFTrailRenderer.Create();
-        }
-
-        public override void Init()
-        {
-            _sampleStep = 1f / _samplingFrequency;
-            var bottomPos = _start.position;
-            var topPos = _end.position;
-            var capacity = Mathf.CeilToInt(_samplingFrequency * _trailDuration);
-            _trailElementCollection = new TrailElementCollection(capacity, bottomPos, topPos, TimeHelper.time);
-            var trailWidth = _trailWidth;
-            _whiteSectionMaxDuration = Math.Min(_whiteSectionMaxDuration, _trailDuration);
-            _lastZScale = transform.lossyScale.z;
-            _trailRenderer.Cast<SFTrailRenderer>().Init(trailWidth, _trailDuration, _granularity, _whiteSectionMaxDuration);
             _inited = true;
-
-            SetMaterial(_customMaterial);
         }
 
-        public override float GetTrailWidth(BladeMovementDataElement lastAddedData)
+        public void SetMaterialBlock(MaterialPropertyBlock block)
         {
-            return _trailWidth;
-        }
-
-        public void SetMaterial(Material newMaterial)
-        {
-            _customMaterial = newMaterial;
-
-            if (_trailRenderer != null)
+            if (_vertexPool == null || _vertexPool.MeshRenderer == null)
             {
-                _trailRenderer.Cast<SFTrailRenderer>().SetMaterial(_customMaterial);
+                return;
+            }
+
+            _vertexPool.MeshRenderer.SetPropertyBlock(block);
+        }
+
+        private void RefreshSpline()
+        {
+            for (var i = 0; i < _snapshotList.Count; i++)
+            {
+                _spline.ControlPoints[i].Position = _snapshotList[i].Pos;
+                _spline.ControlPoints[i].Normal = _snapshotList[i].PointEnd - _snapshotList[i].PointStart;
+            }
+
+            _spline.RefreshSpline();
+        }
+
+        private void UpdateVertex()
+        {
+            var pool = _vertexSegment.Pool;
+
+            for (var i = 0; i < Granularity; i++)
+            {
+                var baseIdx = _vertexSegment.VertStart + i * 3;
+
+                var uvSegment = (float)i / Granularity;
+
+                var uvCoord = Vector2.zero;
+
+                var pos = _spline.InterpolateByLen(uvSegment);
+
+                var up = _spline.InterpolateNormalByLen(uvSegment);
+                var pos0 = pos + up.normalized * TrailWidth * 0.5f;
+                var pos1 = pos - up.normalized * TrailWidth * 0.5f;
+
+                var color = Color;
+
+                if (uvSegment < Whitestep)
+                {
+                    color = Color.LerpUnclamped(Color.white, Color, uvSegment / Whitestep);
+                }
+
+
+                // pos0
+                pool.Vertices[baseIdx] = pos0;
+                pool.Colors[baseIdx] = color;
+                uvCoord.x = 0f;
+                uvCoord.y = uvSegment;
+                pool.UVs[baseIdx] = uvCoord;
+
+                //pos
+                pool.Vertices[baseIdx + 1] = pos;
+                pool.Colors[baseIdx + 1] = color;
+                uvCoord.x = 0.5f;
+                uvCoord.y = uvSegment;
+                pool.UVs[baseIdx + 1] = uvCoord;
+
+                //pos1
+                pool.Vertices[baseIdx + 2] = pos1;
+                pool.Colors[baseIdx + 2] = color;
+                uvCoord.x = 1f;
+                uvCoord.y = uvSegment;
+                pool.UVs[baseIdx + 2] = uvCoord;
+            }
+
+            _vertexSegment.Pool.UVChanged = true;
+            _vertexSegment.Pool.VertChanged = true;
+            _vertexSegment.Pool.ColorChanged = true;
+        }
+
+        private void UpdateIndices()
+        {
+            var pool = _vertexSegment.Pool;
+
+            for (var i = 0; i < Granularity - 1; i++)
+            {
+                var baseIdx = _vertexSegment.VertStart + i * 3;
+                var nextBaseIdx = _vertexSegment.VertStart + (i + 1) * 3;
+
+                var iidx = _vertexSegment.IndexStart + i * 12;
+
+                //triangle left
+                pool.Indices[iidx + 0] = nextBaseIdx;
+                pool.Indices[iidx + 1] = nextBaseIdx + 1;
+                pool.Indices[iidx + 2] = baseIdx;
+                pool.Indices[iidx + 3] = nextBaseIdx + 1;
+                pool.Indices[iidx + 4] = baseIdx + 1;
+                pool.Indices[iidx + 5] = baseIdx;
+
+                //triangle right
+                pool.Indices[iidx + 6] = nextBaseIdx + 1;
+                pool.Indices[iidx + 7] = nextBaseIdx + 2;
+                pool.Indices[iidx + 8] = baseIdx + 1;
+                pool.Indices[iidx + 9] = nextBaseIdx + 2;
+                pool.Indices[iidx + 10] = baseIdx + 2;
+                pool.Indices[iidx + 11] = baseIdx + 1;
+            }
+
+            pool.IndiceChanged = true;
+        }
+
+        private void UpdateHeadElem()
+        {
+            _snapshotList[0].PointStart = PointStart.position;
+            _snapshotList[0].PointEnd = PointEnd.position;
+        }
+
+        private void RecordCurElem()
+        {
+            var elem = _elemPool.Get();
+            elem.PointStart = PointStart.position;
+            elem.PointEnd = PointEnd.position;
+
+            if (_snapshotList.Count < TrailLength)
+            {
+                _snapshotList.Insert(1, elem);
+            }
+            else
+            {
+                _elemPool.Release(_snapshotList[_snapshotList.Count - 1]);
+                _snapshotList.RemoveAt(_snapshotList.Count - 1);
+                _snapshotList.Insert(1, elem);
+            }
+        }
+
+        public class Element
+        {
+            public Vector3 Pos => (PointStart + PointEnd) / 2f;
+            public Vector3 PointEnd;
+            public Vector3 PointStart;
+
+            public Element(Vector3 start, Vector3 end)
+            {
+                PointStart = start;
+                PointEnd = end;
+            }
+
+            public Element()
+            { }
+        }
+
+        public class ElementPool
+        {
+            public int CountAll { get; private set; }
+            private readonly Stack<Element> _stack = new Stack<Element>();
+
+            public ElementPool(int preCount)
+            {
+                for (var i = 0; i < preCount; i++)
+                {
+                    var element = new Element();
+                    _stack.Push(element);
+                    CountAll++;
+                }
+            }
+
+            public Element Get()
+            {
+                Element element;
+                if (_stack.Count == 0)
+                {
+                    element = new Element();
+                    CountAll++;
+                }
+                else
+                {
+                    element = _stack.Pop();
+                }
+
+                return element;
+            }
+
+            public void Release(Element element)
+            {
+                if (_stack.Count > 0 && ReferenceEquals(_stack.Peek(), element))
+                {
+                    Debug.LogError("Internal error. Trying to destroy object that is already released to pool.");
+                }
+
+                _stack.Push(element);
             }
         }
     }

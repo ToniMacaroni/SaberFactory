@@ -20,7 +20,7 @@ namespace SaberFactory.Instances
 
         public void Dispose()
         {
-            DestroyMaterials();
+            Destroy();
         }
 
         public override void Revert()
