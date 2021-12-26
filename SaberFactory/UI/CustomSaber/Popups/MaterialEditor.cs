@@ -60,6 +60,11 @@ namespace SaberFactory.UI.CustomSaber.Popups
 
         public async void Close()
         {
+            if (!IsOpen)
+            {
+                return;
+            }
+
             await Hide(true);
         }
 
