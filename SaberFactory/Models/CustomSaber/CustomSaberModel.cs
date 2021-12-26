@@ -207,9 +207,15 @@ namespace SaberFactory.Models.CustomSaber
         public override async Task FromJson(JObject obj, Serializer serializer)
         {
             await base.FromJson(obj, serializer);
-            if (HasTrail)
+            var trailModelToken = obj[nameof(TrailModel)];
+            if (trailModelToken != null)
             {
-                await TrailModel.FromJson((JObject)obj[nameof(TrailModel)], serializer);
+                if (TrailModel == null)
+                {
+                    TrailModel = new TrailModel();
+                }
+
+                await TrailModel.FromJson((JObject)trailModelToken, serializer);
             }
         }
 
@@ -217,7 +223,7 @@ namespace SaberFactory.Models.CustomSaber
         {
             var obj = (JObject)await base.ToJson(serializer);
             
-            if (HasTrail)
+            if (TrailModel != null)
             {
                 obj.Add(nameof(TrailModel), await TrailModel.ToJson(serializer));
             }

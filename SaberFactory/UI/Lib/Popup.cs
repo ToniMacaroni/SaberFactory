@@ -12,6 +12,8 @@ namespace SaberFactory.UI.Lib
         private Transform _originalParent;
         private CanvasGroup _parentCanvasGroup;
 
+        public bool IsOpen;
+
         protected virtual void Awake()
         {
             _cachedTransform = transform;
@@ -59,6 +61,8 @@ namespace SaberFactory.UI.Lib
             {
                 FadeParentCanvases();
             }
+
+            IsOpen = true;
         }
 
         protected async Task Hide(bool animated)
@@ -76,6 +80,8 @@ namespace SaberFactory.UI.Lib
             {
                 transform.SetParent(_originalParent, false);
             }
+
+            IsOpen = false;
         }
 
         protected void ParentToViewController()

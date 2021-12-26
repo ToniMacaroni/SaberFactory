@@ -155,6 +155,7 @@ namespace SaberFactory.UI.CustomSaber.Views
             _editorInstanceManager.OnSaberInstanceCreated -= CreateTrail;
 
             _materialEditor.Close();
+            _chooseTrailPopup.Exit();
             _instanceTrailData = null;
             _trailPreviewer.Destroy();
         }
@@ -202,6 +203,8 @@ namespace SaberFactory.UI.CustomSaber.Views
                         TextureWrapMode.Clamp) { TrailOriginTrails = trailList };
 
                     model.TrailModel.CopyFrom(trailModel);
+                    model.TrailModel.Material.UpdateBackupMaterial(false);
+
                     return true;
                 }
 

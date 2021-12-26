@@ -78,8 +78,13 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
             }
         }
 
-        private async void Exit()
+        public async void Exit()
         {
+            if (!IsOpen)
+            {
+                return;
+            }
+
             _onSelectionChanged = null;
 
             _saberList.OnItemSelected -= SaberSelected;
