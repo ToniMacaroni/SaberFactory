@@ -56,8 +56,10 @@ namespace SaberFactory.UI.CustomSaber.Views.Modifiers
 #if !PAT
             return;
 #endif
-            
+
+#pragma warning disable CS0162 // Unreachable code detected
             _modifyableComponentManager = _instanceManager.CurrentPiece?.Model.ModifyableComponentManager;
+
             if (IsAvailable)
             {
                 IsNotCustomizable = false;
@@ -68,6 +70,7 @@ namespace SaberFactory.UI.CustomSaber.Views.Modifiers
             {
                 IsNotCustomizable = true;
             }
+#pragma warning restore CS0162 // Unreachable code detected
         }
 
         public override void DidClose()
@@ -76,11 +79,14 @@ namespace SaberFactory.UI.CustomSaber.Views.Modifiers
             return;
 #endif
 
+#pragma warning disable CS0162 // Unreachable code detected
             _modifyableComponentManager = null;
+
             _componentList.data = new List<CustomListTableData.CustomCellInfo>();
             _componentList.tableView.ReloadData();
             ClearCurrentView();
             GizmoDrawer.Deactivate();
+#pragma warning restore CS0162 // Unreachable code detected
         }
 
         public void SetupMod()

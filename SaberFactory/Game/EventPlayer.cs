@@ -25,7 +25,7 @@ namespace SaberFactory.Game
 
         [Inject] private readonly ScoreController _scoreController = null;
 
-        [Inject] private readonly MonoKernel _monoKernel = null;
+        //[Inject] private readonly MonoKernel _monoKernel = null;
 
         private bool _didInit;
 
