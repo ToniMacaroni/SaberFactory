@@ -47,15 +47,7 @@ namespace SaberFactory.Game
             _saberInstance.CreateTrail(false, _saberTrail);
             SetColor(_saberColor ?? _colorManager.ColorForSaberType(_saberInstance.Model.SaberSlot.ToSaberType()));
 
-            if (_afHandler != null && AFHandler.IsValid && AFHandler.ShouldFire)
-            {
-                await Task.Delay(4000);
-                await _afHandler.Shoot(this, saber.saberType);
-            }
-            else
-            {
-                _eventPlayer?.SetPartEventList(_saberInstance.Events, saber.saberType);
-            }
+            _eventPlayer?.SetPartEventList(_saberInstance.Events, saber.saberType);
 
             _logger.Info("Instantiated Saber");
         }
