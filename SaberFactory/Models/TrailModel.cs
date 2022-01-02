@@ -14,7 +14,7 @@ namespace SaberFactory.Models
     /// <summary>
     ///     Stores information on how to build a trail
     /// </summary>
-    internal class TrailModel : IFactorySerializable
+    public class TrailModel : IFactorySerializable
     {
         public int OriginalLength { get; private set; }
 

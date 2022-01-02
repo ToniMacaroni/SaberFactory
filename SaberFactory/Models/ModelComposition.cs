@@ -8,7 +8,7 @@ namespace SaberFactory.Models
     /// <summary>
     ///     Stores left and right piece models + additional detached game objects in a composition
     /// </summary>
-    internal class ModelComposition : IDisposable, ICustomListItem
+    public class ModelComposition : IDisposable, ICustomListItem
     {
         public readonly AdditionalInstanceHandler AdditionalInstanceHandler;
         public readonly AssetTypeDefinition AssetTypeDefinition;

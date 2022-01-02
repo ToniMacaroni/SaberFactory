@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace SaberFactory.Serialization
 {
-    internal class PresetSaveManager
+    public class PresetSaveManager
     {
         private readonly DirectoryInfo _presetDir;
         private readonly Serializer _serializer;

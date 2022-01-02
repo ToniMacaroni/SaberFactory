@@ -3,7 +3,7 @@ using System;
 namespace SaberFactory.Models
 {
     [Serializable]
-    internal readonly struct AssetTypeDefinition
+    public readonly struct AssetTypeDefinition
     {
         public static readonly AssetTypeDefinition CustomSaber = new AssetTypeDefinition(EAssetType.Model, EAssetSubType.CustomSaber);
 

@@ -12,7 +12,6 @@ namespace SaberFactory.Game
 {
     internal class SfSaberModelController : SaberModelController, IColorable
     {
-        [InjectOptional] private readonly AFHandler _afHandler = null;
         [InjectOptional] private readonly EventPlayer _eventPlayer = null;
         [Inject] private readonly GameSaberSetup _gameSaberSetup = null;
         [Inject] private readonly SiraLog _logger = null;

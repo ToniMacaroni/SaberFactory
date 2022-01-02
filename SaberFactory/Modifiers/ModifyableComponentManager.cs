@@ -12,7 +12,7 @@ using SaberFactory.Serialization;
 
 namespace SaberFactory.Modifiers
 {
-    internal class ModifyableComponentManager : IFactorySerializable
+    public class ModifyableComponentManager : IFactorySerializable
     {
         public readonly Dictionary<int, BaseModifierImpl> Mods = new Dictionary<int, BaseModifierImpl>();
 

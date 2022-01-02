@@ -7,7 +7,7 @@ namespace SaberFactory.Models
     ///     Class for handling gameobject outside of the left and right sabers or parts
     ///     Mostly used for custom sabers
     /// </summary>
-    internal class AdditionalInstanceHandler
+    public class AdditionalInstanceHandler
     {
         public bool IsInstantiated => _instance != null;
 

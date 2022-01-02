@@ -16,7 +16,7 @@ namespace SaberFactory.DataStore
     /// <summary>
     ///     Class for managing store assets ie. parts and custom sabers
     /// </summary>
-    internal class MainAssetStore : IDisposable, ILoadingTask
+    public class MainAssetStore : IDisposable, ILoadingTask
     {
         public List<string> AdditionalCustomSaberFolders { get; } = new List<string>();
 
@@ -81,7 +81,7 @@ namespace SaberFactory.DataStore
             return await this[PathTools.ToRelativePath(meta.AssetMetaPath.Path)];
         }
 
-        public async Task LoadAllMetaAsync(EAssetTypeConfiguration assetType)
+        internal async Task LoadAllMetaAsync(EAssetTypeConfiguration assetType)
         {
             await LoadAllCustomSaberMetaDataAsync();
         }
@@ -210,7 +210,7 @@ namespace SaberFactory.DataStore
             sw.Print(_logger);
         }
 
-        public async Task<ModelComposition> CreateMetaData(AssetMetaPath assetMetaPath)
+        internal async Task<ModelComposition> CreateMetaData(AssetMetaPath assetMetaPath)
         {
             var relativePath = assetMetaPath.RelativePath+".meta";
             if (_metaData.TryGetValue(relativePath, out _))

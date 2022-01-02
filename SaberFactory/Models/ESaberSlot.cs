@@ -1,6 +1,6 @@
 ﻿namespace SaberFactory.Models
 {
-    internal enum ESaberSlot
+    public enum ESaberSlot
     {
         Left,
         Right

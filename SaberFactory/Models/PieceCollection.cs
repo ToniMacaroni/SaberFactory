@@ -7,7 +7,7 @@ namespace SaberFactory.Models
     ///     Class for managing a collection of parts
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    internal class PieceCollection<T> : IEnumerable
+    public class PieceCollection<T> : IEnumerable
     {
         public T this[AssetTypeDefinition definition]
         {
