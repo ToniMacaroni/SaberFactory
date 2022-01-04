@@ -1,6 +1,8 @@
-﻿using SaberFactory.Configuration;
+﻿using System;
+using SaberFactory.Configuration;
 using SaberFactory.DataStore;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace SaberFactory.Models.CustomSaber
 {
@@ -18,6 +20,21 @@ namespace SaberFactory.Models.CustomSaber
         public ModelComposition GetComposition(StoreAsset storeAsset)
         {
             var (leftSaber, rightSaber) = GetSabers(storeAsset.Prefab.transform);
+
+            if (rightSaber == null)
+            {
+                var newParent = new GameObject("RightSaber").transform;
+                newParent.parent = storeAsset.Prefab.transform;
+
+                rightSaber = Object.Instantiate(leftSaber, newParent, false);
+                rightSaber.transform.position = Vector3.zero;
+                rightSaber.transform.localScale = new Vector3(-1, 1, 1);
+
+                rightSaber.name = "RightSaberMirror";
+
+                rightSaber = newParent.gameObject;
+                rightSaber.SetActive(false);
+            }
 
             var storeAssetLeft = new StoreAsset(storeAsset.RelativePath, leftSaber, storeAsset.AssetBundle);
             var storeAssetRight = new StoreAsset(storeAsset.RelativePath, rightSaber, storeAsset.AssetBundle);

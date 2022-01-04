@@ -25,7 +25,7 @@ namespace SaberFactory.Models
             AssetTypeDefinition = definition;
             _modelLeft = modelLeft;
             _modelRight = modelRight;
-            AdditionalInstanceHandler = new AdditionalInstanceHandler(additionalData);
+            AdditionalInstanceHandler = new AdditionalInstanceHandler(additionalData, modelRight.StoreAsset.Prefab);
 
             if (_modelLeft == null && _modelRight == null)
             {
