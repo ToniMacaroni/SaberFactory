@@ -42,6 +42,7 @@ namespace SaberFactory
             zenjector.Install<PluginAppInstaller>(Location.App, logger, pluginConfig, metadata);
             zenjector.Install<PluginMenuInstaller>(Location.Menu);
             zenjector.Install<PluginGameInstaller>(Location.Player | Location.MultiPlayer);
+            //zenjector.Mutate("Gamep");
         }
 
         [OnEnable]

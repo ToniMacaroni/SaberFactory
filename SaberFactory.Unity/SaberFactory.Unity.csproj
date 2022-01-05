@@ -47,6 +47,9 @@
             <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.dll</HintPath>
             <Private>False</Private>
         </Reference>
+        <Reference Include="UnityEngine.AudioModule">
+          <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.AudioModule.dll</HintPath>
+        </Reference>
         <Reference Include="UnityEngine.CoreModule">
             <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
             <Private>False</Private>
@@ -56,7 +59,7 @@
             <Private>False</Private>
         </Reference>
         <Reference Include="UnityEngine.JSONSerializeModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-          <HintPath>..\..\..\Program Files (x86)\Steam\steamapps\common\Beat Saber\Beat Saber_Data\Managed\UnityEngine.JSONSerializeModule.dll</HintPath>
+          <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.JSONSerializeModule.dll</HintPath>
         </Reference>
     </ItemGroup>
 
@@ -77,6 +80,7 @@
       <Compile Include="..\SaberFactory\ProjectComponents\SaberModifierCollection.cs">
         <Link>SaberModifierCollection.cs</Link>
       </Compile>
+      <Compile Include="..\SaberFactory\ProjectComponents\SFSaberSound.cs" Link="SFSaberSound.cs" />
       <Compile Include="..\SaberFactory\ProjectComponents\TransformModifier.cs">
         <Link>TransformModifier.cs</Link>
       </Compile>
