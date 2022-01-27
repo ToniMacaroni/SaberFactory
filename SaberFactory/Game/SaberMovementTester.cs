@@ -1,8 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Linq;
 using System.Threading.Tasks;
 using SiraUtil.Sabers;
 using UnityEngine;
 using Zenject;
+using Object = UnityEngine.Object;
 
 namespace SaberFactory.Game
 {
@@ -11,8 +14,6 @@ namespace SaberFactory.Game
         private readonly AudioTimeSyncController _audioController;
         private readonly InitData _initData;
         private readonly SiraSaberFactory _saberFactory;
-
-        private Transform _movementContainer;
         private SiraSaber _saber;
 
         private SaberMovementTester(InitData initData, SiraSaberFactory saberFactory, AudioTimeSyncController audioController)
@@ -33,30 +34,76 @@ namespace SaberFactory.Game
                 return;
             }
 
-            _movementContainer = new GameObject("SaberTester").transform;
-            _movementContainer.localPosition = new Vector3(0, 1.5f, 0);
-            _saber = _saberFactory.Spawn(SaberType.SaberA);
-            _saber.transform.SetParent(_movementContainer, false);
+            var saberA = CreateSaber(SaberType.SaberA, new Vector3(0, 0.6f, 0), Quaternion.Euler(90, 0, 0));
+            var saberB = CreateSaber(SaberType.SaberB, new Vector3(0, 0.6f, 0), Quaternion.Euler(90, 0, 0));
 
-            SharedCoroutineStarter.instance.StartCoroutine(AnimationCoroutine());
+            SharedCoroutineStarter.instance.StartCoroutine(GroundRoundAnimationCoroutine(-0.2f, saberA));
+            SharedCoroutineStarter.instance.StartCoroutine(GroundRoundAnimationCoroutine(0.2f, saberB));
+
+            // Don't try this at home
+            var allLRs = Object.FindObjectsOfType<LineRenderer>()
+                .Where(x => x.name.Contains("SaberBurnMark"));
+
+            var normalLR = allLRs.First(x => !x.name.Contains("Sira"));
+            var siraLRs = allLRs.Where(x => x.name.Contains("Sira"));
+
+            foreach (var lineRenderer in siraLRs)
+            {
+                lineRenderer.sharedMaterial = new Material(normalLR.sharedMaterial);
+                lineRenderer.textureMode = LineTextureMode.Stretch;
+                //lineRenderer.widthMultiplier = 2;
+                Console.WriteLine("Replaced mat");
+            }
         }
 
-        private IEnumerator AnimationCoroutine()
+        public Transform CreateSaber(SaberType saberType, Vector3 pos, Quaternion rot)
         {
-            var currentRot = _movementContainer.localEulerAngles.x;
+            var parent = new GameObject("SaberTester_" + saberType).transform;
+            parent.localPosition = new Vector3(0, 0.6f, 0);
+            parent.localRotation = Quaternion.Euler(90, 0, 0);
+            _saber = _saberFactory.Spawn(saberType);
+            _saber.transform.SetParent(parent, false);
+
+            return parent;
+        }
+
+        //private IEnumerator AnimationCoroutine()
+        //{
+        //    var currentRot = _movementContainer.localEulerAngles.x;
+        //    while (true)
+        //    {
+        //        while (currentRot < 90)
+        //        {
+        //            currentRot += 1;
+        //            _movementContainer.localEulerAngles = new Vector3(currentRot, 0, 0);
+        //            yield return new WaitForEndOfFrame();
+        //        }
+
+        //        while (currentRot > -90)
+        //        {
+        //            currentRot -= 1;
+        //            _movementContainer.localEulerAngles = new Vector3(currentRot, 0, 0);
+        //            yield return new WaitForEndOfFrame();
+        //        }
+        //    }
+        //}
+
+        private IEnumerator GroundRoundAnimationCoroutine(float xPos, Transform t)
+        {
+            var currentPos = t.localPosition.z;
             while (true)
             {
-                while (currentRot < 90)
+                while (currentPos < 1)
                 {
-                    currentRot += 1;
-                    _movementContainer.localEulerAngles = new Vector3(currentRot, 0, 0);
+                    currentPos += 0.02f;
+                    t.localPosition = new Vector3(xPos, 0.6f, currentPos);
                     yield return new WaitForEndOfFrame();
                 }
 
-                while (currentRot > -90)
+                while (currentPos > 0)
                 {
-                    currentRot -= 1;
-                    _movementContainer.localEulerAngles = new Vector3(currentRot, 0, 0);
+                    currentPos -= 0.02f;
+                    t.localPosition = new Vector3(xPos, 0.6f, currentPos);
                     yield return new WaitForEndOfFrame();
                 }
             }

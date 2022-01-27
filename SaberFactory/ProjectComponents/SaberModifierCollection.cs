@@ -22,11 +22,12 @@ namespace SaberFactory.ProjectComponents
 
     public bool Init()
     {
+        Console.WriteLine("Inited " + gameObject.name);
         if (string.IsNullOrEmpty(ObjectJson) || _inited)
         {
             return _inited;
         }
-        
+
         Newtonsoft.Json.JsonConvert.PopulateObject(ObjectJson, this);
         
         foreach (var mod in VisibilityModifiers)

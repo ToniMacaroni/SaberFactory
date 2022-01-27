@@ -1,6 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using HarmonyLib;
 using SaberFactory.Helpers;
 using SaberFactory.Instances;
+using SaberFactory.Misc;
 using SaberFactory.Models;
 using SiraUtil.Interfaces;
 using SiraUtil.Logging;
@@ -17,6 +21,7 @@ namespace SaberFactory.Game
         [Inject] private readonly SiraLog _logger = null;
         [Inject] private readonly SaberInstance.Factory _saberInstanceFactory = null;
         [Inject] private readonly SaberSet _saberSet = null;
+        [Inject] private readonly List<ICustomizer> _customizers = null;
         private Color? _saberColor;
 
         private SaberInstance _saberInstance;
@@ -42,6 +47,12 @@ namespace SaberFactory.Game
             var saberModel = saber.saberType == SaberType.SaberA ? _saberSet.LeftSaber : _saberSet.RightSaber;
 
             _saberInstance = _saberInstanceFactory.Create(saberModel);
+
+            if (saber.saberType == SaberType.SaberA)
+            {
+                _customizers.Do(x=>x.SetSaber(_saberInstance));
+            }
+
             _saberInstance.SetParent(transform);
             _saberInstance.CreateTrail(false, _saberTrail);
             SetColor(_saberColor ?? _colorManager.ColorForSaberType(_saberInstance.Model.SaberSlot.ToSaberType()));

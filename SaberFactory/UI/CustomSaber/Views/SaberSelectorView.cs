@@ -16,7 +16,6 @@ using SaberFactory.Editor;
 using SaberFactory.Helpers;
 using SaberFactory.Loaders;
 using SaberFactory.Models;
-using SaberFactory.Serialization;
 using SaberFactory.UI.CustomSaber.CustomComponents;
 using SaberFactory.UI.CustomSaber.Popups;
 using SaberFactory.UI.Lib;
@@ -62,12 +61,10 @@ namespace SaberFactory.UI.CustomSaber.Views
         [Inject] private readonly EditorInstanceManager _editorInstanceManager = null;
 
         [Inject] private readonly MainAssetStore _mainAssetStore = null;
-        [Inject(Id = nameof(SaberFactory))] private readonly PluginMetadata _metadata = null;
         [Inject] private readonly PluginConfig _pluginConfig = null;
         [Inject] private readonly List<RemoteLocationPart> _remoteParts = null;
         [Inject] private readonly SaberFileWatcher _saberFileWatcher = null;
         [Inject] private readonly SaberSet _saberSet = null;
-        [Inject] private readonly Serializer _serializer = null;
         private ModelComposition _currentComposition;
         private PreloadMetaData _currentPreloadMetaData;
         private SaberListDirectoryManager _dirManager;
@@ -108,7 +105,7 @@ namespace SaberFactory.UI.CustomSaber.Views
             _dirManager = new SaberListDirectoryManager(_mainAssetStore.AdditionalCustomSaberFolders);
             _saberList.OnItemSelected += SaberSelected;
             _saberList.OnCategorySelected += DirectorySelected;
-            _listTitle = "<color=#2f6594>Saber Factory " + _metadata.HVersion + "</color>";
+            _listTitle = "";
             _saberList.SetText(_listTitle);
             await LoadSabers();
 
@@ -120,15 +117,6 @@ namespace SaberFactory.UI.CustomSaber.Views
                 imageView.overrideSprite = imageView.sprite;
                 // ColorUtility.TryParseHtmlString("#c5c5c5", out var newBgColor);
                 // imageView.color = newBgColor;
-            }
-        }
-
-        private async void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.N))
-            {
-                File.WriteAllText("Serialized.txt", (await _saberSet.ToJson(_serializer)).ToString());
-                Debug.LogWarning("Serialized");
             }
         }
 
@@ -206,12 +194,14 @@ namespace SaberFactory.UI.CustomSaber.Views
             if (_currentComposition != null)
             {
                 _saberList.Select(_mainAssetStore.GetMetaDataForComposition(_currentComposition)?.ListName, !scrollToTop);
+                UpdatePedestalText(_currentComposition);
             }
 
             if (scrollToTop)
             {
                 _saberList.ScrollTo(0);
             }
+
 
             UpdateUi();
         }
@@ -275,12 +265,25 @@ namespace SaberFactory.UI.CustomSaber.Views
             {
                 await ShowSabers();
             }
+
+            _editor.FlashPedestal(new Color(0.24f, 0.77f, 1f));
         }
 
         private void CompositionDidChange(ModelComposition comp)
         {
             _currentComposition = comp;
+            UpdatePedestalText(comp);
             _saberList.Select(comp);
+        }
+
+        private void UpdatePedestalText(ICustomListItem item)
+        {
+            var saberName = item.ListName;
+            if (saberName.Length > 12)
+            {
+                saberName = saberName.Substring(0, 9) + "...";
+            }
+            _editor.SetPedestalText(0, saberName);
         }
 
         private void UpdateUi()

@@ -276,6 +276,11 @@ namespace SaberFactory.Modifiers
 
             foreach (var t in _transforms)
             {
+                if (!t.transform)
+                {
+                    continue;
+                }
+
                 t.transform.localPosition = t.ogPos + offset;
             }
         }
@@ -289,6 +294,11 @@ namespace SaberFactory.Modifiers
 
             foreach (var t in _transforms)
             {
+                if (!t.transform)
+                {
+                    continue;
+                }
+
                 t.transform.localScale = t.ogScale + offset;
             }
         }
@@ -302,6 +312,11 @@ namespace SaberFactory.Modifiers
 
             foreach (var t in _transforms)
             {
+                if (!t.transform)
+                {
+                    continue;
+                }
+
                 t.transform.localRotation = t.ogRotation * Quaternion.Euler(Vector3.forward * offset);
             }
         }

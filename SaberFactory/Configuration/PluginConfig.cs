@@ -1,14 +1,16 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using IPA.Config.Stores;
 using IPA.Config.Stores.Attributes;
 using IPA.Config.Stores.Converters;
+using JetBrains.Annotations;
 
 [assembly: InternalsVisibleTo(GeneratedStore.AssemblyVisibilityTarget)]
 
 namespace SaberFactory.Configuration
 {
-    internal class PluginConfig
+    internal class PluginConfig : INotifyPropertyChanged
     {
         public bool Enabled { get; set; } = true;
 
@@ -48,6 +50,10 @@ namespace SaberFactory.Configuration
         public bool SpecialBackground { get; set; } = true;
 
         public bool ReloadOnSaberUpdate { get; set; } = false;
+
+        public float SwingSoundVolume { get; set; } = 1;
+
+        public bool EnableCustomBurnmarks { get; set; } = true;
 
         // How many threads to spawn when loading all sabers
         // ! Not used as of right now !
@@ -93,6 +99,14 @@ namespace SaberFactory.Configuration
         public bool IsFavorite(string path)
         {
             return Favorites.Contains(path);
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

@@ -1,7 +1,10 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Threading;
 using BeatSaberMarkupLanguage.Attributes;
 using SaberFactory.Configuration;
+using SaberFactory.Editor;
+using SaberFactory.ProjectComponents;
 using SaberFactory.UI.CustomSaber.CustomComponents;
 using SaberFactory.UI.Lib;
 using UnityEngine;
@@ -11,8 +14,8 @@ namespace SaberFactory.UI.CustomSaber.Views
 {
     internal class SettingsView : SubView, INavigationCategoryView
     {
-        private static readonly string PROFILE_URL = "https://ko-fi.com/tonimacaroni";
-        private static readonly string DISCORD_URL = "https://discord.gg/PjD7WcChH3";
+        private const string ProfileUrl = "https://ko-fi.com/tonimacaroni";
+        private const string DiscordUrl = "https://discord.gg/PjD7WcChH3";
 
         [UIComponent("changelog-popup")] private readonly ChangelogPopup _changelogPopup = null;
         [UIObject("github-button")] private readonly GameObject _githubButton = null;
@@ -61,14 +64,46 @@ namespace SaberFactory.UI.CustomSaber.Views
             }
         }
 
+        private float SwingSoundVolume
+        {
+            get => _pluginConfig.SwingSoundVolume;
+            set
+            {
+                _pluginConfig.SwingSoundVolume = value;
+                if (_saberSound)
+                {
+                    _saberSound.ConfigVolume = value;
+                }
+                OnPropertyChanged();
+            }
+        }
+
+        private bool EnableCustomBurnmarks
+        {
+            get => _pluginConfig.EnableCustomBurnmarks;
+            set
+            {
+                _pluginConfig.EnableCustomBurnmarks = value;
+                OnPropertyChanged();
+            }
+        }
+
         [Inject] private readonly PluginConfig _pluginConfig = null;
         [Inject] private readonly PluginManager _pluginManager = null;
+        [Inject] private readonly EditorInstanceManager _editorInstanceManager = null;
 
         public ENavigationCategory Category => ENavigationCategory.Settings;
+
+        private SFSaberSound _saberSound;
 
         public override void DidClose()
         {
             _changelogPopup.Hide();
+        }
+
+        public override void DidOpen()
+        {
+            _editorInstanceManager.CurrentSaber.GetSaberComponent(out _saberSound);
         }
 
         [UIAction("#post-parse")]
@@ -84,13 +119,13 @@ namespace SaberFactory.UI.CustomSaber.Views
         [UIAction("profile-clicked")]
         private void ProfileClicked()
         {
-            Process.Start(PROFILE_URL);
+            Process.Start(ProfileUrl);
         }
 
         [UIAction("discord-clicked")]
         private void DiscordClicked()
         {
-            Process.Start(DISCORD_URL);
+            Process.Start(DiscordUrl);
         }
 
         [UIAction("github-clicked")]

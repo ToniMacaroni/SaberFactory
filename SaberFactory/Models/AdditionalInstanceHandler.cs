@@ -59,6 +59,11 @@ namespace SaberFactory.Models
             return saberSlot == ESaberSlot.Left ? _customSaberLeftSaber : _customSaberRightSaber;
         }
 
+        public T GetComponent<T>() where T : Component
+        {
+            return GetInstance().GetComponent<T>();
+        }
+
         public Transform FindInInstance(string name)
         {
             return GetInstance().transform.Find(name);

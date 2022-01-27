@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Threading.Tasks;
 using HarmonyLib;
@@ -6,10 +7,14 @@ using IPA;
 using IPA.Config;
 using IPA.Config.Stores;
 using IPA.Loader;
+using IPA.Utilities;
 using SaberFactory.Configuration;
 using SaberFactory.Helpers;
 using SaberFactory.Installers;
+using SaberFactory.Misc;
 using SiraUtil.Zenject;
+using UnityEngine;
+using Zenject;
 using IPALogger = IPA.Logging.Logger;
 
 namespace SaberFactory
@@ -42,7 +47,12 @@ namespace SaberFactory
             zenjector.Install<PluginAppInstaller>(Location.App, logger, pluginConfig, metadata);
             zenjector.Install<PluginMenuInstaller>(Location.Menu);
             zenjector.Install<PluginGameInstaller>(Location.Player | Location.MultiPlayer);
-            //zenjector.Mutate("Gamep");
+
+            zenjector.Mutate<SaberBurnMarkArea>("Environment", (ctx, ogBurnMark) =>
+            {
+                var newBurner = CommonHelpers.Upgrade(ogBurnMark, typeof(CustomSaberBurnMarkArea));
+                ctx.Container.QueueForInject(newBurner);
+            });
         }
 
         [OnEnable]

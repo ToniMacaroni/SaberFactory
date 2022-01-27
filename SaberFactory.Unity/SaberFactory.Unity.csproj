@@ -18,14 +18,14 @@
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
         <Optimize>false</Optimize>
         <OutputPath>bin\Debug\</OutputPath>
-        <DefineConstants>DEBUG;TRACE;UNITY</DefineConstants>
+        <DefineConstants>DEBUG;TRACE;UNITY;UNITY_EDITOR</DefineConstants>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
         <Optimize>true</Optimize>
         <OutputPath>bin\Release\</OutputPath>
         <ErrorReport>prompt</ErrorReport>
         <WarningLevel>4</WarningLevel>
-        <DefineConstants>TRACE;UNITY</DefineConstants>
+        <DefineConstants>TRACE;UNITY;UNITY_EDITOR</DefineConstants>
     </PropertyGroup>
     <PropertyGroup Condition="$(DefineConstants.Contains('CIBuild')) OR '$(NCrunch)' == '1'">
         <DisableCopyToPlugins>True</DisableCopyToPlugins>
@@ -86,6 +86,15 @@
       </Compile>
       <Compile Include="..\SaberFactory\ProjectComponents\VisibilityModifier.cs">
         <Link>VisibilityModifier.cs</Link>
+      </Compile>
+      <Compile Include="..\SaberFactory\ProjectComponents\SFBurnmarks.cs">
+	      <Link>SFBurnMarks.cs</Link>
+      </Compile>
+      <Compile Include="..\SaberFactory\ProjectComponents\SFClashEffect.cs">
+	      <Link>SFClashEffect.cs</Link>
+      </Compile>
+      <Compile Include="..\SaberFactory\ProjectComponents\HelpAttribute.cs">
+	      <Link>HelpAttribute.cs</Link>
       </Compile>
     </ItemGroup>
 

@@ -1,7 +1,6 @@
 #if !UNITY
-using IPA.Utilities;
+using SaberFactory.Helpers;
 #endif
-using System;
 using UnityEngine;
 
 namespace SaberFactory.ProjectComponents
@@ -25,35 +24,55 @@ namespace SaberFactory.ProjectComponents
         [Tooltip("No sound is produced if saber point moves more than this distance in one frame.")]
         public float NoSoundTopThresholdSqr = 1f;
 
+        [Range(0, 1)]
+        public float Volume = 1;
+
 #if !UNITY
-        public SaberSound ToSaberSound()
+        public float ConfigVolume = 1;
+
+        private Vector3 _prevPos;
+        private float _speed;
+
+        public virtual void Start()
         {
-            var saberSound = gameObject.AddComponent<SaberSound>();
-            SaberTopAccessor(ref saberSound) = SaberTop;
-            AudioSourceAccessor(ref saberSound) = AudioSource;
-            PitchBySpeedCurveAccessor(ref saberSound) = PitchBySpeedCurve;
-            GainBySpeedCurveAccessor(ref saberSound) = GainBySpeedCurve;
-            SpeedMultiplierAccessor(ref saberSound) = SpeedMultiplier;
-            UpSmoothAccessor(ref saberSound) = UpSmooth;
-            DownSmoothAccessor(ref saberSound) = DownSmooth;
-            NoSoundTopThresholdSqrAccessor(ref saberSound) = NoSoundTopThresholdSqr;
-            DestroyImmediate(this);
-            return saberSound;
+            _prevPos = SaberTop.position;
+
+            var saberMb = SaberHelpers.GetSaberMonoBehaviour(gameObject);
+            if (saberMb)
+            {
+                saberMb.RegisterComponent(this);
+            }
         }
 
-        private void Awake()
+        public virtual void Update()
         {
-            ToSaberSound();
-        }
+            var position = SaberTop.position;
+            if ((_prevPos - position).sqrMagnitude > NoSoundTopThresholdSqr) _prevPos = position;
 
-        private static readonly FieldAccessor<SaberSound, Transform>.Accessor SaberTopAccessor = FieldAccessor<SaberSound, Transform>.GetAccessor("_saberTop");
-        private static readonly FieldAccessor<SaberSound, AudioSource>.Accessor AudioSourceAccessor = FieldAccessor<SaberSound, AudioSource>.GetAccessor("_audioSource");
-        private static readonly FieldAccessor<SaberSound, AnimationCurve>.Accessor PitchBySpeedCurveAccessor = FieldAccessor<SaberSound, AnimationCurve>.GetAccessor("_pitchBySpeedCurve");
-        private static readonly FieldAccessor<SaberSound, AnimationCurve>.Accessor GainBySpeedCurveAccessor = FieldAccessor<SaberSound, AnimationCurve>.GetAccessor("_gainBySpeedCurve");
-        private static readonly FieldAccessor<SaberSound, float>.Accessor SpeedMultiplierAccessor = FieldAccessor<SaberSound, float>.GetAccessor("_speedMultiplier");
-        private static readonly FieldAccessor<SaberSound, float>.Accessor UpSmoothAccessor = FieldAccessor<SaberSound, float>.GetAccessor("_upSmooth");
-        private static readonly FieldAccessor<SaberSound, float>.Accessor DownSmoothAccessor = FieldAccessor<SaberSound, float>.GetAccessor("_downSmooth");
-        private static readonly FieldAccessor<SaberSound, float>.Accessor NoSoundTopThresholdSqrAccessor = FieldAccessor<SaberSound, float>.GetAccessor("_noSoundTopThresholdSqr");
+            float targetSpeed;
+            if (Time.deltaTime == 0f)
+            {
+                targetSpeed = 0f;
+            }
+            else
+            {
+                targetSpeed = SpeedMultiplier * Vector3.Distance(position, _prevPos) / Time.deltaTime;
+            }
+
+            if (targetSpeed < _speed)
+            {
+                _speed = Mathf.Clamp01(Mathf.Lerp(_speed, targetSpeed, Time.deltaTime * DownSmooth));
+            }
+            else
+            {
+                _speed = Mathf.Clamp01(Mathf.Lerp(_speed, targetSpeed, Time.deltaTime * UpSmooth));
+            }
+
+            AudioSource.pitch = PitchBySpeedCurve.Evaluate(_speed);
+            AudioSource.volume = GainBySpeedCurve.Evaluate(_speed) * Volume * ConfigVolume;
+
+            _prevPos = position;
+        }
 #endif
     }
 }

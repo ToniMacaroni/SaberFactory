@@ -1,7 +1,10 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using SaberFactory.Helpers;
+using SaberFactory.Loaders;
+using TMPro;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -9,6 +12,8 @@ namespace SaberFactory.Editor
 {
     internal class Pedestal
     {
+        private static readonly string PedestalPath = String.Join(".", nameof(SaberFactory), "Resources", "pedestal");
+
         public bool IsVisible
         {
             set
@@ -29,13 +34,15 @@ namespace SaberFactory.Editor
         public Transform SaberContainerTransform { get; private set; }
         private readonly FileInfo _customPedestalFile;
 
-        private readonly EmbeddedAssetLoader _embeddedAssetLoader;
-
         private Transform _rootTransform;
+        private TextMeshPro _textMeshPro;
+        private Material _ledMat;
 
-        public Pedestal(EmbeddedAssetLoader embeddedAssetLoader, FileInfo customPedestalFile)
+        private readonly string[] _lines = new string[3];
+        private static readonly int LedColor = Shader.PropertyToID("_LedColor");
+
+        public Pedestal(FileInfo customPedestalFile)
         {
-            _embeddedAssetLoader = embeddedAssetLoader;
             _customPedestalFile = customPedestalFile;
         }
 
@@ -54,7 +61,20 @@ namespace SaberFactory.Editor
                 return;
             }
 
-            Object.Instantiate(prefab, _rootTransform, false);
+            var instantiated = Object.Instantiate(prefab, _rootTransform, false);
+            _textMeshPro = instantiated.GetComponentsInChildren<TextMeshPro>()
+                .FirstOrDefault(x => x.name == "Pedestal_Display");
+            var leds = instantiated.GetComponentsInChildren<MeshRenderer>().FirstOrDefault(x => x.name == "Leds");
+
+            if (_textMeshPro)
+            {
+                _textMeshPro.alignment = TextAlignmentOptions.Center;
+            }
+
+            if (leds)
+            {
+                _ledMat = leds.sharedMaterial;
+            }
 
             SaberContainerTransform = _rootTransform.CreateGameObject("SaberContainer").transform;
             SaberContainerTransform.localPosition += new Vector3(0, 1, 0);
@@ -64,6 +84,17 @@ namespace SaberFactory.Editor
 
 
             IsVisible = false;
+        }
+
+        public void SetText(int line, string text)
+        {
+            if (!_textMeshPro)
+            {
+                return;
+            }
+
+            _lines[line] = text;
+            _textMeshPro.text = string.Join("\n", _lines);
         }
 
         private async Task<GameObject> GetPedestalAsset()
@@ -82,7 +113,10 @@ namespace SaberFactory.Editor
                 }
             }
 
-            return await _embeddedAssetLoader.LoadAsset<GameObject>("Pedestal");
+            var data = await Readers.ReadResourceAsync(PedestalPath);
+            var bundle = await Readers.LoadAssetFromAssetBundleAsync<GameObject>(data, "Pedestal");
+            bundle.Item2.Unload(false);
+            return bundle.Item1;
         }
 
         public void Destroy()
@@ -91,6 +125,16 @@ namespace SaberFactory.Editor
             {
                 _rootTransform.gameObject.TryDestroy();
             }
+        }
+
+        public void SetLedColor(Color color)
+        {
+            if (!_ledMat)
+            {
+                return;
+            }
+
+            _ledMat.SetColor(LedColor, color);
         }
     }
 }
