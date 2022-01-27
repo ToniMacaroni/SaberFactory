@@ -14,7 +14,6 @@ namespace SaberFactory.UI.Lib
 
         public void SetData(PropertyDescriptor data)
         {
-            Console.WriteLine($"Setup Data {data.Type}");
             switch (data.Type)
             {
                 case EPropertyType.Float:

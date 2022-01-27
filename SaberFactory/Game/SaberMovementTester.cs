@@ -52,7 +52,6 @@ namespace SaberFactory.Game
                 lineRenderer.sharedMaterial = new Material(normalLR.sharedMaterial);
                 lineRenderer.textureMode = LineTextureMode.Stretch;
                 //lineRenderer.widthMultiplier = 2;
-                Console.WriteLine("Replaced mat");
             }
         }
 
