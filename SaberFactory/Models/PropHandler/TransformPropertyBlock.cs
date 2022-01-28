@@ -8,7 +8,7 @@ namespace SaberFactory.Models.PropHandler
     /// <summary>
     ///     Class to store transform data
     /// </summary>
-    internal class TransformPropertyBlock : IFactorySerializable
+    public class TransformPropertyBlock : IFactorySerializable
     {
         public float Width { get; set; } = 1;
 

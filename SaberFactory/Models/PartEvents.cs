@@ -4,7 +4,7 @@ using UnityEngine.Events;
 
 namespace SaberFactory.Models
 {
-    internal class PartEvents
+    public class PartEvents
     {
         public UnityEvent MultiplierUp;
 

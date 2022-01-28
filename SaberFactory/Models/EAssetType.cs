@@ -1,6 +1,6 @@
 ﻿namespace SaberFactory.Models
 {
-    internal enum EAssetType
+    public enum EAssetType
     {
         Model,
         Halo

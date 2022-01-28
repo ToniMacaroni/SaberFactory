@@ -14,7 +14,7 @@ namespace SaberFactory.Models
     ///     Model related to everything that makes up a saber
     ///     like parts, halos, accessories, custom sabers
     /// </summary>
-    internal class BasePieceModel : IDisposable, IFactorySerializable
+    public class BasePieceModel : IDisposable, IFactorySerializable
     {
         /// <summary>
         ///     Type of the associated instance class

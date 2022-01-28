@@ -8,6 +8,7 @@ using SaberFactory.Helpers;
 using SaberFactory.Instances;
 using SaberFactory.Instances.PostProcessors;
 using SaberFactory.Instances.Trail;
+using SaberFactory.Misc;
 using SaberFactory.Models;
 using SaberFactory.Models.CustomSaber;
 using SaberFactory.Serialization;
@@ -77,6 +78,8 @@ namespace SaberFactory.Installers
 
             Container.Bind<SaberFileWatcher>().AsSingle();
             Container.Bind<RandomUtil>().AsSingle();
+
+            Container.BindInterfacesAndSelfTo<SaberClashCustomizer>().AsSingle();
 
             InstallFactories();
             InstallMiddlewares();

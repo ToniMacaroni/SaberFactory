@@ -12,7 +12,7 @@ using SaberFactory.Serialization;
 
 namespace SaberFactory.Modifiers
 {
-    internal class ModifyableComponentManager : IFactorySerializable
+    public class ModifyableComponentManager : IFactorySerializable
     {
         public readonly Dictionary<int, BaseModifierImpl> Mods = new Dictionary<int, BaseModifierImpl>();
 
@@ -22,7 +22,7 @@ namespace SaberFactory.Modifiers
 
         public ModifyableComponentManager(GameObject prefab)
         {
-            SaberModifierCollection = prefab.GetComponent<SaberModifierCollection>();
+            SaberModifierCollection = prefab.GetComponentInChildren<SaberModifierCollection>();
         }
 
         public async Task FromJson(JObject obj, Serializer serializer)
@@ -102,7 +102,7 @@ namespace SaberFactory.Modifiers
                 return;
             }
 
-            var saberModifierCollection = gameObject.GetComponent<SaberModifierCollection>();
+            var saberModifierCollection = gameObject.GetComponentInChildren<SaberModifierCollection>();
             if (saberModifierCollection == null)
             {
                 return;

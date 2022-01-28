@@ -10,7 +10,7 @@ using Zenject;
 
 namespace SaberFactory.Serialization
 {
-    internal class Serializer
+    public class Serializer
     {
         public static readonly JsonSerializer JsonSerializer = new JsonSerializer();
 

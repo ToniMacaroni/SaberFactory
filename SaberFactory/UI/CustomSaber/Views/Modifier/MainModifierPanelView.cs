@@ -26,6 +26,7 @@ namespace SaberFactory.UI.CustomSaber.Views.Modifiers
         protected override string _resourceName => PatViewPath;
         [UIValue("pat-preview")] private string PatPreview => "https://www.youtube.com/watch?v=xI-YFoPilxU";
         [UIValue("has-pat-preview")] private bool HasPatPreview => true;
+        [UIValue("additional-pat-info")] private string AdditionalPatInfo => "Feature needs to be implemented on saber";
 #endif
 
         [UIObject("container")] private readonly GameObject _container = null;

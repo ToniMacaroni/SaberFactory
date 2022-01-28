@@ -7,7 +7,7 @@ namespace SaberFactory.Instances
     ///     Extension class for <see cref="Material" /> with more information
     ///     and possibly to revert a changed <see cref="Material" />
     /// </summary>
-    internal class MaterialDescriptor
+    public class MaterialDescriptor
     {
         public bool IsValid => Material != null;
         public Material Material;

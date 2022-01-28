@@ -14,7 +14,7 @@ using Zenject;
 
 namespace SaberFactory.Models.CustomSaber
 {
-    internal class CustomSaberModel : BasePieceModel
+    public class CustomSaberModel : BasePieceModel
     {
         public override Type InstanceType { get; protected set; } = typeof(CustomSaberInstance);
 

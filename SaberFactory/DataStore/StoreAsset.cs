@@ -7,7 +7,7 @@ namespace SaberFactory.DataStore
     /// <summary>
     ///     Keeps information about the origin of the asset
     /// </summary>
-    internal class StoreAsset
+    public class StoreAsset
     {
         public readonly AssetBundle AssetBundle;
         public readonly string Extension;

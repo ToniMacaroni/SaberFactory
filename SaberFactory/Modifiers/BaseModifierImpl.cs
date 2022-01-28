@@ -3,7 +3,7 @@ using SaberFactory.Serialization;
 
 namespace SaberFactory.Modifiers
 {
-    internal abstract class BaseModifierImpl : UpdatableSerialializable, IStringUiProvider
+    public abstract class BaseModifierImpl : UpdatableSerialializable, IStringUiProvider
     {
         public abstract string Name { get; }
         public abstract string TypeName { get; }

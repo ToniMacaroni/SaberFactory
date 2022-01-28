@@ -70,7 +70,8 @@
         <Copy SourceFiles="$(OutputAssemblyName).dll" DestinationFiles="$(ArtifactDestination)\Plugins\$(AssemblyName).dll"/>
         <Message Text="PluginVersion: $(PluginVersion), AssemblyVersion: $(AssemblyVersion), GameVersion: $(GameVersion)" Importance="high"/>
         <Delete Files="@(OldZips)" TreatErrorsAsWarnings="true" ContinueOnError="true"/>
-        <ZipDir SourceDirectory="$(ArtifactDestination)" DestinationFile="$(DestinationDirectory)$(ArtifactName).zip"/>
+		<ZipDir Condition="!$(DefineConstants.Contains(PAT))" SourceDirectory="$(ArtifactDestination)" DestinationFile="$(DestinationDirectory)$(ArtifactName).zip"/>
+		<ZipDir Condition="$(DefineConstants.Contains(PAT))" SourceDirectory="$(ArtifactDestination)" DestinationFile="$(DestinationDirectory)$(ArtifactName)_Patreon.zip"/>
     </Target>
     <!--Copies the assembly and pdb to the Beat Saber folder.-->
     <Target Name="CopyToPlugins" AfterTargets="Build" Condition="'$(DisableCopyToPlugins)' != 'True' AND '$(ContinuousIntegrationBuild)' != 'True'">

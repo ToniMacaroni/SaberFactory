@@ -1,6 +1,6 @@
 namespace SaberFactory.Models
 {
-    internal enum EAssetSubType
+    public enum EAssetSubType
     {
         Blade,
         Emitter,

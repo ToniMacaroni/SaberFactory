@@ -2,7 +2,7 @@
 
 namespace SaberFactory.Models
 {
-    internal struct ModelMetaData
+    public struct ModelMetaData
     {
         public string Name;
         public string Author;

@@ -38,6 +38,8 @@ namespace SaberFactory.Instances
         private InstanceTrailData _instanceTrailData;
         private List<CustomSaberTrailHandler> _secondaryTrails;
 
+        private readonly Dictionary<Type, Component> _saberComponents = new Dictionary<Type, Component>();
+
         private SaberInstance(
             SaberModel model,
             BasePieceInstance.Factory pieceFactory,
@@ -51,7 +53,7 @@ namespace SaberFactory.Instances
             Model = model;
 
             GameObject = new GameObject(SaberName);
-            GameObject.AddComponent<SaberMonoBehaviour>().Init(this, OnSaberGameObjectDestroyed);
+            GameObject.AddComponent<SaberMonoBehaviour>().Init(this, _saberComponents, OnSaberGameObjectDestroyed);
 
             CachedTransform = GameObject.transform;
 
@@ -160,6 +162,14 @@ namespace SaberFactory.Instances
             }
         }
 
+        public bool GetSaberComponent<T>(out T saberComp) where T : Component
+        {
+            saberComp = null;
+            if (!_saberComponents.TryGetValue(typeof(T), out var comp)) return false;
+            saberComp = (T)comp;
+            return saberComp;
+        }
+
         public void Destroy()
         {
             GameObject.TryDestroy();
@@ -221,17 +231,25 @@ namespace SaberFactory.Instances
         {
             public SaberInstance SaberInstance { get; private set; }
             private Action _onDestroyed;
+            public Dictionary<Type, Component> SaberComponentDict;
 
             private void OnDestroy()
             {
                 _onDestroyed?.Invoke();
             }
 
-            public void Init(SaberInstance saberInstance, Action onDestroyedCallback)
+            public void Init(SaberInstance saberInstance, Dictionary<Type, Component> saberComponentDict, Action onDestroyedCallback)
             {
                 SaberInstance = saberInstance;
+                SaberComponentDict = saberComponentDict;
                 _onDestroyed = onDestroyedCallback;
             }
+
+            public void RegisterComponent(Component comp)
+            {
+                SaberComponentDict[comp.GetType()] = comp;
+            }
+
         }
     }
 }

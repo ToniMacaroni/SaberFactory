@@ -8,7 +8,6 @@ using SaberFactory.Instances.Trail;
 using SaberFactory.Models;
 using SaberFactory.Models.CustomSaber;
 using SiraUtil.Logging;
-using SiraUtil.Tools;
 using UnityEngine;
 
 namespace SaberFactory.Instances.CustomSaber

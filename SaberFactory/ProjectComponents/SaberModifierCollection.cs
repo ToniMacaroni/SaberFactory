@@ -26,7 +26,7 @@ namespace SaberFactory.ProjectComponents
         {
             return _inited;
         }
-        
+
         Newtonsoft.Json.JsonConvert.PopulateObject(ObjectJson, this);
         
         foreach (var mod in VisibilityModifiers)

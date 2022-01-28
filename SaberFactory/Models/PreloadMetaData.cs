@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace SaberFactory.Models
 {
-    internal class PreloadMetaData : ICustomListItem
+    public class PreloadMetaData : ICustomListItem
     {
         public AssetTypeDefinition AssetTypeDefinition { get; private set; }
 
@@ -40,18 +40,18 @@ namespace SaberFactory.Models
             }
         }
 
-        public readonly AssetMetaPath AssetMetaPath;
+        internal readonly AssetMetaPath AssetMetaPath;
 
         private byte[] _coverData;
         private Sprite _coverSprite;
         private Texture2D _coverTex;
 
-        public PreloadMetaData(AssetMetaPath assetMetaPath)
+        internal PreloadMetaData(AssetMetaPath assetMetaPath)
         {
             AssetMetaPath = assetMetaPath;
         }
 
-        public PreloadMetaData(AssetMetaPath assetMetaPath, ICustomListItem customListItem, AssetTypeDefinition assetTypeDefinition)
+        internal PreloadMetaData(AssetMetaPath assetMetaPath, ICustomListItem customListItem, AssetTypeDefinition assetTypeDefinition)
         {
             AssetMetaPath = assetMetaPath;
             AssetTypeDefinition = assetTypeDefinition;

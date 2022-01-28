@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace SaberFactory.Serialization
 {
-    internal class UpdatableSerialializable : IFactorySerializable
+    public class UpdatableSerialializable : IFactorySerializable
     {
         private readonly List<(HandledValueAttribute, PropertyInfo)> _updateProps = new List<(HandledValueAttribute, PropertyInfo)>();
 

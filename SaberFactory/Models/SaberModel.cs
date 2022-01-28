@@ -12,7 +12,7 @@ namespace SaberFactory.Models
     ///     Stores information on how to build a saber instance
     /// </summary>
     [JsonObject(MemberSerialization.OptIn)]
-    internal class SaberModel : IFactorySerializable
+    public class SaberModel : IFactorySerializable
     {
         public bool IsEmpty => PieceCollection.PieceCount == 0;
         public readonly PieceCollection<BasePieceModel> PieceCollection;
