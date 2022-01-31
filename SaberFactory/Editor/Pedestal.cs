@@ -37,9 +37,11 @@ namespace SaberFactory.Editor
         private Transform _rootTransform;
         private TextMeshPro _textMeshPro;
         private Material _ledMat;
+        private Material _spiralMat;
 
         private readonly string[] _lines = new string[3];
         private static readonly int LedColor = Shader.PropertyToID("_LedColor");
+        private static readonly int Length = Shader.PropertyToID("_Length");
 
         public Pedestal(FileInfo customPedestalFile)
         {
@@ -65,6 +67,7 @@ namespace SaberFactory.Editor
             _textMeshPro = instantiated.GetComponentsInChildren<TextMeshPro>()
                 .FirstOrDefault(x => x.name == "Pedestal_Display");
             var leds = instantiated.GetComponentsInChildren<MeshRenderer>().FirstOrDefault(x => x.name == "Leds");
+            var spiral = instantiated.GetComponentsInChildren<MeshRenderer>().FirstOrDefault(x => x.name == "Spiral");
 
             if (_textMeshPro)
             {
@@ -74,6 +77,11 @@ namespace SaberFactory.Editor
             if (leds)
             {
                 _ledMat = leds.sharedMaterial;
+            }
+
+            if (spiral)
+            {
+                _spiralMat = spiral.sharedMaterial;
             }
 
             SaberContainerTransform = _rootTransform.CreateGameObject("SaberContainer").transform;
@@ -135,6 +143,11 @@ namespace SaberFactory.Editor
             }
 
             _ledMat.SetColor(LedColor, color);
+        }
+
+        public void SetSpiralLength(float length)
+        {
+            _spiralMat.SetFloat(Length, length);
         }
     }
 }
