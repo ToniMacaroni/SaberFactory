@@ -34,7 +34,7 @@ namespace SaberFactory.Installers
 
             //Container.BindInterfacesAndSelfTo<AFHandler>().AsSingle();
             Container.BindInterfacesAndSelfTo<GameSaberSetup>().AsSingle();
-            Container.BindInstance(SaberModelRegistration.Create<SfSaberModelController>(300)).AsSingle();
+            Container.BindInstance(SaberModelRegistration.Create<SfSaberModelController>(300));
 
 #if DEBUG && TEST_TRAIL
             if (Container.TryResolve<LaunchOptions>()?.FPFC ?? false)
