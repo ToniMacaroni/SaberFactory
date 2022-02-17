@@ -82,6 +82,9 @@ namespace SaberFactory.Editor
             if (spiral)
             {
                 _spiralMat = spiral.sharedMaterial;
+                var clr = _spiralMat.color;
+                clr.a = 0;
+                _spiralMat.color = clr;
             }
 
             SaberContainerTransform = _rootTransform.CreateGameObject("SaberContainer").transform;
@@ -148,6 +151,19 @@ namespace SaberFactory.Editor
         public void SetSpiralLength(float length)
         {
             _spiralMat.SetFloat(Length, length);
+            if (length > 0.99f)
+            {
+                var clr = _spiralMat.color;
+                clr.a = 0;
+                _spiralMat.color = clr;
+            }
+        }
+
+        public void InitSpiral()
+        {
+            var clr = _spiralMat.color;
+            clr.a = 1;
+            _spiralMat.color = clr;
         }
     }
 }

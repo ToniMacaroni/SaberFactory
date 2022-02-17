@@ -63,7 +63,8 @@ namespace SaberFactory.Instances.Trail
                 TrailColor = Color.white,
                 TrailLength = InstanceTrailData.Length,
                 Whitestep = InstanceTrailData.WhiteStep,
-                Granularity = trailConfig.Granularity
+                Granularity = trailConfig.Granularity,
+                SamplingFrequency = trailConfig.SamplingFrequency
             };
 
             var (pointStart, pointEnd) = InstanceTrailData.GetPoints();
