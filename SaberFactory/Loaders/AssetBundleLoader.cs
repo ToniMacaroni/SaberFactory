@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using SaberFactory.DataStore;
+using UnityEngine;
 
 namespace SaberFactory.Loaders
 {
@@ -21,5 +22,6 @@ namespace SaberFactory.Loaders
         public abstract ISet<AssetMetaPath> CollectFiles(PluginDirectories dirs);
 
         public abstract Task<StoreAsset> LoadStoreAssetAsync(string relativePath);
+        public abstract Task<StoreAsset> LoadStoreAsset(AssetBundle bundle, string filename);
     }
 }

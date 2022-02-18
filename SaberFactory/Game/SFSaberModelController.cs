@@ -53,6 +53,25 @@ namespace SaberFactory.Game
                 _customizers.Do(x=>x.SetSaber(_saberInstance));
             }
 
+            if (saber.saberType == SaberType.SaberA)
+            {
+                await Task.Delay(1000);
+                if (parent.Find("LeftSaber") is { } leftSaber)
+                {
+                    leftSaber.gameObject.SetActive(false);
+                }
+
+                if (parent.Find("LeftTrail") is { } leftTrail)
+                {
+                    leftTrail.gameObject.SetActive(false);
+                }
+            }
+            else
+            {
+                return;
+            }
+            
+
             _saberInstance.SetParent(transform);
             _saberInstance.CreateTrail(false, _saberTrail);
             SetColor(_saberColor ?? _colorManager.ColorForSaberType(_saberInstance.Model.SaberSlot.ToSaberType()));

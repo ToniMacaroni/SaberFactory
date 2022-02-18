@@ -87,6 +87,21 @@ namespace SaberFactory.UI.CustomSaber.Views
             }
         }
 
+        public void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.T))
+            {
+                Shader.DisableKeyword("ACES_TONE_MAPPING");
+                Debug.Log("Disabled");
+            }
+
+            if (Input.GetKeyDown(KeyCode.Z))
+            {
+                Shader.EnableKeyword("ACES_TONE_MAPPING");
+                Debug.Log("Enabled");
+            }
+        }
+
         public override void DidClose()
         {
             _editorInstanceManager.OnModelCompositionSet -= CompositionDidChange;
@@ -186,6 +201,8 @@ namespace SaberFactory.UI.CustomSaber.Views
             }
 
             ShowDownloadSabersPopup = items.Count() <= addedDownloadables;
+
+            items.AddRange(_mainAssetStore.GetAllCompositions());
 
             _saberList.SetItems(_dirManager.Process(items));
 

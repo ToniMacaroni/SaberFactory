@@ -46,6 +46,9 @@
         <None Remove="Resources\Icons\folder.png" />
         <None Remove="Resources\Icons\transform-icon.png" />
         <None Remove="Resources\UI\border.png" />
+        <Reference Include="CustomSaber">
+          <HintPath>..\..\..\Program Files (x86)\Steam\steamapps\common\Beat Saber\Plugins\customsaber.dll</HintPath>
+        </Reference>
         <Reference Include="UnityEngine.IMGUIModule">
             <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
             <Private>false</Private>
@@ -72,10 +75,6 @@
             <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Colors.dll</HintPath>
             <Private>False</Private>
             <SpecificVersion>False</SpecificVersion>
-        </Reference>
-        <Reference Include="CustomSaberComponents, Version=4.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-            <SpecificVersion>False</SpecificVersion>
-            <HintPath>Resources\CustomSaberComponents.dll</HintPath>
         </Reference>
         <Reference Include="GameplayCore">
             <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\GameplayCore.dll</HintPath>

@@ -42,6 +42,28 @@ namespace SaberFactory.Editor
 
         public void HideHandle()
         {
+            if (_menuPlayerController.leftController.transform.Find("LeftSaber") is { } leftSaber)
+            {
+                leftSaber.gameObject.SetActive(false);
+            }
+
+            if (_menuPlayerController.leftController.transform.Find("LeftTrail") is { } leftTrail)
+            {
+                leftTrail.gameObject.SetActive(false);
+            }
+
+            //var cam1 = GameObject.Find("Cam2_Side View").transform;
+            //var cam2 = GameObject.Find("Cam2_Side View2").transform;
+
+            //cam1.parent = _menuPlayerController.leftController.transform;
+            //cam2.parent = _menuPlayerController.rightController.transform;
+
+            //cam1.localPosition = new Vector3(0.48f, -0.95f, 0);
+            //cam2.localPosition = new Vector3(0.48f, -0.95f, 0);
+
+            //cam1.localEulerAngles = new Vector3(0, 0, 0);
+            //cam2.localEulerAngles = new Vector3(0, 0, 0);
+
             if (!_isHandleVisisble)
             {
                 return;

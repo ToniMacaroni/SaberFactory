@@ -39,5 +39,15 @@ namespace SaberFactory.Loaders
 
             return new StoreAsset(relativePath, result.Item1, result.Item2);
         }
+
+        public override async Task<StoreAsset> LoadStoreAsset(AssetBundle bundle, string filename)
+        {
+            var result = await bundle.LoadAssetFromAssetBundleAsync<GameObject>("_CustomSaber");
+            if (result == null)
+            {
+                return null;
+            }
+            return new StoreAsset("CustomSabers\\"+filename+".saber", result, bundle);
+        }
     }
 }

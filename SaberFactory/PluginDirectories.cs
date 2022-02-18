@@ -21,7 +21,7 @@ namespace SaberFactory
             Cache = SaberFactoryDir.CreateSubdirectory("Cache");
             CustomSaberDir = baseDir.GetDirectory(CustomSabersDirName);
 
-            if (!CustomSaberDir.Exists)
+            if (!CustomSaberDir.Exists || true)
             {
                 CustomSaberDir = SaberFactoryDir.GetDirectory(CustomSabersDirName);
                 PathTools.RelativeExtension = Path.Combine(userDataDir.Name, SaberFactoryDir.Name) + Path.DirectorySeparatorChar;

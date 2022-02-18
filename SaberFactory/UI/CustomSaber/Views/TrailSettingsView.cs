@@ -36,14 +36,22 @@ namespace SaberFactory.UI.CustomSaber.Views
         private int GranularityValue
         {
             get => _trailConfig.Granularity;
-            set => _trailConfig.Granularity = value;
+            set
+            {
+                _trailConfig.Granularity = value;
+                _dirty = true;
+            }
         }
 
         [UIValue("sampling-frequency-value")]
         private int SamplingFrequencyValue
         {
             get => _trailConfig.SamplingFrequency;
-            set => _trailConfig.SamplingFrequency = value;
+            set
+            {
+                _trailConfig.SamplingFrequency = value;
+                _dirty = true;
+            } 
         }
 
         [UIValue("refresh-button-active")]
@@ -391,6 +399,7 @@ namespace SaberFactory.UI.CustomSaber.Views
                     return;
                 }
 
+                _dirty = true;
                 _instanceTrailData.WhiteStep = value;
                 OnPropertyChanged();
             }
