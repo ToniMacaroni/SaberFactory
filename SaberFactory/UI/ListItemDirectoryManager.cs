@@ -6,9 +6,9 @@ using SaberFactory.UI.Lib;
 
 namespace SaberFactory.UI
 {
-    internal class SaberListDirectoryManager
+    internal class ListItemDirectoryManager
     {
-        private const string UpDirIndicator = "..";
+        private const string UpDirIndicator = "<";
         public string DirectoryString { get; private set; } = "";
 
         public bool IsInRoot => string.IsNullOrEmpty(_currentDirectory);
@@ -16,7 +16,7 @@ namespace SaberFactory.UI
 
         private string _currentDirectory = "";
 
-        public SaberListDirectoryManager(List<string> additionalFolderPool)
+        public ListItemDirectoryManager(List<string> additionalFolderPool)
         {
             _additionalFolderPool = additionalFolderPool;
         }

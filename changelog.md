@@ -1,9 +1,7 @@
 *(for Beat Saber 1.19)*
 
-- Ability to export only one saber if both of your sabers are identical
-- Added custom saber swing sounds
-- Added custom saber burnmarks
-- New pedestal
-- Made majority of the sf internals public to make it easier for mods to interact with sf
+- Made all patreon features free
+- Allow mods to add sabers from memory
+- fixed auto refreshing trail when changin whitestep
 
 *Needs `BeatSaberMarkupLanguage` and `SiraUtil` (available on ModAssistant)*

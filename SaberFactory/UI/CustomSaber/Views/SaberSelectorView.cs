@@ -67,7 +67,7 @@ namespace SaberFactory.UI.CustomSaber.Views
         [Inject] private readonly SaberSet _saberSet = null;
         private ModelComposition _currentComposition;
         private PreloadMetaData _currentPreloadMetaData;
-        private SaberListDirectoryManager _dirManager;
+        private ListItemDirectoryManager _dirManager;
         private string _listTitle;
 
         private bool _showDownloadSabersPopup;
@@ -102,7 +102,7 @@ namespace SaberFactory.UI.CustomSaber.Views
         [UIAction("#post-parse")]
         private async void Setup()
         {
-            _dirManager = new SaberListDirectoryManager(_mainAssetStore.AdditionalCustomSaberFolders);
+            _dirManager = new ListItemDirectoryManager(_mainAssetStore.AdditionalCustomSaberFolders);
             _saberList.OnItemSelected += SaberSelected;
             _saberList.OnCategorySelected += DirectorySelected;
             _listTitle = "";
@@ -139,10 +139,12 @@ namespace SaberFactory.UI.CustomSaber.Views
 
         private async Task ShowSabers(bool scrollToTop = false, int delay = 0)
         {
+            // Get all metadata and sort by favorite
             var metaEnumerable = from meta in _mainAssetStore.GetAllMetaData()
                 orderby meta.IsFavorite descending
                 select meta;
 
+            // Sort everything else by the selected sort mode
             switch (_sortMode)
             {
                 case ChooseSort.ESortMode.Name:
@@ -169,6 +171,7 @@ namespace SaberFactory.UI.CustomSaber.Views
 
             var addedDownloadables = 0;
 
+            // Show downloadable sabers
             if (_pluginConfig.ShowDownloadableSabers)
             {
                 var idx = items.Count(x => x.IsFavorite);
@@ -185,8 +188,10 @@ namespace SaberFactory.UI.CustomSaber.Views
                 }
             }
 
+            // If there are only downloadable sabers present show the modelsaber hint
             ShowDownloadSabersPopup = items.Count() <= addedDownloadables;
 
+            // Fill the saber list with the currently selected directory
             _saberList.SetItems(_dirManager.Process(items));
 
             _currentComposition = _editorInstanceManager.CurrentModelComposition;
