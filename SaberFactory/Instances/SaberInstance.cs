@@ -64,7 +64,7 @@ namespace SaberFactory.Instances
 
             GameObject.transform.localScale = new Vector3(model.SaberWidth, model.SaberWidth, model.SaberLength);
 
-            saberMiddlewares.Do(x => x.ProcessSaber(GameObject));
+            saberMiddlewares.Do(x => x.ProcessSaber(this));
 
             SetupTrailData();
             InitializeEvents();
