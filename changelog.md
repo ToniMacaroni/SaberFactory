@@ -1,7 +1,9 @@
-*(for Beat Saber 1.19)*
+*(for Beat Saber 1.20)*
 
+- Update for Beat Saber 1.20
 - Made all patreon features free
 - Allow mods to add sabers from memory
-- fixed auto refreshing trail when changin whitestep
+- Fixed auto refreshing trail when changin whitestep
+- Fixed rotation offset not being mirrored
 
 *Needs `BeatSaberMarkupLanguage` and `SiraUtil` (available on ModAssistant)*

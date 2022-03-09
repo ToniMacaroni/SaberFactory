@@ -48,8 +48,11 @@ namespace SaberFactory.Game
             _beatmapObjectManager.noteWasCutEvent -= OnNoteCut;
             _beatmapObjectManager.noteWasMissedEvent -= OnNoteMiss;
 
-            _obstacleSaberSparkleEffectManager.sparkleEffectDidStartEvent -= SaberStartCollide;
-            _obstacleSaberSparkleEffectManager.sparkleEffectDidEndEvent -= SaberEndCollide;
+            if (_obstacleSaberSparkleEffectManager)
+            {
+                _obstacleSaberSparkleEffectManager.sparkleEffectDidStartEvent -= SaberStartCollide;
+                _obstacleSaberSparkleEffectManager.sparkleEffectDidEndEvent -= SaberEndCollide;
+            }
 
             _energyCounter.gameEnergyDidReach0Event -= InvokeOnLevelFail;
 
