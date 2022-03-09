@@ -24,12 +24,12 @@ namespace SaberFactory.Game
         private readonly SaberSet _saberSet;
 
         private GameSaberSetup(PluginConfig config, SaberSet saberSet, MainAssetStore mainAssetStore,
-            [Inject(Id = "beatmapdata")] BeatmapData beatmapData, RandomUtil randomUtil)
+            IReadonlyBeatmapData beatmap, RandomUtil randomUtil)
         {
             _config = config;
             _saberSet = saberSet;
             _mainAssetStore = mainAssetStore;
-            _beatmapData = beatmapData;
+            _beatmapData = beatmap.CastChecked<BeatmapData>();
             _randomUtil = randomUtil;
 
             _oldLeftSaberModel = _saberSet.LeftSaber;
@@ -82,6 +82,11 @@ namespace SaberFactory.Game
         {
             try
             {
+                if (_beatmapData == null)
+                {
+                    return;
+                }
+                
                 if (!_beatmapData.GetField("_customSaber", out var songSaber))
                 {
                     return;

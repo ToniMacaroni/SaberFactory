@@ -1,79 +1,99 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using BeatSaberMarkupLanguage.FloatingScreen;
 using IPA.Utilities;
 using ModestTree;
 using SaberFactory.Configuration;
+using SaberFactory.Helpers;
 using SaberFactory.Models;
+using SiraUtil.Logging;
 using UnityEngine;
 using Zenject;
 
 namespace SaberFactory.Game
 {
     internal class EventPlayer : IDisposable
-    {
-        private static readonly FieldAccessor<ScoreController, int>.Accessor _scoreControllerNotes =
-            FieldAccessor<ScoreController, int>.GetAccessor("_cutOrMissedNotes");
-
+    { 
         [Inject] private readonly BeatmapObjectManager _beatmapObjectManager = null;
 
         [Inject] private readonly GameEnergyCounter _energyCounter = null;
 
-        //[InjectOptional] private ObstacleSaberSparkleEffectManager _obstacleSaberSparkleEffectManager;
+        [InjectOptional] private readonly ObstacleSaberSparkleEffectManager _obstacleSaberSparkleEffectManager = null;
 
         [Inject] private readonly PluginConfig _pluginConfig = null;
 
-        [Inject] private readonly ScoreController _scoreController = null;
+        [Inject] private readonly IScoreController _scoreController = null;
 
-        //[Inject] private readonly MonoKernel _monoKernel = null;
+        [Inject] private readonly IComboController _comboController = null;
+        
+        [Inject] private readonly RelativeScoreAndImmediateRankCounter _scoreCounter = null;
 
-        private bool _didInit;
+        [Inject] private readonly IReadonlyBeatmapData _beatmapData = null;
 
-        [Inject(Id = "LastNoteId")] private float _lastNoteTime;
+        [InjectOptional] private readonly GameCoreSceneSetupData _gameCoreSceneSetupData = null;
+
+        [Inject] private readonly SiraLog _logger = null;
+
+        public bool IsActive;
+
+        private float? _lastNoteTime;
         private List<PartEvents> _partEventsList;
         private SaberType _saberType;
 
+        private float _prevScore;
+
         public void Dispose()
         {
-            if (_didInit)
-            {
-                _beatmapObjectManager.noteWasCutEvent -= OnNoteCut;
-                _beatmapObjectManager.noteWasMissedEvent -= OnNoteMiss;
+            _beatmapObjectManager.noteWasCutEvent -= OnNoteCut;
+            _beatmapObjectManager.noteWasMissedEvent -= OnNoteMiss;
 
-                //_obstacleSaberSparkleEffectManager.sparkleEffectDidStartEvent -= SaberStartCollide;
-                //_obstacleSaberSparkleEffectManager.sparkleEffectDidEndEvent -= SaberEndCollide;
+            _obstacleSaberSparkleEffectManager.sparkleEffectDidStartEvent -= SaberStartCollide;
+            _obstacleSaberSparkleEffectManager.sparkleEffectDidEndEvent -= SaberEndCollide;
 
-                _energyCounter.gameEnergyDidReach0Event -= InvokeOnLevelFail;
+            _energyCounter.gameEnergyDidReach0Event -= InvokeOnLevelFail;
 
-                _scoreController.multiplierDidChangeEvent -= MultiplayerDidChange;
+            _scoreController.multiplierDidChangeEvent -= MultiplayerDidChange;
 
-                _scoreController.comboDidChangeEvent -= InvokeComboChanged;
-            }
+            _scoreCounter.relativeScoreOrImmediateRankDidChangeEvent -= ScoreChanged;
+
+            _comboController.comboDidChangeEvent -= OnComboDidChangeEvent;
         }
 
         public void SetPartEventList(List<PartEvents> partEventsList, SaberType saberType)
         {
             _partEventsList = partEventsList;
             _saberType = saberType;
-
+            
             if (!_pluginConfig.EnableEvents)
             {
                 return;
             }
 
-            _didInit = true;
+            if (_gameCoreSceneSetupData == null)
+            {
+                return;
+            }
+
+            IsActive = true;
+
+            _lastNoteTime = _beatmapData.CastChecked<BeatmapData>()?.GetLastNoteTime();
+
+            if (!_lastNoteTime.HasValue)
+            {
+                _logger.Warn("Couldn't get last note time. Certain level end events won't work");
+            }
 
             // OnSlice LevelEnded Combobreak
             _beatmapObjectManager.noteWasCutEvent += OnNoteCut;
             _beatmapObjectManager.noteWasMissedEvent += OnNoteMiss;
 
             // Sabers clashing
-            //if (_obstacleSaberSparkleEffectManager == null)
-            //{
-            //    _obstacleSaberSparkleEffectManager = _monoKernel.GetComponentInChildren<ObstacleSaberSparkleEffectManager>();
-            //}
-            //_obstacleSaberSparkleEffectManager.sparkleEffectDidStartEvent += SaberStartCollide;
-            //_obstacleSaberSparkleEffectManager.sparkleEffectDidEndEvent += SaberEndCollide;
+            if (_obstacleSaberSparkleEffectManager)
+            {
+                _obstacleSaberSparkleEffectManager.sparkleEffectDidStartEvent += SaberStartCollide;
+                _obstacleSaberSparkleEffectManager.sparkleEffectDidEndEvent += SaberEndCollide;
+            }
 
             // OnLevelFail
             _energyCounter.gameEnergyDidReach0Event += InvokeOnLevelFail;
@@ -81,8 +101,11 @@ namespace SaberFactory.Game
             // MultiplierUp
             _scoreController.multiplierDidChangeEvent += MultiplayerDidChange;
 
+            // Accuracy changed
+            _scoreCounter.relativeScoreOrImmediateRankDidChangeEvent += ScoreChanged;
+            
             // Combo changed
-            _scoreController.comboDidChangeEvent += InvokeComboChanged;
+            _comboController.comboDidChangeEvent += OnComboDidChangeEvent;
 
             InvokeOnLevelStart();
         }
@@ -169,8 +192,28 @@ namespace SaberFactory.Game
 
         #region Events
 
+        private void ScoreChanged()
+        {
+            var score = _scoreCounter.relativeScore;
+            if (Math.Abs(_prevScore - score) >= 0.001f)
+            {
+                InvokeAccuracyChanged(score);
+                _prevScore = score;
+            }
+        }
+        
+        private void OnComboDidChangeEvent(int combo)
+        {
+            InvokeComboChanged(combo);
+        }
+        
         private void OnNoteCut(NoteController noteController, in NoteCutInfo noteCutInfo)
         {
+            if (!_lastNoteTime.HasValue)
+            {
+                return;
+            }
+            
             if (!noteCutInfo.allIsOK)
             {
                 InvokeCombobreak();
@@ -183,9 +226,7 @@ namespace SaberFactory.Game
                 }
             }
 
-            FireAccuracyEvents();
-
-            if (Mathf.Approximately(noteController.noteData.time, _lastNoteTime))
+            if (Mathf.Approximately(noteController.noteData.time, _lastNoteTime.Value))
             {
                 _lastNoteTime = 0;
                 InvokeLevelEnded();
@@ -194,18 +235,21 @@ namespace SaberFactory.Game
 
         private void OnNoteMiss(NoteController noteController)
         {
+            if (!_lastNoteTime.HasValue)
+            {
+                return;
+            }
+            
             if (noteController.noteData.colorType != ColorType.None)
             {
                 InvokeCombobreak();
             }
 
-            if (Mathf.Approximately(noteController.noteData.time, _lastNoteTime))
+            if (Mathf.Approximately(noteController.noteData.time, _lastNoteTime.Value))
             {
                 _lastNoteTime = 0;
                 InvokeLevelEnded();
             }
-
-            FireAccuracyEvents();
         }
 
         private void SaberEndCollide(SaberType saberType)
@@ -230,24 +274,6 @@ namespace SaberFactory.Game
             {
                 InvokeMultiplierUp();
             }
-        }
-
-        private IEnumerator CalculateAccuracyAndFireEventsCoroutine()
-        {
-            yield return null;
-
-            var scoreController = _scoreController;
-
-            var rawScore = scoreController.prevFrameRawScore;
-            var maxScore = ScoreModel.MaxRawScoreForNumberOfNotes(_scoreControllerNotes(ref scoreController));
-            var accuracy = rawScore / (float)maxScore;
-
-            InvokeAccuracyChanged(accuracy);
-        }
-
-        private void FireAccuracyEvents()
-        {
-            SharedCoroutineStarter.instance.StartCoroutine(CalculateAccuracyAndFireEventsCoroutine());
         }
 
         #endregion
