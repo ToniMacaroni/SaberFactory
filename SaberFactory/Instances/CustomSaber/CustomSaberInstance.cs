@@ -16,12 +16,14 @@ namespace SaberFactory.Instances.CustomSaber
     {
         public InstanceTrailData InstanceTrailData { get; private set; }
         private readonly SiraLog _logger;
-        private readonly List<IPartPostProcessor> _postProcessors;
 
-        public CustomSaberInstance(CustomSaberModel model, SiraLog logger, List<IPartPostProcessor> postProcessors) : base(model)
+        public CustomSaberInstance(
+            CustomSaberModel model,
+            SiraLog logger,
+            List<IPartPostProcessor> postProcessors)
+            : base(model, postProcessors)
         {
             _logger = logger;
-            _postProcessors = postProcessors;
             InitializeTrailData(GameObject, model.TrailModel);
         }
 

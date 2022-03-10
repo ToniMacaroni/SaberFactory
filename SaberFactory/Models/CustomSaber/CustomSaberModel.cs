@@ -44,7 +44,7 @@ namespace SaberFactory.Models.CustomSaber
         {
             get
             {
-                _hasTrail ??= Prefab != null && Prefab.GetComponent<CustomTrail>() != null;
+                _hasTrail ??= CheckTrail();
                 return _hasTrail.Value;
             }
         }
@@ -152,6 +152,13 @@ namespace SaberFactory.Models.CustomSaber
             {
                 return null;
             }
+            
+            // Trail without material doesn't do anything
+            // so treat it as if there is no trail
+            if (!trail.TrailMaterial)
+            {
+                return null;
+            }
 
             TextureWrapMode wrapMode = default;
             if (trail.TrailMaterial != null && trail.TrailMaterial.TryGetMainTexture(out var tex))
@@ -168,6 +175,21 @@ namespace SaberFactory.Models.CustomSaber
                 new MaterialDescriptor(trail.TrailMaterial),
                 0, wrapMode,
                 addTrailOrigin ? StoreAsset.RelativePath : null);
+        }
+
+        private bool CheckTrail()
+        {
+            if (!Prefab)
+            {
+                return false;
+            }
+
+            if (Prefab.GetComponent<CustomTrail>() is { } trail && trail.TrailMaterial)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         /// <summary>

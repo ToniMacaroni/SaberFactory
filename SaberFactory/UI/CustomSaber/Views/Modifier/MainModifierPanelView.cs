@@ -22,12 +22,12 @@ namespace SaberFactory.UI.CustomSaber.Views.Modifiers
     {
         public ENavigationCategory Category => ENavigationCategory.Modifier;
 
-#if !PAT
-        protected override string _resourceName => PatViewPath;
-        [UIValue("pat-preview")] private string PatPreview => "https://www.youtube.com/watch?v=xI-YFoPilxU";
-        [UIValue("has-pat-preview")] private bool HasPatPreview => true;
-        [UIValue("additional-pat-info")] private string AdditionalPatInfo => "Feature needs to be implemented on saber";
-#endif
+//#if !PAT
+//        protected override string _resourceName => PatViewPath;
+//        [UIValue("pat-preview")] private string PatPreview => "https://www.youtube.com/watch?v=xI-YFoPilxU";
+//        [UIValue("has-pat-preview")] private bool HasPatPreview => true;
+//        [UIValue("additional-pat-info")] private string AdditionalPatInfo => "Feature needs to be implemented on saber";
+//#endif
 
         [UIObject("container")] private readonly GameObject _container = null;
         [UIComponent("component-list")] private readonly CustomListTableData _componentList = null;
@@ -54,9 +54,9 @@ namespace SaberFactory.UI.CustomSaber.Views.Modifiers
 
         public override void DidOpen()
         {
-#if !PAT
-            return;
-#endif
+//#if !PAT
+//            return;
+//#endif
 
 #pragma warning disable CS0162 // Unreachable code detected
             _modifyableComponentManager = _instanceManager.CurrentPiece?.Model.ModifyableComponentManager;
@@ -76,9 +76,9 @@ namespace SaberFactory.UI.CustomSaber.Views.Modifiers
 
         public override void DidClose()
         {
-#if !PAT
-            return;
-#endif
+//#if !PAT
+//            return;
+//#endif
 
 #pragma warning disable CS0162 // Unreachable code detected
             _modifyableComponentManager = null;

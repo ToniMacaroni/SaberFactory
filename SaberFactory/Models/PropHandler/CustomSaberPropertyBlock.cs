@@ -6,7 +6,7 @@
         {
             var block = (CustomSaberPropertyBlock)otherBlock;
             TransformProperty.Width = block.TransformProperty.Width;
-            TransformProperty.Rotation = block.TransformProperty.Rotation;
+            TransformProperty.Rotation = -block.TransformProperty.Rotation;
             TransformProperty.Offset = block.TransformProperty.Offset;
         }
     }

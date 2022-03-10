@@ -15,12 +15,14 @@ namespace SaberFactory.DataStore
         public readonly string NameWithoutExtension;
         public readonly string RelativePath;
         public readonly string SubDirName;
+        public readonly bool IsStoredOnDisk;
 
         public GameObject Prefab;
 
         public StoreAsset(string relativePath, GameObject prefab, AssetBundle assetBundle)
         {
             RelativePath = relativePath;
+            IsStoredOnDisk = !relativePath.StartsWith("External");
             Name = Path.GetFileName(RelativePath);
             NameWithoutExtension = Path.GetFileNameWithoutExtension(Name);
             Extension = Path.GetExtension(Name);

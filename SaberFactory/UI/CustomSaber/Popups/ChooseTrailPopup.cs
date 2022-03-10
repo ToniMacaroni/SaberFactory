@@ -21,14 +21,14 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
 
         private List<PreloadMetaData> _comps;
 
-        private SaberListDirectoryManager _dirManager;
+        private ListItemDirectoryManager _dirManager;
         private Action<TrailModel, List<CustomTrail>> _onSelectionChanged;
 
         private (TrailModel, List<CustomTrail>) _selectedTrailModel;
 
         public async void Show(IEnumerable<PreloadMetaData> comps, Action<TrailModel, List<CustomTrail>> onSelectionChanged)
         {
-            _dirManager ??= new SaberListDirectoryManager(_mainAssetStore.AdditionalCustomSaberFolders);
+            _dirManager ??= new ListItemDirectoryManager(_mainAssetStore.AdditionalCustomSaberFolders);
 
             _onSelectionChanged = onSelectionChanged;
 

@@ -70,8 +70,8 @@ namespace SaberFactory.Game
             while (t < 1)
             {
                 t += 0.01f;
-                posTween.Sample(t);
-                rotTween.Sample(t);
+                posTween.GetValue(t);
+                rotTween.GetValue(t);
                 await Task.Delay(10);
             }
         }

@@ -3,9 +3,9 @@
   "id": "SaberFactory",
   "name": "Saber Factory",
   "author": "Toni Macaroni",
-  "version": "2.5.0",
+  "version": "2.5.1",
   "description": "A highly customizable saber mod",
-  "gameVersion": "1.19.0",
+  "gameVersion": "1.20.0",
   "dependsOn": {
     "BSIPA": "^4.2.0",
     "SiraUtil": "^3.0.1",

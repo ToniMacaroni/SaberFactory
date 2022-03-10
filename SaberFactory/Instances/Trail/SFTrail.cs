@@ -12,6 +12,7 @@ namespace SaberFactory.Instances.Trail
         public Vector3 CurHeadPos => (PointStart.position + PointEnd.position) / 2f;
         public Color Color = Color.white;
         public int Granularity = 60;
+        public int SamplingFrequency = 20;
         public Material Material;
         public Transform PointEnd;
         public Transform PointStart;
@@ -108,6 +109,7 @@ namespace SaberFactory.Instances.Trail
             Granularity = initData.Granularity;
             TrailLength = initData.TrailLength;
             Whitestep = initData.Whitestep;
+            SamplingFrequency = initData.SamplingFrequency;
 
             gameObject.layer = 12;
             if (editor)

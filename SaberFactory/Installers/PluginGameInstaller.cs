@@ -8,6 +8,7 @@ using SaberFactory.Misc;
 using SaberFactory.Models;
 using SiraUtil.Interfaces;
 using SiraUtil.Sabers;
+using UnityEngine;
 using Zenject;
 
 namespace SaberFactory.Installers
@@ -22,15 +23,7 @@ namespace SaberFactory.Installers
                 return;
             }
 
-            if (Container.HasBinding<GameplayCoreSceneSetupData>())
-            {
-                var sceneSetupData = Container.Resolve<GameplayCoreSceneSetupData>();
-                var beatmapData = sceneSetupData.difficultyBeatmap.beatmapData;
-                Container.Bind<BeatmapData>().WithId("beatmapdata").FromInstance(beatmapData);
-                var lastNoteTime = beatmapData.GetLastNoteTime();
-                Container.Bind<float>().WithId("LastNoteId").FromInstance(lastNoteTime);
-                Container.BindInterfacesAndSelfTo<EventPlayer>().AsTransient();
-            }
+            Container.BindInterfacesAndSelfTo<EventPlayer>().AsTransient();
 
             //Container.BindInterfacesAndSelfTo<AFHandler>().AsSingle();
             Container.BindInterfacesAndSelfTo<GameSaberSetup>().AsSingle();

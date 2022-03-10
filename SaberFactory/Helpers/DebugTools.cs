@@ -1,9 +1,13 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using System.Text;
+using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.FloatingScreen;
 using BeatSaberMarkupLanguage.Tags;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Object = UnityEngine.Object;
 
 namespace SaberFactory.Helpers
 {
@@ -50,6 +54,30 @@ namespace SaberFactory.Helpers
             return FloatingScreen.CreateFloatingScreen(size??new Vector2(500, 500), false, pos??new Vector3(0, 1, 1), Quaternion.identity);
         }
 
+        public static FloatingScreen CreateScreen(DebugCallbackString[] debugStrings, Vector2? size = null, Vector3? pos = null)
+        {
+            var screen = FloatingScreen.CreateFloatingScreen(size??new Vector2(500, 500), false, pos??new Vector3(0, 1, 1), Quaternion.identity);
+
+            var bg = new BackgroundTag().CreateObject(screen.transform);
+            bg.GetComponentInChildren<Backgroundable>().ApplyBackground("round-rect-panel");
+
+            var vertical = new VerticalLayoutTag().CreateObject(bg.transform);
+
+            foreach (var debugString in debugStrings)
+            {
+                var horizontal = new HorizontalLayoutTag().CreateObject(vertical.transform);
+                new TextTag().CreateObject(horizontal.transform).GetComponentInChildren<TextMeshProUGUI>().text = debugString.Title;
+                var str = new TextTag().CreateObject(horizontal.transform).GetComponentInChildren<TextMeshProUGUI>();
+                str.text = debugString.Value;
+                debugString.OnValueUpdated += s =>
+                {
+                    str.text = s;
+                };
+            }
+
+            return screen;
+        }
+
         public static void TextureScreen(Texture tex, Vector2? size = null, Vector3? pos = null)
         {
             var screen = CreateScreen(size, pos);
@@ -65,6 +93,25 @@ namespace SaberFactory.Helpers
             public float? Size;
             public Transform Parent;
             public Color? Color;
+        }
+
+        public class DebugCallbackString
+        {
+            public event Action<string> OnValueUpdated;
+
+            public string Value;
+            public string Title;
+
+            public DebugCallbackString(string title)
+            {
+                Title = title;
+            }
+
+            public void SetValue(string newValue)
+            {
+                Value = newValue;
+                OnValueUpdated?.Invoke(newValue);
+            }
         }
     }
 }

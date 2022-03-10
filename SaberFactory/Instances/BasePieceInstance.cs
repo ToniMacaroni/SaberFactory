@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using SaberFactory.Helpers;
+using SaberFactory.Instances.PostProcessors;
 using SaberFactory.Instances.Setters;
 using SaberFactory.Models;
 using UnityEngine;
@@ -20,9 +21,11 @@ namespace SaberFactory.Instances
         public readonly BasePieceModel Model;
 
         private List<Material> _colorableMaterials;
+        protected readonly List<IPartPostProcessor> _postProcessors;
 
-        protected BasePieceInstance(BasePieceModel model)
+        protected BasePieceInstance(BasePieceModel model, List<IPartPostProcessor> postProcessors)
         {
+            _postProcessors = postProcessors;
             Model = model;
             GameObject = Instantiate();
             CachedTransform = GameObject.transform;

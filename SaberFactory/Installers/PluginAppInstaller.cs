@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using IPA.Loader;
-using IPA.Logging;
 using SaberFactory.Configuration;
 using SaberFactory.DataStore;
 using SaberFactory.Helpers;
@@ -13,7 +12,9 @@ using SaberFactory.Models;
 using SaberFactory.Models.CustomSaber;
 using SaberFactory.Serialization;
 using SiraUtil;
+using UnityEngine;
 using Zenject;
+using Logger = IPA.Logging.Logger;
 
 namespace SaberFactory.Installers
 {

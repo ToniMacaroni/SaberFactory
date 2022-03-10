@@ -15,14 +15,15 @@ namespace SaberFactory.Instances.PostProcessors
             _config = config;
         }
 
-        public void ProcessSaber(GameObject saberObject)
+        public void ProcessSaber(SaberInstance saberObject)
         {
-            saberObject.SetLayer<Renderer>(12);
-            saberObject.GetComponentsInChildren<Collider>().Do(x => x.enabled = false);
-            saberObject.GetComponentsInChildren<AudioSource>(true).Do(x => x.volume *= _config.SaberAudioVolumeMultiplier);
-            saberObject.GetComponentsInChildren<Renderer>(true).Do(x => { x.sortingOrder = 3; });
+            var gameobject = saberObject.GameObject;
+            gameobject.SetLayer<Renderer>(12);
+            gameobject.GetComponentsInChildren<Collider>().Do(x => x.enabled = false);
+            gameobject.GetComponentsInChildren<AudioSource>(true).Do(x => x.volume *= _config.SaberAudioVolumeMultiplier);
+            gameobject.GetComponentsInChildren<Renderer>(true).Do(x => { x.sortingOrder = 3; });
 
-            if (saberObject.GetComponentInChildren<SFSaberSound>() is { } saberSound)
+            if (gameobject.GetComponentInChildren<SFSaberSound>() is { } saberSound)
             {
                 saberSound.ConfigVolume = _config.SwingSoundVolume;
             }
