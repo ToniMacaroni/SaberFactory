@@ -315,8 +315,4 @@
         </PackageReference>
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="UI\CUI" />
-    </ItemGroup>
-
 </Project>
