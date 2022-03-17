@@ -67,14 +67,6 @@ namespace SaberFactory.UI.CustomSaber
         {
             base.SetupTemplates();
             BsmlDecorator.AddTemplate("NavHeight", "70");
-            // if (BsmlDecorator.StyleSheetHandler.GetSelector("btn", out var selector))
-            // {
-            //     Debug.LogWarning($"Found {selector.Name}");
-            //     foreach (var rule in selector.GetRules())
-            //     {
-            //         Debug.LogWarning($"- {rule.Name} = {rule.Value}");
-            //     }
-            // }
         }
 
         #region Views

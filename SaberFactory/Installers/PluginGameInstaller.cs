@@ -1,6 +1,7 @@
 ﻿//#define TEST_TRAIL
 
 
+using ModestTree;
 using SaberFactory.Configuration;
 using SaberFactory.Game;
 using SaberFactory.Helpers;
@@ -26,6 +27,12 @@ namespace SaberFactory.Installers
             Container.BindInterfacesAndSelfTo<EventPlayer>().AsTransient();
 
             //Container.BindInterfacesAndSelfTo<AFHandler>().AsSingle();
+
+            if (!Container.HasBinding<ObstacleSaberSparkleEffectManager>())
+            {
+                Container.Bind<ObstacleSaberSparkleEffectManager>().FromMethod(ObstanceSaberSparkleEffectManagerGetter).AsSingle();
+            }
+            
             Container.BindInterfacesAndSelfTo<GameSaberSetup>().AsSingle();
             Container.BindInstance(SaberModelRegistration.Create<SfSaberModelController>(300));
 
@@ -36,6 +43,13 @@ namespace SaberFactory.Installers
                 Container.BindInterfacesAndSelfTo<SaberMovementTester>().AsSingle().WithArguments(testerInitData);
             }
 #endif
+        }
+
+        private ObstacleSaberSparkleEffectManager ObstanceSaberSparkleEffectManagerGetter(InjectContext ctx)
+        {
+            var playerSpaceConverter = Container.TryResolve<PlayerSpaceConvertor>();
+            Assert.IsNotNull(playerSpaceConverter, $"{nameof(playerSpaceConverter)} was null");
+            return playerSpaceConverter.GetComponentInChildren<ObstacleSaberSparkleEffectManager>();
         }
     }
 }

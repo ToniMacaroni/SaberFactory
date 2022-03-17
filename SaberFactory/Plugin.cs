@@ -43,7 +43,7 @@ namespace SaberFactory
 
             zenjector.UseLogger(logger);
             zenjector.UseHttpService();
-            zenjector.Expose<ObstacleSaberSparkleEffectManager>("Gameplay");
+
             zenjector.Install<PluginAppInstaller>(Location.App, logger, pluginConfig, metadata);
             zenjector.Install<PluginMenuInstaller>(Location.Menu);
             zenjector.Install<PluginGameInstaller>(Location.Player | Location.MultiPlayer);

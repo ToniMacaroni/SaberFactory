@@ -43,26 +43,6 @@ namespace SaberFactory.Game
 
         private float _prevScore;
 
-        public void Dispose()
-        {
-            _beatmapObjectManager.noteWasCutEvent -= OnNoteCut;
-            _beatmapObjectManager.noteWasMissedEvent -= OnNoteMiss;
-
-            if (_obstacleSaberSparkleEffectManager)
-            {
-                _obstacleSaberSparkleEffectManager.sparkleEffectDidStartEvent -= SaberStartCollide;
-                _obstacleSaberSparkleEffectManager.sparkleEffectDidEndEvent -= SaberEndCollide;
-            }
-
-            _energyCounter.gameEnergyDidReach0Event -= InvokeOnLevelFail;
-
-            _scoreController.multiplierDidChangeEvent -= MultiplayerDidChange;
-
-            _scoreCounter.relativeScoreOrImmediateRankDidChangeEvent -= ScoreChanged;
-
-            _comboController.comboDidChangeEvent -= OnComboDidChangeEvent;
-        }
-
         public void SetPartEventList(List<PartEvents> partEventsList, SaberType saberType)
         {
             _partEventsList = partEventsList;
@@ -111,6 +91,26 @@ namespace SaberFactory.Game
             _comboController.comboDidChangeEvent += OnComboDidChangeEvent;
 
             InvokeOnLevelStart();
+        }
+        
+        public void Dispose()
+        {
+            _beatmapObjectManager.noteWasCutEvent -= OnNoteCut;
+            _beatmapObjectManager.noteWasMissedEvent -= OnNoteMiss;
+
+            if (_obstacleSaberSparkleEffectManager)
+            {
+                _obstacleSaberSparkleEffectManager.sparkleEffectDidStartEvent -= SaberStartCollide;
+                _obstacleSaberSparkleEffectManager.sparkleEffectDidEndEvent -= SaberEndCollide;
+            }
+
+            _energyCounter.gameEnergyDidReach0Event -= InvokeOnLevelFail;
+
+            _scoreController.multiplierDidChangeEvent -= MultiplayerDidChange;
+
+            _scoreCounter.relativeScoreOrImmediateRankDidChangeEvent -= ScoreChanged;
+
+            _comboController.comboDidChangeEvent -= OnComboDidChangeEvent;
         }
 
         public void InvokeLevelEnded()
