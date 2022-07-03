@@ -37,6 +37,7 @@ namespace SaberFactory.Instances
 
         private InstanceTrailData _instanceTrailData;
         private List<CustomSaberTrailHandler> _secondaryTrails;
+        private readonly PlayerDataModel _playerDataModel;
 
         private readonly Dictionary<Type, Component> _saberComponents = new Dictionary<Type, Component>();
 
@@ -45,10 +46,12 @@ namespace SaberFactory.Instances
             BasePieceInstance.Factory pieceFactory,
             SiraLog logger,
             TrailConfig trailConfig,
-            List<ISaberPostProcessor> saberMiddlewares)
+            List<ISaberPostProcessor> saberMiddlewares,
+            PlayerDataModel playerDataModel)
         {
             _logger = logger;
             _trailConfig = trailConfig;
+            _playerDataModel = playerDataModel;
 
             Model = model;
 
@@ -66,6 +69,7 @@ namespace SaberFactory.Instances
 
             saberMiddlewares.Do(x => x.ProcessSaber(this));
 
+            SetupGlobalShaderVars();
             SetupTrailData();
             InitializeEvents();
         }
@@ -222,6 +226,13 @@ namespace SaberFactory.Instances
         {
             Model.SaberLength = length;
             GameObject.transform.localScale = new Vector3(Model.SaberWidth, Model.SaberWidth, length);
+        }
+
+        private void SetupGlobalShaderVars()
+        {
+            var scheme = _playerDataModel.playerData.colorSchemesSettings.GetSelectedColorScheme();
+            Shader.SetGlobalColor(MaterialProperties.UserColorLeft, scheme.saberAColor);
+            Shader.SetGlobalColor(MaterialProperties.UserColorRight, scheme.saberBColor);
         }
 
         internal class Factory : PlaceholderFactory<SaberModel, SaberInstance>

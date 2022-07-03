@@ -105,7 +105,6 @@ namespace SaberFactory.Editor
 #if PAT
             SetPedestalText(2, "<color=#ffffff80>Patreon ♥</color>");
 #endif
-            SetupGlobalShaderVars();
         }
 
         public async void Open()
@@ -217,13 +216,6 @@ namespace SaberFactory.Editor
             {
                 await AnimationHelper.AsyncAnimation(0.3f, CancellationToken.None, t => { parent.localScale = new Vector3(t, t, t); });
             }
-        }
-
-        private void SetupGlobalShaderVars()
-        {
-            var scheme = _playerDataModel.playerData.colorSchemesSettings.GetSelectedColorScheme();
-            Shader.SetGlobalColor(MaterialProperties.UserColorLeft, scheme.saberAColor);
-            Shader.SetGlobalColor(MaterialProperties.UserColorRight, scheme.saberBColor);
         }
     }
 }
