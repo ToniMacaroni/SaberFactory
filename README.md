@@ -1,5 +1,5 @@
 <p align="center">
-    <h1 align="center">Saber Factory 2</h1>
+    <h1 align="center">Saber Factory 2 (v3 is in the making)</h1>
 </p>
 
 <p align="center">
