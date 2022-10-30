@@ -1,5 +1,5 @@
 <p align="center">
-    <h1 align="center">Saber Factory 2 (v3 is in the making)</h1>
+    <h1 align="center">Saber Factory 2</br>(v3 is in the making)</h1>
 </p>
 
 <p align="center">
@@ -43,6 +43,10 @@ Change the shape, shaders, material properties, textures and more of parts and s
 ## How do I install it
 1) Download the first zip from [Here](https://github.com/ToniMacaroni/SaberFactoryV2/releases)
 2) Unpack it in your Beat Saber directory
+
+## I want to create a saber
+I highly recommend watching [this tutorial](https://www.youtube.com/watch?v=YqpcNTpzW4A).  
+The unity project can be found [here](https://github.com/ToniMacaroni/AssetCreationProject)
 
 ## I have made a map and want it to use a specific saber
 You can add a "_customSaber" prop to your beatmap data
