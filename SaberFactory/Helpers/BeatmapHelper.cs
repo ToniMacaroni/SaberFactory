@@ -6,7 +6,7 @@
         {
             var lastTime = 0f;
 
-            foreach (var noteData in beatmapData.GetBeatmapDataItems<NoteData>())
+            foreach (var noteData in beatmapData.GetBeatmapDataItems<NoteData>(0))
             {
                 if (noteData.colorType == ColorType.None)
                 {
