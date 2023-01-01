@@ -3,26 +3,36 @@ using System.Threading.Tasks;
 using SaberFactory.DataStore;
 using UnityEngine;
 
-namespace SaberFactory.Loaders
+namespace SaberFactory.Loaders;
+
+/// <summary>
+///     Base class for loading store assets
+/// </summary>
+internal abstract class AssetBundleLoader
 {
     /// <summary>
-    ///     Base class for loading store assets
+    ///     File extension to look for when loading
     /// </summary>
-    internal abstract class AssetBundleLoader
-    {
-        /// <summary>
-        ///     File extension to look for while loading
-        /// </summary>
-        public abstract string HandledExtension { get; }
+    public abstract string HandledExtension { get; }
 
-        /// <summary>
-        ///     Get all the loadable file paths
-        /// </summary>
-        /// <returns></returns>
-        public abstract ISet<AssetMetaPath> CollectFiles(PluginDirectories dirs);
+    /// <summary>
+    ///     Get all the loadable file paths
+    /// </summary>
+    /// <returns></returns>
+    public abstract ISet<AssetMetaPath> CollectFiles(PluginDirectories dirs);
 
-        public abstract Task<StoreAsset> LoadStoreAssetAsync(string relativePath);
+    /// <summary>
+    /// Loads the implemented asset by the <see cref="RelativePath"/>
+    /// </summary>
+    /// <param name="relativePath">the <see cref="RelativePath"/> to the asset</param>
+    /// <returns><see cref="StoreAsset"/> with the implemented asset</returns>
+    public abstract Task<StoreAsset> LoadStoreAssetAsync(RelativePath relativePath);
 
-        public abstract Task<StoreAsset> LoadStoreAssetFromBundleAsync(AssetBundle bundle, string saberName);
-    }
+    /// <summary>
+    /// Load the implemented asset by <see cref="AssetBundle"/>
+    /// </summary>
+    /// <param name="bundle">The <see cref="AssetBundle"/> to load the asset from</param>
+    /// <param name="assetName">The new asset name for the asset</param>
+    /// <returns><see cref="StoreAsset"/> with the implemented asset</returns>
+    public abstract Task<StoreAsset> LoadStoreAssetFromBundleAsync(AssetBundle bundle, string assetName);
 }

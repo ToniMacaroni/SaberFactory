@@ -7,7 +7,7 @@ namespace SaberFactory.Instances.Trail
 {
     internal class MainTrailHandler : ITrailHandler
     {
-        public SFTrail TrailInstance { get; protected set; }
+        public SFTrail TrailInstance { get; }
 
         protected InstanceTrailData InstanceTrailData;
 
@@ -53,7 +53,7 @@ namespace SaberFactory.Instances.Trail
                 return;
             }
 
-            if (InstanceTrailData.Length < 1)
+            if (InstanceTrailData.Length.Value < 1)
             {
                 return;
             }
@@ -61,8 +61,8 @@ namespace SaberFactory.Instances.Trail
             var trailInitData = new TrailInitData
             {
                 TrailColor = Color.white,
-                TrailLength = InstanceTrailData.Length,
-                Whitestep = InstanceTrailData.WhiteStep,
+                TrailLength = InstanceTrailData.Length.Value,
+                Whitestep = InstanceTrailData.Whitestep.Value,
                 Granularity = trailConfig.Granularity,
                 SamplingFrequency = trailConfig.SamplingFrequency
             };

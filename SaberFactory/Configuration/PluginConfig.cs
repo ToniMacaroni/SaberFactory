@@ -5,6 +5,7 @@ using IPA.Config.Stores;
 using IPA.Config.Stores.Attributes;
 using IPA.Config.Stores.Converters;
 using JetBrains.Annotations;
+using SaberFactory.UI.Flow;
 
 [assembly: InternalsVisibleTo(GeneratedStore.AssemblyVisibilityTarget)]
 
@@ -17,9 +18,6 @@ namespace SaberFactory.Configuration
         // is used to check if it's the user's first time
         // launching the mod
         public bool FirstLaunch { get; set; } = true;
-
-        // Enable saber events
-        public bool EnableEvents { get; set; } = true;
 
         // Use your own saber instead of the one dictated by the song
         public bool OverrideSongSaber { get; set; } = false;
@@ -39,26 +37,23 @@ namespace SaberFactory.Configuration
 
         public bool ShowDownloadableSabers { get; set; } = true;
 
-        public bool AutoUpdateTrail { get; set; } = true;
-
         public bool ShowGameplaySettingsButton { get; set; } = true;
 
-        public bool ControlTrailWithThumbstick { get; set; } = true;
-
         public float SaberAudioVolumeMultiplier { get; set; } = 1;
-
-        public bool SpecialBackground { get; set; } = true;
 
         public bool ReloadOnSaberUpdate { get; set; } = false;
 
         public float SwingSoundVolume { get; set; } = 1;
 
         public bool EnableCustomBurnmarks { get; set; } = true;
+        
+        public float SaberSelectionBackgroundOpacity { get; set; } = 0.1f;
+        
+        public int SaberSelectionBackgroundBlurAmount { get; set; } = 4;
 
-        // How many threads to spawn when loading all sabers
-        // ! Not used as of right now !
-        [Ignore] public int LoadingThreads { get; set; } = 2;
+        public string LoadedPreset { get; set; } = "default.sfps";
 
+        public string MonitorPreset { get; set; } = "";
 
         // Which type to use with the mod (parts / custom sabers)
         [UseConverter(typeof(EnumConverter<EAssetTypeConfiguration>))]
@@ -67,6 +62,9 @@ namespace SaberFactory.Configuration
         // List of sabers / parts marked as favorite
         [UseConverter(typeof(ListConverter<string>))]
         public List<string> Favorites { get; set; } = new List<string>();
+        
+        [UseConverter(typeof(EventSettingsConverter))]
+        public EventSettings EventSettings { get; set; } = new();
 
         [Ignore] public bool RuntimeFirstLaunch;
 
@@ -79,6 +77,7 @@ namespace SaberFactory.Configuration
             if (!IsFavorite(path))
             {
                 Favorites.Add(path);
+                Changed();
             }
         }
 
@@ -89,6 +88,7 @@ namespace SaberFactory.Configuration
         public void RemoveFavorite(string path)
         {
             Favorites.Remove(path);
+            Changed();
         }
 
         /// <summary>
@@ -99,6 +99,11 @@ namespace SaberFactory.Configuration
         public bool IsFavorite(string path)
         {
             return Favorites.Contains(path);
+        }
+        
+        // Is used to notify a change to the config
+        public virtual void Changed()
+        {
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

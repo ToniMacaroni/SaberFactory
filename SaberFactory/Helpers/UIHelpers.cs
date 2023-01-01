@@ -77,27 +77,6 @@ namespace SaberFactory.Helpers
             await AnimationHelper.AsyncAnimation(0.8f, cancelToken, t => { transform.localPosition = new Vector3(0, 0, moveOffset * (1f - t)); });
         }
 
-        public static async Task AnimateIn(this IAnimatableUi animatable, CancellationToken cancelToken)
-        {
-            if (!(animatable is MonoBehaviour comp))
-            {
-                return;
-            }
-
-            switch (animatable.AnimationType)
-            {
-                case IAnimatableUi.EAnimationType.Horizontal:
-                    await DoHorizontalTransition(comp.transform, cancelToken);
-                    break;
-                case IAnimatableUi.EAnimationType.Vertical:
-                    await DoVerticalTransition(comp.transform, cancelToken);
-                    break;
-                case IAnimatableUi.EAnimationType.Z:
-                    await DoZTransition(comp.transform, cancelToken);
-                    break;
-            }
-        }
-
         public static RectTransform GetRect(this Transform transform)
         {
             return transform.Cast<RectTransform>();
@@ -106,6 +85,26 @@ namespace SaberFactory.Helpers
         public static RectTransform GetRect(this GameObject go)
         {
             return go.transform.Cast<RectTransform>();
+        }
+
+        public static GameObject Block(Transform childT)
+        {
+            var canvasGroup = childT.GetComponentInParent<CanvasGroup>();
+            if (canvasGroup == null)
+            {
+                return null;
+            }
+
+            var blocker = new GameObject("Blocker");
+            var rect = blocker.AddComponent<RectTransform>();
+            rect.SetParent(canvasGroup.transform, false);
+
+            return blocker;
+        }
+        
+        public static CanvasGroup GetCanvasGroup(this Transform transform)
+        {
+            return transform.GetComponentInParent<CanvasGroup>();
         }
 
         private static readonly FieldAccessor<VRGraphicRaycaster, PhysicsRaycasterWithCache>.Accessor RaycasterWithCacheAcc =

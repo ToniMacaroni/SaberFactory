@@ -62,7 +62,7 @@ namespace SaberFactory.Helpers
             {
                 return 0;
             }
-
+            
             return Mathf.Abs(t1.localPosition.z - t2.localPosition.z);
         }
 

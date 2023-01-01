@@ -46,7 +46,7 @@ namespace SaberFactory.UI
 
         private void ButtonClick()
         {
-            Editor.Editor.Instance?.Open();
+            Editor.LegacyEditor.Instance?.Open();
         }
     }
 }

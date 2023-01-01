@@ -1,5 +1,6 @@
 ﻿using System;
 using SaberFactory.UI;
+using SaberFactory.UI.Flow;
 using SaberFactory.UI.Lib;
 using UnityEngine;
 
@@ -8,7 +9,7 @@ namespace SaberFactory.Models
     /// <summary>
     ///     Stores left and right piece models + additional detached game objects in a composition
     /// </summary>
-    public class ModelComposition : IDisposable, ICustomListItem
+    public class ModelComposition : IDisposable, IAssetInfo
     {
         public readonly AdditionalInstanceHandler AdditionalInstanceHandler;
         public readonly AssetTypeDefinition AssetTypeDefinition;
@@ -49,10 +50,11 @@ namespace SaberFactory.Models
             }
         }
 
-        public string ListName => _metaData.Name;
-        public string ListAuthor => _metaData.Author;
-        public Sprite ListCover => _metaData.Cover;
+        public string Name => _metaData.Name;
+        public string Author => _metaData.Author;
+        public Sprite Cover => _metaData.Cover;
         public bool IsFavorite => _metaData.IsFavorite;
+        public string SubDir => _modelLeft.StoreAsset.SubDirName;
 
         public void Dispose()
         {

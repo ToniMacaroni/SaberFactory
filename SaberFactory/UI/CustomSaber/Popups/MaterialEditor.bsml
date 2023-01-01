@@ -1,8 +1,0 @@
-﻿<bg size-delta-x="0" bg="round-rect-panel" border="" raycast="true">
-    <vertical>
-        <dropdown-list-setting id='material-dropdown' text='Material' options='materials'/>
-        <!--<dropdown-list-setting id='shader-dropdown' text='Shader' options='shaders'/>-->
-        <sui.prop-list id='prop-list' pref-height='80' pref-width='100'/>
-        <sui.button text='Close' on-click='click-close' normal-color='#00000080'/>
-    </vertical>
-</bg>

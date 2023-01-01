@@ -4,13 +4,14 @@ using System.Runtime.Serialization.Formatters.Binary;
 using BeatSaberMarkupLanguage;
 using SaberFactory.Loaders;
 using SaberFactory.UI;
+using SaberFactory.UI.Flow;
 using SaberFactory.UI.Lib;
 using TMPro;
 using UnityEngine;
 
 namespace SaberFactory.Models
 {
-    public class PreloadMetaData : ICustomListItem
+    public class PreloadMetaData : IAssetInfo
     {
         public AssetTypeDefinition AssetTypeDefinition { get; private set; }
 
@@ -51,22 +52,24 @@ namespace SaberFactory.Models
             AssetMetaPath = assetMetaPath;
         }
 
-        internal PreloadMetaData(AssetMetaPath assetMetaPath, ICustomListItem customListItem, AssetTypeDefinition assetTypeDefinition)
+        internal PreloadMetaData(AssetMetaPath assetMetaPath, IAssetInfo customListItem, AssetTypeDefinition assetTypeDefinition)
         {
             AssetMetaPath = assetMetaPath;
             AssetTypeDefinition = assetTypeDefinition;
-            ListName = customListItem.ListName;
-            ListAuthor = customListItem.ListAuthor;
-            _coverSprite = customListItem.ListCover;
+            Name = customListItem.Name;
+            Author = customListItem.Author;
+            _coverSprite = customListItem.Cover;
         }
 
-        public string ListName { get; private set; }
+        public string Name { get; private set; }
 
-        public string ListAuthor { get; private set; }
+        public string Author { get; private set; }
 
-        public Sprite ListCover => CoverSprite;
+        public Sprite Cover => CoverSprite;
 
         public bool IsFavorite { get; set; }
+
+        public string SubDir => AssetMetaPath.SubDirName;
 
         public void SaveToFile()
         {
@@ -76,8 +79,8 @@ namespace SaberFactory.Models
             }
 
             var ser = new SerializableMeta();
-            ser.Name = ListName;
-            ser.Author = ListAuthor;
+            ser.Name = Name;
+            ser.Author = Author;
             ser.AssetTypeDefinition = AssetTypeDefinition;
 
             if (_coverSprite != null)
@@ -104,8 +107,8 @@ namespace SaberFactory.Models
             var ser = (SerializableMeta)formatter.Deserialize(fs);
             fs.Close();
 
-            ListName = ser.Name;
-            ListAuthor = ser.Author;
+            Name = ser.Name;
+            Author = ser.Author;
             _coverData = ser.CoverData;
             AssetTypeDefinition = ser.AssetTypeDefinition;
 

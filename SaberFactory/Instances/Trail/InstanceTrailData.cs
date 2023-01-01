@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using CustomSaber;
+using FlowUi.Helpers;
 using HarmonyLib;
+using Newtonsoft.Json;
+using SaberFactory.AssetProperties;
 using SaberFactory.Helpers;
 using SaberFactory.Models;
 using SaberFactory.Models.CustomSaber;
@@ -20,48 +23,12 @@ namespace SaberFactory.Instances.Trail
 
         public MaterialDescriptor Material => TrailModel.Material;
 
-        public int Length
-        {
-            get => TrailModel.Length;
-            set => SetLength(value);
-        }
-
-        public float WhiteStep
-        {
-            get => TrailModel.Whitestep;
-            set => SetWhitestep(value);
-        }
-
-        public float Offset
-        {
-            get => TrailModel.TrailPosOffset.z;
-            set
-            {
-                var pos = TrailModel.TrailPosOffset;
-                pos.z = value;
-                TrailModel.TrailPosOffset = pos;
-                PointEnd.localPosition = pos;
-                Width = Width;
-            }
-        }
-
-        public float Width
-        {
-            get => Mathf.Abs(PointEnd.parent.localPosition.z - PointStart.localPosition.z);
-            set => SetWidth(value);
-        }
-
-        public bool ClampTexture
-        {
-            get => TrailModel.ClampTexture;
-            set => SetClampTexture(value);
-        }
-
-        public bool Flip
-        {
-            get => TrailModel.Flip;
-            set => TrailModel.Flip = value;
-        }
+        public IntProperty Length => TrailModel.Length;
+        public FloatProperty Whitestep => TrailModel.Whitestep;
+        public FloatProperty Offset => TrailModel.Offset;
+        public FloatProperty Width => TrailModel.Width;
+        public BoolProperty ClampTexture => TrailModel.ClampTexture;
+        public BoolProperty Flip => TrailModel.Flip;
 
         public bool HasMultipleTrails => SecondaryTrails.Count > 0;
         public List<SecondaryTrailHandler> SecondaryTrails { get; }
@@ -81,42 +48,47 @@ namespace SaberFactory.Instances.Trail
 
             _isTrailReversed = isTrailReversed;
 
-            SecondaryTrails = secondaryTrails?.Select(x => new SecondaryTrailHandler(x, trailModel.OriginalLength)).ToList() ??
+            SecondaryTrails = secondaryTrails?.Select(x => new SecondaryTrailHandler(x, trailModel.Length.DefaultValue)).ToList() ??
                               new List<SecondaryTrailHandler>();
-            SecondaryTrails.Do(x => x.UpdateLength(trailModel.Length));
+            SecondaryTrails.Do(x => x.UpdateLength(trailModel.Length.Value));
 
             Init(trailModel);
         }
 
         private void Init(TrailModel trailModel)
         {
-            SetClampTexture(trailModel.ClampTexture);
-            SetWidth(trailModel.Width);
-            Offset = Offset;
+            trailModel.Length.RegisterHandler(nameof(InstanceTrailData), SetLength);
+            trailModel.Offset.RegisterHandler(nameof(InstanceTrailData), val =>
+            {
+                var pos = trailModel.TrailPosOffset;
+                pos.z = val;
+                TrailModel.TrailPosOffset = pos;
+                PointEnd.localPosition = pos;
+                trailModel.Width.InvokeValueChange();
+            });
+            
+            trailModel.Width.RegisterHandler(nameof(InstanceTrailData), SetWidth);
+            trailModel.ClampTexture.RegisterHandler(nameof(InstanceTrailData), SetClampTexture);
+
+            trailModel.Width.InvokeValueChange();
+            trailModel.Offset.InvokeValueChange();
+            trailModel.ClampTexture.InvokeValueChange();
         }
 
-        public void SetWidth(float width)
+        private void SetWidth(float width)
         {
-            TrailModel.Width = width;
             var pos = PointStart.localPosition;
             pos.z = PointEnd.parent.localPosition.z - width;
             PointStart.localPosition = pos;
         }
 
-        public void SetLength(int length)
+        private void SetLength(int length)
         {
-            TrailModel.Length = length;
             SecondaryTrails.Do(x => x.UpdateLength(length));
         }
 
-        public void SetWhitestep(float whitestep)
+        private void SetClampTexture(bool shouldClampTexture)
         {
-            TrailModel.Whitestep = whitestep;
-        }
-
-        public void SetClampTexture(bool shouldClampTexture)
-        {
-            TrailModel.ClampTexture = shouldClampTexture;
             if (TrailModel.OriginalTextureWrapMode.HasValue &&
                 TrailModel.Material.IsValid &&
                 TrailModel.Material.Material.TryGetMainTexture(out var tex))
@@ -125,30 +97,12 @@ namespace SaberFactory.Instances.Trail
             }
         }
 
-        public void RevertMaterialForCustomSaber(CustomSaberModel saber)
-        {
-            TrailModel.Material.Revert();
-
-            var saberTrail = saber.StoreAsset.Prefab.GetComponent<CustomTrail>();
-            if (saberTrail == null)
-            {
-                return;
-            }
-
-            saberTrail.TrailMaterial = TrailModel.Material.Material;
-        }
-
-        public void RevertMaterial()
-        {
-            TrailModel.Material.Revert();
-        }
-
         public (Transform start, Transform end) GetPoints()
         {
             var pointStart = _isTrailReversed ? PointEnd : PointStart;
             var pointEnd = _isTrailReversed ? PointStart : PointEnd;
 
-            return (Flip ? pointEnd : pointStart, Flip ? pointStart : pointEnd);
+            return (Flip.Value ? pointEnd : pointStart, Flip.Value ? pointStart : pointEnd);
         }
 
         internal class SecondaryTrailHandler

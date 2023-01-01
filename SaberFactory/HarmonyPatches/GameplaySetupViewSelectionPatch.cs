@@ -22,7 +22,7 @@ namespace SaberFactory.HarmonyPatches
                         GameplaySetupViewPatch.SaberPanelIdx];
 
                 ____selectionSegmentedControl.SelectCellWithNumber(____activePanelIdx);
-                Editor.Editor.Instance?.Open();
+                Editor.LegacyEditor.Instance?.Open();
                 cell.ClearHighlight(SelectableCell.TransitionType.Instant);
                 return false;
             }

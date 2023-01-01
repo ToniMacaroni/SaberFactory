@@ -106,5 +106,20 @@ namespace SaberFactory.Helpers
             gameObject.SetActive(goState);
             return upgradedMonoBehaviour;
         }
+
+        public static Assembly LoadAssemblyFromMemory(string path)
+        {
+            try
+            {
+                var data = Readers.ReadResource(path);
+                return Assembly.Load(data);
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError("Couldn't load assembly");
+                Debug.LogError(ex);
+                return null;
+            }
+        }
     }
 }

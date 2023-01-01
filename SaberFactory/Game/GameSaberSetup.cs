@@ -93,7 +93,7 @@ namespace SaberFactory.Game
                 }
 
                 var metaData = _mainAssetStore.GetAllMetaData(AssetTypeDefinition.CustomSaber);
-                var saber = metaData.FirstOrDefault(x => x.ListName == songSaber.ToString());
+                var saber = metaData.FirstOrDefault(x => x.Name == songSaber.ToString());
                 if (saber == null)
                 {
                     return;

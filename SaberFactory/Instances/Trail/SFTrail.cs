@@ -163,8 +163,8 @@ namespace SaberFactory.Instances.Trail
                 var pos = _spline.InterpolateByLen(uvSegment);
 
                 var up = _spline.InterpolateNormalByLen(uvSegment);
-                var pos0 = pos + up.normalized * TrailWidth * 0.5f;
-                var pos1 = pos - up.normalized * TrailWidth * 0.5f;
+                var pos0 = pos + up.normalized * (TrailWidth * 0.5f);
+                var pos1 = pos - up.normalized * (TrailWidth * 0.5f);
 
                 var color = Color;
 

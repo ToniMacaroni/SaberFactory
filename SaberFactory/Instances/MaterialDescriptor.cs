@@ -18,7 +18,7 @@ namespace SaberFactory.Instances
         {
             Material = material;
 
-            if (material != null)
+            if (material)
             {
                 _originalMaterial = new Material(material);
             }

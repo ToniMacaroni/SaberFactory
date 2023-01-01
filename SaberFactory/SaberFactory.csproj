@@ -3,7 +3,7 @@
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
         <OutputType>Library</OutputType>
-        <LangVersion>8.0</LangVersion>
+        <LangVersion>10</LangVersion>
         <LocalRefsDir Condition="Exists('..\Refs')">..\Refs</LocalRefsDir>
         <BeatSaberDir>$(LocalRefsDir)</BeatSaberDir>
         <AppOutputBase>$(MSBuildProjectDirectory)\</AppOutputBase>
@@ -13,6 +13,7 @@
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <Version>3.0.0</Version>
         <SignAssembly>false</SignAssembly>
+        <DefineConstants>MOD</DefineConstants>
     </PropertyGroup>
 
 
@@ -46,6 +47,12 @@
         <None Remove="Resources\Icons\folder.png" />
         <None Remove="Resources\Icons\transform-icon.png" />
         <None Remove="Resources\UI\border.png" />
+        <Reference Include="FactoryCore.OdinSerializer">
+          <HintPath>F:\BeatSaberUnity\Build\BeatSaberUnity_Data\Managed\FactoryCore.OdinSerializer.dll</HintPath>
+        </Reference>
+        <Reference Include="HMRendering">
+          <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\HMRendering.dll</HintPath>
+        </Reference>
         <Reference Include="UnityEngine.IMGUIModule">
             <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
             <Private>false</Private>
@@ -206,11 +213,14 @@
         <EmbeddedResource Include="Resources\Icons\wrench.png" />
         <None Remove="Serialization\MeshRendererModifierView.bsml" />
         <None Remove="UI\CustomSaber\CustomSaberUiComposition.css" />
-        <EmbeddedResource Include="UI\CustomSaber\BaseUiComposition.css" />
         <None Remove="UI\PatreonView.bsml" />
-        <EmbeddedResource Include="UI\PatreonView.bsml" />
         <None Remove="Resources\UI\patreon-medium-button.png" />
         <EmbeddedResource Include="Resources\UI\patreon-button.png" />
+        <None Remove="Resources\Flow\SaberFactoryMainViewController" />
+        <None Remove="Resources\Flow\SaberFactoryMainUi" />
+        <EmbeddedResource Include="Resources\Flow\SaberFactoryMainUi" />
+        <None Remove="Resources\Prefabs\SaberFactoryEditor" />
+        <EmbeddedResource Include="Resources\Prefabs\SaberFactoryEditor" />
     </ItemGroup>
 
     <ItemGroup>
@@ -218,73 +228,6 @@
         <None Include="Directory.Build.props" Condition="Exists('Directory.Build.props')" />
         <None Include="Directory.Build.targets" Condition="Exists('Directory.Build.targets')" />
         <None Include="SaberFactory.csproj.user" Condition="Exists('SaberFactory.csproj.user')" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <EmbeddedResource Include="UI\CustomSaber\Views\MainView.bsml">
-            <DependentUpon>MainView.cs</DependentUpon>
-        </EmbeddedResource>
-        <EmbeddedResource Include="UI\CustomSaber\Views\SaberSelectorView.bsml">
-            <DependentUpon>SaberSelectorView.cs</DependentUpon>
-        </EmbeddedResource>
-        <EmbeddedResource Include="UI\CustomSaber\Views\TrailSettingsView.bsml">
-            <DependentUpon>TrailSettingsView.cs</DependentUpon>
-        </EmbeddedResource>
-        <EmbeddedResource Include="UI\CustomSaber\Views\NavigationView.bsml">
-            <DependentUpon>NavigationView.cs</DependentUpon>
-        </EmbeddedResource>
-        <EmbeddedResource Include="UI\CustomSaber\CustomComponents\CustomCellList.bsml">
-            <DependentUpon>CustomCellList.cs</DependentUpon>
-        </EmbeddedResource>
-        <EmbeddedResource Include="UI\CustomSaber\CustomComponents\CustomList.bsml">
-            <DependentUpon>CustomList.cs</DependentUpon>
-        </EmbeddedResource>
-        <EmbeddedResource Include="UI\CustomSaber\Popups\MaterialEditor.bsml">
-            <DependentUpon>MaterialEditor.cs</DependentUpon>
-        </EmbeddedResource>
-        <EmbeddedResource Include="UI\CustomSaber\Views\TransformSettingsView.bsml">
-            <DependentUpon>TransformSettingsView.cs</DependentUpon>
-        </EmbeddedResource>
-        <EmbeddedResource Include="UI\CustomSaber\CustomComponents\IconToggleButton.bsml">
-            <DependentUpon>IconToggleButton.cs</DependentUpon>
-        </EmbeddedResource>
-        <EmbeddedResource Include="UI\CustomSaber\Popups\LoadingPopup.bsml">
-            <DependentUpon>LoadingPopup.cs</DependentUpon>
-        </EmbeddedResource>
-        <EmbeddedResource Include="UI\CustomSaber\Popups\ChooseTrailPopup.bsml">
-            <DependentUpon>ChooseTrailPopup.cs</DependentUpon>
-        </EmbeddedResource>
-        <EmbeddedResource Include="UI\CustomSaber\CustomComponents\PropList.bsml">
-            <DependentUpon>PropList.cs</DependentUpon>
-        </EmbeddedResource>
-        <EmbeddedResource Include="UI\Lib\PropCells\FloatPropCell.bsml" />
-        <EmbeddedResource Include="UI\Lib\PropCells\BoolPropCell.bsml" />
-        <EmbeddedResource Include="UI\Lib\PropCells\ColorPropCell.bsml" />
-        <EmbeddedResource Include="UI\Lib\PropCells\TexturePropCell.bsml" />
-        <EmbeddedResource Include="UI\CustomSaber\Views\SettingsView.bsml">
-            <DependentUpon>SettingsView.cs</DependentUpon>
-        </EmbeddedResource>
-        <EmbeddedResource Include="UI\CustomSaber\Popups\TexturePickerPopup.bsml">
-            <DependentUpon>TexturePickerPopup.cs</DependentUpon>
-        </EmbeddedResource>
-        <EmbeddedResource Include="UI\CustomSaber\Popups\ChangelogPopup.bsml">
-            <DependentUpon>ChangelogPopup.cs</DependentUpon>
-        </EmbeddedResource>
-        <EmbeddedResource Include="UI\CustomSaber\CustomComponents\NavButton.bsml">
-            <DependentUpon>NavButton.cs</DependentUpon>
-        </EmbeddedResource>
-        <EmbeddedResource Include="UI\CustomSaber\Popups\ChooseSort.bsml">
-            <DependentUpon>ChooseSort.cs</DependentUpon>
-        </EmbeddedResource>
-        <EmbeddedResource Include="UI\CustomSaber\Popups\MessagePopup.bsml">
-            <DependentUpon>MessagePopup.cs</DependentUpon>
-        </EmbeddedResource>
-        <EmbeddedResource Include="UI\CustomSaber\Views\Modifier\MainModifierPanelView.bsml">
-            <DependentUpon>MainModifierPanelView.cs</DependentUpon>
-        </EmbeddedResource>
-		<EmbeddedResource Include="Modifiers\TransformModifierView.bsml">
-			<DependentUpon>TransformModifierImpl.cs</DependentUpon>
-		</EmbeddedResource>
     </ItemGroup>
 
     <ItemGroup>
@@ -315,4 +258,9 @@
         </PackageReference>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\FlowUi\FlowUi.csproj" />
+    </ItemGroup>
+
+<!--    <Import Project="$(MSBuildThisFileDirectory)..\tools\Packaging.targets" />-->
 </Project>

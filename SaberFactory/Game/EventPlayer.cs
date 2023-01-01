@@ -7,6 +7,7 @@ using ModestTree;
 using SaberFactory.Configuration;
 using SaberFactory.Helpers;
 using SaberFactory.Models;
+using SaberFactory.UI.Flow;
 using SiraUtil.Logging;
 using UnityEngine;
 using Zenject;
@@ -16,26 +17,19 @@ namespace SaberFactory.Game
     internal class EventPlayer : IDisposable
     { 
         [Inject] private readonly BeatmapObjectManager _beatmapObjectManager = null;
-
         [Inject] private readonly GameEnergyCounter _energyCounter = null;
-
         [InjectOptional] private readonly ObstacleSaberSparkleEffectManager _obstacleSaberSparkleEffectManager = null;
-
-        [Inject] private readonly PluginConfig _pluginConfig = null;
-
         [Inject] private readonly IScoreController _scoreController = null;
-
         [Inject] private readonly IComboController _comboController = null;
-        
         [Inject] private readonly RelativeScoreAndImmediateRankCounter _scoreCounter = null;
-
         [Inject] private readonly IReadonlyBeatmapData _beatmapData = null;
-
         [InjectOptional] private readonly GameCoreSceneSetupData _gameCoreSceneSetupData = null;
-
+        [Inject] private readonly PluginConfig _pluginConfig = null;
         [Inject] private readonly SiraLog _logger = null;
 
         public bool IsActive;
+        
+        private EventSettings EventSettings => _pluginConfig.EventSettings;
 
         private float? _lastNoteTime;
         private List<PartEvents> _partEventsList;
@@ -47,8 +41,8 @@ namespace SaberFactory.Game
         {
             _partEventsList = partEventsList;
             _saberType = saberType;
-            
-            if (!_pluginConfig.EnableEvents)
+
+            if (EventSettings.DisableAll)
             {
                 return;
             }
@@ -115,6 +109,11 @@ namespace SaberFactory.Game
 
         public void InvokeLevelEnded()
         {
+            if (!EventSettings.OnLevelEnded)
+            {
+                return;
+            }
+            
             foreach (var partEvents in _partEventsList)
             {
                 partEvents.OnLevelEnded?.Invoke();
@@ -123,6 +122,11 @@ namespace SaberFactory.Game
 
         public void InvokeCombobreak()
         {
+            if (!EventSettings.OnComboBreak)
+            {
+                return;
+            }
+            
             foreach (var partEvents in _partEventsList)
             {
                 partEvents.OnComboBreak?.Invoke();
@@ -131,6 +135,11 @@ namespace SaberFactory.Game
 
         public void InvokeOnLevelFail()
         {
+            if (!EventSettings.OnLevelFail)
+            {
+                return;
+            }
+            
             foreach (var partEvents in _partEventsList)
             {
                 partEvents.OnLevelFail?.Invoke();
@@ -139,6 +148,11 @@ namespace SaberFactory.Game
 
         public void InvokeMultiplierUp()
         {
+            if (!EventSettings.MultiplierUp)
+            {
+                return;
+            }
+            
             foreach (var partEvents in _partEventsList)
             {
                 partEvents.MultiplierUp?.Invoke();
@@ -147,6 +161,11 @@ namespace SaberFactory.Game
 
         public void InvokeOnSlice()
         {
+            if (!EventSettings.OnSlice)
+            {
+                return;
+            }
+            
             foreach (var partEvents in _partEventsList)
             {
                 partEvents.OnSlice?.Invoke();
@@ -155,6 +174,11 @@ namespace SaberFactory.Game
 
         public void InvokeSaberStartColliding()
         {
+            if (!EventSettings.SaberStartColliding)
+            {
+                return;
+            }
+            
             foreach (var partEvents in _partEventsList)
             {
                 partEvents.SaberStartColliding?.Invoke();
@@ -163,6 +187,11 @@ namespace SaberFactory.Game
 
         public void InvokeSaberStopColliding()
         {
+            if (!EventSettings.SaberStopColliding)
+            {
+                return;
+            }
+            
             foreach (var partEvents in _partEventsList)
             {
                 partEvents.SaberStopColliding?.Invoke();
@@ -171,6 +200,11 @@ namespace SaberFactory.Game
 
         public void InvokeOnLevelStart()
         {
+            if (!EventSettings.OnLevelStart)
+            {
+                return;
+            }
+            
             foreach (var partEvents in _partEventsList)
             {
                 partEvents.OnLevelStart?.Invoke();
@@ -179,6 +213,11 @@ namespace SaberFactory.Game
 
         public void InvokeComboChanged(int combo)
         {
+            if (!EventSettings.OnComboChanged)
+            {
+                return;
+            }
+            
             foreach (var partEvents in _partEventsList)
             {
                 partEvents.OnComboChanged?.Invoke(combo);
@@ -187,6 +226,11 @@ namespace SaberFactory.Game
 
         public void InvokeAccuracyChanged(float accuracy)
         {
+            if (!EventSettings.OnAccuracyChanged)
+            {
+                return;
+            }
+            
             foreach (var partEvents in _partEventsList)
             {
                 partEvents.OnAccuracyChanged?.Invoke(accuracy);

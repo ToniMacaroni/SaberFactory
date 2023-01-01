@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CustomSaber;
+using ModestTree;
 using Newtonsoft.Json.Linq;
 using SaberFactory.DataStore;
 using SaberFactory.Helpers;
@@ -20,38 +22,22 @@ namespace SaberFactory.Models.CustomSaber
 
         public TrailModel TrailModel
         {
-            get
-            {
-                if (_trailModel == null)
-                {
-                    var trailModel = GrabTrail(false);
-                    if (trailModel == null)
-                    {
-                        _hasTrail = false;
-                        return null;
-                    }
-
-                    _trailModel = trailModel;
-                }
-
-                return _trailModel;
-            }
-
+            get => _trailModel ??= GrabTrail(false);
             set => _trailModel = value;
         }
 
-        public bool HasTrail
-        {
-            get
-            {
-                _hasTrail ??= CheckTrail();
-                return _hasTrail.Value;
-            }
-        }
+        public bool HasTrail => TrailModel != null;
+
+        public bool HasNativeTrail => FirstNativeTrail != null;
+
+        public CustomTrail FirstNativeTrail => NativeTrails.FirstOrDefault();
+
+        public List<CustomTrail> NativeTrails => _nativeTrails.Value;
 
         public SaberDescriptor SaberDescriptor;
         private bool _didReparentTrail;
-        private bool? _hasTrail;
+
+        private readonly Lazy<List<CustomTrail>> _nativeTrails;
 
         private TrailModel _trailModel;
 
@@ -59,6 +45,7 @@ namespace SaberFactory.Models.CustomSaber
 
         public CustomSaberModel(StoreAsset storeAsset) : base(storeAsset)
         {
+            _nativeTrails = new Lazy<List<CustomTrail>>(NativeTrailValueFactory);
             PropertyBlock = new CustomSaberPropertyBlock();
         }
 
@@ -78,8 +65,8 @@ namespace SaberFactory.Models.CustomSaber
                 return;
             }
 
-            trailModel.Length = trail.Length;
-            trailModel.Width = trail.Width;
+            trailModel.Length.SetWithoutInvoke(trail.Length);
+            trailModel.Width.SetWithoutInvoke(trail.Width);
         }
 
         public override void SaveAdditionalData()
@@ -94,8 +81,8 @@ namespace SaberFactory.Models.CustomSaber
             var path = _pluginDirectories.Cache.GetFile(StoreAsset.NameWithoutExtension+".trail").FullName;
             var trail = new TrailProportions
             {
-                Length = trailModel.Length,
-                Width = trailModel.Width
+                Length = trailModel.Length.Value,
+                Width = trailModel.Width.Value
             };
             QuickSave.SaveObject(trail, path);
         }
@@ -130,7 +117,7 @@ namespace SaberFactory.Models.CustomSaber
                 if (originalMaterial != null && (string.IsNullOrWhiteSpace(TrailModel.TrailOrigin) ||
                                     originalMaterial.shader.name == otherMat.shader.name))
                 {
-                    foreach (var prop in otherMat.GetProperties(MaterialAttributes.HideInSf))
+                    foreach (var prop in otherMat.GetProperties(MaterialAttributes.SFHide))
                     {
                         originalMaterial.SetProperty(prop.Item2, prop.Item1, prop.Item3);
                     }
@@ -144,24 +131,38 @@ namespace SaberFactory.Models.CustomSaber
             }
         }
 
-        public TrailModel GrabTrail(bool addTrailOrigin)
+        /// <summary>
+        /// Find trail on this saber and return a new trail model
+        /// </summary>
+        /// <param name="addTrailOrigin">add this asset to the trail information</param>
+        /// <param name="replaceMat">if provided, will replace the current trail material with this one</param>
+        /// <returns></returns>
+        public TrailModel GrabTrail(bool addTrailOrigin, Material replaceMat = null)
         {
-            var trail = SaberHelpers.GetTrails(Prefab).FirstOrDefault();
+            var trail = FirstNativeTrail;
 
-            if (trail == null)
+            if (!trail)
             {
+                Debug.Log($"{Prefab.name} doesn't have a trail");
                 return null;
+            }
+
+            if (replaceMat)
+            {
+                trail.TrailMaterial = replaceMat;
             }
             
             // Trail without material doesn't do anything
             // so treat it as if there is no trail
             if (!trail.TrailMaterial)
             {
+                Debug.Log($"{Prefab.name} trail has no material");
                 return null;
             }
 
+            // if material and tex exists, get the wrap mode
             TextureWrapMode wrapMode = default;
-            if (trail.TrailMaterial != null && trail.TrailMaterial.TryGetMainTexture(out var tex))
+            if (trail.TrailMaterial && trail.TrailMaterial.TryGetMainTexture(out var tex))
             {
                 wrapMode = tex.wrapMode;
             }
@@ -174,22 +175,7 @@ namespace SaberFactory.Models.CustomSaber
                 trail.Length,
                 new MaterialDescriptor(trail.TrailMaterial),
                 0, wrapMode,
-                addTrailOrigin ? StoreAsset.RelativePath : null);
-        }
-
-        private bool CheckTrail()
-        {
-            if (!Prefab)
-            {
-                return false;
-            }
-
-            if (Prefab.GetComponent<CustomTrail>() is { } trail && trail.TrailMaterial)
-            {
-                return true;
-            }
-
-            return false;
+                addTrailOrigin ? StoreAsset.RelativePath.Path : null);
         }
 
         /// <summary>
@@ -197,15 +183,26 @@ namespace SaberFactory.Models.CustomSaber
         /// </summary>
         public void ResetTrail()
         {
-            TrailModel = GrabTrail(false);
+            if (TrailModel == null)
+            {
+                return;
+            }
+
+            if (!TrailModel.Material.IsValid)
+            {
+                Debug.Log($"{nameof(TrailModel)} material is invalid");
+                return;
+            }
+
+            TrailModel.Material.Revert();
+
+            TrailModel = GrabTrail(false, TrailModel.Material.Material);
         }
 
         /// <summary>
         ///     Reparent trail transforms to specified parent
         ///     so we don't have to care about scaling and rotations afterwards
         /// </summary>
-        /// <param name="parent">Transform to parent the trail transforms to</param>
-        /// <param name="trail"></param>
         public void FixTrailParents()
         {
             if (_didReparentTrail)
@@ -215,13 +212,13 @@ namespace SaberFactory.Models.CustomSaber
 
             _didReparentTrail = true;
 
-            var trail = Prefab.GetComponent<CustomTrail>();
+            var trail = FirstNativeTrail;
 
-            if (trail is null)
+            if (!trail)
             {
                 return;
             }
-
+            
             trail.PointStart.SetParent(Prefab.transform, true);
             trail.PointEnd.SetParent(Prefab.transform, true);
         }
@@ -251,6 +248,11 @@ namespace SaberFactory.Models.CustomSaber
             }
 
             return obj;
+        }
+        
+        private List<CustomTrail> NativeTrailValueFactory()
+        {
+            return SaberHelpers.GetTrails(Prefab);
         }
 
         internal class Factory : PlaceholderFactory<StoreAsset, CustomSaberModel>

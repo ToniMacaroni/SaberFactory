@@ -55,7 +55,7 @@ namespace SaberFactory.Models
         {
             var obj = new JObject
             {
-                { "Path", StoreAsset.RelativePath },
+                { "Path", StoreAsset.RelativePath.Path },
                 { nameof(PropertyBlock), await PropertyBlock.ToJson(serializer) },
                 { nameof(ModifyableComponentManager), await ModifyableComponentManager.ToJson(serializer) }
             };

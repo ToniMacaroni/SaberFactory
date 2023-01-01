@@ -27,11 +27,11 @@ namespace SaberFactory.Helpers
 
         private async void RunDebugAction()
         {
-            var editorInstanceManager = _container.Resolve<EditorInstanceManager>();
+            var editorInstanceManager = _container.Resolve<SaberInstanceManager>();
             var assetStore = _container.Resolve<MainAssetStore>();
-            var saber = await assetStore["CustomSabers\\Mod Test.saber"];
+            var saber = await assetStore[new RelativePath("CustomSabers\\Mod Test.saber")];
             editorInstanceManager.SetModelComposition(saber);
-            var editor = _container.Resolve<Editor.Editor>();
+            var editor = _container.Resolve<Editor.LegacyEditor>();
             editor.Open();
         }
     }

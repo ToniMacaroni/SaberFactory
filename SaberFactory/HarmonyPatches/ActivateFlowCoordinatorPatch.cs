@@ -10,7 +10,7 @@ namespace SaberFactory.HarmonyPatches
     {
         public static void Prefix()
         {
-            Editor.Editor.Instance?.Close(true);
+            Editor.LegacyEditor.Instance?.Close(true);
         }
     }
 }

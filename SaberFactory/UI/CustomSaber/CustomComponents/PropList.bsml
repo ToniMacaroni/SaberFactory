@@ -1,4 +1,0 @@
-﻿<div id="root-object" bg="round-rect-panel" bg-color="#FFFFFF05"
->
-    <sui.scroll-view id='item-container' size-delta-x='-2' child-control-height='true' spacing='2' pad-bottom='10' pad-top='10'/>
-</div>

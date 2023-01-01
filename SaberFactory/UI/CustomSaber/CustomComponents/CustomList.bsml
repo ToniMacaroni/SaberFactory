@@ -1,8 +1,0 @@
-﻿<vertical spacing="2" id="root-vertical" bg="round-rect-panel" pad="2">
-    <text align='Center' id='header-text'/>
-    <sui.list id='item-list' select-cell='item-selected'/>
-    <horizontal custom-bg='' custom-color='#00000033' preferred-height='8'>
-        <page-button event-click='item-list#PageDown' direction='Down' pref-width='8'/>
-        <page-button event-click='item-list#PageUp' direction='Up' pref-width='8'/>
-    </horizontal>
-</vertical>

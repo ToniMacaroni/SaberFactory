@@ -9,7 +9,6 @@ using SaberFactory.Gizmo;
 using SaberFactory.Helpers;
 using SaberFactory.ProjectComponents;
 using SaberFactory.Serialization;
-using SaberFactory.UI.Lib.BSML;
 using TMPro;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -82,10 +81,6 @@ namespace SaberFactory.Modifiers
         [UIComponent("rotation-text")] private readonly TextMeshProUGUI _rotationText = null;
         [UIComponent("scale-text")] private readonly TextMeshProUGUI _scaleText = null;
 
-        [UIComponent("pos-btn")] private readonly ButtonStateColors _posButton = null;
-        [UIComponent("rot-btn")] private readonly ButtonStateColors _rotButton = null;
-        [UIComponent("scale-btn")] private readonly ButtonStateColors _scaleButton = null;
-
         private static readonly Color _defaultButtonColor = new Color(0.086f, 0.090f, 0.101f, 0.8f);
 
         public static bool LockX { get; set; }
@@ -140,35 +135,10 @@ namespace SaberFactory.Modifiers
             return _cachedBsml ??= Readers.ReadResource("SaberFactory.Modifiers.TransformModifierImpl").BytesToString();
         }
 
-        private void UpdateButtonColors()
-        {
-            _posButton.NormalColor = _rotButton.NormalColor = _scaleButton.NormalColor = _defaultButtonColor;
-            _posButton.UpdateSelectionState();
-            _rotButton.UpdateSelectionState();
-            _scaleButton.UpdateSelectionState();
-
-            var btn = TransformMode switch
-            {
-                ETransformMode.Positioning => _posButton,
-                ETransformMode.Rotating => _rotButton,
-                ETransformMode.Scaling => _scaleButton,
-                _ => null
-            };
-
-            if (btn == null)
-            {
-                return;
-            }
-
-            btn.NormalColor = Color.white.ColorWithAlpha(0.2f);
-            btn.UpdateSelectionState();
-        }
-
         [UIAction("positioning-mode")]
         private void SetPositioningMode()
         {
             TransformMode = ETransformMode.Positioning;
-            UpdateButtonColors();
 
             var controller = Object.FindObjectsOfType<VRController>().FirstOrDefault();
             if (!controller)
@@ -191,7 +161,6 @@ namespace SaberFactory.Modifiers
         private void SetRotationMode()
         {
             TransformMode = ETransformMode.Rotating;
-            UpdateButtonColors();
 
             var controller = Object.FindObjectsOfType<VRController>().FirstOrDefault();
             if (!controller)
@@ -210,7 +179,6 @@ namespace SaberFactory.Modifiers
         private void SetScalingMode()
         {
             TransformMode = ETransformMode.Scaling;
-            UpdateButtonColors();
 
             var controller = Object.FindObjectsOfType<VRController>().FirstOrDefault();
             if (!controller)

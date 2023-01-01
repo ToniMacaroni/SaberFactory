@@ -56,6 +56,7 @@ namespace SaberFactory.UI
 
         public void Create(Transform parent, InstanceTrailData trailData, bool onlyColorVertex)
         {
+
             _sections.Clear();
             var (pointStart, pointEnd) = trailData.GetPoints();
             _sections.Add(new TrailPreviewSection(0, parent, pointStart, pointEnd, _prefab) { OnlyColorVertex = onlyColorVertex });
@@ -74,8 +75,18 @@ namespace SaberFactory.UI
 
 
             Material = trailData.Material.Material;
-            Length = trailData.Length;
+            Length = trailData.Length.Value;
             UpdateWidth();
+
+            trailData.Length.RegisterHandler(nameof(TrailPreviewer), val =>
+            {
+                Length = val;
+            });
+            
+            trailData.Width.RegisterHandler(nameof(TrailPreviewer), _ =>
+            {
+                UpdateWidth();
+            });
         }
 
         public void SetMaterial(Material mat)
@@ -198,12 +209,13 @@ namespace SaberFactory.UI
             {
                 var locPosStart = _instance.transform.InverseTransformPoint(_pointStart.position);
                 var locPosEnd = _instance.transform.InverseTransformPoint(_pointEnd.position);
-
+                
                 var newVerts = new Vector3[4];
                 newVerts[0] = new Vector3(0, 0, locPosStart.z); // bottom left
                 newVerts[1] = new Vector3(0, 0, locPosEnd.z); // top left
                 newVerts[2] = new Vector3(1, 0, locPosEnd.z); // top right
                 newVerts[3] = new Vector3(1, 0, locPosStart.z); // bottom right
+                
                 _mesh.vertices = newVerts;
             }
 

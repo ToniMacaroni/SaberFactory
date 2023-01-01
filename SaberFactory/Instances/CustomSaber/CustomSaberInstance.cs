@@ -40,7 +40,7 @@ namespace SaberFactory.Instances.CustomSaber
                 return;
             }
 
-            var trails = SaberHelpers.GetTrails(saberObject).ToArray();
+            var trails = SaberHelpers.GetTrails(saberObject);
             
             // Add new CustomTrail component with given data (creating position transforms for given position)
             CustomTrail SetupTrail(int length, float startPos, float endPos, Material material)
@@ -55,10 +55,10 @@ namespace SaberFactory.Instances.CustomSaber
                 return newTrail;
             }
 
-            // if saber has no trial set up a generic one
-            if (trails is null || trails.Length < 1)
+            // if saber has no trail set up a generic one
+            if (trails is null || trails.Count < 1)
             {
-                trails = new[] { SetupTrail(12, 0, 1, null) };
+                trails = new List<CustomTrail>{ SetupTrail(12, 0, 1, null) };
             }
 
             var saberTrail = trails[0];
@@ -70,7 +70,7 @@ namespace SaberFactory.Instances.CustomSaber
             {
                 secondaryTrails = new List<CustomTrail>();
                 // first remove all existing CustomTrail components
-                for (var i = 1; i < trails.Length; i++)
+                for (var i = 1; i < trails.Count; i++)
                 {
                     Object.DestroyImmediate(trails[i]);
                 }
@@ -94,10 +94,10 @@ namespace SaberFactory.Instances.CustomSaber
                 }
             }
             // set up secondary trails from this saber
-            else if (trails.Length > 1)
+            else if (trails.Count > 1)
             {
                 secondaryTrails = new List<CustomTrail>();
-                for (var i = 1; i < trails.Length; i++)
+                for (var i = 1; i < trails.Count; i++)
                 {
                     secondaryTrails.Add(trails[i]);
                 }

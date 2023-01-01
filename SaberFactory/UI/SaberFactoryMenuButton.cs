@@ -4,9 +4,9 @@ namespace SaberFactory.UI
 {
     internal class SaberFactoryMenuButton : MenuButtonRegistrar
     {
-        private readonly Editor.Editor _editor;
+        private readonly Editor.LegacyEditor _editor;
 
-        protected SaberFactoryMenuButton(Editor.Editor editor) : base("Saber Factory", "Good quality sabers")
+        protected SaberFactoryMenuButton(Editor.LegacyEditor editor) : base("Saber Factory", "Good quality sabers")
         {
             _editor = editor;
         }

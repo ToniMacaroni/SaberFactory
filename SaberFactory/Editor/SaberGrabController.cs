@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace SaberFactory.Editor
 {
-    internal class SaberGrabController
+    internal class SaberGrabController : ISaberPresenter
     {
         public readonly Transform GrabContainer;
         private readonly MenuPlayerController _menuPlayerController;
@@ -16,13 +16,6 @@ namespace SaberFactory.Editor
             _menuPlayerController = menuPlayerController;
             GrabContainer = new GameObject("SaberGrabContainer").transform;
             GrabContainer.SetParent(menuPlayerController.leftController.transform, false);
-        }
-
-        public void GrabSaber(SaberInstance saberInstance)
-        {
-            HideHandle();
-            _currentSaberInstancce = saberInstance;
-            saberInstance.SetParent(GrabContainer);
         }
 
         public void ShowHandle()
@@ -53,6 +46,19 @@ namespace SaberFactory.Editor
             {
                 handle.gameObject.SetActive(_isHandleVisisble);
             }
+        }
+
+        public void Present(SaberInstance saberInstance)
+        {
+            HideHandle();
+            _currentSaberInstancce = saberInstance;
+            saberInstance.CreateTrail(true);
+            saberInstance.SetParent(GrabContainer);
+        }
+
+        public void StopPresenting()
+        {
+            ShowHandle();
         }
     }
 }

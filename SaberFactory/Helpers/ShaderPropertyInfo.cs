@@ -15,26 +15,41 @@ namespace SaberFactory.Helpers
         public readonly List<ShaderTexture> Textures = new List<ShaderTexture>();
         public readonly List<ShaderVector> Vectors = new List<ShaderVector>();
 
+        public Dictionary<string, BaseProperty> PropertyByName = new();
+
+        public Shader Shader { get; }
+
         public ShaderPropertyInfo(Shader shader)
         {
+            Shader = shader;
             for (var i = 0; i < shader.GetPropertyCount(); i++)
             {
                 switch (shader.GetPropertyType(i))
                 {
                     case ShaderPropertyType.Range:
-                        Ranges.Add(new ShaderRange(shader, i));
+                        var rangeProp = new ShaderRange(shader, i);
+                        Ranges.Add(rangeProp);
+                        PropertyByName[rangeProp.Name] = rangeProp;
                         break;
                     case ShaderPropertyType.Float:
-                        Floats.Add(new ShaderFloat(shader, i));
+                        var floatProp = new ShaderFloat(shader, i);
+                        Floats.Add(floatProp);
+                        PropertyByName[floatProp.Name] = floatProp;
                         break;
                     case ShaderPropertyType.Vector:
-                        Vectors.Add(new ShaderVector(shader, i));
+                        var vectorProp = new ShaderVector(shader, i);
+                        Vectors.Add(vectorProp);
+                        PropertyByName.Add(vectorProp.Name, vectorProp);
                         break;
                     case ShaderPropertyType.Texture:
-                        Textures.Add(new ShaderTexture(shader, i));
+                        var texProp = new ShaderTexture(shader, i);
+                        Textures.Add(texProp);
+                        PropertyByName[texProp.Name] = texProp;
                         break;
                     case ShaderPropertyType.Color:
-                        Colors.Add(new ShaderColor(shader, i));
+                        var colProp = new ShaderColor(shader, i);
+                        Colors.Add(colProp);
+                        PropertyByName[colProp.Name] = colProp;
                         break;
                 }
             }
@@ -51,29 +66,24 @@ namespace SaberFactory.Helpers
             return result;
         }
 
-        public BaseProperty FindFromAll(string name)
+        public void SetAll(Material mat, List<object> values)
         {
-            if (Find(Ranges, name, out var prop))
+            var allProps = GetAll();
+            
+            if (allProps.Count != values.Count)
             {
-                return prop;
+                Debug.LogWarning($"Property count does not match for {Shader.name}");
             }
-
-            if (Find(Floats, name, out prop))
+            
+            for (int i = 0; i < allProps.Count; i++)
             {
-                return prop;
+                allProps[i].SetValue(mat, values[i]);
             }
+        }
 
-            if (Find(Vectors, name, out prop))
-            {
-                return prop;
-            }
-
-            if (Find(Textures, name, out prop))
-            {
-                return prop;
-            }
-
-            if (Find(Colors, name, out prop))
+        public BaseProperty FindByName(string name)
+        {
+            if (PropertyByName.TryGetValue(name, out var prop))
             {
                 return prop;
             }
@@ -256,6 +266,31 @@ namespace SaberFactory.Helpers
             {
                 return JToken.FromObject(GetValue(mat));
             }
+        }
+    }
+
+    internal class CachedMaterialValues
+    {
+        private readonly ShaderPropertyInfo _shaderInfo;
+        private readonly List<object> _values = new();
+
+        public CachedMaterialValues(ShaderPropertyInfo shaderInfo)
+        {
+            _shaderInfo = shaderInfo;
+        }
+
+        public void CacheValues(Material material)
+        {
+            _values.Clear();
+            foreach (var prop in _shaderInfo.GetAll())
+            {
+                _values.Add(prop.GetValue(material));
+            }
+        }
+
+        public void SetValues(Material material)
+        {
+            _shaderInfo.SetAll(material, _values);
         }
     }
 }

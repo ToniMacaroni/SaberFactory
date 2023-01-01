@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using FlowUi.Helpers;
 using IPA.Loader;
 using SaberFactory.Configuration;
 using SaberFactory.DataStore;
@@ -11,6 +12,7 @@ using SaberFactory.Misc;
 using SaberFactory.Models;
 using SaberFactory.Models.CustomSaber;
 using SaberFactory.Serialization;
+using SaberFactory.UI.Flow;
 using SiraUtil;
 using UnityEngine;
 using Zenject;
@@ -57,8 +59,9 @@ namespace SaberFactory.Installers
             Container.Bind<PluginManager>().AsSingle();
 
             Serializer.Install(Container);
-            Container.Bind<ShaderPropertyCache>().AsSingle();
             Container.Bind<PresetSaveManager>().AsSingle();
+            Container.BindInterfacesAndSelfTo<PresetManager>().AsSingle();
+
             Container.BindInterfacesAndSelfTo<TrailConfig>().AsSingle();
 
             Container.BindInterfacesAndSelfTo<EmbeddedAssetLoader>().AsSingle();

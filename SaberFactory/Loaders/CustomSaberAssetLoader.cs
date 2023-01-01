@@ -23,9 +23,9 @@ namespace SaberFactory.Loaders
             return paths;
         }
 
-        public override async Task<StoreAsset> LoadStoreAssetAsync(string relativePath)
+        public override async Task<StoreAsset> LoadStoreAssetAsync(RelativePath relativePath)
         {
-            var fullPath = PathTools.ToFullPath(relativePath);
+            var fullPath = relativePath.ToAbsolutePath();
             if (!File.Exists(fullPath))
             {
                 return null;
@@ -40,7 +40,7 @@ namespace SaberFactory.Loaders
             return new StoreAsset(relativePath, result.Item1, result.Item2);
         }
 
-        public override async Task<StoreAsset> LoadStoreAssetFromBundleAsync(AssetBundle bundle, string saberName)
+        public override async Task<StoreAsset> LoadStoreAssetFromBundleAsync(AssetBundle bundle, string assetName)
         {
             var result = await bundle.LoadAssetFromAssetBundleAsync<GameObject>("_CustomSaber");
             if (result == null)
@@ -48,7 +48,7 @@ namespace SaberFactory.Loaders
                 return null;
             }
 
-            return new StoreAsset("External\\" + saberName, result, bundle);
+            return new StoreAsset(new RelativePath("External\\"+assetName), result, bundle);
         }
     }
 }

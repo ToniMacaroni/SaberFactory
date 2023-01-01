@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using IPA.Utilities;
 using Newtonsoft.Json.Linq;
 using SaberFactory.DataStore;
 using SaberFactory.Helpers;
 using SaberFactory.Serialization;
+using SaberFactory.UI.Flow;
 using SiraUtil.Logging;
 using SiraUtil.Tools;
 using UnityEngine;
@@ -17,18 +19,24 @@ namespace SaberFactory.Models
     /// </summary>
     public class SaberSet : IFactorySerializable, ILoadingTask
     {
+        [Inject] private readonly SiraLog _logger = null;
+
         public SaberModel LeftSaber { get; set; }
 
         public SaberModel RightSaber { get; set; }
+        
+        public PresetInfo LoadedPreset { get; set; }
 
         public bool IsEmpty => LeftSaber.IsEmpty && RightSaber.IsEmpty;
 
         private readonly MainAssetStore _mainAssetStore;
-
         private readonly PresetSaveManager _presetSaveManager;
 
-        [Inject] private readonly SiraLog _logger = null;
-
+        /// <summary>
+        /// Called when new sabers are loaded into the set
+        /// </summary>
+        public event Action OnSaberSetChanged;
+        
         private SaberSet(
             [Inject(Id = ESaberSlot.Left)] SaberModel leftSaber,
             [Inject(Id = ESaberSlot.Right)] SaberModel rightSaber,
@@ -39,8 +47,6 @@ namespace SaberFactory.Models
             _mainAssetStore = mainAssetStore;
             LeftSaber = leftSaber;
             RightSaber = rightSaber;
-
-            _ = Load();
         }
 
         public async Task FromJson(JObject obj, Serializer serializer)
@@ -75,13 +81,21 @@ namespace SaberFactory.Models
             RightSaber.SetModelComposition(modelComposition);
         }
 
+        /// <summary>
+        /// Set custom saber by name
+        /// </summary>
+        /// <param name="saberName"></param>
         public async Task SetSaber(string saberName)
         {
             var metaData = _mainAssetStore.GetAllMetaData(AssetTypeDefinition.CustomSaber);
-            var saber = metaData.FirstOrDefault(x => x.ListName == saberName);
+            var saber = metaData.FirstOrDefault(x => x.Name == saberName);
             await SetSaber(saber);
         }
 
+        /// <summary>
+        /// Set model composition by <see cref="PreloadMetaData"/>
+        /// </summary>
+        /// <param name="preloadData"></param>
         public async Task SetSaber(PreloadMetaData preloadData)
         {
             if (preloadData == null)
@@ -92,16 +106,51 @@ namespace SaberFactory.Models
             SetModelComposition(await _mainAssetStore.GetCompositionByMeta(preloadData));
         }
 
-        public async Task Save(string fileName = "default")
+        public async Task Save(PresetInfo presetInfo = null)
         {
-            await _presetSaveManager.SaveSaber(this, fileName);
+            var preset = presetInfo ?? LoadedPreset;
+            
+            if (preset == null)
+            {
+                return;
+            }
+            
+            try
+            {
+                await _presetSaveManager.SaveSaber(this, preset.File.Name);
+                if (presetInfo != null)
+                {
+                    LoadedPreset = presetInfo;
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError("Error saving saberset");
+                Debug.LogError(e);
+            }
+            
         }
 
-        public async Task Load(string fileName = "default")
+        public async Task Load(PresetInfo presetInfo)
         {
-            CurrentTask = _presetSaveManager.LoadSaber(this, fileName);
-            await CurrentTask;
+            try
+            { 
+                CurrentTask = _presetSaveManager.LoadSaber(this, presetInfo.File.Name);
+                LoadedPreset = presetInfo;
+                await CurrentTask;
+            }
+            catch (Exception e)
+            {
+                Debug.LogError("Error loading saberset");
+                Debug.LogError(e);
+            }
+            
             CurrentTask = null;
+        }
+
+        public async Task Reload()
+        {
+            await Load(LoadedPreset);
         }
 
         public void Sync(SaberModel fromModel)

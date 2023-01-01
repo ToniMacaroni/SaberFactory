@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using BeatSaberMarkupLanguage;
 using SaberFactory.Helpers;
 using SaberFactory.UI;
+using SaberFactory.UI.Flow;
 using SaberFactory.UI.Lib;
 using SiraUtil;
 using SiraUtil.Web;
@@ -13,7 +14,7 @@ using UnityEngine;
 
 namespace SaberFactory.Models
 {
-    internal class RemoteLocationPart : ICustomListItem
+    internal class RemoteLocationPart : IAssetInfo
     {
         public readonly string RemoteLocation;
         private readonly DirectoryInfo _customSaberDir;
@@ -27,24 +28,26 @@ namespace SaberFactory.Models
             _customSaberDir = pluginDirs.CustomSaberDir;
 
             RemoteLocation = initData.RemoteLocation;
-            ListName = initData.Name;
-            ListAuthor = initData.Author + " : <color=green>Download</color>";
+            Name = initData.Name;
+            Author = initData.Author + " : <color=green>Download</color>";
             _filename = initData.Filename;
 
             if (!string.IsNullOrEmpty(initData.CoverPath))
             {
                 var data = Utilities.GetResource(Assembly.GetExecutingAssembly(), initData.CoverPath);
-                ListCover = BeatSaberMarkupLanguage.Utilities.LoadSpriteRaw(data);
+                Cover = Utilities.LoadSpriteRaw(data);
             }
         }
 
-        public string ListName { get; }
+        public string Name { get; }
 
-        public string ListAuthor { get; }
+        public string Author { get; }
 
-        public Sprite ListCover { get; }
+        public Sprite Cover { get; }
 
         public bool IsFavorite { get; }
+        
+        public string SubDir { get; }
 
         public async Task<Tuple<bool, string>> Download(CancellationToken token)
         {

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -12,10 +13,9 @@ namespace SaberFactory.Serialization
 {
     public class Serializer
     {
-        public static readonly JsonSerializer JsonSerializer = new JsonSerializer();
+        public static readonly JsonSerializer JsonSerializer = new();
 
         [Inject] private readonly MainAssetStore _mainAssetStore = null;
-        [Inject] private readonly ShaderPropertyCache _shaderPropertyCache = null;
         [Inject] private readonly TextureStore _textureStore = null;
 
         static Serializer()
@@ -24,6 +24,7 @@ namespace SaberFactory.Serialization
             JsonSerializer.Converters.Add(new Vec3Converter());
             JsonSerializer.Converters.Add(new Vec4Converter());
             JsonSerializer.Converters.Add(new ColorConverter());
+            JsonSerializer.Converters.Add(new AssetPropertyConverter());
         }
 
         public static void Install(DiContainer container)
@@ -39,17 +40,22 @@ namespace SaberFactory.Serialization
         public async Task<ModelComposition> LoadPiece(JToken pathTkn)
         {
             await _mainAssetStore.WaitForFinish();
-            return await _mainAssetStore[pathTkn.ToObject<string>()];
+            return await _mainAssetStore[new RelativePath(pathTkn.ToObject<string>())];
         }
 
         public JToken SerializeMaterial(Material material)
         {
             var result = new JObject();
-            var shaderInfo = _shaderPropertyCache[material.shader];
+            var shaderInfo = ShaderInfoCache.Get(material.shader);
+
+            var addedPropNames = new HashSet<string>();
 
             foreach (var prop in shaderInfo.GetAll())
             {
-                result.Add(prop.Name, prop.ToJson(material));
+                if (addedPropNames.Add(prop.Name))
+                {
+                    result.Add(prop.Name, prop.ToJson(material));
+                }
             }
 
             return result;
@@ -57,7 +63,7 @@ namespace SaberFactory.Serialization
 
         public async Task LoadMaterial(JObject ser, Material material)
         {
-            var shaderInfo = _shaderPropertyCache[material.shader];
+            var shaderInfo = ShaderInfoCache.Get(material.shader);
             foreach (var prop in shaderInfo.GetAll())
             {
                 var jProp = ser.Property(prop.Name);

@@ -47,7 +47,7 @@ namespace SaberFactory.Models.CustomSaber
             modelRight.SaberSlot = ESaberSlot.Right;
 
             var composition = new ModelComposition(AssetTypeDefinition.CustomSaber, modelLeft, modelRight, storeAsset.Prefab);
-            composition.SetFavorite(_config.IsFavorite(storeAsset.RelativePath));
+            composition.SetFavorite(_config.IsFavorite(storeAsset.RelativePath.Path));
 
             return composition;
         }

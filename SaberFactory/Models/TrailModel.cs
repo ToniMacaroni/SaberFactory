@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using CustomSaber;
+using IPA.Config.Stores.Attributes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using SaberFactory.AssetProperties;
 using SaberFactory.Helpers;
 using SaberFactory.Instances;
+using SaberFactory.Misc;
 using SaberFactory.Models.CustomSaber;
 using SaberFactory.Serialization;
 using UnityEngine;
@@ -16,28 +19,22 @@ namespace SaberFactory.Models
     /// </summary>
     public class TrailModel : IFactorySerializable
     {
-        public int OriginalLength { get; private set; }
-
-        [MapSerialize] public bool ClampTexture;
-
-        [MapSerialize] public bool Flip;
-
-        [MapSerialize] public int Length;
-
         [JsonIgnore] public MaterialDescriptor Material;
-
         public TextureWrapMode? OriginalTextureWrapMode;
-
-        [MapSerialize] public string TrailOrigin;
-
-        // for custom sabers with multiple trails
+        public string TrailOrigin;
         [JsonIgnore] public List<CustomTrail> TrailOriginTrails;
+        public Vector3 TrailPosOffset;
 
-        [MapSerialize] public Vector3 TrailPosOffset;
+        public readonly IntProperty Length;
+        public readonly FloatProperty Whitestep;
+        public readonly FloatProperty Offset; // Vertical offset of the whole trail
+        public readonly FloatProperty Width;
+        public readonly BoolProperty ClampTexture; // Clamp the main texture of the trail
+        public readonly BoolProperty Flip; // Flip the trail
 
-        [MapSerialize] public float Whitestep;
-
-        [MapSerialize] public float Width;
+        [JsonIgnore] private readonly ValueRange<int> _lengthRange = new(1, 30);
+        [JsonIgnore] private readonly ValueRange<float> _widthRange = new(0.1f, 1.5f);
+        [JsonIgnore] private readonly ValueRange<float> _offsetRange = new(-0.5f, 0.5f);
 
         public TrailModel(
             Vector3 trailPosOffset,
@@ -49,21 +46,31 @@ namespace SaberFactory.Models
             string trailOrigin = "")
         {
             TrailPosOffset = trailPosOffset;
-            Width = width;
-            Length = length;
-            OriginalLength = length;
+            Offset = new FloatProperty(trailPosOffset.z, _offsetRange);
+            Width = new FloatProperty(width, _widthRange);
+            Length = new IntProperty(length, _lengthRange);
             Material = material;
-            Whitestep = whitestep;
+            Whitestep = new FloatProperty(whitestep);
             OriginalTextureWrapMode = originalTextureWrapMode;
+            ClampTexture = new BoolProperty(originalTextureWrapMode == TextureWrapMode.Clamp);
+            Flip = new BoolProperty(false);
             TrailOrigin = trailOrigin;
         }
 
         public TrailModel()
-        { }
+        {
+            Length = new IntProperty(1, _lengthRange);
+            Whitestep = new FloatProperty(0);
+            Offset = new FloatProperty(0, _offsetRange);
+            Width = new FloatProperty(1, _widthRange);
+            ClampTexture = new BoolProperty(false);
+            Flip = new BoolProperty(false);
+        }
 
         public async Task FromJson(JObject obj, Serializer serializer)
         {
             obj.Populate(this);
+            
             if (!string.IsNullOrEmpty(TrailOrigin))
             {
                 await LoadFromTrailOrigin(serializer, TrailOrigin);
@@ -71,10 +78,7 @@ namespace SaberFactory.Models
 
             if (obj.SelectToken("Material") is { } materialToken)
             {
-                if (Material is null)
-                {
-                    Material = new MaterialDescriptor(null);
-                }
+                Material ??= new MaterialDescriptor(null);
 
                 await serializer.LoadMaterial((JObject)materialToken, Material.Material);
             }
@@ -95,21 +99,20 @@ namespace SaberFactory.Models
         public void CopyFrom(TrailModel other)
         {
             TrailPosOffset = other.TrailPosOffset;
-            Width = other.Width;
-            Length = other.Length;
+            Width.CopyFrom(other.Width);
+            Length.CopyFrom(other.Length, true);
             Material ??= new MaterialDescriptor(null);
             Material.Material = new Material(other.Material.Material);
-            Whitestep = other.Whitestep;
+            Whitestep.CopyFrom(other.Whitestep);
             TrailOrigin = other.TrailOrigin;
-            ClampTexture = other.ClampTexture;
-            Flip = other.Flip;
-            OriginalLength = other.OriginalLength;
+            ClampTexture.CopyFrom(other.ClampTexture);
+            Flip.CopyFrom(other.Flip);
         }
 
         private async Task LoadFromTrailOrigin(Serializer serializer, JToken trailOrigin)
         {
             var comp = await serializer.LoadPiece(trailOrigin);
-            if (!(comp?.GetLeft() is CustomSaberModel cs))
+            if (comp?.GetLeft() is not CustomSaberModel cs)
             {
                 return;
             }
@@ -122,7 +125,7 @@ namespace SaberFactory.Models
 
             Material ??= new MaterialDescriptor(null);
             Material.Material = originTrailModel.Material.Material;
-            TrailOriginTrails = SaberHelpers.GetTrails(cs.Prefab);
+            TrailOriginTrails = cs.NativeTrails;
         }
     }
 }

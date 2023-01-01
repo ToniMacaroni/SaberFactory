@@ -1,6 +1,0 @@
-﻿<stack>
-    <image id='bg' source='#RoundRect10'/>
-    <horizontal pad='2'>
-        <slider-setting id='val-slider' text='Float' on-change='slider-changed' apply-on-change='true'/>
-    </horizontal>
-</stack>

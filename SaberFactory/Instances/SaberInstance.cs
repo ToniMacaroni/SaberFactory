@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using CustomSaber;
 using HarmonyLib;
+using SaberFactory.AssetProperties;
 using SaberFactory.Configuration;
 using SaberFactory.Helpers;
 using SaberFactory.Instances.CustomSaber;
@@ -22,23 +23,25 @@ namespace SaberFactory.Instances
     {
         public const string SaberName = "SF Saber";
 
-        internal ITrailHandler TrailHandler { get; private set; }
+        public readonly SaberModel Model;
+
+        public FloatProperty SaberWidth { get; private set; }
+        public FloatProperty SaberLength { get; private set; }
 
         internal List<PartEvents> Events { get; private set; }
+        
         public readonly Transform CachedTransform;
         public readonly GameObject GameObject;
 
-        internal readonly SaberModel Model;
-
-        internal readonly PieceCollection<BasePieceInstance> PieceCollection;
-
-        private readonly SiraLog _logger;
+        internal ITrailHandler TrailHandler { get; private set; }
         private readonly TrailConfig _trailConfig;
-
         private InstanceTrailData _instanceTrailData;
         private List<CustomSaberTrailHandler> _secondaryTrails;
-
-        private readonly Dictionary<Type, Component> _saberComponents = new Dictionary<Type, Component>();
+        
+        internal readonly PieceCollection<BasePieceInstance> PieceCollection;
+        private readonly Dictionary<Type, Component> _saberComponents = new();
+        
+        internal event Action OnDestroyed;
 
         private SaberInstance(
             SaberModel model,
@@ -47,7 +50,6 @@ namespace SaberFactory.Instances
             TrailConfig trailConfig,
             List<ISaberPostProcessor> saberMiddlewares)
         {
-            _logger = logger;
             _trailConfig = trailConfig;
 
             Model = model;
@@ -62,16 +64,32 @@ namespace SaberFactory.Instances
             var sectionInstantiator = new SectionInstantiator(this, pieceFactory, PieceCollection);
             sectionInstantiator.InstantiateSections();
 
-            GameObject.transform.localScale = new Vector3(model.SaberWidth, model.SaberWidth, model.SaberLength);
-
             saberMiddlewares.Do(x => x.ProcessSaber(this));
 
             SetupTrailData();
             InitializeEvents();
+            RegisterProperties();
         }
 
-        internal event Action OnDestroyed;
+        private void RegisterProperties()
+        {
+            SaberWidth = new FloatProperty(Model.SaberWidth, 0, 3, 0.05f);
+            SaberWidth.RegisterHandler(nameof(SaberInstance), val =>
+            {
+                Model.SaberWidth = val;
+                GameObject.transform.localScale = new Vector3(val, val, Model.SaberLength);
+            });
+            SaberWidth.InvokeValueChange();
 
+            SaberLength = new FloatProperty(Model.SaberLength);
+            SaberLength.RegisterHandler(nameof(SaberInstance), val =>
+            {
+                Model.SaberLength = val;
+                GameObject.transform.localScale = new Vector3(Model.SaberWidth, Model.SaberWidth, val);
+            });
+            SaberLength.InvokeValueChange();
+        }
+        
         public void SetParent(Transform parent)
         {
             CachedTransform.SetParent(parent, false);
@@ -187,7 +205,7 @@ namespace SaberFactory.Instances
             }
         }
 
-        private bool GetCustomSaber(out CustomSaberInstance customSaberInstance)
+        internal bool GetCustomSaber(out CustomSaberInstance customSaberInstance)
         {
             if (PieceCollection.TryGetPiece(AssetTypeDefinition.CustomSaber, out var instance))
             {
@@ -210,18 +228,6 @@ namespace SaberFactory.Instances
             }
 
             return _instanceTrailData;
-        }
-
-        public void SetSaberWidth(float width)
-        {
-            Model.SaberWidth = width;
-            GameObject.transform.localScale = new Vector3(width, width, Model.SaberLength);
-        }
-
-        public void SetSaberLength(float length)
-        {
-            Model.SaberLength = length;
-            GameObject.transform.localScale = new Vector3(Model.SaberWidth, Model.SaberWidth, length);
         }
 
         internal class Factory : PlaceholderFactory<SaberModel, SaberInstance>
