@@ -1,9 +1,9 @@
-*(for Beat Saber 1.20)*
+*(for Beat Saber 1.27)*
 
-- Update for Beat Saber 1.20
-- Made all patreon features free
-- Allow mods to add sabers from memory
-- Fixed auto refreshing trail when changin whitestep
-- Fixed rotation offset not being mirrored
+- Update for Beat Saber 1.27
+- Fixed zenject error with faulty trail config
+- Fixed `_UserColorLeft` and `_UserColorRight` properties not being updated (thanks to @AlexxSeven)
+
+*this is just a small update for bug fixes in 2.x.x, v3 is still being developed in parallel*
 
 *Needs `BeatSaberMarkupLanguage` and `SiraUtil` (available on ModAssistant)*
