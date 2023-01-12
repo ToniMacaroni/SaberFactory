@@ -4,6 +4,7 @@ using System.IO;
 using System.Reflection;
 using Newtonsoft.Json;
 using SaberFactory.Helpers;
+using UnityEngine;
 using Zenject;
 
 namespace SaberFactory.Configuration
@@ -18,7 +19,9 @@ namespace SaberFactory.Configuration
 
         protected readonly FileInfo ConfigFile;
 
-        private readonly Dictionary<PropertyInfo, object> _originalValues = new Dictionary<PropertyInfo, object>();
+        private readonly Dictionary<PropertyInfo, object> _originalValues = new();
+
+        private bool _didLoadingFail;
 
         protected ConfigBase(PluginDirectories pluginDirs, string fileName)
         {
@@ -27,7 +30,9 @@ namespace SaberFactory.Configuration
 
         public void Dispose()
         {
-            if (SaveOnDispose)
+            // if loading failed, we don't want to put the original values back
+            // let the user fix the config file
+            if (SaveOnDispose && !_didLoadingFail)
             {
                 Save();
             }
@@ -62,7 +67,15 @@ namespace SaberFactory.Configuration
                 return;
             }
 
-            JsonConvert.PopulateObject(ConfigFile.ReadText(), this);
+            try
+            {
+                JsonConvert.PopulateObject(ConfigFile.ReadText(), this);
+            }
+            catch (Exception e)
+            {
+                _didLoadingFail = true;
+                Debug.LogError($"[Saber Factory Configs] Failed to load config file {ConfigFile.Name}");
+            }
         }
 
         public void Save()
