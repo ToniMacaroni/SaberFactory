@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using SaberFactory.DataStore;
@@ -13,11 +14,7 @@ namespace SaberFactory.Misc
 {
     internal class RemotePartRetriever : IInitializable, ILoadingTask
     {
-#if DEBUG
-        public const string RemoteSaberUrl = "https://raw.githubusercontent.com/ToniMacaroni/SaberFactory/development/Saberlist.json";
-#else
-        public const string RemoteSaberUrl = "https://raw.githubusercontent.com/ToniMacaroni/SaberFactory/main/Saberlist.json";
-#endif        
+        public const string RemoteSaberUrl = "https://raw.githubusercontent.com/ToniMacaroni/SaberFactory/main/SaberList.json";
 
         public Status RetrievingStatus { get; private set; } = Status.Loading;
         public Task CurrentTask { get; private set; }
@@ -44,10 +41,19 @@ namespace SaberFactory.Misc
         {
             Debug.LogWarning("Loading remote sabers");
             
+            RemoteSabers.Clear();
+            
             try
             {
+                #if DEBUG
+                var content = File.ReadAllText(@"I:\repos\SaberFactory\SaberList.json");
+                //var response = await _httpService.GetAsync("https://raw.githubusercontent.com/ToniMacaroni/SaberFactory/development/SaberList.json");
+                //var content = await response.ReadAsStringAsync();
+                #else
                 var response = await _httpService.GetAsync(RemoteSaberUrl);
                 var content = await response.ReadAsStringAsync();
+                #endif
+
                 var sabers = JsonConvert.DeserializeObject<RemoteSaberListData>(content);
                 
                 foreach (var saberInitData in sabers.SaberInitDatas)
@@ -79,6 +85,7 @@ namespace SaberFactory.Misc
         
         public class RemoteSaberListData
         {
+            [JsonProperty("items")]
             public List<RemoteLocationPart.InitData> SaberInitDatas { get; set; }
         }
     }

@@ -30,6 +30,12 @@ namespace SaberFactory.Models
             RemoteLocation = initData.RemoteLocation;
             ListName = initData.Name;
             ListAuthor = initData.Author + " : <color=green>Download</color>";
+            
+            if (!string.IsNullOrEmpty(initData.FeatureType))
+            {
+                ListAuthor += $" : <color={initData.FeatureColor}>{initData.FeatureType}</color>";
+            }
+            
             _filename = initData.Filename;
 
             if (!string.IsNullOrEmpty(initData.CoverPath))
@@ -76,20 +82,41 @@ namespace SaberFactory.Models
 
         public struct InitData
         {
+            /// <summary>
+            /// The network location of the saber
+            /// </summary>
             [JsonProperty("remote_location")]
             public string RemoteLocation;
             
+            /// <summary>
+            /// The name of the saber as it will appear in the saber list
+            /// </summary>
             [JsonProperty("name")]
             public string Name;
             
+            /// <summary>
+            /// The author of the saber
+            /// </summary>
             [JsonProperty("author")]
             public string Author;
             
+            /// <summary>
+            /// The filename to which the saber will be saved
+            /// </summary>
             [JsonProperty("filename")]
             public string Filename;
             
+            /// <summary>
+            /// The resource path of the cover image
+            /// </summary>
             [JsonProperty("cover_path")]
             public string CoverPath;
+
+            [JsonProperty("feature_type")]
+            public string FeatureType;
+
+            [JsonProperty("feature_color")]
+            public string FeatureColor;
         }
     }
 }
