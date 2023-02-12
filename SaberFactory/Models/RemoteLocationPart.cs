@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using BeatSaberMarkupLanguage;
+using Newtonsoft.Json;
 using SaberFactory.Helpers;
 using SaberFactory.UI;
 using SaberFactory.UI.Lib;
@@ -75,10 +76,19 @@ namespace SaberFactory.Models
 
         public struct InitData
         {
+            [JsonProperty("remote_location")]
             public string RemoteLocation;
+            
+            [JsonProperty("name")]
             public string Name;
+            
+            [JsonProperty("author")]
             public string Author;
+            
+            [JsonProperty("filename")]
             public string Filename;
+            
+            [JsonProperty("cover_path")]
             public string CoverPath;
         }
     }

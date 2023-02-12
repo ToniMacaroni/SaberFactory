@@ -15,6 +15,7 @@ using SaberFactory.DataStore;
 using SaberFactory.Editor;
 using SaberFactory.Helpers;
 using SaberFactory.Loaders;
+using SaberFactory.Misc;
 using SaberFactory.Models;
 using SaberFactory.UI.CustomSaber.CustomComponents;
 using SaberFactory.UI.CustomSaber.Popups;
@@ -62,7 +63,7 @@ namespace SaberFactory.UI.CustomSaber.Views
 
         [Inject] private readonly MainAssetStore _mainAssetStore = null;
         [Inject] private readonly PluginConfig _pluginConfig = null;
-        [Inject] private readonly List<RemoteLocationPart> _remoteParts = null;
+        [Inject] private readonly RemotePartRetriever _remotePartRetriever = null;
         [Inject] private readonly SaberFileWatcher _saberFileWatcher = null;
         [Inject] private readonly SaberSet _saberSet = null;
         private ModelComposition _currentComposition;
@@ -132,6 +133,7 @@ namespace SaberFactory.UI.CustomSaber.Views
         public async Task LoadSabers()
         {
             _loadingPopup.Show();
+            await _remotePartRetriever.WaitForFinish();
             await _mainAssetStore.LoadAllMetaAsync(_pluginConfig.AssetType);
             await ShowSabers(false, 500);
             _loadingPopup.Hide();
@@ -172,13 +174,13 @@ namespace SaberFactory.UI.CustomSaber.Views
             var addedDownloadables = 0;
 
             // Show downloadable sabers
-            if (_pluginConfig.ShowDownloadableSabers)
+            if (_pluginConfig.ShowDownloadableSabers && _remotePartRetriever.RetrievingStatus == RemotePartRetriever.Status.Success)
             {
                 var idx = items.Count(x => x.IsFavorite);
 
                 // if the saber isn't aleady present
                 // add the downloadable option
-                foreach (var remotePart in _remoteParts)
+                foreach (var remotePart in _remotePartRetriever.RemoteSabers)
                 {
                     if (!loadedNames.Contains(remotePart.ListName))
                     {
@@ -252,7 +254,7 @@ namespace SaberFactory.UI.CustomSaber.Views
                 _currentComposition =
                     await _mainAssetStore.CreateMetaData(
                         new AssetMetaPath(new FileInfo(Path.Combine(UnityGame.InstallPath, relPath))));
-                _remoteParts.Remove(remotePart);
+                _remotePartRetriever.RemoveSaber(remotePart);
                 _loadingPopup.Hide();
             }
             else if (item is ModelComposition comp)

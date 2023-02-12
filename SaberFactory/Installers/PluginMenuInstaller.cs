@@ -1,5 +1,8 @@
-﻿using SaberFactory.Editor;
+﻿using System;
+using System.Net.Http;
+using SaberFactory.Editor;
 using SaberFactory.Helpers;
+using SaberFactory.Misc;
 using SaberFactory.Models;
 using SaberFactory.UI;
 using SaberFactory.UI.CustomSaber;
@@ -12,13 +15,15 @@ namespace SaberFactory.Installers
 {
     internal class PluginMenuInstaller : Installer
     {
+        private HttpClient _httpClient = new HttpClient();
+        
         public override void InstallBindings()
         {
             Container.Bind<EditorInstanceManager>().AsSingle();
 
             MainUIInstaller.Install(Container);
 
-            BindRemoteSabers();
+            //BindRemoteSabers();
 
             Container.Bind<BaseUiComposition>().To<CustomSaberUiComposition>().AsSingle();
             Container.Bind<SaberGrabController>().AsSingle();
