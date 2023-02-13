@@ -81,6 +81,8 @@ namespace SaberFactory.Installers
             Container.Bind<RandomUtil>().AsSingle();
 
             Container.BindInterfacesAndSelfTo<SaberClashCustomizer>().AsSingle();
+            
+            Container.BindInterfacesAndSelfTo<RemotePartRetriever>().AsSingle();
 
             InstallFactories();
             InstallMiddlewares();

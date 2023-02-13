@@ -1,0 +1,18 @@
+{
+    "items": [
+        {
+            "name":  "SF Default 2018",
+            "author":  "Toni Macaroni",
+            "remote_location":  "https://github.com/ToniMacaroni/SaberFactoryV2/blob/main/Sabers/SFDefault2018.saber?raw=true",
+            "filename":  "SF Default 2018.saber",
+            "cover_path":  "SaberFactory.Resources.Icons.SFSaber_Icon.png"
+        },
+        {
+            "name":  "SF Default",
+            "author":  "Toni Macaroni",
+            "remote_location":  "https://github.com/ToniMacaroni/SaberFactoryV2/blob/main/Sabers/SFDefault.saber?raw=true",
+            "filename":  "SF Default.saber",
+            "cover_path":  "SaberFactory.Resources.Icons.SFSaber_Icon.png"
+        }
+    ]
+}
