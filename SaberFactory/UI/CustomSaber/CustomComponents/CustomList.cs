@@ -6,6 +6,7 @@ using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.TypeHandlers;
 using HMUI;
 using IPA.Utilities;
+using SaberFactory.Configuration;
 using SaberFactory.UI.Lib;
 using SaberFactory.UI.Lib.BSML;
 using TMPro;
@@ -23,6 +24,8 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
         [UIComponent("header-text")] private readonly TextMeshProUGUI _textMesh = null;
 
         [Inject] private readonly IVRPlatformHelper _platformHelper = null;
+        [Inject] private readonly PluginConfig _config = null;
+        
         private int _currentIdx = -1;
 
         private List<ICustomListItem> _listObjects;
@@ -41,7 +44,10 @@ namespace SaberFactory.UI.CustomSaber.CustomComponents
                     Subtext = item.ListAuthor,
                     Icon = item.ListCover,
                     IsFavorite = item.IsFavorite,
-                    IsCategory = item is ListDirectory
+                    IsCategory = item is ListDirectory,
+                    
+                    Color0 = _config.ListCellColor0,
+                    Color1 = _config.ListCellColor1
                 };
 
                 data.Add(cell);
