@@ -148,6 +148,11 @@ namespace SaberFactory.UI.Lib.BSML
                     nameText.text = Data[idx].Text;
                     authorText.text = Data[idx].Subtext;
 
+                    // bg.color0 = new Color(0.047f, 0.471f, 0.949f);
+                    // bg.color1 = new Color(0.875f, 0.086f, 0.435f);
+                    bg.color0 = cellData.Color0;
+                    bg.color1 = cellData.Color1;
+
                     return tableCell;
                 // case ListStyle.Box:
                 //     AnnotatedBeatmapLevelCollectionTableCell cell = GetLevelPackTableCell();
@@ -209,8 +214,6 @@ namespace SaberFactory.UI.Lib.BSML
                 
                 var bg = _backgroundImageAccessor(ref tableCell).Cast<ImageView>();
                 bg.SetSkew(0);
-                bg.color1 = new Color(0.875f, 0.086f, 0.435f);
-                bg.color0 = new Color(0.047f, 0.471f, 0.949f);
                 _songAuthorTextAccessor(ref tableCell).richText = true;
             }
 
@@ -261,6 +264,9 @@ namespace SaberFactory.UI.Lib.BSML
             public string RightText;
             public string Subtext;
             public string Text;
+
+            public Color Color0;
+            public Color Color1;
         }
 
         #region Accessors
