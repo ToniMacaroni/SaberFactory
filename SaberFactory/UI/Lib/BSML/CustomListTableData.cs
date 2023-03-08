@@ -199,6 +199,13 @@ namespace SaberFactory.UI.Lib.BSML
                 tableCell.SetField("_highlightBackgroundColor", new Color(0.360f, 0.647f, 1, 0.7f));
                 tableCell.SetField("_selectedBackgroundColor", new Color(0.360f, 0.647f, 1, 0.9f));
                 tableCell.SetField("_selectedAndHighlightedBackgroundColor", new Color(0.360f, 0.647f, 1, 0.9f));
+                
+                // copied directly from BSML, hide the promotion badges introduced in 1.28.0
+                tableCell.GetField<GameObject, LevelListTableCell>("_promoBackgroundGo").SetActive(false);
+                tableCell.GetField<GameObject, LevelListTableCell>("_promoBadgeGo").SetActive(false);
+                tableCell.GetField<GameObject, LevelListTableCell>("_updatedBadgeGo").SetActive(false);
+                tableCell.GetField<LayoutWidthLimiter, LevelListTableCell>("_layoutWidthLimiter").limitWidth = false;
+                
                 var bg = _backgroundImageAccessor(ref tableCell).Cast<ImageView>();
                 bg.SetSkew(0);
                 bg.color1 = bg.color1.ColorWithAlpha(0.4f);
