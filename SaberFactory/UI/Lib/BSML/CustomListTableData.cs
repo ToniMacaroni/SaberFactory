@@ -195,13 +195,22 @@ namespace SaberFactory.UI.Lib.BSML
                 var t = _favoriteImageAccessor(ref tableCell).gameObject.transform.AsRectTransform();
                 t.sizeDelta = new Vector2(5, 5);
                 t.anchoredPosition = new Vector2(-8.5f, 0);
-
-                tableCell.SetField("_highlightBackgroundColor", new Color(0.360f, 0.647f, 1, 0.7f));
-                tableCell.SetField("_selectedBackgroundColor", new Color(0.360f, 0.647f, 1, 0.9f));
-                tableCell.SetField("_selectedAndHighlightedBackgroundColor", new Color(0.360f, 0.647f, 1, 0.9f));
+                
+                tableCell.SetField("_highlightBackgroundColor", Color.white.ColorWithAlpha(0.3f));
+                tableCell.SetField("_selectedBackgroundColor", Color.white.ColorWithAlpha(0.7f));
+                tableCell.SetField("_selectedAndHighlightedBackgroundColor", Color.white.ColorWithAlpha(0.7f));
+                
+                // Promo stuff
+                tableCell.GetField<GameObject, LevelListTableCell>("_promoBackgroundGo").SetActive(false);
+                tableCell.GetField<GameObject, LevelListTableCell>("_promoBadgeGo").SetActive(false);
+                tableCell.GetField<GameObject, LevelListTableCell>("_updatedBadgeGo").SetActive(false);
+                
+                tableCell.GetField<LayoutWidthLimiter, LevelListTableCell>("_layoutWidthLimiter").limitWidth = false;
+                
                 var bg = _backgroundImageAccessor(ref tableCell).Cast<ImageView>();
                 bg.SetSkew(0);
-                bg.color1 = bg.color1.ColorWithAlpha(0.4f);
+                bg.color1 = new Color(0.875f, 0.086f, 0.435f);
+                bg.color0 = new Color(0.047f, 0.471f, 0.949f);
                 _songAuthorTextAccessor(ref tableCell).richText = true;
             }
 
