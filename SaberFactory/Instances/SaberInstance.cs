@@ -5,6 +5,7 @@ using CustomSaber;
 using HarmonyLib;
 using SaberFactory.Configuration;
 using SaberFactory.Helpers;
+using SaberFactory.Installers;
 using SaberFactory.Instances.CustomSaber;
 using SaberFactory.Instances.PostProcessors;
 using SaberFactory.Instances.Trail;
@@ -38,6 +39,10 @@ namespace SaberFactory.Instances
         private InstanceTrailData _instanceTrailData;
         private List<CustomSaberTrailHandler> _secondaryTrails;
         private readonly PlayerDataModel _playerDataModel;
+        private readonly SaberInstanceList _saberInstanceList;
+        private readonly SaberSettableSettings _saberSettableSettings;
+
+        public PlayerTransforms PlayerTransforms;
 
         private readonly Dictionary<Type, Component> _saberComponents = new Dictionary<Type, Component>();
 
@@ -47,11 +52,15 @@ namespace SaberFactory.Instances
             SiraLog logger,
             TrailConfig trailConfig,
             List<ISaberPostProcessor> saberMiddlewares,
-            PlayerDataModel playerDataModel)
+            PlayerDataModel playerDataModel,
+            SaberInstanceList saberInstanceList,
+            [InjectOptional] SaberSettableSettings saberSettableSettings)
         {
             _logger = logger;
             _trailConfig = trailConfig;
             _playerDataModel = playerDataModel;
+            _saberInstanceList = saberInstanceList;
+            _saberSettableSettings = saberSettableSettings;
 
             Model = model;
 
@@ -72,6 +81,8 @@ namespace SaberFactory.Instances
             SetupGlobalShaderVars();
             SetupTrailData();
             InitializeEvents();
+            
+            _saberInstanceList.Add(this);
         }
 
         internal event Action OnDestroyed;
@@ -131,14 +142,14 @@ namespace SaberFactory.Instances
             {
                 if (backupTrail is { })
                 {
-                    TrailHandler = new MainTrailHandler(GameObject, backupTrail);
+                    TrailHandler = new MainTrailHandler(GameObject, backupTrail, PlayerTransforms, _saberSettableSettings);
                     TrailHandler.CreateTrail(_trailConfig, editor);
                 }
 
                 return;
             }
 
-            TrailHandler = new MainTrailHandler(GameObject);
+            TrailHandler = new MainTrailHandler(GameObject, PlayerTransforms, _saberSettableSettings);
             TrailHandler.SetTrailData(trailData);
             TrailHandler.CreateTrail(_trailConfig, editor);
 
@@ -147,7 +158,7 @@ namespace SaberFactory.Instances
                 _secondaryTrails = new List<CustomSaberTrailHandler>();
                 foreach (var customTrail in secondaryTrails)
                 {
-                    var handler = new CustomSaberTrailHandler(GameObject, customTrail);
+                    var handler = new CustomSaberTrailHandler(GameObject, customTrail, PlayerTransforms);
                     handler.CreateTrail(_trailConfig, editor);
                     _secondaryTrails.Add(handler);
                 }
@@ -178,6 +189,7 @@ namespace SaberFactory.Instances
         {
             GameObject.TryDestroy();
             OnDestroyed?.Invoke();
+            _saberInstanceList.Remove(this);
         }
 
         // Called when Saber GameObject gets destroyed

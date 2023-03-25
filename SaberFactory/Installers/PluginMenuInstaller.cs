@@ -1,5 +1,6 @@
 ﻿using SaberFactory.Editor;
 using SaberFactory.Helpers;
+using SaberFactory.Instances.Trail;
 using SaberFactory.UI;
 using SaberFactory.UI.CustomSaber;
 using SaberFactory.UI.Lib;

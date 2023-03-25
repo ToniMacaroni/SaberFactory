@@ -1,6 +1,8 @@
-﻿using IPA.Utilities;
+﻿using Heck.SettingsSetter;
+using IPA.Utilities;
 using SaberFactory.Configuration;
 using SaberFactory.Helpers;
+using SaberFactory.Installers;
 using UnityEngine;
 
 namespace SaberFactory.Instances.Trail
@@ -12,14 +14,19 @@ namespace SaberFactory.Instances.Trail
         protected InstanceTrailData InstanceTrailData;
 
         private readonly SaberTrail _backupTrail;
+        private readonly PlayerTransforms _playerTransforms;
+        private readonly SaberSettableSettings _saberSettableSettings;
         private bool _canColorMaterial;
 
-        public MainTrailHandler(GameObject gameobject)
+        public MainTrailHandler(GameObject gameobject, PlayerTransforms playerTransforms, SaberSettableSettings saberSettableSettings)
         {
             TrailInstance = gameobject.AddComponent<SFTrail>();
+            _playerTransforms = playerTransforms;
+            _saberSettableSettings = saberSettableSettings;
         }
 
-        public MainTrailHandler(GameObject gameobject, SaberTrail backupTrail) : this(gameobject)
+        public MainTrailHandler(GameObject gameobject, SaberTrail backupTrail, PlayerTransforms playerTransforms, SaberSettableSettings saberSettableSettings)
+            : this(gameobject, playerTransforms, saberSettableSettings)
         {
             _backupTrail = backupTrail;
         }
@@ -50,6 +57,8 @@ namespace SaberFactory.Instances.Trail
                 };
 
                 TrailInstance.Setup(trailInitDataVanilla, trailStart.transform, trailEnd.transform, material, editor);
+                TrailInstance.PlayerTransforms = _playerTransforms;
+                InitSettableSettings();
                 return;
             }
 
@@ -82,15 +91,40 @@ namespace SaberFactory.Instances.Trail
                 InstanceTrailData.Material.Material,
                 editor
             );
+            
+            TrailInstance.PlayerTransforms = _playerTransforms;
+            InitSettableSettings();
 
             if (!trailConfig.OnlyUseVertexColor)
             {
                 _canColorMaterial = MaterialHelpers.IsMaterialColorable(InstanceTrailData.Material.Material);
             }
         }
+        
+        private void UpdateRelativeMode()
+        {
+            TrailInstance.RelativeMode = _saberSettableSettings.RelativeTrailMode.Value;
+        }
+
+        private void InitSettableSettings()
+        {
+            if (_saberSettableSettings == null) return;
+
+            UpdateRelativeMode();
+            _saberSettableSettings.RelativeTrailMode.ValueChanged += UpdateRelativeMode;
+        }
+        
+        private void UnInitSettableSettings()
+        {
+            if (_saberSettableSettings == null) return;
+            
+            _saberSettableSettings.RelativeTrailMode.ValueChanged -= UpdateRelativeMode;
+        }
 
         public void DestroyTrail(bool immediate = false)
         {
+            UnInitSettableSettings();
+            
             if (immediate)
             {
                 TrailInstance.TryDestoryImmediate();

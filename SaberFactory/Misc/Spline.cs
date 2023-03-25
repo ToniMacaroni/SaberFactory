@@ -112,7 +112,7 @@ namespace SaberFactory.Misc
             var len = t * mSegments[mSegments.Count - 1].Dist;
 
 
-            var index = 0;
+            int index;
             for (index = 0; index < mSegments.Count; index++)
             {
                 if (mSegments[index].Dist >= len)
@@ -129,10 +129,10 @@ namespace SaberFactory.Misc
                 return seg;
             }
 
-            var prevIdx = seg.SegmentIndex - 1;
+            var prevIdx = seg!.SegmentIndex - 1;
             var prevSeg = mSegments[prevIdx];
-            var PrevLen = seg.Dist - prevSeg.Dist;
-            localF = (len - prevSeg.Dist) / PrevLen;
+            var prevLen = seg.Dist - prevSeg.Dist;
+            localF = (len - prevSeg.Dist) / prevLen;
             return prevSeg;
         }
 
