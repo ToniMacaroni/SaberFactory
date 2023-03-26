@@ -47,7 +47,7 @@ namespace SaberFactory.Models
 
         public bool IsFavorite { get; }
         
-        public string SubDir { get; }
+        public string SubDir { get; } = "";
 
         public async Task<Tuple<bool, string>> Download(CancellationToken token)
         {

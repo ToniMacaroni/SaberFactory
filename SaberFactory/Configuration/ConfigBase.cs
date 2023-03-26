@@ -71,7 +71,7 @@ namespace SaberFactory.Configuration
             {
                 JsonConvert.PopulateObject(ConfigFile.ReadText(), this);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 _didLoadingFail = true;
                 Debug.LogError($"[Saber Factory Configs] Failed to load config file {ConfigFile.Name}");

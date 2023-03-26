@@ -8,6 +8,7 @@ using SaberFactory.DataStore;
 using SaberFactory.Editor;
 using SaberFactory.Helpers;
 using SaberFactory.Instances;
+using SaberFactory.Misc;
 using SaberFactory.Models;
 using SaberFactory.UI.Lib;
 using UnityEngine;
@@ -149,13 +150,7 @@ public partial class SFSaberSelectionVC
 
     private KawaseBlurRendererSO.KernelSize GetBlurAmount(int strength)
     {
-        if (strength > 8)
-        {
-            strength = 8;
-        }
-
-        strength--;
-        strength = Mathf.Clamp(strength, 0, 7);
+        strength = Mathf.Clamp(strength-1, 0, 8);
         return (KawaseBlurRendererSO.KernelSize)strength;
     }
 

@@ -35,8 +35,12 @@ namespace SaberFactory.Instances
 
         internal ITrailHandler TrailHandler { get; private set; }
         private readonly TrailConfig _trailConfig;
+        private readonly SaberInstanceList _saberInstanceList;
+        private readonly SaberSettableSettings _saberSettableSettings;
         private InstanceTrailData _instanceTrailData;
         private List<CustomSaberTrailHandler> _secondaryTrails;
+        
+        public PlayerTransforms PlayerTransforms;
         
         internal readonly PieceCollection<BasePieceInstance> PieceCollection;
         private readonly Dictionary<Type, Component> _saberComponents = new();
@@ -48,9 +52,13 @@ namespace SaberFactory.Instances
             BasePieceInstance.Factory pieceFactory,
             SiraLog logger,
             TrailConfig trailConfig,
-            List<ISaberPostProcessor> saberMiddlewares)
+            List<ISaberPostProcessor> saberMiddlewares,
+            SaberInstanceList saberInstanceList,
+            [InjectOptional] SaberSettableSettings saberSettableSettings)
         {
             _trailConfig = trailConfig;
+            _saberInstanceList = saberInstanceList;
+            _saberSettableSettings = saberSettableSettings;
 
             Model = model;
 
@@ -65,10 +73,12 @@ namespace SaberFactory.Instances
             sectionInstantiator.InstantiateSections();
 
             saberMiddlewares.Do(x => x.ProcessSaber(this));
-
+            
             SetupTrailData();
             InitializeEvents();
             RegisterProperties();
+            
+            _saberInstanceList.Add(this);
         }
 
         private void RegisterProperties()
@@ -145,14 +155,14 @@ namespace SaberFactory.Instances
             {
                 if (backupTrail is { })
                 {
-                    TrailHandler = new MainTrailHandler(GameObject, backupTrail);
+                    TrailHandler = new MainTrailHandler(GameObject, backupTrail, PlayerTransforms, _saberSettableSettings);
                     TrailHandler.CreateTrail(_trailConfig, editor);
                 }
 
                 return;
             }
 
-            TrailHandler = new MainTrailHandler(GameObject);
+            TrailHandler = new MainTrailHandler(GameObject, PlayerTransforms, _saberSettableSettings);
             TrailHandler.SetTrailData(trailData);
             TrailHandler.CreateTrail(_trailConfig, editor);
 
@@ -161,7 +171,7 @@ namespace SaberFactory.Instances
                 _secondaryTrails = new List<CustomSaberTrailHandler>();
                 foreach (var customTrail in secondaryTrails)
                 {
-                    var handler = new CustomSaberTrailHandler(GameObject, customTrail);
+                    var handler = new CustomSaberTrailHandler(GameObject, customTrail, PlayerTransforms, _saberSettableSettings);
                     handler.CreateTrail(_trailConfig, editor);
                     _secondaryTrails.Add(handler);
                 }

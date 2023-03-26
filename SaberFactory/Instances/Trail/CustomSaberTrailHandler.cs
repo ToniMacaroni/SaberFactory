@@ -13,12 +13,16 @@ namespace SaberFactory.Instances.Trail
         public SFTrail TrailInstance { get; protected set; }
 
         private readonly CustomTrail _customTrail;
+        private readonly PlayerTransforms _playerTransforms;
+        private readonly SaberSettableSettings _saberSettableSettings;
         private bool _canColorMaterial;
 
-        public CustomSaberTrailHandler(GameObject gameobject, CustomTrail customTrail)
+        public CustomSaberTrailHandler(GameObject gameobject, CustomTrail customTrail, PlayerTransforms playerTransforms, SaberSettableSettings saberSettableSettings)
         {
             TrailInstance = gameobject.AddComponent<SFTrail>();
             _customTrail = customTrail;
+            _playerTransforms = playerTransforms;
+            _saberSettableSettings = saberSettableSettings;
         }
 
         public void CreateTrail(TrailConfig trailConfig, bool editor)
@@ -51,15 +55,38 @@ namespace SaberFactory.Instances.Trail
                 _customTrail.TrailMaterial,
                 editor
             );
+            TrailInstance.PlayerTransforms = _playerTransforms;
+            InitSettableSettings();
 
             if (!trailConfig.OnlyUseVertexColor)
             {
                 _canColorMaterial = MaterialHelpers.IsMaterialColorable(_customTrail.TrailMaterial);
             }
         }
+        
+        private void UpdateRelativeMode()
+        {
+            TrailInstance.RelativeMode = _saberSettableSettings.RelativeTrailMode.Value;
+        }
+
+        private void InitSettableSettings()
+        {
+            if (_saberSettableSettings == null) return;
+
+            UpdateRelativeMode();
+            _saberSettableSettings.RelativeTrailMode.ValueChanged += UpdateRelativeMode;
+        }
+
+        private void UnInitSettableSettings()
+        {
+            if (_saberSettableSettings == null) return;
+
+            _saberSettableSettings.RelativeTrailMode.ValueChanged -= UpdateRelativeMode;
+        }
 
         public void DestroyTrail()
         {
+            UnInitSettableSettings();
             TrailInstance.TryDestoryImmediate();
         }
 

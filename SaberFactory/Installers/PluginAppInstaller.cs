@@ -77,6 +77,8 @@ namespace SaberFactory.Installers
             // Model stuff
             Container.Bind<SaberModel>().WithId(ESaberSlot.Left).AsCached().WithArguments(ESaberSlot.Left);
             Container.Bind<SaberModel>().WithId(ESaberSlot.Right).AsCached().WithArguments(ESaberSlot.Right);
+            
+            Container.Bind<SaberInstanceList>().AsSingle();
 
             Container.Bind<SaberSet>().AsSingle();
 
@@ -84,6 +86,13 @@ namespace SaberFactory.Installers
             Container.Bind<RandomUtil>().AsSingle();
 
             Container.BindInterfacesAndSelfTo<SaberClashCustomizer>().AsSingle();
+            
+            Container.BindInterfacesAndSelfTo<RemotePartRetriever>().AsSingle();
+            
+            if (IPA.Loader.PluginManager.GetPlugin("Heck") != null)
+            {
+                Container.BindInterfacesAndSelfTo<SaberSettableSettings>().AsSingle();
+            }
 
             InstallFactories();
             InstallMiddlewares();

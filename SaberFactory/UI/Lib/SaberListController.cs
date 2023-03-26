@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using SaberFactory.Configuration;
 using SaberFactory.DataStore;
+using SaberFactory.Misc;
 using SaberFactory.Models;
 using SaberFactory.UI.Flow;
 using UnityEngine;
@@ -12,7 +13,7 @@ public class SaberListController
 {
     private readonly MainAssetStore _mainAssetStore;
     private readonly PluginConfig _pluginConfig;
-    private readonly List<RemoteLocationPart> _remoteParts;
+    private readonly RemotePartRetriever _remotePartRetriever;
     private readonly ListAssetDirectoryManager _dirManager;
 
     public enum ESortMode
@@ -28,11 +29,11 @@ public class SaberListController
     internal SaberListController(
         MainAssetStore mainAssetStore,
         PluginConfig pluginConfig,
-        List<RemoteLocationPart> remoteParts)
+        RemotePartRetriever remotePartRetriever)
     {
         _mainAssetStore = mainAssetStore;
         _pluginConfig = pluginConfig;
-        _remoteParts = remoteParts;
+        _remotePartRetriever = remotePartRetriever;
         _dirManager = new ListAssetDirectoryManager(_mainAssetStore.AdditionalCustomSaberFolders);
     }
 
@@ -68,13 +69,13 @@ public class SaberListController
         var addedDownloadables = 0;
 
         // Show downloadable sabers
-        if (_pluginConfig.ShowDownloadableSabers)
+        if (_pluginConfig.ShowDownloadableSabers && _remotePartRetriever.RetrievingStatus == RemotePartRetriever.Status.Success)
         {
             var idx = items.Count(x => x.IsFavorite);
 
             // if the saber isn't aleady present
             // add the downloadable option
-            foreach (var remotePart in _remoteParts)
+            foreach (var remotePart in _remotePartRetriever.RemoteSabers)
             {
                 if (!loadedNames.Contains(remotePart.Name))
                 {

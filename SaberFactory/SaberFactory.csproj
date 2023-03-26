@@ -50,6 +50,9 @@
         <Reference Include="FactoryCore.OdinSerializer">
           <HintPath>F:\BeatSaberUnity\Build\BeatSaberUnity_Data\Managed\FactoryCore.OdinSerializer.dll</HintPath>
         </Reference>
+        <Reference Include="Heck">
+          <HintPath>$(BeatSaberDir)\Plugins\Heck.dll</HintPath>
+        </Reference>
         <Reference Include="HMRendering">
           <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\HMRendering.dll</HintPath>
         </Reference>

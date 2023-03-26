@@ -5,6 +5,7 @@ using ModestTree;
 using SaberFactory.Configuration;
 using SaberFactory.Game;
 using SaberFactory.Helpers;
+using SaberFactory.Instances;
 using SaberFactory.Misc;
 using SaberFactory.Models;
 using SiraUtil.Interfaces;
@@ -18,6 +19,12 @@ namespace SaberFactory.Installers
     {
         public override void InstallBindings()
         {
+            if (Container.TryResolve<PlayerTransforms>() is { } playerTransforms &&
+                Container.TryResolve<SaberInstanceList>() is { } saberInstanceList)
+            {
+                saberInstanceList.PlayerTransforms = playerTransforms;
+            }
+            
             var config = Container.Resolve<PluginConfig>();
             if (!config.Enabled || Container.Resolve<SaberSet>().IsEmpty)
             {
