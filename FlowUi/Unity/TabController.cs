@@ -81,7 +81,7 @@ namespace FlowUi.Runtime
             _tweeningManager.AddTween(new Vector3Tween(_selectionIndicator.position, cell.transform.position, val =>
                 {
                     _selectionIndicator.position = val;
-                }, 0.5f, EaseType.InOutCubic),
+                }, 0.28f, EaseType.InOutCubic),
                 this);
         }
 

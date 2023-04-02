@@ -20,7 +20,7 @@ public partial class SaberCell
         coverImage.sprite = _asset.Cover;
         coverImage.enabled = _asset.Cover;
 
-        favoriteImage.color = _asset.IsFavorite ? Color.red : new Color(1,1,1,0.1f);
+        favoriteImage.color = _asset.IsFavorite ? new Color(0.875f, 0.086f, 0.435f) : new Color(1,1,1,0.1f);
     }
     
     private string Sanitize(string str)
