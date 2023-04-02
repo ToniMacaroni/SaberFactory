@@ -47,7 +47,7 @@
         <None Remove="Resources\Icons\transform-icon.png" />
         <None Remove="Resources\UI\border.png" />
         <Reference Include="Heck">
-          <HintPath>D:\SteamLibrary\steamapps\common\Beat Saber\Plugins\Heck.dll</HintPath>
+          <HintPath>$(BeatSaberDir)\Plugins\Heck.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.IMGUIModule">
             <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
