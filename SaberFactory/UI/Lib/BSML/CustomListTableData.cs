@@ -214,6 +214,7 @@ namespace SaberFactory.UI.Lib.BSML
                 }
                 catch(Exception e)
                 {
+                    Debug.LogError("Error constrcting CustomListTableData for SF");
                     Debug.LogError(e);
                 }
 
