@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using BeatSaberMarkupLanguage;
 using HMUI;
@@ -206,12 +207,17 @@ namespace SaberFactory.UI.Lib.BSML
                 tableCell.SetField("_selectedAndHighlightedBackgroundColor", Color.white.ColorWithAlpha(0.7f));
                 
                 // Promo stuff
-                tableCell.GetField<GameObject, LevelListTableCell>("_promoBackgroundGo").SetActive(false);
-                tableCell.GetField<GameObject, LevelListTableCell>("_promoBadgeGo").SetActive(false);
-                tableCell.GetField<GameObject, LevelListTableCell>("_updatedBadgeGo").SetActive(false);
-                
-                tableCell.GetField<LayoutWidthLimiter, LevelListTableCell>("_layoutWidthLimiter").limitWidth = false;
-                
+                try
+                {
+                    tableCell.GetField<GameObject, LevelListTableCell>("_promoBadgeGo").SetActive(false);
+                    tableCell.GetField<GameObject, LevelListTableCell>("_updatedBadgeGo").SetActive(false);
+                }
+                catch(Exception e)
+                {
+                    Debug.LogError("Error constrcting CustomListTableData for SF");
+                    Debug.LogError(e);
+                }
+
                 var bg = _backgroundImageAccessor(ref tableCell).Cast<ImageView>();
                 bg.SetSkew(0);
                 _songAuthorTextAccessor(ref tableCell).richText = true;

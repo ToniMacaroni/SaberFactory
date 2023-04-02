@@ -14,11 +14,13 @@ namespace SaberFactory.Instances.Trail
 
         private readonly CustomTrail _customTrail;
         private bool _canColorMaterial;
+        private PlayerTransforms _playerTransforms;
 
-        public CustomSaberTrailHandler(GameObject gameobject, CustomTrail customTrail)
+        public CustomSaberTrailHandler(GameObject gameobject, CustomTrail customTrail, PlayerTransforms playerTransforms)
         {
             TrailInstance = gameobject.AddComponent<SFTrail>();
             _customTrail = customTrail;
+            _playerTransforms = playerTransforms;
         }
 
         public void CreateTrail(TrailConfig trailConfig, bool editor)
@@ -51,11 +53,18 @@ namespace SaberFactory.Instances.Trail
                 _customTrail.TrailMaterial,
                 editor
             );
+            
+            TrailInstance.PlayerTransforms = _playerTransforms;
 
             if (!trailConfig.OnlyUseVertexColor)
             {
                 _canColorMaterial = MaterialHelpers.IsMaterialColorable(_customTrail.TrailMaterial);
             }
+        }
+
+        public void SetRelativeMode(bool active)
+        {
+            TrailInstance.RelativeMode = active;
         }
 
         public void DestroyTrail()

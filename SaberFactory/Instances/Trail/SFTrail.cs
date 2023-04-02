@@ -9,7 +9,7 @@ namespace SaberFactory.Instances.Trail
         public static bool CapFps;
         protected float TrailWidth => (PointStart.position - PointEnd.position).magnitude;
 
-        public Vector3 CurHeadPos => (PointStart.position + PointEnd.position) / 2f;
+        public Vector3 CurHeadPos => (PStartPos + PEndPos) / 2f;
         public Color Color = Color.white;
         public int Granularity = 60;
         public int SamplingFrequency = 20;
@@ -33,9 +33,41 @@ namespace SaberFactory.Instances.Trail
         private readonly int _skipFirstFrames = 4;
         private int _frameNum;
         private float _time;
+        private bool _relativeMode;
+
+        public bool RelativeMode
+        {
+            get => _relativeMode;
+            set
+            {
+                Debug.Log($"Setting relative mode to {value}");
+                _relativeMode = value;
+            }
+        }
+
+        public PlayerTransforms PlayerTransforms { get; set; }
+
+        private Vector3 PStartPos => PointStart.position;
+        private Vector3 PEndPos => PointEnd.position;
+
+        private Vector3 GetPlayerOffset()
+        {
+            if (!PlayerTransforms)
+            {
+                return Vector3.zero;
+            }
+            
+            return PlayerTransforms.transform.position;
+        }
 
         private void LateUpdate()
         {
+            // if (PlayerTransforms)
+            // {
+            //     _pointOffset = PlayerTransforms.transform.position;
+            //     Debug.Log($"Adjusting trail offset to {_pointOffset}");
+            // }
+            
             if (!_inited)
             {
                 return;
@@ -54,28 +86,45 @@ namespace SaberFactory.Instances.Trail
 
             _frameNum++;
 
+            // initialize
             if (_frameNum == _skipFirstFrames + 1)
             {
                 _vertexPool.SetMeshObjectActive(true);
 
                 _spline.Granularity = Granularity;
                 _spline.Clear();
+
+                var pStartPos = PStartPos;
+                var pEndPos = PEndPos;
+                
                 for (var i = 0; i < TrailLength; i++)
                 {
-                    _spline.AddControlPoint(CurHeadPos, PointStart.position - PointEnd.position);
+                    _spline.AddControlPoint(CurHeadPos, pStartPos - pEndPos);
                 }
 
                 _snapshotList.Clear();
-                _snapshotList.Add(new Element(PointStart.position, PointEnd.position));
-                _snapshotList.Add(new Element(PointStart.position, PointEnd.position));
+                
+                _snapshotList.Add(new Element(pStartPos, pEndPos));
+                _snapshotList.Add(new Element(pStartPos, pEndPos));
             }
             else if (_frameNum < _skipFirstFrames + 1)
             {
+                // wait until first initialization frame
                 return;
             }
 
             UpdateHeadElem();
             RecordCurElem();
+
+            if (RelativeMode)
+            {
+                var offset = GetPlayerOffset();
+                _snapshotList[0].PointStart -= offset;
+                _snapshotList[0].PointEnd -= offset;
+                _snapshotList[1].PointStart -= offset;
+                _snapshotList[1].PointEnd -= offset;
+            }
+            
             RefreshSpline();
             UpdateVertex();
             _vertexPool.LateUpdate();
@@ -129,7 +178,7 @@ namespace SaberFactory.Instances.Trail
 
         public void SetMaterialBlock(MaterialPropertyBlock block)
         {
-            if (_vertexPool == null || _vertexPool.MeshRenderer == null)
+            if (_vertexPool == null || !_vertexPool.MeshRenderer)
             {
                 return;
             }
@@ -151,6 +200,7 @@ namespace SaberFactory.Instances.Trail
         private void UpdateVertex()
         {
             var pool = _vertexSegment.Pool;
+            var offset = GetPlayerOffset();
 
             for (var i = 0; i < Granularity; i++)
             {
@@ -161,10 +211,15 @@ namespace SaberFactory.Instances.Trail
                 var uvCoord = Vector2.zero;
 
                 var pos = _spline.InterpolateByLen(uvSegment);
+                
+                if (RelativeMode)
+                {
+                    pos += offset;
+                }
 
                 var up = _spline.InterpolateNormalByLen(uvSegment);
-                var pos0 = pos + up.normalized * TrailWidth * 0.5f;
-                var pos1 = pos - up.normalized * TrailWidth * 0.5f;
+                var pos0 = pos + up.normalized * (TrailWidth * 0.5f);
+                var pos1 = pos - up.normalized * (TrailWidth * 0.5f);
 
                 var color = Color;
 
@@ -234,15 +289,15 @@ namespace SaberFactory.Instances.Trail
 
         private void UpdateHeadElem()
         {
-            _snapshotList[0].PointStart = PointStart.position;
-            _snapshotList[0].PointEnd = PointEnd.position;
+            _snapshotList[0].PointStart = PStartPos;
+            _snapshotList[0].PointEnd = PEndPos;
         }
 
         private void RecordCurElem()
         {
             var elem = _elemPool.Get();
-            elem.PointStart = PointStart.position;
-            elem.PointEnd = PointEnd.position;
+            elem.PointStart = PStartPos;
+            elem.PointEnd = PEndPos;
 
             if (_snapshotList.Count < TrailLength)
             {
@@ -305,10 +360,12 @@ namespace SaberFactory.Instances.Trail
 
             public void Release(Element element)
             {
+                #if DEBUG
                 if (_stack.Count > 0 && ReferenceEquals(_stack.Peek(), element))
                 {
                     Debug.LogError("Internal error. Trying to destroy object that is already released to pool.");
                 }
+                #endif
 
                 _stack.Push(element);
             }

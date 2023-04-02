@@ -11,8 +11,6 @@ using SaberFactory.Misc;
 using SaberFactory.Models;
 using SaberFactory.Models.CustomSaber;
 using SaberFactory.Serialization;
-using SiraUtil;
-using UnityEngine;
 using Zenject;
 using Logger = IPA.Logging.Logger;
 
@@ -75,6 +73,8 @@ namespace SaberFactory.Installers
             Container.Bind<SaberModel>().WithId(ESaberSlot.Left).AsCached().WithArguments(ESaberSlot.Left);
             Container.Bind<SaberModel>().WithId(ESaberSlot.Right).AsCached().WithArguments(ESaberSlot.Right);
 
+            Container.Bind<SaberInstanceList>().AsSingle();
+
             Container.Bind<SaberSet>().AsSingle();
 
             Container.Bind<SaberFileWatcher>().AsSingle();
@@ -83,6 +83,11 @@ namespace SaberFactory.Installers
             Container.BindInterfacesAndSelfTo<SaberClashCustomizer>().AsSingle();
             
             Container.BindInterfacesAndSelfTo<RemotePartRetriever>().AsSingle();
+
+            if (IPA.Loader.PluginManager.GetPlugin("Heck") != null)
+            {
+                Container.BindInterfacesAndSelfTo<SaberSettableSettings>().AsSingle();
+            }
 
             InstallFactories();
             InstallMiddlewares();
