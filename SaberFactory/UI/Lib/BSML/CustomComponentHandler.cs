@@ -16,7 +16,6 @@ using IPA.Utilities;
 using Newtonsoft.Json.Linq;
 using SaberFactory.UI.Lib.BSML.Tags;
 using SiraUtil.Logging;
-using SiraUtil.Tools;
 using UnityEngine;
 using Zenject;
 using Debug = UnityEngine.Debug;
@@ -237,10 +236,22 @@ namespace SaberFactory.UI.Lib.BSML
             }
         }
 
+        private Type[] GetTypesSafe()
+        {
+            try
+            {
+                return Assembly.GetExecutingAssembly().GetTypes();
+            }
+            catch (ReflectionTypeLoadException e)
+            {
+                return e.Types.Where(t => t != null).ToArray();
+            }
+        }
+
         private List<T> InstantiateOfType<T>(params object[] constructorArgs)
         {
             var objects = new List<T>();
-            foreach (var type in Assembly.GetExecutingAssembly().GetTypes().Where(myType =>
+            foreach (var type in GetTypesSafe().Where(myType =>
                 myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(typeof(T)) && myType != typeof(CustomUiComponentTag) &&
                 myType != typeof(PopupTag)))
             {
@@ -253,7 +264,7 @@ namespace SaberFactory.UI.Lib.BSML
         private List<Type> GetListOfType<T>()
         {
             var types = new List<Type>();
-            foreach (var type in Assembly.GetExecutingAssembly().GetTypes()
+            foreach (var type in GetTypesSafe()
                 .Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(typeof(T))))
             {
                 types.Add(type);

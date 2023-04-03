@@ -84,9 +84,11 @@ namespace SaberFactory.Installers
             
             Container.BindInterfacesAndSelfTo<RemotePartRetriever>().AsSingle();
 
+            Container.Bind<SaberSettableSettings>().AsSingle();
+
             if (IPA.Loader.PluginManager.GetPlugin("Heck") != null)
             {
-                Container.BindInterfacesAndSelfTo<SaberSettableSettings>().AsSingle();
+                Container.BindInterfacesAndSelfTo<HeckSettableSettingsInitializer>().AsSingle();
             }
 
             InstallFactories();
