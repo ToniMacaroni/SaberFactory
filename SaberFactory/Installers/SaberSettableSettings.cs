@@ -1,25 +1,27 @@
 using System;
-using Heck.SettingsSetter;
-using UnityEngine;
-using Zenject;
 
 namespace SaberFactory.Installers
 {
-    internal class SaberSettableSettings : IInitializable
+    internal class SaberSettableSettings
     {
-        private const string GroupName = "_saberFactory";
-        
-        public SettableSetting<bool> RelativeTrailMode;
-        
-        public void Initialize()
-        {
-            RegisterSetting(ref RelativeTrailMode, "_relativeTrailMode");
-        }
+        public SettableSettingAbstraction<bool> RelativeTrailMode = new SettableSettingAbstraction<bool>();
 
-        private void RegisterSetting<T>(ref SettableSetting<T> setting, string fieldName) where T : struct
+        public class SettableSettingAbstraction<T>
         {
-            setting = new SettableSetting<T>(GroupName, fieldName);
-            SettingSetterSettableSettingsManager.RegisterSettableSetting(setting.GroupName, setting.FieldName, setting);
+            public event Action ValueChanged;
+
+            public T Value
+            {
+                get => _value;
+                set
+                {
+                    _value = value;
+                    ValueChanged?.Invoke();
+                }
+            }
+
+            private T _value;
+
         }
     }
 }

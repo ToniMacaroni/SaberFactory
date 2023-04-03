@@ -1,5 +1,4 @@
-﻿using Heck.SettingsSetter;
-using IPA.Utilities;
+﻿using IPA.Utilities;
 using SaberFactory.Configuration;
 using SaberFactory.Helpers;
 using SaberFactory.Installers;
