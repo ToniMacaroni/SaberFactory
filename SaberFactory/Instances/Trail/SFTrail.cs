@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using SaberFactory.Helpers;
 using SaberFactory.Misc;
 using UnityEngine;
 
@@ -7,9 +8,11 @@ namespace SaberFactory.Instances.Trail
     internal class SFTrail : MonoBehaviour
     {
         public static bool CapFps;
+        
         protected float TrailWidth => (PointStart.position - PointEnd.position).magnitude;
 
         public Vector3 CurHeadPos => (PStartPos + PEndPos) / 2f;
+        
         public Color Color = Color.white;
         public int Granularity = 60;
         public int SamplingFrequency = 20;
@@ -31,9 +34,11 @@ namespace SaberFactory.Instances.Trail
         protected VertexPool.VertexSegment _vertexSegment;
 
         private readonly int _skipFirstFrames = 4;
+        
         private int _frameNum;
         private float _time;
         private bool _relativeMode;
+        private ImmediateDrawer _immediateDrawer;
 
         public bool RelativeMode
         {
@@ -60,6 +65,56 @@ namespace SaberFactory.Instances.Trail
             return PlayerTransforms.transform.position;
         }
 
+        private void OnEnable()
+        {
+            _vertexPool?.SetMeshObjectActive(true);
+        }
+
+        private void OnDisable()
+        {
+            _vertexPool?.SetMeshObjectActive(false);
+        }
+
+        private void OnDestroy()
+        {
+            if (!_inited || _vertexPool == null)
+            {
+                return;
+            }
+
+            _vertexPool.Destroy();
+        }
+
+        public void Setup(TrailInitData initData, Transform pointStart, Transform pointEnd, Material material, bool editor)
+        {
+            PointStart = pointStart;
+            PointEnd = pointEnd;
+            Material = material;
+            Granularity = initData.Granularity;
+            TrailLength = initData.TrailLength;
+            Whitestep = initData.Whitestep;
+            SamplingFrequency = initData.SamplingFrequency;
+
+#if DEBUG
+            _immediateDrawer = new ImmediateDrawer();
+#endif
+
+            gameObject.layer = 12;
+            if (editor)
+            {
+                SortingOrder = 3;
+            }
+
+            _elemPool = new ElementPool(TrailLength);
+            _vertexPool = new VertexPool(Material, this);
+            _vertexSegment = _vertexPool.GetVertices(Granularity * 3, (Granularity - 1) * 12);
+            UpdateIndices();
+
+            _vertexPool.SetMeshObjectActive(false);
+
+            _inited = true;
+        }
+        
         private void LateUpdate()
         {
             // if (PlayerTransforms)
@@ -124,56 +179,10 @@ namespace SaberFactory.Instances.Trail
                 _snapshotList[1].PointStart -= offset;
                 _snapshotList[1].PointEnd -= offset;
             }
-            
+
             RefreshSpline();
             UpdateVertex();
             _vertexPool.LateUpdate();
-        }
-
-        private void OnEnable()
-        {
-            _vertexPool?.SetMeshObjectActive(true);
-        }
-
-        private void OnDisable()
-        {
-            _vertexPool?.SetMeshObjectActive(false);
-        }
-
-        private void OnDestroy()
-        {
-            if (!_inited || _vertexPool == null)
-            {
-                return;
-            }
-
-            _vertexPool.Destroy();
-        }
-
-        public void Setup(TrailInitData initData, Transform pointStart, Transform pointEnd, Material material, bool editor)
-        {
-            PointStart = pointStart;
-            PointEnd = pointEnd;
-            Material = material;
-            Granularity = initData.Granularity;
-            TrailLength = initData.TrailLength;
-            Whitestep = initData.Whitestep;
-            SamplingFrequency = initData.SamplingFrequency;
-
-            gameObject.layer = 12;
-            if (editor)
-            {
-                SortingOrder = 3;
-            }
-
-            _elemPool = new ElementPool(TrailLength);
-            _vertexPool = new VertexPool(Material, this);
-            _vertexSegment = _vertexPool.GetVertices(Granularity * 3, (Granularity - 1) * 12);
-            UpdateIndices();
-
-            _vertexPool.SetMeshObjectActive(false);
-
-            _inited = true;
         }
 
         public void SetMaterialBlock(MaterialPropertyBlock block)
@@ -191,6 +200,9 @@ namespace SaberFactory.Instances.Trail
             for (var i = 0; i < _snapshotList.Count; i++)
             {
                 _spline.ControlPoints[i].Position = _snapshotList[i].Pos;
+#if DEBUG
+                _immediateDrawer.DrawSmallBall(_spline.ControlPoints[i].Position);
+#endif
                 _spline.ControlPoints[i].Normal = _snapshotList[i].PointEnd - _snapshotList[i].PointStart;
             }
 
@@ -249,10 +261,14 @@ namespace SaberFactory.Instances.Trail
                 uvCoord.x = 1f;
                 uvCoord.y = uvSegment;
                 pool.UVs[baseIdx + 2] = uvCoord;
+
+#if DEBUG
+                _immediateDrawer.DrawSmallBall(pos0, Color.green);
+                _immediateDrawer.DrawSmallBall(pos1, Color.green);
+#endif
             }
 
             _vertexSegment.Pool.UVChanged = true;
-            _vertexSegment.Pool.VertChanged = true;
             _vertexSegment.Pool.ColorChanged = true;
         }
 
