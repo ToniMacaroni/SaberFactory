@@ -59,6 +59,31 @@ that tells Saber Factory to use a specific saber for this map like this:
 Make sure to use the actual name of the saber not the file name.
 Best is to look in-game at the saber to see what the actual name is.
 
+## I have made a noodle map where the player moves and I want the trails to not stretch
+By default if the player moves in a noodle map the trail behaves like a real trail and becomes longer the faster the player moves.
+Sometimes you might have a different vission for your map or the map is less playable with such a long trail.
+You can enable "relative movement of the trail to the player" by using a settable settings in your map like this:
+```
+"_difficultyBeatmaps": [
+        {
+          "_difficulty": "Expert",
+          ...
+          "_customData": {
+            "_requirements": [
+              "Chroma",
+              "Noodle Extensions"
+            ],
+            "_settings": {
+              "_saberFactory": {
+                "_relativeTrailMode": true
+              }
+            },
+          }
+        }
+      ]
+```
+The settings group is `_saberFactory` and the field is `_relativeTrailMode` (which can be either `true` or `false`)
+
 ## I made a mod that needs to create some sabers in a song
 If you want to create sabers in a song see https://github.com/Auros/SiraUtil#sabers
 
