@@ -62,6 +62,7 @@ Best is to look in-game at the saber to see what the actual name is.
 ## I have made a noodle map where the player moves and I want the trails to not stretch
 By default if the player moves in a noodle map the trail behaves like a real trail and becomes longer the faster the player moves.
 Sometimes you might have a different vission for your map or the map is less playable with such a long trail.
+If you don't know what I'm talking about, take a look at this comparison: https://www.youtube.com/watch?v=UP0SqtMcr1g
 You can enable "relative movement of the trail to the player" by using a settable settings in your map like this:
 ```
 "_difficultyBeatmaps": [
