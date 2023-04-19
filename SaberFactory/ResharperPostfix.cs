@@ -31,7 +31,19 @@ namespace SaberFactory
         public static void retnull(this object obj)
         {
             if (obj is null)
-            { }
+            {
+                return;
+            }
+            //$ $END$
+        }
+        
+        [SourceTemplate]
+        public static void uretnull(this UnityEngine.Object obj)
+        {
+            if (!obj)
+            {
+                return;
+            }
             //$ $END$
         }
     }

@@ -46,9 +46,9 @@ namespace SaberFactory.Misc
             try
             {
                 #if DEBUG
-                var content = File.ReadAllText(@"I:\repos\SaberFactory\SaberList.json");
-                //var response = await _httpService.GetAsync("https://raw.githubusercontent.com/ToniMacaroni/SaberFactory/development/SaberList.json");
-                //var content = await response.ReadAsStringAsync();
+                // var content = File.ReadAllText(@"C:\Users\name1\Desktop\SaberFactory\SaberList.json");
+                var response = await _httpService.GetAsync("https://raw.githubusercontent.com/ToniMacaroni/SaberFactory/development/SaberList.json");
+                var content = await response.ReadAsStringAsync();
                 #else
                 var response = await _httpService.GetAsync(RemoteSaberUrl);
                 var content = await response.ReadAsStringAsync();

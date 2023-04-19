@@ -9,7 +9,6 @@ namespace SaberFactory.Misc
     {
         public const int BlockSize = 108;
 
-        public Mesh MyMesh => _meshFilter != null ? _meshFilter.sharedMesh : null;
         public MeshRenderer MeshRenderer;
 
         public float BoundsScheduleTime = 1f;
@@ -20,13 +19,12 @@ namespace SaberFactory.Misc
 
         public bool IndiceChanged;
         public int[] Indices;
-        public bool UV2Changed;
         public bool UVChanged;
         public Vector2[] UVs;
-        public bool VertChanged;
 
         public Vector3[] Vertices;
 
+        protected Mesh _mesh;
         protected GameObject _gameObject;
         protected int _indexTotal;
         protected int _indexUsed;
@@ -40,6 +38,8 @@ namespace SaberFactory.Misc
         protected int _vertexTotal;
         protected int _vertexUsed;
 
+        private bool _canTick;
+
         public VertexPool(Material material, SFTrail owner)
         {
             _vertexTotal = _vertexUsed = 0;
@@ -48,18 +48,18 @@ namespace SaberFactory.Misc
             CreateMeshObj(owner, material);
             _material = material;
             InitArrays();
-            IndiceChanged = ColorChanged = UVChanged = UV2Changed = VertChanged = true;
+            IndiceChanged = ColorChanged = UVChanged = true;
         }
 
         public void RecalculateBounds()
         {
-            MyMesh.RecalculateBounds();
+            _mesh.RecalculateBounds();
         }
 
 
         public void SetMeshObjectActive(bool flag)
         {
-            if (_meshFilter == null)
+            if (!_meshFilter)
             {
                 return;
             }
@@ -81,7 +81,9 @@ namespace SaberFactory.Misc
             MeshRenderer.sharedMaterial = material;
             MeshRenderer.sortingLayerName = _owner.SortingLayerName;
             MeshRenderer.sortingOrder = _owner.SortingOrder;
-            _meshFilter.sharedMesh = new Mesh();
+            _meshFilter.sharedMesh = _mesh = new Mesh();
+
+            _canTick = true;
         }
 
         public void Destroy()
@@ -152,36 +154,32 @@ namespace SaberFactory.Misc
             IndiceChanged = true;
             ColorChanged = true;
             UVChanged = true;
-            VertChanged = true;
-            UV2Changed = true;
         }
 
         public void LateUpdate()
         {
-            if (MyMesh == null)
-            {
+            if (!_canTick)
                 return;
-            }
 
             if (_vertCountChanged)
             {
-                MyMesh.Clear();
+                _mesh.Clear();
             }
 
-            MyMesh.vertices = Vertices;
+            _mesh.vertices = Vertices;
             if (UVChanged)
             {
-                MyMesh.uv = UVs;
+                _mesh.uv = UVs;
             }
 
             if (ColorChanged)
             {
-                MyMesh.colors = Colors;
+                _mesh.colors = Colors;
             }
 
             if (IndiceChanged)
             {
-                MyMesh.triangles = Indices;
+                _mesh.triangles = Indices;
             }
 
             ElapsedTime += Time.deltaTime;
@@ -200,8 +198,6 @@ namespace SaberFactory.Misc
             IndiceChanged = false;
             ColorChanged = false;
             UVChanged = false;
-            UV2Changed = false;
-            VertChanged = false;
         }
 
         public class VertexSegment
