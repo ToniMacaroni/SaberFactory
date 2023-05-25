@@ -30,6 +30,17 @@ namespace SaberFactory.UI.CustomSaber.Views
                 OnPropertyChanged();
             }
         }
+                
+        [UIValue("hmd-only")]
+        private bool HMDOnly
+        {
+            get => _pluginConfig.HMDOnly;
+            set
+            {
+                _pluginConfig.HMDOnly = value;
+                OnPropertyChanged();
+            }
+        }
 
         [UIValue("events-enabled")]
         private bool EventsEnabled

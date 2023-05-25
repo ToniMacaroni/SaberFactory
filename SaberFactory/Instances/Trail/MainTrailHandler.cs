@@ -1,4 +1,5 @@
-﻿using IPA.Utilities;
+﻿using CameraUtils.Core;
+using IPA.Utilities;
 using SaberFactory.Configuration;
 using SaberFactory.Helpers;
 using SaberFactory.Installers;
@@ -100,6 +101,11 @@ namespace SaberFactory.Instances.Trail
             }
         }
         
+        public void SetVisibilityLayer(VisibilityLayer layer)
+        {
+            TrailInstance.SetVisibilityLayer(layer);
+        }
+
         private void UpdateRelativeMode()
         {
             TrailInstance.RelativeMode = _saberSettableSettings.RelativeTrailMode.Value;

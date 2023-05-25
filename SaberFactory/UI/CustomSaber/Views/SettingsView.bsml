@@ -7,7 +7,9 @@
             <checkbox text='Saber Factory Enabled' value='mod-enabled' apply-on-change='true'/>
         </horizontal>
         <vertical pad='2' bg='round-rect-panel' bg-color='#00000050' spacing='1'>
-            <checkbox text='Enable Events' value='events-enabled' apply-on-change='true'
+			<checkbox text='HMD Only' value='hmd-only' apply-on-change='true'
+		              hover-hint='Only show your sabers in-headset and show default sabers in the desktop view [WILL BREAK CAMERA2 "SABER" VISIBILITY TOGGLE]'/>
+			<checkbox text='Enable Events' value='events-enabled' apply-on-change='true'
                       hover-hint='Enable events on the saber (like fc effects)'/>
             <checkbox text='Random Sabers' value='random-sabers' apply-on-change='true'
                       hover-hint='Choose a random saber on every song start'/>
