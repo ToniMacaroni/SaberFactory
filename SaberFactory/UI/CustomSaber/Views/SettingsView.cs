@@ -114,7 +114,7 @@ namespace SaberFactory.UI.CustomSaber.Views
 
         public override void DidOpen()
         {
-            _editorInstanceManager.CurrentSaber.GetSaberComponent(out _saberSound);
+            _editorInstanceManager.CurrentSaber?.GetSaberComponent(out _saberSound);
         }
 
         [UIAction("#post-parse")]

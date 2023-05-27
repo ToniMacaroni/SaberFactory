@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using AssetBundleLoadingTools.Utilities;
 using SaberFactory.DataStore;
 using SaberFactory.Helpers;
 using UnityEngine;
@@ -31,10 +32,20 @@ namespace SaberFactory.Loaders
                 return null;
             }
 
-            var result = await Readers.LoadAssetFromAssetBundleAsync<GameObject>(fullPath, "_CustomSaber");
+            var result = await Readers.LoadAssetFromAssetBundleSafeAsync<GameObject>(fullPath, "_CustomSaber");
             if (result == null)
             {
                 return null;
+            }
+
+            var info = await ShaderRepair.FixShadersOnGameObjectAsync(result.Item1);
+            if (!info.AllShadersReplaced)
+            {
+                Debug.LogWarning($"Missing shader replacement data for {relativePath}:");
+                foreach (var shaderName in info.MissingShaderNames)
+                {
+                    Debug.LogWarning($"\t- {shaderName}");
+                }
             }
 
             return new StoreAsset(relativePath, result.Item1, result.Item2);

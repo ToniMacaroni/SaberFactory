@@ -21,7 +21,7 @@
         </vertical>
 
 
-        <horizontal bg='panel-top' skew='0' bg-color='#00b6ff20' pad='2'>
+        <horizontal bg='panel-top' skew='0' bg-color='#00b6ff20' pad='2' vertical-fit="Unconstrained">
             <sui.icon-button
                     pad='1'
                     pref-width='15'
@@ -36,7 +36,7 @@
                     preferred-height='15'
                     on-click='discord-clicked'
                     icon='SaberFactory.Resources.Icons.discord.png'
-                    hover-hint='Join our lovely server for help with the mod'
+                    hover-hint='Join the discord server for help with the mod'
                     skew='0' show-line='false' normal-color='#00000000' hovered-color='#00b6ff40' use-gradient='false'/>
             <sui.icon-button
                     id='github-button'
