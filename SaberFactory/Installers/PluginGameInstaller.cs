@@ -25,6 +25,9 @@ namespace SaberFactory.Installers
                 saberInstanceList.PlayerTransforms = playerTransforms;
             }
 
+            Container.Bind<HMDOnlySaber>().FromNewComponentOnNewGameObject().AsSingle().NonLazy();
+
+
             var config = Container.Resolve<PluginConfig>();
             if (!config.Enabled || Container.Resolve<SaberSet>().IsEmpty)
             {

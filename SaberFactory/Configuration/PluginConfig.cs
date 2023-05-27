@@ -15,6 +15,9 @@ namespace SaberFactory.Configuration
     {
         public bool Enabled { get; set; } = true;
 
+        // Only show custom sabers within the HMD View
+        public bool HMDOnly { get; set; } = false;
+
         // is used to check if it's the user's first time
         // launching the mod
         public bool FirstLaunch { get; set; } = true;

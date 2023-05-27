@@ -18,7 +18,6 @@ namespace SaberFactory.Instances.PostProcessors
         public void ProcessSaber(SaberInstance saberObject)
         {
             var gameobject = saberObject.GameObject;
-            gameobject.SetLayer<Renderer>(12);
             gameobject.GetComponentsInChildren<Collider>().Do(x => x.enabled = false);
             gameobject.GetComponentsInChildren<AudioSource>(true).Do(x => x.volume *= _config.SaberAudioVolumeMultiplier);
             gameobject.GetComponentsInChildren<Renderer>(true).Do(x => { x.sortingOrder = 3; });

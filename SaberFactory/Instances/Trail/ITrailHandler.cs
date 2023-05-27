@@ -1,4 +1,5 @@
-﻿using SaberFactory.Configuration;
+﻿using CameraUtils.Core;
+using SaberFactory.Configuration;
 using UnityEngine;
 
 namespace SaberFactory.Instances.Trail
@@ -12,5 +13,7 @@ namespace SaberFactory.Instances.Trail
         public void SetTrailData(InstanceTrailData instanceTrailData);
 
         public void SetColor(Color color);
+
+        public void SetVisibilityLayer(VisibilityLayer layer);
     }
 }

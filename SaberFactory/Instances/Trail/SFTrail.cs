@@ -327,6 +327,11 @@ namespace SaberFactory.Instances.Trail
             }
         }
 
+        public void SetVisibilityLayer(CameraUtils.Core.VisibilityLayer layer)
+        {
+            CameraUtils.Core.VisibilityUtils.SetLayerRecursively(_vertexPool.MeshRenderer.gameObject, layer);
+        }
+
         public class Element
         {
             public Vector3 Pos => (PointStart + PointEnd) / 2f;
