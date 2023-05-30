@@ -1,10 +1,8 @@
-﻿using System;
-using SaberFactory.Configuration;
+﻿using SaberFactory.Configuration;
 using SaberFactory.Models;
 using SaberFactory.ProjectComponents;
 using UnityEngine;
 using Zenject;
-using Object = UnityEngine.Object;
 
 namespace SaberFactory.Misc
 {
@@ -68,11 +66,15 @@ namespace SaberFactory.Misc
 
         private SFBurnmarks _info;
 
-        public override void Start()
+        public new void Start()
         {
             base.Start();
             Init();
         }
+
+        // public new void LateUpdate()
+        // {
+        // }
 
         public void Init()
         {

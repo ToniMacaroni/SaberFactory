@@ -3,12 +3,12 @@
   "id": "SaberFactory",
   "name": "Saber Factory",
   "author": "Toni Macaroni",
-  "version": "2.5.4",
+  "version": "2.5.5",
   "description": "A highly customizable saber mod",
   "gameVersion": "1.29.0",
   "dependsOn": {
-    "BSIPA": "^4.2.2",
+    "BSIPA": "^4.3.0",
     "SiraUtil": "^3.1.2",
-    "BeatSaberMarkupLanguage": "^1.6.8"
+    "BeatSaberMarkupLanguage": "^1.6.10"
   }
 }

@@ -37,18 +37,9 @@ namespace SaberFactory.Instances.Trail
         
         private int _frameNum;
         private float _time;
-        private bool _relativeMode;
         private ImmediateDrawer _immediateDrawer;
 
-        public bool RelativeMode
-        {
-            get => _relativeMode;
-            set
-            {
-                Debug.Log($"Setting relative mode to {value}");
-                _relativeMode = value;
-            }
-        }
+        public bool RelativeMode { get; set; }
 
         public PlayerTransforms PlayerTransforms { get; set; }
 

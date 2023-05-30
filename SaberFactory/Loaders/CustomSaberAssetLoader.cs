@@ -2,6 +2,9 @@
 using System.IO;
 using System.Threading.Tasks;
 using AssetBundleLoadingTools.Utilities;
+using CustomSaber;
+using HarmonyLib;
+using IPA.Utilities;
 using SaberFactory.DataStore;
 using SaberFactory.Helpers;
 using UnityEngine;
@@ -48,6 +51,36 @@ namespace SaberFactory.Loaders
                 }
             }
 
+
+            var trailsList = result.Item1.GetComponentsInChildren<CustomTrail>();
+            var matDict = new Dictionary<Material, List<CustomTrail>>();
+            
+            foreach (var trail in trailsList)
+            {
+                if (!trail.TrailMaterial)
+                {
+                    continue;
+                }
+                
+                if (!matDict.ContainsKey(trail.TrailMaterial))
+                {
+                    matDict.Add(trail.TrailMaterial, new List<CustomTrail>());
+                }
+                
+                matDict[trail.TrailMaterial].Add(trail);
+            }
+            
+            foreach (var (mat, trails) in matDict)
+            {
+                var trailInfo = await ShaderRepair.FixShaderOnMaterialAsync(mat);
+
+                if (!trailInfo.AllShadersReplaced)
+                {
+                    Debug.LogWarning("Missing trail shader replacement data. Using default trail");
+                    trails.Do(x=>x.TrailMaterial = null);
+                }
+            }
+            
             return new StoreAsset(relativePath, result.Item1, result.Item2);
         }
 

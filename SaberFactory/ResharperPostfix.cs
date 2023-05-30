@@ -1,6 +1,7 @@
 ﻿#if RESHARPER
 
 using JetBrains.Annotations;
+using UnityEngine;
 
 namespace SaberFactory
 {
@@ -45,6 +46,57 @@ namespace SaberFactory
                 return;
             }
             //$ $END$
+        }
+        
+        [SourceTemplate]
+        public static void equalret(this string obj)
+        {
+            if (obj == "$condition$")
+            {
+                return;
+            }
+            //$ $END$
+        }
+        
+        [SourceTemplate]
+        [Macro(Target = "condition")]
+        public static void nequalret(this string obj)
+        {
+            if (obj != "$condition$")
+            {
+                return;
+            }
+            //$ $END$
+        }
+
+        [SourceTemplate]
+        [Macro(Target = "generic", Expression = "completeType()")]
+        [Macro(Target = "comp")]
+        public static void com(this GameObject obj)
+        {
+            /*$ var $comp$ = obj.GetComponent<$generic$>();
+            $END$ */
+        }
+        
+        [SourceTemplate]
+        [Macro(Target = "generic", Expression = "completeType()")]
+        [Macro(Target = "comp")]
+        public static void comc(this GameObject obj)
+        {
+            /*$ var $comp$ = obj.GetComponentInChildren<$generic$>();
+            $END$ */
+        }
+
+        [SourceTemplate]
+        public static void dbg(this object obj)
+        {
+            Debug.Log($"$obj$: {obj}");
+        }
+        
+        [SourceTemplate]
+        public static void dbgn(this object obj)
+        {
+            Debug.Log($"$obj$ valid: {obj != null}");
         }
     }
 }
