@@ -69,6 +69,10 @@ public class FlowUiRegistration : IInitializable, IDisposable
         {
             Object.DestroyImmediate(_uiInstance);
         }
-        _bundle.Unload(true);
+
+        if (_bundle)
+        {
+            _bundle.Unload(true);
+        }
     }
 }

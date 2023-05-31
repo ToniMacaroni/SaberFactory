@@ -68,7 +68,7 @@ namespace SaberFactory.Misc
 
         private SFBurnmarks _info;
 
-        public override void Start()
+        public new void Start()
         {
             base.Start();
             Init();

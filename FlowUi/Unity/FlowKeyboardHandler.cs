@@ -38,15 +38,19 @@ namespace FlowUi
         [Inject]
         private readonly UIKeyboardManager _uiKeyboardManager = null;
 
+#if MOD
+        public override void Awake()
+#else
         protected override void Awake()
+#endif
         {
         }
 
-        protected override void DoStateTransition(Selectable.SelectionState state, bool instant)
-        {
-        }
+        // public override void DoStateTransition(Selectable.SelectionState state, bool instant)
+        // {
+        // }
 
-        public override void ActivateKeyboard(HMUI.UIKeyboard keyboard)
+        public new void ActivateKeyboard(HMUI.UIKeyboard keyboard)
         {
             if (!_hasKeyboardAssigned)
             {
@@ -56,7 +60,7 @@ namespace FlowUi
             }
         }
 
-        public override void DeactivateKeyboard(HMUI.UIKeyboard keyboard)
+        public new void DeactivateKeyboard(HMUI.UIKeyboard keyboard)
         {
             if (_hasKeyboardAssigned)
             {
@@ -85,13 +89,13 @@ namespace FlowUi
             return await _taskCompletionSource.Task;
         }
 
-        public override void KeyboardDeletePressed()
+        public new void KeyboardDeletePressed()
         {
             Text = Text.Length <= 0 ? "" : Text.Substring(0, Text.Length - 1);
             _onValueChanged.Invoke(this);
         }
 
-        public override void KeyboardKeyPressed(char letter)
+        public new void KeyboardKeyPressed(char letter)
         {
             if (Text.Length < _textLengthLimit)
             {

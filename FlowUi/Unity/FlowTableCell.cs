@@ -28,12 +28,12 @@ namespace FlowUi.Runtime
         {
         }
 
-        protected override void SelectionDidChange(TransitionType transitionType)
+        public override void SelectionDidChange(TransitionType transitionType)
         {
             RefreshVisuals();
         }
 
-        protected override void HighlightDidChange(TransitionType transitionType)
+        public override void HighlightDidChange(TransitionType transitionType)
         {
             RefreshVisuals();
         }

@@ -56,6 +56,9 @@
         <Reference Include="HMRendering">
           <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\HMRendering.dll</HintPath>
         </Reference>
+        <Reference Include="Tweening">
+          <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Tweening.dll</HintPath>
+        </Reference>
         <Reference Include="UnityEngine.IMGUIModule">
             <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
             <Private>false</Private>
@@ -111,7 +114,7 @@
             <Private>False</Private>
             <SpecificVersion>False</SpecificVersion>
         </Reference>
-        <Reference Include="Main">
+        <Reference Include="Main" Publicize="true">
             <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Main.dll</HintPath>
             <Private>False</Private>
         </Reference>
@@ -119,7 +122,7 @@
             <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\HMLib.dll</HintPath>
             <Private>False</Private>
         </Reference>
-        <Reference Include="HMUI">
+        <Reference Include="HMUI" Publicize="true">
             <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\HMUI.dll</HintPath>
             <Private>False</Private>
         </Reference>
@@ -259,6 +262,7 @@
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
+        <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.1" PrivateAssets="all" />
     </ItemGroup>
 
     <ItemGroup>

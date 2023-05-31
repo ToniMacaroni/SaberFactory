@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace FlowUi.Runtime
 {
-    public class FlowModalView : ModalView
+    public class FlowModalView : CustomModalView
     {
         public virtual void Show()
         {

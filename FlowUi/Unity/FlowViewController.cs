@@ -24,9 +24,13 @@ namespace FlowUi.Runtime
         
         protected FlowCategoryContainer _currentCategoryContainer;
 
-        public event Action OnFlowDidDeactivate; 
+        public event Action OnFlowDidDeactivate;
 
+#if MOD
+        public override async void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
+#else
         protected override async void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
+#endif
         {
             gameObject.SetActive(true);
 
@@ -44,7 +48,11 @@ namespace FlowUi.Runtime
             await DidOpen();
         }
 
+#if MOD
+        public override async void DidDeactivate(bool removedFromHierarchy, bool screenSystemDisabling)
+#else
         protected override async void DidDeactivate(bool removedFromHierarchy, bool screenSystemDisabling)
+#endif
         {
             if (_currentCategoryContainer)
             {

@@ -14,7 +14,7 @@ using Zenject;
 
 namespace SaberFactory.Game
 {
-    internal class SfSaberModelController : SaberModelController, IColorable
+    internal class SfSaberModelController : SaberModelController, IColorable, IPreSaberModelInit
     {
         [InjectOptional] private readonly EventPlayer _eventPlayer = null;
         [Inject] private readonly GameSaberSetup _gameSaberSetup = null;
@@ -38,7 +38,7 @@ namespace SaberFactory.Game
             set => SetColor(value);
         }
 
-        public override async void Init(Transform parent, Saber saber)
+        public async void CustomInit(Transform parent, Saber saber)
         {
             await _gameSaberSetup.SetupTask;
 
@@ -60,6 +60,12 @@ namespace SaberFactory.Game
             _eventPlayer?.SetPartEventList(_saberInstance.Events, saber.saberType);
 
             _logger.Info("Instantiated Saber");
+        }
+
+        public bool PreInit(Transform parent, Saber saber)
+        {
+            CustomInit(parent, saber);
+            return false;
         }
     }
 }

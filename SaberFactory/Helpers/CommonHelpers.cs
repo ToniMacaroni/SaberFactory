@@ -99,7 +99,7 @@ namespace SaberFactory.Helpers
             bool goState = gameObject.activeSelf;
             gameObject.SetActive(false);
             var upgradedMonoBehaviour = gameObject.AddComponent(upgradingType);
-            foreach (FieldInfo info in upgradingType.GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic))
+            foreach (FieldInfo info in originalType.GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic))
             {
                 info.SetValue(upgradedMonoBehaviour, info.GetValue(upgradedDummyComponent));
             }

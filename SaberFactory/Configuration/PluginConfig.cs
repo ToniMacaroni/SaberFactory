@@ -25,6 +25,7 @@ namespace SaberFactory.Configuration
         // Randomize saber on each song start
         public bool RandomSaber { get; set; } = false;
 
+        // Animate the saber spawn on selection
         public bool AnimateSaberSelection { get; set; } = true;
 
         // How far does the trail width slider go
@@ -47,7 +48,7 @@ namespace SaberFactory.Configuration
 
         public bool EnableCustomBurnmarks { get; set; } = true;
         
-        public float SaberSelectionBackgroundOpacity { get; set; } = 0.1f;
+        public float SaberSelectionBackgroundOpacity { get; set; } = 0.0f;
         
         public int SaberSelectionBackgroundBlurAmount { get; set; } = 4;
 
