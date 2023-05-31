@@ -34,7 +34,10 @@ namespace SaberFactory.DataStore
 
         public void Unload()
         {
-            AssetBundle.Unload(true);
+            if (AssetBundle)
+            {
+                AssetBundle.Unload(true);
+            }
         }
     }
 }

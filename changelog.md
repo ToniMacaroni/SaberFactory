@@ -9,7 +9,8 @@
 **!!Important!!**  
 Due to the Beat Saber update (switch to new Unity version) all previous custom sabers (materials) are incompatible.  
 This SF update will try to automatically replace all materials with valid ones, but this will only work for public shaders.  
-If you are the creator of previous sabers, you will need to re-export them with SPI compatibility.
+If you are the creator of previous sabers, you will need to re-export them with SPI (Single Pass Instanced) compatibility. 
+I also recommend using (upgrading the project to) Unity 2021 to export your saber, since shaders exported with older version will have bugs.
 
 
 *this is just a small update for bug fixes in 2.x.x, v3 is still being developed in parallel*  
