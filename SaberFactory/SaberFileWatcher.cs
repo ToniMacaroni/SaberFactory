@@ -11,12 +11,14 @@ namespace SaberFactory
 
         public bool IsWatching { get; private set; }
         private readonly DirectoryInfo _dir;
+        private readonly ICoroutineStarter _coroutineStarter;
 
         private FileSystemWatcher _watcher;
 
-        public SaberFileWatcher(PluginDirectories dirs)
+        public SaberFileWatcher(PluginDirectories dirs, ICoroutineStarter coroutineStarter)
         {
             _dir = dirs.CustomSaberDir;
+            _coroutineStarter = coroutineStarter;
         }
 
         public event Action<string> OnSaberUpdate;
@@ -42,7 +44,7 @@ namespace SaberFactory
 
         private void WatcherOnCreated(object sender, FileSystemEventArgs e)
         {
-            HMMainThreadDispatcher.instance.Enqueue(Initiate(e.FullPath));
+            _coroutineStarter.StartCoroutine(Initiate(e.FullPath));
         }
 
         private IEnumerator Initiate(string filename)

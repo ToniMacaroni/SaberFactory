@@ -16,10 +16,7 @@ namespace SaberFactory.UI.Lib
 
         public void Dispose()
         {
-            if (MenuButtons.IsSingletonAvailable && BSMLParser.IsSingletonAvailable)
-            {
-                MenuButtons.instance.UnregisterButton(_menuButton);
-            }
+            MenuButtons.instance.UnregisterButton(_menuButton);
         }
 
         public void Initialize()

@@ -96,6 +96,8 @@ namespace SaberFactory.UI.Lib.BSML
 
             var attrDict = new Dictionary<string, XmlSchemaAttribute>();
 
+            var parent = new GameObject("SaberFactory CustomComponentHandler").transform;
+
             foreach (var item in schema.Items)
             {
                 if (item is XmlSchemaComplexType complexType)
@@ -117,7 +119,7 @@ namespace SaberFactory.UI.Lib.BSML
                     {
                         try
                         {
-                            var node = tag.CreateObject(parser.transform);
+                            var node = tag.CreateObject(parent);
                             foreach (var typeHandler in typeHandlers.Where(x => x.GetType().Assembly == thisAsm))
                             {
                                 var type = typeHandler.GetType().GetCustomAttribute<ComponentHandler>().type;
@@ -164,7 +166,7 @@ namespace SaberFactory.UI.Lib.BSML
 
                 try
                 {
-                    var currentNode = tag.CreateObject(parser.transform);
+                    var currentNode = tag.CreateObject(parent);
                     foreach (var typeHandler in typeHandlers)
                     {
                         var type = typeHandler.GetType().GetCustomAttribute<ComponentHandler>().type;

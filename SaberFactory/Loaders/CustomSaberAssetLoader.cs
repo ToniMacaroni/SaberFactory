@@ -13,6 +13,8 @@ namespace SaberFactory.Loaders
 {
     internal class CustomSaberAssetLoader : AssetBundleLoader
     {
+        private readonly Material _defaultMaterial = new Material(Shader.Find("Hidden/InternalErrorShader"));
+
         public override string HandledExtension => ".saber";
 
         public override ISet<AssetMetaPath> CollectFiles(PluginDirectories dirs)
@@ -41,6 +43,9 @@ namespace SaberFactory.Loaders
                 return null;
             }
 
+            // GameScenesManager might call Resources.UnloadUnusedAssets while we're still working on this
+            result.Item1.hideFlags |= HideFlags.DontUnloadUnusedAsset;
+
             var info = await ShaderRepair.FixShadersOnGameObjectAsync(result.Item1);
             if (!info.AllShadersReplaced)
             {
@@ -50,7 +55,6 @@ namespace SaberFactory.Loaders
                     Debug.LogWarning($"\t- {shaderName}");
                 }
             }
-
 
             var trailsList = result.Item1.GetComponentsInChildren<CustomTrail>();
             var matDict = new Dictionary<Material, List<CustomTrail>>();
@@ -77,10 +81,12 @@ namespace SaberFactory.Loaders
                 if (!trailInfo.AllShadersReplaced)
                 {
                     Debug.LogWarning("Missing trail shader replacement data. Using default trail");
-                    trails.Do(x=>x.TrailMaterial = null);
+                    trails.Do(x => x.TrailMaterial = _defaultMaterial);
                 }
             }
-            
+
+            result.Item1.hideFlags &= ~HideFlags.DontUnloadUnusedAsset;
+
             return new StoreAsset(relativePath, result.Item1, result.Item2);
         }
 
