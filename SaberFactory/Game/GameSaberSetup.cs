@@ -5,7 +5,7 @@ using SaberFactory.Configuration;
 using SaberFactory.DataStore;
 using SaberFactory.Helpers;
 using SaberFactory.Models;
-using UnityEngine;
+using SiraUtil.Logging;
 using Zenject;
 
 namespace SaberFactory.Game
@@ -22,15 +22,17 @@ namespace SaberFactory.Game
         private readonly SaberModel _oldRightSaberModel;
         private readonly RandomUtil _randomUtil;
         private readonly SaberSet _saberSet;
+        private readonly SiraLog _logger;
 
         private GameSaberSetup(PluginConfig config, SaberSet saberSet, MainAssetStore mainAssetStore,
-            IReadonlyBeatmapData beatmap, RandomUtil randomUtil)
+            IReadonlyBeatmapData beatmap, RandomUtil randomUtil, SiraLog logger)
         {
             _config = config;
             _saberSet = saberSet;
             _mainAssetStore = mainAssetStore;
             _beatmapData = beatmap.CastChecked<BeatmapData>();
             _randomUtil = randomUtil;
+            _logger = logger;
 
             _oldLeftSaberModel = _saberSet.LeftSaber;
             _oldRightSaberModel = _saberSet.RightSaber;
@@ -105,7 +107,7 @@ namespace SaberFactory.Game
             }
             catch (Exception e)
             {
-                Debug.LogError(e.ToString());
+                _logger.Error(e.ToString());
             }
         }
     }

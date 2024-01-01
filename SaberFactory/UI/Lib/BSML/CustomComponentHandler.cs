@@ -18,7 +18,6 @@ using SaberFactory.UI.Lib.BSML.Tags;
 using SiraUtil.Logging;
 using UnityEngine;
 using Zenject;
-using Debug = UnityEngine.Debug;
 
 namespace SaberFactory.UI.Lib.BSML
 {
@@ -129,7 +128,7 @@ namespace SaberFactory.UI.Lib.BSML
                                     {
                                         foreach (var attrAlias in attrAliases)
                                         {
-                                            Debug.Log($"Adding {attrAlias} to existing type {complexType.Name}");
+                                            _logger.Info($"Adding {attrAlias} to existing type {complexType.Name}");
                                             complexType.Attributes.Add(new XmlSchemaAttribute
                                             {
                                                 Name = attrAlias
@@ -193,8 +192,8 @@ namespace SaberFactory.UI.Lib.BSML
                 }
                 catch (Exception e)
                 {
-                    Debug.LogError($"Couldn't instantiate {tag.Aliases[0]}");
-                    Debug.LogWarning(e);
+                    _logger.Error($"Couldn't instantiate {tag.Aliases[0]}");
+                    _logger.Warn(e);
                 }
 
                 foreach (var alias in tag.Aliases)
@@ -216,8 +215,8 @@ namespace SaberFactory.UI.Lib.BSML
             schema.Write(writer);
             File.WriteAllText("CustomBSMLSchema.xsd", writer.ToString());
             File.WriteAllText("css.css-data.json", cssDataObject.ToString());
-            
-            Debug.LogWarning("Written new doc");
+
+            _logger.Warn("Written new doc");
         }
 
         private class Utf8Writer : StringWriter

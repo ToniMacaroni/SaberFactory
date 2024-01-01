@@ -7,13 +7,22 @@ using HarmonyLib;
 using IPA.Utilities;
 using SaberFactory.DataStore;
 using SaberFactory.Helpers;
+using SiraUtil.Logging;
 using UnityEngine;
 
 namespace SaberFactory.Loaders
 {
     internal class CustomSaberAssetLoader : AssetBundleLoader
     {
-        private readonly Material _defaultMaterial = new Material(Shader.Find("Hidden/InternalErrorShader"));
+        private readonly SiraLog _logger;
+        private readonly Material _defaultMaterial;
+
+        private CustomSaberAssetLoader(SiraLog logger)
+        {
+            _logger = logger;
+            _defaultMaterial = new Material(Shader.Find("Hidden/InternalErrorShader"));
+        }
+
 
         public override string HandledExtension => ".saber";
 
@@ -49,10 +58,10 @@ namespace SaberFactory.Loaders
             var info = await ShaderRepair.FixShadersOnGameObjectAsync(result.Item1);
             if (!info.AllShadersReplaced)
             {
-                Debug.LogWarning($"Missing shader replacement data for {relativePath}:");
+                _logger.Warn($"Missing shader replacement data for {relativePath}:");
                 foreach (var shaderName in info.MissingShaderNames)
                 {
-                    Debug.LogWarning($"\t- {shaderName}");
+                    _logger.Warn($"\t- {shaderName}");
                 }
             }
 
@@ -80,7 +89,7 @@ namespace SaberFactory.Loaders
 
                 if (!trailInfo.AllShadersReplaced)
                 {
-                    Debug.LogWarning("Missing trail shader replacement data. Using default trail");
+                    _logger.Warn("Missing trail shader replacement data. Using default trail");
                     trails.Do(x => x.TrailMaterial = _defaultMaterial);
                 }
             }
