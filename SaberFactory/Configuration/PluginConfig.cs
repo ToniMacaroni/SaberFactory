@@ -1,17 +1,15 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using IPA.Config.Stores;
 using IPA.Config.Stores.Attributes;
 using IPA.Config.Stores.Converters;
-using JetBrains.Annotations;
 using UnityEngine;
 
 [assembly: InternalsVisibleTo(GeneratedStore.AssemblyVisibilityTarget)]
 
 namespace SaberFactory.Configuration
 {
-    internal class PluginConfig : INotifyPropertyChanged
+    internal class PluginConfig
     {
         public bool Enabled { get; set; } = true;
 
@@ -121,14 +119,6 @@ namespace SaberFactory.Configuration
         public bool IsFavorite(string path)
         {
             return Favorites.Contains(path);
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
