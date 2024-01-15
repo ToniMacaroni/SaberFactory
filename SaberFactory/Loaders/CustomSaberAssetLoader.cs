@@ -46,7 +46,7 @@ namespace SaberFactory.Loaders
                 return null;
             }
 
-            var result = await Readers.LoadAssetFromAssetBundleSafeAsync<GameObject>(fullPath, "_CustomSaber");
+            var result = await Readers.LoadAssetFromAssetBundleAsync<GameObject>(fullPath, "_CustomSaber");
             if (result == null)
             {
                 return null;
