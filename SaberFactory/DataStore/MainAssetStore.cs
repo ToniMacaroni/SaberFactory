@@ -38,6 +38,7 @@ namespace SaberFactory.DataStore
         private MainAssetStore(
             PluginConfig config,
             SiraLog logger,
+            CustomSaberAssetLoader customSaberAssetLoader,
             CustomSaberModelLoader customSaberModelLoader,
             PluginDirectories pluginDirs)
         {
@@ -45,7 +46,7 @@ namespace SaberFactory.DataStore
             _logger = logger;
             _pluginDirs = pluginDirs;
 
-            _customSaberAssetLoader = new CustomSaberAssetLoader();
+            _customSaberAssetLoader = customSaberAssetLoader;
             _customSaberModelLoader = customSaberModelLoader;
 
             _modelCompositions = new Dictionary<string, ModelComposition>();

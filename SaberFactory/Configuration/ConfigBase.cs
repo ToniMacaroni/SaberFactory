@@ -4,7 +4,7 @@ using System.IO;
 using System.Reflection;
 using Newtonsoft.Json;
 using SaberFactory.Helpers;
-using UnityEngine;
+using SiraUtil.Logging;
 using Zenject;
 
 namespace SaberFactory.Configuration
@@ -19,13 +19,16 @@ namespace SaberFactory.Configuration
 
         protected readonly FileInfo ConfigFile;
 
+        private readonly SiraLog _logger;
+
         private readonly Dictionary<PropertyInfo, object> _originalValues = new Dictionary<PropertyInfo, object>();
 
         private bool _didLoadingFail;
 
-        protected ConfigBase(PluginDirectories pluginDirs, string fileName)
+        protected ConfigBase(PluginDirectories pluginDirs, SiraLog logger, string fileName)
         {
             ConfigFile = pluginDirs.SaberFactoryDir.GetFile(fileName);
+            _logger = logger;
         }
 
         public void Dispose()
@@ -74,7 +77,7 @@ namespace SaberFactory.Configuration
             catch (Exception)
             {
                 _didLoadingFail = true;
-                Debug.LogError($"[Saber Factory Configs] Failed to load config file {ConfigFile.Name}");
+                _logger.Error($"[Saber Factory Configs] Failed to load config file {ConfigFile.Name}");
             }
         }
 

@@ -1,4 +1,6 @@
-﻿namespace SaberFactory.Configuration
+﻿using SiraUtil.Logging;
+
+namespace SaberFactory.Configuration
 {
     public class TrailConfig : ConfigBase
     {
@@ -8,7 +10,7 @@
 
         public bool OnlyUseVertexColor { get; set; } = true;
 
-        public TrailConfig(PluginDirectories pluginDirs) : base(pluginDirs, "TrailConfig.json")
+        public TrailConfig(PluginDirectories pluginDirs, SiraLog logger) : base(pluginDirs, logger, "TrailConfig.json")
         { }
     }
 }

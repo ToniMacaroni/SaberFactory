@@ -4,7 +4,7 @@
               child-expand-height='false' child-control-height='false' spacing='2' pad='3'>
 
         <vertical bg='panel-top' skew='0' bg-color='#00b6ff40' pad='2' vertical-fit='PreferredSize'>
-            <text text='You can modify the lenght and width using the thumbstick!' color='#ffffff80' font-size='3.5' align='Center'
+            <text text='You can modify the length and width using the thumbstick!' color='#ffffff80' font-size='3.5' align='Center'
                   active='~ShowThumbstickMessage'/>
             <slider-setting text='Length' value='LengthValue' get-event='update-props,update-proportions' apply-on-change='true' increment="1"
                             min='0' max='30'/>

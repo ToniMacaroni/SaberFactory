@@ -112,15 +112,6 @@ namespace SaberFactory.Helpers
             return new Tuple<T, AssetBundle>(asset, assetBundle);
         }
 
-        //public static async Task<Tuple<T, AssetBundle>> LoadAssetFromAssetBundleAsync<T>(string path,
-        //    string assetName) where T : UnityEngine.Object
-        //{
-        //    var fileData = await ReadFileAsync(path);
-        //    if (fileData == null) return null;
-        //    var asset = await LoadAssetFromAssetBundleAsync<T>(fileData, assetName);
-        //    return asset;
-        //}
-
         public static async Task<Tuple<T, AssetBundle>> LoadAssetFromAssetBundleAsync<T>(string path, string assetName) where T : Object
         {
             var tcs = new TaskCompletionSource<Tuple<T, AssetBundle>>();
@@ -135,28 +126,22 @@ namespace SaberFactory.Helpers
                 }
 
                 var assetRequest = createRequest.assetBundle.LoadAssetAsync<T>(assetName);
-                assetRequest.completed += delegate { tcs.SetResult(new Tuple<T, AssetBundle>((T)assetRequest.asset, createRequest.assetBundle)); };
+                assetRequest.completed += delegate
+                {
+                    Object asset = assetRequest.asset;
+
+                    if (asset == null)
+                    {
+                        createRequest.assetBundle.Unload(true);
+                        tcs.SetResult(null);
+                        return;
+                    }
+
+                    tcs.SetResult(new Tuple<T, AssetBundle>((T)asset, createRequest.assetBundle));
+                };
             };
 
             return await tcs.Task;
-        }
-        
-        public static async Task<Tuple<T, AssetBundle>> LoadAssetFromAssetBundleSafeAsync<T>(string path, string assetName) where T : Object
-        {
-            var bundle = await AssetBundleExtensions.LoadFromFileAsync(path);
-            if (!bundle)
-            {
-                return null;
-            }
-
-            var asset = await AssetBundleExtensions.LoadAssetAsync<T>(bundle, assetName);
-            if (!asset)
-            {
-                bundle.Unload(true);
-                return null;
-            }
-
-            return new Tuple<T, AssetBundle>(asset, bundle);
         }
     }
 }

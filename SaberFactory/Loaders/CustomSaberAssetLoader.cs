@@ -7,12 +7,23 @@ using HarmonyLib;
 using IPA.Utilities;
 using SaberFactory.DataStore;
 using SaberFactory.Helpers;
+using SiraUtil.Logging;
 using UnityEngine;
 
 namespace SaberFactory.Loaders
 {
     internal class CustomSaberAssetLoader : AssetBundleLoader
     {
+        private readonly SiraLog _logger;
+        private readonly Material _defaultMaterial;
+
+        private CustomSaberAssetLoader(SiraLog logger)
+        {
+            _logger = logger;
+            _defaultMaterial = new Material(Shader.Find("Hidden/InternalErrorShader"));
+        }
+
+
         public override string HandledExtension => ".saber";
 
         public override ISet<AssetMetaPath> CollectFiles(PluginDirectories dirs)
@@ -35,22 +46,24 @@ namespace SaberFactory.Loaders
                 return null;
             }
 
-            var result = await Readers.LoadAssetFromAssetBundleSafeAsync<GameObject>(fullPath, "_CustomSaber");
+            var result = await Readers.LoadAssetFromAssetBundleAsync<GameObject>(fullPath, "_CustomSaber");
             if (result == null)
             {
                 return null;
             }
 
+            // GameScenesManager might call Resources.UnloadUnusedAssets while we're still working on this
+            result.Item1.hideFlags |= HideFlags.DontUnloadUnusedAsset;
+
             var info = await ShaderRepair.FixShadersOnGameObjectAsync(result.Item1);
             if (!info.AllShadersReplaced)
             {
-                Debug.LogWarning($"Missing shader replacement data for {relativePath}:");
+                _logger.Warn($"Missing shader replacement data for {relativePath}:");
                 foreach (var shaderName in info.MissingShaderNames)
                 {
-                    Debug.LogWarning($"\t- {shaderName}");
+                    _logger.Warn($"\t- {shaderName}");
                 }
             }
-
 
             var trailsList = result.Item1.GetComponentsInChildren<CustomTrail>();
             var matDict = new Dictionary<Material, List<CustomTrail>>();
@@ -76,11 +89,13 @@ namespace SaberFactory.Loaders
 
                 if (!trailInfo.AllShadersReplaced)
                 {
-                    Debug.LogWarning("Missing trail shader replacement data. Using default trail");
-                    trails.Do(x=>x.TrailMaterial = null);
+                    _logger.Warn("Missing trail shader replacement data. Using default trail");
+                    trails.Do(x => x.TrailMaterial = _defaultMaterial);
                 }
             }
-            
+
+            result.Item1.hideFlags &= ~HideFlags.DontUnloadUnusedAsset;
+
             return new StoreAsset(relativePath, result.Item1, result.Item2);
         }
 

@@ -14,13 +14,15 @@ namespace SaberFactory.Game
         private readonly AudioTimeSyncController _audioController;
         private readonly InitData _initData;
         private readonly SiraSaberFactory _saberFactory;
+        private readonly ICoroutineStarter _coroutineStarter;
         private SiraSaber _saber;
 
-        private SaberMovementTester(InitData initData, SiraSaberFactory saberFactory, AudioTimeSyncController audioController)
+        private SaberMovementTester(InitData initData, SiraSaberFactory saberFactory, AudioTimeSyncController audioController, ICoroutineStarter coroutineStarter)
         {
             _initData = initData;
             _saberFactory = saberFactory;
             _audioController = audioController;
+            _coroutineStarter = coroutineStarter;
         }
 
         public async void Initialize()
@@ -37,8 +39,8 @@ namespace SaberFactory.Game
             var saberA = CreateSaber(SaberType.SaberA, new Vector3(0, 0.6f, 0), Quaternion.Euler(90, 0, 0));
             var saberB = CreateSaber(SaberType.SaberB, new Vector3(0, 0.6f, 0), Quaternion.Euler(90, 0, 0));
 
-            SharedCoroutineStarter.instance.StartCoroutine(GroundRoundAnimationCoroutine(-0.2f, saberA));
-            SharedCoroutineStarter.instance.StartCoroutine(GroundRoundAnimationCoroutine(0.2f, saberB));
+            _coroutineStarter.StartCoroutine(GroundRoundAnimationCoroutine(-0.2f, saberA));
+            _coroutineStarter.StartCoroutine(GroundRoundAnimationCoroutine(0.2f, saberB));
 
             // Don't try this at home
             var allLRs = Object.FindObjectsOfType<LineRenderer>()

@@ -1,13 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using SaberFactory.DataStore;
 using SaberFactory.Models;
 using SiraUtil.Logging;
 using SiraUtil.Web;
-using UnityEngine;
 using Zenject;
 
 namespace SaberFactory.Misc
@@ -39,7 +37,7 @@ namespace SaberFactory.Misc
 
         public async Task Retrieve()
         {
-            Debug.LogWarning("Loading remote sabers");
+            _logger.Warn("Loading remote sabers");
             
             RemoteSabers.Clear();
             
@@ -63,7 +61,7 @@ namespace SaberFactory.Misc
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                _logger.Error(e);
                 RetrievingStatus = Status.Failed;
                 return;
             }

@@ -86,7 +86,7 @@ namespace SaberFactory.UI.Lib.BSML.Tags
 
             scrollView.SetField<ScrollView, RectTransform>("_contentRectTransform", parentObj.transform as RectTransform);
 
-            SharedCoroutineStarter.instance.StartCoroutine(Man(gameObject, rectTransform));
+            BeatSaberUI.DiContainer.Resolve<ICoroutineStarter>().StartCoroutine(Man(gameObject, rectTransform));
 
             return child;
         }
